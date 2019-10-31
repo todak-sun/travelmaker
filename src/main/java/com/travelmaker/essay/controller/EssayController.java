@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping(value = "/essay")
+@RequestMapping(value = "/api/essay")
 public class EssayController {
 
 	@GetMapping(produces = "application/json; charset=UTF-8")
