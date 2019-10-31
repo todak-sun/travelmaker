@@ -24,6 +24,8 @@
 		base-package="com.travelmaker.route.controller" />
 	<context:component-scan
 		base-package="com.travelmaker.user.controller" />
+	<context:component-scan
+		base-package="com.travelmaker.home.controller" />
 
 	<context:component-scan
 		base-package="com.travelmaker.config" />
@@ -42,10 +44,11 @@
 		<beans:property name="prefix" value="/WEB-INF/views/" />
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
-	
+
 	<!-- fileUpload -->
-   <beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-      <beans:property name="maxUploadSize" value="5000000"/>
-   </beans:bean>
+	<beans:bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<beans:property name="maxUploadSize" value="5000000" />
+	</beans:bean>
 
 </beans:beans>
