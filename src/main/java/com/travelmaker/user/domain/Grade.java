@@ -1,4 +1,4 @@
-package com.travelmaker.domain;
+package com.travelmaker.user.domain;
 
 public enum Grade {
 	MASTER(4, null), OFFICIAL(2, MASTER), NORMAL(1, OFFICIAL);

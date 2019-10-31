@@ -1,4 +1,4 @@
-package com.travelmaker.domain;
+package com.travelmaker.user.domain;
 
 public enum Gender {
 	MAIL(1), FEMAIL(2);

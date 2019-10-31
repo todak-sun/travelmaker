@@ -1,4 +1,4 @@
-package com.travelmaker.domain;
+package com.travelmaker.user.domain;
 
 import lombok.Getter;
 import lombok.Setter;
