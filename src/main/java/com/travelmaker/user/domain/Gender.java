@@ -8,11 +8,13 @@ public enum Gender {
 	private Gender(int value) {
 		this.value = value;
 	}
-
+	
+	
 	public int intValue() {
 		return this.value;
 	}
-
+	
+	
 	public static Gender valueOf(int value) {
 		switch (value) {
 		case 1:
