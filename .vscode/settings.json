@@ -1,0 +1,15 @@
+{
+    "prettier.jsxBracketSameLine": false,
+    "prettier.arrowParens": "always",
+    "prettier.singleQuote": true,
+    "prettier.tabWidth": 2,
+    "prettier.semi": true,
+    "prettier.bracketSpacing": true,
+    "prettier.jsxSingleQuote": true,
+    "prettier.htmlWhitespaceSensitivity": "css",
+    "javascript.format.enable": false,
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "editor.formatOnSave": true,
+}
