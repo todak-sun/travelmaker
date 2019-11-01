@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="routeSQL">
+
+	<insert id="setRouteStep1" parameterType="com.travelmaker.route.domain.RouteDTO">
+		INSERT INTO route (bno, rno, nickname, title, fixed)
+		VALUES (seq_bno.NEXTVAL, seq_rno.NEXTVAL, #{nickname}, #{title}, 1)
+	</insert>
+	
+	<insert id="saveCourse" parameterType="com.travelmaker.route.domain.RouteContentDTO">
+		UPDATE route_content SET (dateStart, dateEnd)
+		VALUES (#{dateStart}, #{dateEnd})
+	</insert>
+	
+</mapper>
