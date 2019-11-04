@@ -16,8 +16,9 @@ public class RouteDAOMybatis implements RouteDAO {
 	private SqlSession sqlSession;
 	
 	@Override
-	public void setRouteStep1(RouteDTO routeDTO) {
+	public int setRouteStep1(RouteDTO routeDTO) {
 		sqlSession.insert("routeSQL.setRouteStep1",routeDTO);
+		return sqlSession.selectOne("routeSQL.getCurrRnoSeq");
 	}
 
 	@Override

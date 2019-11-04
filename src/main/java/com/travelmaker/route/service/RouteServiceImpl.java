@@ -14,9 +14,9 @@ public class RouteServiceImpl implements RouteService {
 	RouteDAO routeDAO;
 	
 	@Override
-	public void setRouteStep1(RouteDTO routeDTO) {
+	public int setRouteStep1(RouteDTO routeDTO) {
 		
-		routeDAO.setRouteStep1(routeDTO);
+		return routeDAO.setRouteStep1(routeDTO);
 	}
 
 	@Override

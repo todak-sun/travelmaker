@@ -5,7 +5,7 @@ import com.travelmaker.route.domain.RouteDTO;
 
 public interface RouteDAO {
 
-	public void setRouteStep1(RouteDTO routeDTO);
+	public int setRouteStep1(RouteDTO routeDTO);
 
 	public void saveCourse(RouteContentDTO routeContentDTO);
 

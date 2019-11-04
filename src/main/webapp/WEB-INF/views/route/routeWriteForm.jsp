@@ -32,18 +32,6 @@ pageEncoding="UTF-8"%>
           name="destination"
           value="overseas"
         />해외
-        <!-- <input
-          type="button"
-          id="domestic-write-btn"
-          name="domestic"
-          value="국내작성버튼"
-        />
-        <input
-          type="button"
-          id="overseas-write-btn"
-          name="overseas"
-          value="해외작성버튼"
-        /> -->
       </div>
       <div class="route-info" style="display: none;">
         <div class="route-point"></div>
@@ -66,6 +54,7 @@ pageEncoding="UTF-8"%>
           <input type="text" name="dateEnd" placeholder="종료날짜 입력" />
         </div>
       </div>
+      <input type="hidden" id="rno" name="rno" />
     </form>
 
     <div class="route-write-command">

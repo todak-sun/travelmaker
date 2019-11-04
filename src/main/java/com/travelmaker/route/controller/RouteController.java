@@ -42,10 +42,10 @@ public class RouteController {
 			@RequestParam String destination) {
 		System.out.println(destination);
 		routeDTO.setIsDomestic(destination.equals("overseas") ? 0 : 1);
-		routeService.setRouteStep1(routeDTO);
+		int rno = routeService.setRouteStep1(routeDTO);
 
-		Map map = new HashMap<String, String>();
-		map.put("destination", destination);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("rno", rno);
 		// ajax로 리턴해서 자바스크립트에서 양식 뿌려주기
 		return map;
 	}
@@ -56,7 +56,7 @@ public class RouteController {
 		
 		System.out.println(routeContentDTO.getDateStart());
 		System.out.println(routeContentDTO.getDateEnd());
-		Map map = new HashMap<String, String>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("test", "test값");
 		routeService.saveCourse(routeContentDTO);
 		// ajax로 리턴해서 자바스크립트에서 양식 뿌려주기

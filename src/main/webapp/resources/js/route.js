@@ -33,10 +33,10 @@ $(function() {
           showCommand(2);
           break;
         case 'next-btn-1':
-          showWriteForm();
+          showWriteForm(2);
           break;
         case 'next-btn-2':
-          showWriteForm();
+          // showWriteForm(3);
           showCommand(3);
           break;
         case 'course-save-btn':
@@ -88,7 +88,7 @@ $(function() {
   }
 
   //여러개 쓸 땐 dataset.어쩌구
-  function showWriteForm() {
+  function showWriteForm(level) {
     // 제목, 국내&해외 변수값 선언
     let routeTitle = document.querySelector('#route-title').value;
     let destination;
@@ -107,21 +107,11 @@ $(function() {
       // 제목이 빈칸이 아니면 DB에 route 틀 저장 및 작성 폼 생성
       showWriteFormAjax(routeTitle, destination)
         .then(function(result) {
-          switch (destination) {
-            case 'domestic':
-              creatDomesticWriteForm2();
-              break;
-
-            case 'overseas':
-              createOverseasWriteForm2();
-              break;
-
-            default:
-              alert('잘못된 명령어');
-              break;
-          }
+          showWriteForm2(destination);
+          showCommand(level);
+          $('.route-info').show();
           $('.route-destination').hide();
-          showCommand(2);
+          $('#rno').val(result.rno);
         })
         .catch(function(error) {
           console.log(error);
@@ -144,137 +134,71 @@ $(function() {
   }
 });
 
-//국내루트 글작성 폼 생성 함수2
-function creatDomesticWriteForm2() {
-  // 국내 작성 폼 생성
-  $('.route-info').show();
-  $('.route-location')
-    .append($('<label/>').text('장소'))
-    .append(
-      $('<input/>', {
-        type: 'text',
-        name: 'location',
-        placeholder: '장소 입력'
-      })
-    );
-  // $('.route-point')
-  //   .append($('<label/>').text('지점선택'))
-  //   .append($('<select/>'));
-  // $('.route-point>select').append(
-  //   $('<option/>', {
-  //     text: '새 지점'
-  //   })
-  // );
-  // $('.route-location')
-  //   .append($('<label/>').text('여행지 찾기'))
-  //   .append(
-  //     $('<input/>', {
-  //       type: 'text',
-  //       name: 'location',
-  //       placeholder: '여행지 입력'
-  //     })
-  //   );
-  // $('.route-content')
-  //   .append($('<label/>').text('내용입력'))
-  //   .append(
-  //     $('<textarea/>', {
-  //       name: 'content',
-  //       placeholder: '내용 입력'
-  //     })
-  //   );
-  // $('.route-image')
-  //   .append($('<label/>').text('사진'))
-  //   .append(
-  //     $('<input/>', {
-  //       type: 'file',
-  //       name: 'image'
-  //     })
-  //   );
-  // $('.route-date')
-  //   .append($('<label/>').text('날짜'))
-  //   .append(
-  //     $('<input/>', {
-  //       type: 'text',
-  //       name: 'dateStart',
-  //       placeholder: '시작날짜 입력'
-  //     })
-  //   )
-  //   .append(
-  //     $('<input/>', {
-  //       type: 'text',
-  //       name: 'dateEnd',
-  //       placeholder: '종료날짜 입력'
-  //     })
-  //   );
+function showWriteForm2(destination) {
+  switch (destination) {
+    case 'domestic':
+      $('.route-location')
+        .append($('<label/>').text('장소'))
+        .append(
+          $('<input/>', {
+            type: 'text',
+            name: 'location',
+            placeholder: '장소 입력'
+          })
+        );
+      break;
+
+    case 'overseas':
+      $('.route-location')
+        .append($('<label/>').text('국가'))
+        .append(
+          $('<input/>', {
+            type: 'text',
+            name: 'nation',
+            placeholder: '국가 입력'
+          })
+        )
+        .append($('<label/>').text('도시'))
+        .append(
+          $('<input/>', {
+            type: 'text',
+            name: 'city',
+            placeholder: '도시 입력'
+          })
+        )
+        .append($('<label/>').text('장소'))
+        .append(
+          $('<input/>', {
+            type: 'text',
+            name: 'place',
+            placeholder: '장소 입력'
+          }).append(
+            $('<input/>', {
+              type: 'hidden',
+              name: 'location'
+            })
+          )
+        );
+      break;
+
+    default:
+      alert('잘못된 명령어');
+      break;
+  }
 }
 
-//해외루트 글작성 폼 생성 함수2
-function createOverseasWriteForm2() {
-  // 해외 작성 폼 생성
-  $('.route-info').show();
-  $('.route-location')
-    .append($('<label/>').text('국가'))
-    .append(
-      $('<input/>', {
-        type: 'text',
-        name: 'nation',
-        placeholder: '국가 입력'
-      })
-    )
-    .append($('<label/>').text('도시'))
-    .append(
-      $('<input/>', {
-        type: 'text',
-        name: 'city',
-        placeholder: '도시 입력'
-      })
-    )
-    .append($('<label/>').text('장소'))
-    .append(
-      $('<input/>', {
-        type: 'text',
-        name: 'location',
-        placeholder: '장소 입력'
-      })
-    );
-
-  // $('.route-content')
-  //   .append($('<label/>').text('내용입력'))
-  //   .append(
-  //     $('<textarea/>', {
-  //       name: 'content',
-  //       placeholder: '내용 입력'
-  //     })
-  //   );
-
-  // $('.route-image')
-  //   .append($('<label/>').text('사진'))
-  //   .append(
-  //     $('<input/>', {
-  //       type: 'file',
-  //       name: 'image'
-  //     })
-  //   );
-
-  // $('.route-date')
-  //   .append($('<label/>').text('날짜'))
-  //   .append(
-  //     $('<input/>', {
-  //       type: 'text',
-  //       name: 'dateStart',
-  //       placeholder: '시작날짜 입력'
-  //     })
-  //   )
-  //   .append(
-  //     $('<input/>', {
-  //       type: 'text',
-  //       name: 'dateEnd',
-  //       placeholder: '종료날짜 입력'
-  //     })
-  //   );
-}
-
+// 코스 저장
 function saveCourse() {
+  if (document.querySelector('#overseas-radio').checked) {
+    $('input[name=location]').val(
+      $('input[name=nation]').val() +
+        '_' +
+        $('input[name=city]').val() +
+        '_' +
+        $('input[name=place]').val()
+    );
+  }
+
   $.ajax({
     type: 'post',
     url: '/route/saveCourse',
@@ -287,6 +211,7 @@ function saveCourse() {
       //이전 저장 다음 버튼 생성
       //루트 글작성 명령어 생성 및 제거, 글작성 단계에 따라 버튼 종류가 달라짐
       //이벤트 걸기
+      document.forms['route-write-form'].reset();
     },
     error: function(err) {
       console.log(err);
