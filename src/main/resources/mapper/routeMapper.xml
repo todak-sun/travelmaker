@@ -4,13 +4,18 @@
 <mapper namespace="routeSQL">
 
 	<insert id="setRouteStep1" parameterType="com.travelmaker.route.domain.RouteDTO">
-		INSERT INTO route (bno, rno, nickname, title, fixed)
-		VALUES (seq_bno.NEXTVAL, seq_rno.NEXTVAL, #{nickname}, #{title}, 1)
+		INSERT INTO route (bno, rno, nickname, title, fixed, isDomestic)
+		VALUES (seq_bno.NEXTVAL, seq_rno.NEXTVAL, #{nickname}, #{title}, 0, #{isDomestic})
 	</insert>
 	
 	<insert id="saveCourse" parameterType="com.travelmaker.route.domain.RouteContentDTO">
-		UPDATE route_content SET (dateStart, dateEnd)
-		VALUES (#{dateStart}, #{dateEnd})
+		INSERT INTO route_content (crno, rno, content, lat, lng, location, dateStart, dateEnd, score, fixed)
+		VALUES (seq_crno.NEXTVAL, #{rno}, #{content}, #{lat}, #{lng}, #{location}, #{dateStart}, #{dateEnd}, #{score}, 0)
 	</insert>
+	
+	<update id="updateCourse" parameterType="com.travelmaker.route.domain.RouteContentDTO">
+		UPDATE route_content SET (rno, content, lat, lng, location, dateStart, dateEnd, score, fixed)
+		VALUES (#{rno}, #{content}, #{lat}, #{lng}, #{location}, TO_DATE('${dateStart}','YYYY-DD-MM'), #{dateEnd}, #{score}, #{fixed})
+	</update>
 	
 </mapper>

@@ -18,4 +18,5 @@ public class RouteDTO {
 	private String dateUpdate;
 	private int comment;
 	private int fixed;
+	private int isDomestic;
 }

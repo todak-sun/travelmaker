@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -22,7 +23,7 @@ public class RouteController {
 
 	@Autowired
 	RouteService routeService;
-	
+
 	@RequestMapping(value = "routeList")
 	public String routeList(Model model) {
 		// dto 리스트를 서버DB에서 가져오기
@@ -35,34 +36,31 @@ public class RouteController {
 		return "/route/routeWriteForm";
 	}
 
-	@RequestMapping(value = "domesticWriteForm")
+	@RequestMapping(value = "showWriteForm")
 	@ResponseBody
-	public Map<String, Object> domesticWriteForm(Model model,
-			@ModelAttribute RouteDTO routeDTO) {
-				
+	public Map<String, Object> createWriteForm(Model model, @ModelAttribute RouteDTO routeDTO,
+			@RequestParam String destination) {
+		System.out.println(destination);
+		routeDTO.setIsDomestic(destination.equals("overseas") ? 0 : 1);
 		routeService.setRouteStep1(routeDTO);
+
+		Map map = new HashMap<String, String>();
+		map.put("destination", destination);
 		// ajax로 리턴해서 자바스크립트에서 양식 뿌려주기
-		return null;
+		return map;
 	}
 
-	@RequestMapping(value = "overseaWriteForm")
+	@RequestMapping(value = "saveCourse", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> overseaWriteForm(Model model,
-			@ModelAttribute RouteDTO routeDTO) {
+	public Map<String, Object> saveCourse(Model model, @ModelAttribute RouteContentDTO routeContentDTO) {
 		
-		routeService.setRouteStep1(routeDTO);
-		// ajax로 리턴해서 자바스크립트에서 양식 뿌려주기
-		return null;
-	}
-	
-	@RequestMapping(value = "saveCourse")
-	@ResponseBody
-	public Map<String, Object> saveCourse(Model model,
-			@ModelAttribute RouteContentDTO routeContentDTO) {
 		System.out.println(routeContentDTO.getDateStart());
+		System.out.println(routeContentDTO.getDateEnd());
+		Map map = new HashMap<String, String>();
+		map.put("test", "test값");
 		routeService.saveCourse(routeContentDTO);
 		// ajax로 리턴해서 자바스크립트에서 양식 뿌려주기
-		return null;
+		return map;
 	}
 
 }
