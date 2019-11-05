@@ -41,7 +41,7 @@ public class RouteController {
 	public Map<String, Object> createWriteForm(Model model, @ModelAttribute RouteDTO routeDTO,
 			@RequestParam String destination) {
 		System.out.println(destination);
-		routeDTO.setIsDomestic(destination.equals("overseas") ? 0 : 1);
+		routeDTO.setIsDomestic(destination.equals("abroad") ? 0 : 1);
 		int rno = routeService.setRouteStep1(routeDTO);
 
 		Map<String, Object> map = new HashMap<String, Object>();

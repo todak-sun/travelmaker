@@ -14,12 +14,12 @@
 	
 	<insert id="saveCourse" parameterType="com.travelmaker.route.domain.RouteContentDTO">
 		INSERT INTO route_content (crno, rno, content, lat, lng, location, dateStart, dateEnd, score, fixed)
-		VALUES (seq_crno.NEXTVAL, #{rno}, #{content}, #{lat}, #{lng}, #{location}, TO_DATE('${dateStart}','YYYY-DD-MM'), TO_DATE('${dateEnd}','YYYY-DD-MM'), #{score}, 0)
+		VALUES (seq_crno.NEXTVAL, #{rno}, #{content}, #{lat}, #{lng}, #{location}, TO_DATE('${dateStart}','YYYY-MM-DD'), TO_DATE('${dateEnd}','YYYY-MM-DD'), #{score}, 0)
 	</insert>
 	
 	<update id="updateCourse" parameterType="com.travelmaker.route.domain.RouteContentDTO">
 		UPDATE route_content SET (rno, content, lat, lng, location, dateStart, dateEnd, score, fixed)
-		VALUES (#{rno}, #{content}, #{lat}, #{lng}, #{location}, TO_DATE('${dateStart}','YYYY-DD-MM'), TO_DATE('${dateEnd}','YYYY-DD-MM'), #{score}, #{fixed})
+		VALUES (#{rno}, #{content}, #{lat}, #{lng}, #{location}, TO_DATE('${dateStart}','YYYY-MM-DD'), TO_DATE('${dateEnd}','YYYY-MM-DD'), #{score}, #{fixed})
 	</update>
 	
 </mapper>

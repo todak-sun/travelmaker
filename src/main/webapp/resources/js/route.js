@@ -36,17 +36,18 @@ $(function() {
           showWriteForm(2);
           break;
         case 'next-btn-2':
-          // showWriteForm(3);
-          showCommand(3);
+          showEpilogueForm();
           break;
         case 'course-save-btn':
           saveCourse();
           // 코스 저장 버튼
           break;
         case 'preview-btn':
+          showPreview();
           // 미리보기 버튼
           break;
         case 'route-save-btn':
+          saveRoute();
           // 최종 저장 버튼
           break;
 
@@ -56,6 +57,7 @@ $(function() {
       }
     });
   }
+
   // 단계별 버튼 내용 변경
   function showCommand(commandLevel) {
     switch (commandLevel) {
@@ -87,31 +89,41 @@ $(function() {
     }
   }
 
+  function showEpilogueForm() {
+    // 코스가 1개 이상 저장되어있는지 확인 후
+    // 루트 인포 숨기기
+    $('.route-info-form').hide();
+    $('.route-epilogue-form').show();
+    showCommand(3);
+    // 에필로그 작성창 열기
+  }
+
   //여러개 쓸 땐 dataset.어쩌구
   function showWriteForm(level) {
     // 제목, 국내&해외 변수값 선언
-    let routeTitle = document.querySelector('#route-title').value;
+    let routeTitle = document.querySelector('#route-title');
+    let destinations = document.querySelectorAll('.route-destination>input');
     let destination;
-    document
-      .querySelectorAll('.route-destination>input')
-      .forEach((radioBtn) => {
-        if (radioBtn.checked) {
-          destination = radioBtn.value;
-        }
-      });
-
+    destinations.forEach((radioBtn) => {
+      if (radioBtn.checked) {
+        destination = radioBtn.value;
+      }
+    });
     // 제목 작성 여부 체크
-    if (routeTitle == '') {
+    if (!routeTitle.value) {
       alert('제목을 입력해주세요');
     } else {
       // 제목이 빈칸이 아니면 DB에 route 틀 저장 및 작성 폼 생성
-      showWriteFormAjax(routeTitle, destination)
+      showWriteFormAjax(routeTitle.value, destination)
         .then(function(result) {
           showWriteForm2(destination);
           showCommand(level);
-          $('.route-info').show();
+          $('.route-info-form').show();
           $('.route-destination').hide();
           $('#rno').val(result.rno);
+          routeTitle.disabled = true;
+          // destinations[0].disabled = true;
+          // destinations[1].disabled = true;
         })
         .catch(function(error) {
           console.log(error);
@@ -119,102 +131,194 @@ $(function() {
     }
   }
 
-  // 서버에 루트폼 입력
-  function showWriteFormAjax(routeTitle, destination) {
+  // <-- DB에 route 임시저장
+  function showWriteFormAjax(title, destination) {
     return $.ajax({
       type: 'post',
       url: '/route/showWriteForm',
       data: {
         nickname: 'test1',
-        title: routeTitle,
+        title: title,
         destination: destination
       },
       dataType: 'json'
     });
   }
-});
+  // DB에 route 임시저장 -->
 
-function showWriteForm2(destination) {
-  switch (destination) {
-    case 'domestic':
-      $('.route-location')
-        .append($('<label/>').text('장소'))
-        .append(
-          $('<input/>', {
-            type: 'text',
-            name: 'location',
-            placeholder: '장소 입력'
-          })
-        );
-      break;
+  // <-- 국내 해외 폼 보여주기
+  function showWriteForm2(destination) {
+    switch (destination) {
+      case 'domestic':
+        $('.abroad-info').hide();
+        break;
 
-    case 'overseas':
-      $('.route-location')
-        .append($('<label/>').text('국가'))
-        .append(
-          $('<input/>', {
-            type: 'text',
-            name: 'nation',
-            placeholder: '국가 입력'
-          })
-        )
-        .append($('<label/>').text('도시'))
-        .append(
-          $('<input/>', {
-            type: 'text',
-            name: 'city',
-            placeholder: '도시 입력'
-          })
-        )
-        .append($('<label/>').text('장소'))
-        .append(
-          $('<input/>', {
-            type: 'text',
-            name: 'place',
-            placeholder: '장소 입력'
-          }).append(
-            $('<input/>', {
-              type: 'hidden',
-              name: 'location'
-            })
-          )
-        );
-      break;
+      case 'abroad':
+        break;
 
-    default:
-      alert('잘못된 명령어');
-      break;
-  }
-}
-
-// 코스 저장
-function saveCourse() {
-  if (document.querySelector('#overseas-radio').checked) {
-    $('input[name=location]').val(
-      $('input[name=nation]').val() +
-        '_' +
-        $('input[name=city]').val() +
-        '_' +
-        $('input[name=place]').val()
-    );
-  }
-
-  $.ajax({
-    type: 'post',
-    url: '/route/saveCourse',
-    data: $('#route-write-form').serialize(),
-    dataType: 'json',
-    success: function(data) {
-      console.log(data.test);
-      //작성 폼 생성
-      //글작성 단계를 커맨드버튼에 알려줌
-      //이전 저장 다음 버튼 생성
-      //루트 글작성 명령어 생성 및 제거, 글작성 단계에 따라 버튼 종류가 달라짐
-      //이벤트 걸기
-      document.forms['route-write-form'].reset();
-    },
-    error: function(err) {
-      console.log(err);
+      default:
+        alert('잘못된 명령어');
+        break;
     }
+    let today = `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}`;
+    document.querySelector('input[name=dateStart]').value = today;
+    document.querySelector('input[name=dateEnd]').value = today;
+  }
+  // 국내 해외 폼 보여주기 -->
+
+  // <-- 코스 저장
+  function saveCourse() {
+    let title = document.querySelector('input[name=title]');
+    let nation = document.querySelector('input[name=nation]');
+    let city = document.querySelector('input[name=city]');
+    let place = document.querySelector('input[name=place]');
+    let content = document.querySelector('textarea[name=content]');
+    let location = document.querySelector('input[name=location]');
+    let dateStart = document.querySelector('input[name=dateStart]');
+    let dateEnd = document.querySelector('input[name=dateEnd]');
+    let score = document.querySelector('input[name=score]');
+
+    // <- 유효성 검사
+    if (document.querySelector('#abroad-radio').checked) {
+      if (!nation.value) {
+        alert('나라를 입력해주세요');
+        nation.focus();
+        return;
+      } else if (!city.value) {
+        alert('도시를 입력해주세요');
+        city.focus();
+        return;
+      } else if (!place.value) {
+        alert('장소를 입력해주세요');
+        place.focus();
+        return;
+      }
+      location.value = nation.value + '_' + city.value + '_' + place.value;
+    } else {
+      location.value = place.value;
+    }
+
+    if (!location.value) {
+      alert('장소를 입력해주세요');
+      location.focus();
+      return;
+    } else if (!content.value) {
+      alert('내용을 입력해주세요');
+      content.focus();
+      return;
+    } else if (!dateStart.value) {
+      alert('시작날짜를 입력해주세요');
+      dateStart.focus();
+      return;
+    } else if (!dateEnd.value) {
+      alert('종료날짜를 입력해주세요');
+      dateEnd.focus();
+      return;
+    }
+    // 유효성 검사 ->
+
+    // <- 별점수 DB 데이터로 변환
+    // let starCount = 0;
+
+    function countStar() {
+      return new Promise(function(resolve, reject) {
+        resolve(document.querySelectorAll('.route-score a.on').length);
+      });
+    }
+
+    countStar()
+      .then(function(data) {
+        return new Promise(function(resolve) {
+          resolve();
+          score.value = data;
+        });
+      })
+      .then(saveCourseAjax)
+      .then(saveCourseAjaxSuccess)
+      // .then(function(data) {
+      //   const $frag = $(document.createDocumentFragment());
+      //   const $li = $(`
+      //   <li>
+      //   <h4>${place.value}</h4>
+      //   <span>날짜 : ${dateStart.value} - ${dateEnd.value}</span>
+      //   <input type="button" value="위로">
+      //   </li>
+      //   `);
+      //   $frag.append($li);
+      //   $('.saved-courses').append($frag);
+      //   document.forms['route-write-form'].reset();
+      // })
+      .catch(function(error) {
+        console.log(error);
+      });
+    // return function(){
+    //   let starCount = 0;
+    //   document
+    //   .querySelectorAll('.route-score>input[class=on]')
+    //   .forEach(function() {
+    //     starCount += 1;
+    //   });
+    // }
+
+    // 별점수 DB 데이터로 변환 ->
+
+    // <- DB에 코스 임시저장
+    function saveCourseAjax() {
+      return $.ajax({
+        type: 'post',
+        url: '/route/saveCourse',
+        data: $('#route-write-form').serialize(),
+        dataType: 'json'
+      });
+    }
+
+    function saveCourseAjaxSuccess() {
+      const $frag = $(document.createDocumentFragment());
+      const $li = $(`
+      <li>
+      <h4>${place.value}</h4>
+      <span>날짜 : ${dateStart.value} - ${dateEnd.value}</span>
+      <input type="button" value="위로">
+      </li>
+      `);
+      $frag.append($li);
+      $('.saved-courses').append($frag);
+      document.forms['route-write-form'].reset();
+    }
+    // DB에 코스 임시저장 ->
+
+    // <- 웹페이지에 코스 임시저장
+    // saveCourseAjax()
+    //   .then(function(data) {
+    //     const $frag = $(document.createDocumentFragment());
+    //     const $li = $(`
+    //     <li>
+    //     <h4>${place.value}</h4>
+    //     <span>날짜 : ${dateStart.value} - ${dateEnd.value}</span>
+    //     <input type="button" value="위로">
+    //     </li>
+    //     `);
+    //     $frag.append($li);
+    //     $('.saved-courses').append($frag);
+    //     document.forms['route-write-form'].reset();
+    //   })
+    //   .catch(function(error) {
+    //     console.log(error);
+    //   });
+    // 웹페이지에 코스 임시저장 ->
+  }
+  // 코스 저장 -->
+
+  // 별점수 매기기
+  $('.star_rating a').click(function() {
+    $(this)
+      .parent()
+      .children('a')
+      .removeClass('on');
+    $(this)
+      .addClass('on')
+      .prevAll('a')
+      .addClass('on');
+    return false;
   });
-}
+});
