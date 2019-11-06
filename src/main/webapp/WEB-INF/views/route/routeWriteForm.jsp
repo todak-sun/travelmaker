@@ -69,6 +69,8 @@ pageEncoding="UTF-8"%>
           <label>장소</label>
           <input type="text" name="place" placeholder="장소 입력" />
           <input type="hidden" name="location" />
+          <input type="hidden" name="lat" />
+          <input type="hidden" name="lng" />
         </div>
         <div class="route-content">
           <label>내용입력</label>
