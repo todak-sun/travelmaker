@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.travelmaker.route.domain.RouteContentDTO;
 import com.travelmaker.route.domain.RouteDTO;
@@ -39,10 +40,8 @@ public class RouteController {
 
 	@RequestMapping(value = "showWriteForm")
 	@ResponseBody
-	public Map<String, Object> createWriteForm(Model model, @ModelAttribute RouteDTO routeDTO,
-			@RequestParam String destination) {
-		System.out.println(destination);
-		routeDTO.setIsDomestic(destination.equals("abroad") ? 0 : 1);
+	public Map<String, Object> createWriteForm(Model model, @ModelAttribute RouteDTO routeDTO) {
+//		routeDTO.setIsDomestic(isDomestic);
 		int rno = routeService.setRoute(routeDTO);
 
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -66,8 +65,9 @@ public class RouteController {
 	
 	@RequestMapping(value = "saveRoute", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> saveRoute(Model model, @ModelAttribute RouteDTO routeDTO) {
-		
+	public Map<String, Object> saveRoute(Model model, @ModelAttribute RouteDTO routeDTO){
+//			, @RequestParam MultipartFile images) {
+//		System.out.println(images.getSize());
 		System.out.println(routeDTO.getHashtag());
 		Map<String, Object> map = new HashMap<String, Object>();
 		routeService.saveRoute(routeDTO);
