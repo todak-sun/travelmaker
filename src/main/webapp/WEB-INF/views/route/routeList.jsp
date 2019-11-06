@@ -11,8 +11,8 @@ pageEncoding="UTF-8"%>
       탑 공간, 로그인 정보 등등 +
       <input
         type="button"
-        name="routeWriteBtn"
-        id="routeWriteBtn"
+        name="route-write-btn"
+        id="route-write-btn"
         value="루트글쓰기"
       />
     </div>
@@ -24,8 +24,9 @@ pageEncoding="UTF-8"%>
     </div>
   </body>
   <script
-    type="text/javascript"
     src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+    crossorigin="anonymous"
   ></script>
   <script type="text/javascript" src="/resources/js/route.js"></script>
 </html>
