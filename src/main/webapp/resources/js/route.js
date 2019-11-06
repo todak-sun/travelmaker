@@ -3,6 +3,8 @@
  */
 
 $(function() {
+	// rno 전역
+	var rno;
   // 루트 글작성 폼으로 이동
   $('#route-write-btn').on('click', function() {
     location.href = '/route/write';
