@@ -14,15 +14,21 @@ public class RouteServiceImpl implements RouteService {
 	RouteDAO routeDAO;
 	
 	@Override
-	public int setRouteStep1(RouteDTO routeDTO) {
+	public int setRoute(RouteDTO routeDTO) {
 		
-		return routeDAO.setRouteStep1(routeDTO);
+		return routeDAO.setRoute(routeDTO);
 	}
 
 	@Override
 	public void saveCourse(RouteContentDTO routeContentDTO) {
 		
 		routeDAO.saveCourse(routeContentDTO);
+	}
+
+	@Override
+	public void saveRoute(RouteDTO routeDTO) {
+
+		routeDAO.saveRoute(routeDTO);
 	}
 	
 }

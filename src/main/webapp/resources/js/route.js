@@ -5,7 +5,7 @@
 $(function() {
   // 루트 글작성 폼으로 이동
   $('#route-write-btn').on('click', function() {
-    location.href = '/route/routeWriteForm';
+    location.href = '/route/write';
   });
 
   // 버튼 변수 선언 & 클릭 이벤트 부여
@@ -217,52 +217,29 @@ $(function() {
     }
     // 유효성 검사 ->
 
-    // <- 별점수 DB 데이터로 변환
-    // let starCount = 0;
+    // <- DB에 코스 임시저장 프로미스
+    countStar()
+      .then(function(starNum) {
+        return new Promise(function(resolve, reject) {
+          resolve();
+          score.value = starNum;
+        });
+      })
+      .then(saveCourseAjax)
+      .then(saveCourseAjaxSuccess)
+      .catch(function(error) {
+        console.log(error);
+      });
 
+    // < 별점수 숫자로
     function countStar() {
       return new Promise(function(resolve, reject) {
         resolve(document.querySelectorAll('.route-score a.on').length);
       });
     }
+    // 별점수 숫자로 >
 
-    countStar()
-      .then(function(data) {
-        return new Promise(function(resolve) {
-          resolve();
-          score.value = data;
-        });
-      })
-      .then(saveCourseAjax)
-      .then(saveCourseAjaxSuccess)
-      // .then(function(data) {
-      //   const $frag = $(document.createDocumentFragment());
-      //   const $li = $(`
-      //   <li>
-      //   <h4>${place.value}</h4>
-      //   <span>날짜 : ${dateStart.value} - ${dateEnd.value}</span>
-      //   <input type="button" value="위로">
-      //   </li>
-      //   `);
-      //   $frag.append($li);
-      //   $('.saved-courses').append($frag);
-      //   document.forms['route-write-form'].reset();
-      // })
-      .catch(function(error) {
-        console.log(error);
-      });
-    // return function(){
-    //   let starCount = 0;
-    //   document
-    //   .querySelectorAll('.route-score>input[class=on]')
-    //   .forEach(function() {
-    //     starCount += 1;
-    //   });
-    // }
-
-    // 별점수 DB 데이터로 변환 ->
-
-    // <- DB에 코스 임시저장
+    // < DB에 코스 임시저장
     function saveCourseAjax() {
       return $.ajax({
         type: 'post',
@@ -271,7 +248,9 @@ $(function() {
         dataType: 'json'
       });
     }
+    // DB에 코스 임시저장 >
 
+    // < 웹페이지에 코스 임시저장
     function saveCourseAjaxSuccess() {
       const $frag = $(document.createDocumentFragment());
       const $li = $(`
@@ -283,31 +262,42 @@ $(function() {
       `);
       $frag.append($li);
       $('.saved-courses').append($frag);
-      document.forms['route-write-form'].reset();
+      nation.value = '';
+      city.value = '';
+      place.value = '';
+      location.value = '';
+      content.value = '';
     }
-    // DB에 코스 임시저장 ->
-
-    // <- 웹페이지에 코스 임시저장
-    // saveCourseAjax()
-    //   .then(function(data) {
-    //     const $frag = $(document.createDocumentFragment());
-    //     const $li = $(`
-    //     <li>
-    //     <h4>${place.value}</h4>
-    //     <span>날짜 : ${dateStart.value} - ${dateEnd.value}</span>
-    //     <input type="button" value="위로">
-    //     </li>
-    //     `);
-    //     $frag.append($li);
-    //     $('.saved-courses').append($frag);
-    //     document.forms['route-write-form'].reset();
-    //   })
-    //   .catch(function(error) {
-    //     console.log(error);
-    //   });
-    // 웹페이지에 코스 임시저장 ->
+    // 웹페이지에 코스 임시저장 >
+    // DB에 코스 임시저장 프로미스 ->
   }
   // 코스 저장 -->
+
+  // <-- 루트 저장
+  function saveRoute() {
+    title = document.querySelector('#route-title');
+    epilogue = document.querySelector('#route-epilogue');
+    hashtag = document.querySelector('#hashtag');
+    rno = document.querySelector('#rno');
+    $.ajax({
+      type: 'post',
+      url: '/route/saveRoute',
+      data: {
+        title: title.value,
+        content: epilogue.value,
+        hashtag: hashtag.value,
+        rno: rno.value,
+        nickname: 'test1'
+      },
+      success: function(data) {
+        alert('저장 성공');
+      },
+      error: function(error) {
+        console.log(error);
+      }
+    });
+  }
+  // 루트 저장 -->
 
   // 별점수 매기기
   $('.star_rating a').click(function() {

@@ -16,14 +16,19 @@ public class RouteDAOMybatis implements RouteDAO {
 	private SqlSession sqlSession;
 	
 	@Override
-	public int setRouteStep1(RouteDTO routeDTO) {
-		sqlSession.insert("routeSQL.setRouteStep1",routeDTO);
+	public int setRoute(RouteDTO routeDTO) {
+		sqlSession.insert("routeSQL.setRoute",routeDTO);
 		return sqlSession.selectOne("routeSQL.getCurrRnoSeq");
 	}
 
 	@Override
 	public void saveCourse(RouteContentDTO routeContentDTO) {
 		sqlSession.insert("routeSQL.saveCourse",routeContentDTO);
+	}
+
+	@Override
+	public void saveRoute(RouteDTO routeDTO) {
+		sqlSession.update("routeSQL.saveRoute",routeDTO);
 	}
 	
 }

@@ -30,8 +30,9 @@ public class RouteController {
 		return "/route/routeList";
 	}
 
-	@RequestMapping(value = "routeWriteForm")
-	public String routeWirteForm(Model model) {
+	@RequestMapping(value = "write")
+	public String routeWirteForm(Model model, @RequestParam int isDomestic) {
+		model.addAttribute("isDomestic", isDomestic);
 		// dto를 서버DB에 저장
 		return "/route/routeWriteForm";
 	}
@@ -42,7 +43,7 @@ public class RouteController {
 			@RequestParam String destination) {
 		System.out.println(destination);
 		routeDTO.setIsDomestic(destination.equals("abroad") ? 0 : 1);
-		int rno = routeService.setRouteStep1(routeDTO);
+		int rno = routeService.setRoute(routeDTO);
 
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("rno", rno);
@@ -59,6 +60,17 @@ public class RouteController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("test", "test값");
 		routeService.saveCourse(routeContentDTO);
+		// ajax로 리턴해서 자바스크립트에서 양식 뿌려주기
+		return map;
+	}
+	
+	@RequestMapping(value = "saveRoute", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> saveRoute(Model model, @ModelAttribute RouteDTO routeDTO) {
+		
+		System.out.println(routeDTO.getHashtag());
+		Map<String, Object> map = new HashMap<String, Object>();
+		routeService.saveRoute(routeDTO);
 		// ajax로 리턴해서 자바스크립트에서 양식 뿌려주기
 		return map;
 	}

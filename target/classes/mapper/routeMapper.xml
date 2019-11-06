@@ -3,21 +3,32 @@
 
 <mapper namespace="routeSQL">
 
-	<insert id="setRouteStep1" parameterType="com.travelmaker.route.domain.RouteDTO">
+	<insert id="setRoute" parameterType="route">
 		INSERT INTO route (bno, rno, nickname, title, fixed, isDomestic)
 		VALUES (seq_bno.NEXTVAL, seq_rno.NEXTVAL, #{nickname}, #{title}, 0, #{isDomestic})
 	</insert>
+	
+	<insert id="saveRoute" parameterType="route">
+	begin
+		UPDATE route SET content=#{content}, hashtag=#{hashtag}, datewrite=SYSDATE, dateupdate=SYSDATE, fixed=1 where rno = #{rno} and nickname = #{nickname};
+		UPDATE route_content SET fixed=1 WHERE rno=#{rno};
+	end;
+	</insert>
+	
+	<select id="getRoute" parameterType="Integer" resultType="route" >
+		SELECT * FROM route WHERE rno = #{rno}
+	</select>
 	
 	<select id="getCurrRnoSeq" resultType="Integer">
 		SELECT SEQ_RNO.CURRVAL FROM DUAL
 	</select>
 	
-	<insert id="saveCourse" parameterType="com.travelmaker.route.domain.RouteContentDTO">
+	<insert id="saveCourse" parameterType="routeContent">
 		INSERT INTO route_content (crno, rno, content, lat, lng, location, dateStart, dateEnd, score, fixed)
 		VALUES (seq_crno.NEXTVAL, #{rno}, #{content}, #{lat}, #{lng}, #{location}, TO_DATE('${dateStart}','YYYY-MM-DD'), TO_DATE('${dateEnd}','YYYY-MM-DD'), #{score}, 0)
 	</insert>
 	
-	<update id="updateCourse" parameterType="com.travelmaker.route.domain.RouteContentDTO">
+	<update id="updateCourse" parameterType="routeContent">
 		UPDATE route_content SET (rno, content, lat, lng, location, dateStart, dateEnd, score, fixed)
 		VALUES (#{rno}, #{content}, #{lat}, #{lng}, #{location}, TO_DATE('${dateStart}','YYYY-MM-DD'), TO_DATE('${dateEnd}','YYYY-MM-DD'), #{score}, #{fixed})
 	</update>

@@ -99,7 +99,18 @@ pageEncoding="UTF-8"%>
 
       <div class="route-epilogue-form" style="display: none;">
         <label>에필로그</label>
-        <textarea name="epilogue" placeholder="내용 입력"></textarea>
+        <br />
+        <textarea
+          id="route-epilogue"
+          name="epilogue"
+          placeholder="내용 입력"
+        ></textarea>
+        <input
+          type="text"
+          id="hashtag"
+          name="hashtag"
+          placeholder="#해쉬태그"
+        />
       </div>
     </form>
     <div class="route-write-command">
