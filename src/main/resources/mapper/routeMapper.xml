@@ -27,10 +27,18 @@
 		INSERT INTO route_content (crno, rno, content, lat, lng, location, dateStart, dateEnd, score, fixed)
 		VALUES (seq_crno.NEXTVAL, #{rno}, #{content}, #{lat}, #{lng}, #{location}, TO_DATE('${dateStart}','YYYY-MM-DD'), TO_DATE('${dateEnd}','YYYY-MM-DD'), #{score}, 0)
 	</insert>
+
+	<select id="getCurrCrnoSeq" resultType="Integer">
+		SELECT SEQ_CRNO.CURRVAL FROM DUAL
+	</select>
 	
 	<update id="updateCourse" parameterType="routeContent">
 		UPDATE route_content SET (rno, content, lat, lng, location, dateStart, dateEnd, score, fixed)
 		VALUES (#{rno}, #{content}, #{lat}, #{lng}, #{location}, TO_DATE('${dateStart}','YYYY-MM-DD'), TO_DATE('${dateEnd}','YYYY-MM-DD'), #{score}, #{fixed})
 	</update>
+	
+	<insert id="saveRouteImage" parameterType="routeImage">
+		INSERT INTO route_image VALUES (seq_ino.NEXTVAL, #{crno}, #{img}, #{imgOrder})
+	</insert>
 	
 </mapper>

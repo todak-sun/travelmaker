@@ -1,3 +1,6 @@
+/**
+ *
+ */
 $(function() {
   const $modal = $('#modal-area'); //모달
 
@@ -56,15 +59,15 @@ $(function() {
 
       console.log(writeType, isDomestic);
       moveTo(writeType, isDomestic);
-    }
 
-    function moveTo(writeType, isDomestic) {
-      const defaultLink = 'http://' + location.host;
-      if (writeType === 'essay') {
-        location.href = defaultLink + '/essay/write?isDomestic=' + isDomestic;
-      } else if (writeType === 'route') {
-        //여기다 맞는 url 설정
-        location.href = defaultLink + '/route/write?isDomestic=' + isDomestic;
+      function moveTo(writeType, isDomestic) {
+        const defaultLink = 'http://' + location.host;
+        if (writeType === 'essay') {
+          location.href = defaultLink + '/essay/write?isDomestic=' + isDomestic;
+        } else if (writeType === 'route') {
+          //여기다 맞는 url 설정
+          location.href = defaultLink + '/route/write?isDomestic=' + isDomestic;
+        }
       }
     }
   }
@@ -72,56 +75,56 @@ $(function() {
   //모달 템플릿
   function getTemplateModal(title, body) {
     return `<div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                        <h5 class="modal-title">${title}</h5>
-                        <button
-                            type="button"
-                            class="close"
-                            data-dismiss="modal"
-                            aria-label="Close"
-                        >
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        </div>
-                        <div class="modal-body">
-                        ${body}
-                        </div>
-                    </div>
-                </div>
-                `;
+                  <div class="modal-content">
+                      <div class="modal-header">
+                      <h5 class="modal-title">${title}</h5>
+                      <button
+                          type="button"
+                          class="close"
+                          data-dismiss="modal"
+                          aria-label="Close"
+                      >
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                      </div>
+                      <div class="modal-body">
+                      ${body}
+                      </div>
+                  </div>
+              </div>
+              `;
   }
 
   function getTemplateWriteSelector() {
     return `
-          <div class="row justify-content-center">
-              <lable>여행루트 글쓰기</label>
-              <input name="writeType" value="route" type="radio" checked />
-              <label>여행에세이 글쓰기</label>
-              <input name="writeType" value="essay" type="radio" />
-          </div>
-          <div class="row justify-content-center">
-              <lable>국내</label>
-              <input name="isDomestic" value="1" type="radio" checked />
-              <label>해외</label>
-              <input name="isDomestic" value="0" type="radio" />
-          </div>
-          <button id="btn-to-write" class="btn btn-outline-info">글쓰러 가기</button>
-        `;
+    <div class="row justify-content-center">
+        <lable>여행루트 글쓰기</label>
+        <input name="writeType" value="route" type="radio" checked />
+        <label>여행에세이 글쓰기</label>
+        <input name="writeType" value="essay" type="radio" />
+    </div>
+    <div class="row justify-content-center">
+        <lable>국내</label>
+        <input name="isDomestic" value="1" type="radio" checked />
+        <label>해외</label>
+        <input name="isDomestic" value="0" type="radio" />
+    </div>
+    <button id="btn-to-write" class="btn btn-outline-info">글쓰러 가기</button>
+  `;
   }
 
   //예제로 짜놓은 로그인 템플릿
   function getTemplateLogin() {
     return `
-          <div class="input-group">
-              <label class="input-group-text">계정</label>
-              <input name="account" type="text" class="form-control">
-          </div>
-          <div class="input-group">
-              <label class="input-group-text">비밀번호</label>
-              <input name="password" type="password" class="form-control">
-          </div>
-          <button class="btn btn-outline-info">로그인</button> 
-        `;
+        <div class="input-group">
+            <label class="input-group-text">계정</label>
+            <input name="account" type="text" class="form-control">
+        </div>
+        <div class="input-group">
+            <label class="input-group-text">비밀번호</label>
+            <input name="password" type="password" class="form-control">
+        </div>
+        <button class="btn btn-outline-info">로그인</button> 
+      `;
   }
 });

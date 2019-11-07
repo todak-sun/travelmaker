@@ -3,12 +3,22 @@
  */
 
 $(function() {
-	// rno 전역
-	var rno;
-  // 루트 글작성 폼으로 이동
-  $('#route-write-btn').on('click', function() {
-    location.href = '/route/write';
-  });
+  // 전역변수들
+  let rno;
+  let isDomestic = getJSONfromQueryString().isDomestic;
+  document.querySelector('#isDomestic').value = isDomestic;
+
+  function getJSONfromQueryString() {
+    let qs = location.search.slice(1);
+    qs = qs.split('&');
+
+    const obj = {};
+    qs.forEach((q) => {
+      q = q.split('=');
+      obj[q[0]] = decodeURIComponent(q[1] || '');
+    });
+    return JSON.parse(JSON.stringify(obj));
+  }
 
   // 버튼 변수 선언 & 클릭 이벤트 부여
   const previousBtn = document.querySelector('#previous-btn');
@@ -18,6 +28,11 @@ $(function() {
   previousBtn.addEventListener('click', clickBtn);
   saveBtn.addEventListener('click', clickBtn);
   nextBtn.addEventListener('click', clickBtn);
+
+  // 루트 글작성 폼으로 이동
+  $('#route-write-btn').on('click', function() {
+    location.href = '/route/write';
+  });
 
   // 버튼 클릭 이벤트 모음
   function clickBtn(e) {
@@ -104,28 +119,21 @@ $(function() {
   function showWriteForm(level) {
     // 제목, 국내&해외 변수값 선언
     let routeTitle = document.querySelector('#route-title');
-    let destinations = document.querySelectorAll('.route-destination>input');
-    let destination;
-    destinations.forEach((radioBtn) => {
-      if (radioBtn.checked) {
-        destination = radioBtn.value;
-      }
-    });
+
     // 제목 작성 여부 체크
     if (!routeTitle.value) {
       alert('제목을 입력해주세요');
     } else {
       // 제목이 빈칸이 아니면 DB에 route 틀 저장 및 작성 폼 생성
-      showWriteFormAjax(routeTitle.value, destination)
+      // showWriteFormAjax(routeTitle.value, destination)
+      showWriteFormAjax(routeTitle.value)
         .then(function(result) {
-          showWriteForm2(destination);
+          showWriteForm2();
           showCommand(level);
           $('.route-info-form').show();
           $('.route-destination').hide();
-          $('#rno').val(result.rno);
+          rno = result.rno;
           routeTitle.disabled = true;
-          // destinations[0].disabled = true;
-          // destinations[1].disabled = true;
         })
         .catch(function(error) {
           console.log(error);
@@ -134,14 +142,15 @@ $(function() {
   }
 
   // <-- DB에 route 임시저장
-  function showWriteFormAjax(title, destination) {
+  function showWriteFormAjax(title) {
     return $.ajax({
       type: 'post',
       url: '/route/showWriteForm',
       data: {
         nickname: 'test1',
         title: title,
-        destination: destination
+        // destination: destination,
+        isDomestic: isDomestic
       },
       dataType: 'json'
     });
@@ -149,19 +158,22 @@ $(function() {
   // DB에 route 임시저장 -->
 
   // <-- 국내 해외 폼 보여주기
-  function showWriteForm2(destination) {
-    switch (destination) {
-      case 'domestic':
-        $('.abroad-info').hide();
-        break;
-
-      case 'abroad':
-        break;
-
-      default:
-        alert('잘못된 명령어');
-        break;
+  function showWriteForm2() {
+    if (isDomestic) {
+      $('.abroad-info').hide();
     }
+    // switch (destination) {
+    //   case 'domestic':
+    //     $('.abroad-info').hide();
+    //     break;
+
+    //   case 'abroad':
+    //     break;
+
+    //   default:
+    //     alert('잘못된 명령어');
+    //     break;
+    // }
     let today = `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}`;
     document.querySelector('input[name=dateStart]').value = today;
     document.querySelector('input[name=dateEnd]').value = today;
@@ -179,9 +191,12 @@ $(function() {
     let dateStart = document.querySelector('input[name=dateStart]');
     let dateEnd = document.querySelector('input[name=dateEnd]');
     let score = document.querySelector('input[name=score]');
+    let lat = document.querySelector('input[name=lat]');
+    let lng = document.querySelector('input[name=lng]');
 
     // <- 유효성 검사
-    if (document.querySelector('#abroad-radio').checked) {
+    // if (document.querySelector('#abroad-radio').checked) {
+    if (!isDomestic) {
       if (!nation.value) {
         alert('나라를 입력해주세요');
         nation.focus();
@@ -227,32 +242,50 @@ $(function() {
           score.value = starNum;
         });
       })
+      .then(createRouteForm)
       .then(saveCourseAjax)
       .then(saveCourseAjaxSuccess)
       .catch(function(error) {
         console.log(error);
       });
 
-    // < 별점수 숫자로
+    // < 1.별점수 숫자로
     function countStar() {
       return new Promise(function(resolve, reject) {
         resolve(document.querySelectorAll('.route-score a.on').length);
       });
     }
-    // 별점수 숫자로 >
+    function createRouteForm() {
+      return new Promise(function(resolve, reject) {
+        const $form = $('#route-write-form')[0];
+        const formData = new FormData($form);
+        let images = document.querySelector('input[name=images]').files;
+        if (images.length > 5) {
+          alert('이미지는 5개까지만 업로드 가능합니다');
+          return;
+        }
+        for (let i = 0; i < images.length; i++) {
+          formData.append('image' + i, images[i]);
+        }
+        formData.append('rno', rno);
+        resolve(formData);
+      });
+    }
+    // 1.별점수 숫자로 >
 
-    // < DB에 코스 임시저장
-    function saveCourseAjax() {
+    // < 2.DB에 코스 임시저장
+    function saveCourseAjax(formData) {
       return $.ajax({
         type: 'post',
         url: '/route/saveCourse',
-        data: $('#route-write-form').serialize(),
-        dataType: 'json'
+        processData: false,
+        contentType: false,
+        data: formData
       });
     }
-    // DB에 코스 임시저장 >
+    // 2.DB에 코스 임시저장 >
 
-    // < 웹페이지에 코스 임시저장
+    // < 3.웹페이지에 코스 임시저장
     function saveCourseAjaxSuccess() {
       const $frag = $(document.createDocumentFragment());
       const $li = $(`
@@ -270,7 +303,7 @@ $(function() {
       location.value = '';
       content.value = '';
     }
-    // 웹페이지에 코스 임시저장 >
+    // 3.웹페이지에 코스 임시저장 >
     // DB에 코스 임시저장 프로미스 ->
   }
   // 코스 저장 -->
@@ -280,7 +313,7 @@ $(function() {
     title = document.querySelector('#route-title');
     epilogue = document.querySelector('#route-epilogue');
     hashtag = document.querySelector('#hashtag');
-    rno = document.querySelector('#rno');
+    // rno = document.querySelector('#rno');
     $.ajax({
       type: 'post',
       url: '/route/saveRoute',
@@ -288,7 +321,7 @@ $(function() {
         title: title.value,
         content: epilogue.value,
         hashtag: hashtag.value,
-        rno: rno.value,
+        rno: rno,
         nickname: 'test1'
       },
       success: function(data) {

@@ -28,5 +28,5 @@ pageEncoding="UTF-8"%>
     integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
     crossorigin="anonymous"
   ></script>
-  <script type="text/javascript" src="/resources/js/route.js"></script>
+  <script type="text/javascript" src="/resources/js/route/route.js"></script>
 </html>

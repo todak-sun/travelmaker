@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.travelmaker.route.domain.RouteContentDTO;
 import com.travelmaker.route.domain.RouteDTO;
+import com.travelmaker.route.domain.RouteImageDTO;
 
 @Repository("routeDAO")
 @Transactional
@@ -22,13 +23,19 @@ public class RouteDAOMybatis implements RouteDAO {
 	}
 
 	@Override
-	public void saveCourse(RouteContentDTO routeContentDTO) {
+	public int saveCourse(RouteContentDTO routeContentDTO) {
 		sqlSession.insert("routeSQL.saveCourse",routeContentDTO);
+		return sqlSession.selectOne("routeSQL.getCurrCrnoSeq");
 	}
 
 	@Override
 	public void saveRoute(RouteDTO routeDTO) {
 		sqlSession.update("routeSQL.saveRoute",routeDTO);
+	}
+
+	@Override
+	public void saveRouteImage(RouteImageDTO routeImageDTO) {
+		sqlSession.insert("routeSQL.saveRouteImage",routeImageDTO);
 	}
 	
 }
