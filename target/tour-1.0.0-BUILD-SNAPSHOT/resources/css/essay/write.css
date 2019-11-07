@@ -1,0 +1,108 @@
+#map {
+  width: 100%;
+  height: 100%;
+  min-height: 500px;
+}
+
+.hide {
+  display: none;
+}
+
+.modal-dialog {
+  min-width: 800px;
+  padding: 0;
+}
+
+#placesList {
+  list-style: none;
+}
+
+.list-group-item {
+  padding: 0;
+}
+
+.place-addr {
+  font-size: 0.75rem;
+}
+
+.map-container {
+  width: 750px;
+  height: 350px;
+}
+
+#description {
+  font-family: Roboto;
+  font-size: 15px;
+  font-weight: 300;
+}
+
+#infowindow-content .title {
+  font-weight: bold;
+}
+
+#infowindow-content {
+  display: none;
+}
+
+#map #infowindow-content {
+  display: inline;
+}
+
+.pac-card {
+  margin: 10px 10px 0 0;
+  border-radius: 2px 0 0 2px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  outline: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  background-color: #fff;
+  font-family: Roboto;
+}
+
+.pac-container {
+  padding-bottom: 12px;
+  margin-right: 12px;
+  z-index: 9999;
+}
+
+.pac-controls {
+  display: inline-block;
+  padding: 5px 11px;
+}
+
+.pac-controls label {
+  font-family: Roboto;
+  font-size: 13px;
+  font-weight: 300;
+}
+
+#pac-input {
+  background-color: #fff;
+  font-family: Roboto;
+  font-size: 15px;
+  font-weight: 300;
+  margin-left: 12px;
+  padding: 0 11px 0 13px;
+  text-overflow: ellipsis;
+  width: 400px;
+}
+
+#pac-input:focus {
+  border-color: #4d90fe;
+}
+
+#target {
+  width: 345px;
+}
+
+#img-background {
+  width: 100%;
+  height: 200px;
+  background-repeat: no-repeat;
+  background-image: url('http://placehold.it/500X300');
+  background-size: cover;
+}
+
+#tmp-content-list-group {
+  list-style: none;
+}

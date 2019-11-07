@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(value = "/essay")
 public class EssayPageController {
 
-	@GetMapping(value = "/write")
+	@GetMapping("/write")
 	public String write() {
 		return "/essay/write";
 	}

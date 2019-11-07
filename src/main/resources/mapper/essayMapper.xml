@@ -10,7 +10,43 @@
         SELECT * FROM essay WHERE rno = #{rno}
     </select>
 
-    <insert id="create" parameterType="essay">
-        INSERT INTO essay VALUES(bno.nextVal, rno.nextVal, #{nickname}, #{title}, 0, 0, #{hashtag}, sysdate, sysdate, 0, #{location}, #{lat}, #{lng}, #{content}, #{fixed})
+    <select id="getRno" resultType="int">
+        SELECT rno.currVal FROM dual
+    </select>
+
+    <select id="getFilepath" resultType="java.lang.String">
+        SELECT FILEPATH FROM ESSAY WHERE rno = #{rno}
+    </select>
+
+    <select id="getEssayTmpBySeq" resultType="essay">
+        SELECT * FROM essay WHERE fixed = 0 AND seq = #{seq}
+    </select>
+
+    <delete id="delete">
+        DELETE FROM essay WHERE rno = #{rno}
+    </delete>
+
+    <insert id="saveEssayTmp" parameterType="essay">
+      INSERT INTO essay(bno, rno, seq, title, likes, views, hashtag, dateWrite, dateUpdate, cmt, filepath, fixed, isDomestic)
+      VALUES(bno.nextVal, rno.nextVal, #{seq}, #{title}, 0, 0, #{hashtag}, sysdate, sysdate, 0, #{filepath}, 0, #{isDomestic})
     </insert>
+
+    <update id="saveEssay" parameterType="essay">
+        UPDATE essay SET title = #{title, jdbcType=VARCHAR}, hashtag = #{hashtag, jdbcType=VARCHAR}, dateUpdate = sysdate, filepath = #{filepath}, fixed = #{fixed}
+        WHERE rno = #{rno}
+    </update>
+
+    <insert id="saveImage" parameterType="essayImage">
+      INSERT INTO essay_image(ino, rno, imagename)
+      VALUES(ino.nextVal, #{rno}, #{imagename})
+    </insert>
+
+    <delete id="deleteImage">
+        DELETE essay_image WHERE rno = #{rno}
+    </delete>
+
+    <select id="getImageName" resultType="java.lang.String">
+        SELECT imagename FROM essay_image WHERE rno = #{rno}
+    </select>
+
 </mapper>

@@ -5,9 +5,15 @@ import com.travelmaker.essay.domain.EssayDTO;
 import java.util.List;
 
 public interface EssayService {
-    public List<EssayDTO> getEssay();
+    List<EssayDTO> getEssay();
 
-    public EssayDTO getEssayOne(int rno);
+    EssayDTO getEssayOne(int rno);
 
-    public int createEssay(EssayDTO essayDTO);
+    int create(EssayDTO essayDTO);
+
+    String update(EssayDTO essayDTO);
+
+    List<EssayDTO> getEssayTmpBySeq(int seq);
+
+    void delete(int rno);
 }

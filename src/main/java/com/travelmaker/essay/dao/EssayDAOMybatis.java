@@ -1,6 +1,7 @@
 package com.travelmaker.essay.dao;
 
 import com.travelmaker.essay.domain.EssayDTO;
+import com.travelmaker.essay.domain.EssayImageDTO;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -24,7 +25,38 @@ public class EssayDAOMybatis implements EssayDAO {
     }
 
     @Override
-    public int create(EssayDTO essayDTO) {
-        return sqlSession.insert("essaySQL.create", essayDTO);
+    public int saveEssayTmp(EssayDTO essayDTO) {
+        sqlSession.insert("essaySQL.saveEssayTmp", essayDTO);
+        return sqlSession.selectOne("essaySQL.getRno");
     }
+
+    @Override
+    public int saveImage(EssayImageDTO essayImageDTO) {
+        return sqlSession.insert("essaySQL.saveImage", essayImageDTO);
+    }
+
+    @Override
+    public int saveEssay(EssayDTO essayDTO) {
+        return sqlSession.update("essaySQL.saveEssay", essayDTO);
+    }
+
+    @Override
+    public List<EssayDTO> getEssayTmpBySeq(int seq) {
+        return sqlSession.selectList("essaySQL.getEssayTmpBySeq", seq);
+    }
+
+    @Override
+    public String deleteImage(int rno) {
+        String imagename = sqlSession.selectOne("essaySQL.getImageName", rno);
+        sqlSession.delete("essaySQL.deleteImage", rno);
+        return imagename;
+    }
+
+    @Override
+    public String delete(int rno) {
+        String filename = sqlSession.selectOne("essaySQL.getFilepath", rno);
+        sqlSession.delete("essaySQL.delete", rno);
+        return filename;
+    }
+
 }
