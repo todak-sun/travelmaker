@@ -201,7 +201,7 @@ pageEncoding="UTF-8"%>
         placeholder="제목을 입력해 주세요"
       />
     </div>
-    <form id="route-write-form" name="route-write-form">
+    <form id="route-write-form" name="route-write-form" method="post">
       <div class="route-destination">
         <input type="hidden" id="isDomestic" name="isDomestic" value="" />
       </div>
@@ -240,7 +240,7 @@ pageEncoding="UTF-8"%>
         <div class="route-image">
           <label>사진</label>
 
-          <input type="file" name="image" multiple="multiple" />
+          <input type="file" name="images" multiple="multiple" />
         </div>
         <div class="route-date">
           <label>날짜</label>
@@ -259,7 +259,7 @@ pageEncoding="UTF-8"%>
           <input type="hidden" name="score" />
         </div>
       </div>
-      <input type="hidden" id="rno" name="rno" />
+      <!--       <input type="hidden" id="rno" name="rno" /> -->
 
       <div class="route-epilogue-form" style="display: none;">
         <label>에필로그</label>
@@ -392,7 +392,7 @@ pageEncoding="UTF-8"%>
     src="//dapi.kakao.com/v2/maps/sdk.js?appkey=58d9a72c9db8da0b849a32734093767e&libraries=services"
   ></script>
 
-  <script type="text/javascript" src="/resources/js/route.js"></script>
+  <script type="text/javascript" src="/resources/js/route/route.js"></script>
 
   <script type="text/javascript">
     var markers, mapContainer, mapOption, map, ps, infowindow;

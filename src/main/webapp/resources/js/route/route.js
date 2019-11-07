@@ -242,6 +242,7 @@ $(function() {
           score.value = starNum;
         });
       })
+      .then(createRouteForm)
       .then(saveCourseAjax)
       .then(saveCourseAjaxSuccess)
       .catch(function(error) {
@@ -254,24 +255,32 @@ $(function() {
         resolve(document.querySelectorAll('.route-score a.on').length);
       });
     }
+    function createRouteForm() {
+      return new Promise(function(resolve, reject) {
+        const $form = $('#route-write-form')[0];
+        const formData = new FormData($form);
+        let images = document.querySelector('input[name=images]').files;
+        if (images.length > 5) {
+          alert('이미지는 5개까지만 업로드 가능합니다');
+          return;
+        }
+        for (let i = 0; i < images.length; i++) {
+          formData.append('image' + i, images[i]);
+        }
+        formData.append('rno', rno);
+        resolve(formData);
+      });
+    }
     // 1.별점수 숫자로 >
-    images = document.querySelector('input[type="file"]').files;
+
     // < 2.DB에 코스 임시저장
-    function saveCourseAjax() {
+    function saveCourseAjax(formData) {
       return $.ajax({
         type: 'post',
         url: '/route/saveCourse',
-        data: {
-          content: content.value,
-          location: location.value,
-          dateStart: dateStart.value,
-          dateEnd: dateEnd.value,
-          score: score.value,
-          rno: rno,
-          lat: lat.value,
-          lng: lng.value
-        },
-        dataType: 'json'
+        processData: false,
+        contentType: false,
+        data: formData
       });
     }
     // 2.DB에 코스 임시저장 >

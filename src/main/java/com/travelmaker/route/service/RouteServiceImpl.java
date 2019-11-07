@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.travelmaker.route.dao.RouteDAO;
 import com.travelmaker.route.domain.RouteContentDTO;
 import com.travelmaker.route.domain.RouteDTO;
+import com.travelmaker.route.domain.RouteImageDTO;
 
 @Service(value = "routeService")
 public class RouteServiceImpl implements RouteService {
@@ -20,15 +21,21 @@ public class RouteServiceImpl implements RouteService {
 	}
 
 	@Override
-	public void saveCourse(RouteContentDTO routeContentDTO) {
+	public int saveCourse(RouteContentDTO routeContentDTO) {
 		
-		routeDAO.saveCourse(routeContentDTO);
+		return routeDAO.saveCourse(routeContentDTO);
 	}
 
 	@Override
 	public void saveRoute(RouteDTO routeDTO) {
 
 		routeDAO.saveRoute(routeDTO);
+	}
+
+	@Override
+	public void saveRouteImage(RouteImageDTO routeImageDTO) {
+		
+		routeDAO.saveRouteImage(routeImageDTO);
 	}
 	
 }
