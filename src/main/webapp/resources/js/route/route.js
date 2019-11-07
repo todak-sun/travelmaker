@@ -159,8 +159,16 @@ $(function() {
 
   // <-- 국내 해외 폼 보여주기
   function showWriteForm2() {
-    if (isDomestic) {
+    if (isDomestic == 1) {
       $('.abroad-info').hide();
+      /*$('#searchBtn').removeAttr('id');*/
+      $('#googleMapModal').remove();
+      
+/*      $('#searchBtn').attr('data-toggle', 'modal');
+      $('#searchBtn').attr('data-target', '#exampleModal');*/
+    } else if(isDomestic == 0) {
+    	$('#searchBtn').removeAttr('data-toggle');
+    	$('#searchBtn').removeAttr('data-target');
     }
     // switch (destination) {
     //   case 'domestic':
