@@ -75,11 +75,6 @@ pageEncoding="UTF-8" %>
       </div>
     </nav>
     <!-- 네비게이션 영역 끝 -->
-    <!-- 리스트 영역​ 시작-->
-    <div>
-      <ul class="post-list"></ul>
-    </div>
-    <!-- 리스트 영역 끝 -->
 
     <div id="modal-area" class="modal" tabindex="-1" role="dialog"></div>
     ​

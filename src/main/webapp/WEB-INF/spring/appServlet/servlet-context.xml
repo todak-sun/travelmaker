@@ -23,6 +23,8 @@
 	<context:component-scan
 		base-package="com.travelmaker.route.controller" />
 	<context:component-scan
+		base-package="com.travelmaker.story.controller" />
+	<context:component-scan
 		base-package="com.travelmaker.user.controller" />
 	<context:component-scan
 		base-package="com.travelmaker.home.controller" />

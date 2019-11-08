@@ -20,6 +20,8 @@
 	<context:component-scan
 		base-package="com.travelmaker.route.service" />
 	<context:component-scan
+		base-package="com.travelmaker.story.service" />
+	<context:component-scan
 		base-package="com.travelmaker.user.service" />
 
 	<context:component-scan
@@ -35,6 +37,8 @@
 	<context:component-scan
 		base-package="com.travelmaker.route.dao" />
 	<context:component-scan
+		base-package="com.travelmaker.story.dao" />
+	<context:component-scan
 		base-package="com.travelmaker.user.dao" />
 
 	<context:component-scan
@@ -49,6 +53,8 @@
 		base-package="com.travelmaker.purchase.domain" />
 	<context:component-scan
 		base-package="com.travelmaker.route.domain" />
+	<context:component-scan
+		base-package="com.travelmaker.story.domain" />
 	<context:component-scan
 		base-package="com.travelmaker.user.domain" />
 
