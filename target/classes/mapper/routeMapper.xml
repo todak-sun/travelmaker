@@ -8,12 +8,12 @@
 		VALUES (seq_bno.NEXTVAL, seq_rno.NEXTVAL, #{nickname}, #{title}, 0, #{isDomestic})
 	</insert>
 	
-	<insert id="saveRoute" parameterType="route">
+	<update id="saveRoute" parameterType="route">
 	begin
 		UPDATE route SET content=#{content}, hashtag=#{hashtag}, datewrite=SYSDATE, dateupdate=SYSDATE, fixed=1 where rno = #{rno} and nickname = #{nickname};
 		UPDATE route_content SET fixed=1 WHERE rno=#{rno};
 	end;
-	</insert>
+	</update>
 	
 	<select id="getRoute" parameterType="Integer" resultType="route" >
 		SELECT * FROM route WHERE rno = #{rno}
