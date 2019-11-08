@@ -225,12 +225,10 @@
 }
 
 /* Google Map */
-/* Always set the map height explicitly to define the size of the div
-				       * element that contains the map. */
 #googleMapDiv {
 	height: 100%;
 }
-/* Optional: Makes the sample page fill the window. */
+
 html, body {
 	height: 100%;
 	margin: 0;
@@ -325,10 +323,9 @@ html, body {
 	float: left;
 }
 
-​
-		div#input:hover, div#output:hover {
+div#input:hover, div#output:hover {
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0
-		rgba(0, 0, 0, 0.19);
+	rgba(0, 0, 0, 0.19);
 }
 </style>
 </head>
@@ -442,7 +439,7 @@ html, body {
 		</div>
 	</div>
 
-	<!-- Google Map -->
+	<!-- Google Modal -->
 	<div id="googleMapModal" class="modal fade" role="dialog">
 		<div class="modal-dialog">
 			<!-- Modal content-->

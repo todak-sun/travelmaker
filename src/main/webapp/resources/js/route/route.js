@@ -159,14 +159,14 @@ $(function() {
 
   // <-- 국내 해외 폼 보여주기
   function showWriteForm2() {
+	  // 국내 (Kakao Map)
     if (isDomestic == 1) {
       $('.abroad-info').hide();
-      /*$('#searchBtn').removeAttr('id');*/
+      // 구글 지도 모달창 없애기
       $('#googleMapModal').remove();
-      
-/*      $('#searchBtn').attr('data-toggle', 'modal');
-      $('#searchBtn').attr('data-target', '#exampleModal');*/
+      // 해외 (Google Map)
     } else if(isDomestic == 0) {
+    	// 카카오 지도 모달 연결 속성 없애기
     	$('#searchBtn').removeAttr('data-toggle');
     	$('#searchBtn').removeAttr('data-target');
     }
