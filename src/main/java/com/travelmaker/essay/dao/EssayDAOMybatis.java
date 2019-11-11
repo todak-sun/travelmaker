@@ -1,6 +1,7 @@
 package com.travelmaker.essay.dao;
 
 import com.travelmaker.essay.domain.EssayDTO;
+import com.travelmaker.essay.domain.EssaySearchFilter;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -14,17 +15,35 @@ public class EssayDAOMybatis implements EssayDAO {
     private SqlSession sqlSession;
 
     @Override
-    public List<EssayDTO> getAll() {
+    public EssayDTO readOne(int rno) {
+        return sqlSession.selectOne("essaySQL.readOne", rno);
+    }
+
+    @Override
+    public List<EssayDTO> readAll(EssaySearchFilter essaySearchFilter) {
+        return sqlSession.selectList("essaySQL.search", essaySearchFilter);
+    }
+
+    @Override
+    public EssayDTO create(EssayDTO essayDTO) {
+        sqlSession.insert("essaySQL.create", essayDTO);
+        return sqlSession.selectOne("essaySQL.readOne", essayDTO.getRno());
+    }
+
+    @Override
+    public EssayDTO update(EssayDTO essayDTO) {
+        sqlSession.update("essaySQL.update", essayDTO);
+        return sqlSession.selectOne("essaySQL.readOne", essayDTO.getRno());
+    }
+
+    @Override
+    public void delete(int rno) {
+        sqlSession.delete("essaySQL.delete", rno);
+    }
+
+    @Override
+    public List<EssayDTO> readAll() {
         return sqlSession.selectList("essaySQL.getAll");
     }
 
-    @Override
-    public EssayDTO getOne(int rno) {
-        return sqlSession.selectOne("essaySQL.getOne", rno);
-    }
-
-    @Override
-    public int create(EssayDTO essayDTO) {
-        return sqlSession.insert("essaySQL.create", essayDTO);
-    }
 }

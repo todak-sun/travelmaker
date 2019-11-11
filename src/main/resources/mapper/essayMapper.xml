@@ -2,15 +2,38 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="essaySQL">
-    <select id="getAll" resultType="essay">
-        SELECT * FROM essay
-    </select>
 
-    <select id="getOne" parameterType="int" resultType="essay">
+    <select id="readOne" parameterType="int" resultType="essay">
         SELECT * FROM essay WHERE rno = #{rno}
     </select>
 
-    <insert id="create" parameterType="essay">
-        INSERT INTO essay VALUES(bno.nextVal, rno.nextVal, #{nickname}, #{title}, 0, 0, #{hashtag}, sysdate, sysdate, 0, #{location}, #{lat}, #{lng}, #{content}, #{fixed})
+    <insert id="create">
+        <selectKey keyProperty="rno" resultType="Integer" order="BEFORE">
+            SELECT rno.nextval from dual
+        </selectKey>
+        INSERT INTO ESSAY(BNO, RNO, SEQ, TITLE, HASHTAG, FILE_NAME, IMAGE_NAME)
+        VALUES(bno.nextval, #{rno}, #{seq}, #{title, jdbcType=VARCHAR}, #{hashtag, jdbcType=VARCHAR}, #{fileName}, #{imageName, jdbcType=VARCHAR})
     </insert>
+
+    <select id="search" parameterType="essaySearchFilter" resultType="essay">
+        SELECT * FROM essay WHERE seq = #{seq} AND fixed = #{fixed}
+    </select>
+
+    <update id="update" parameterType="essay">
+        UPDATE ESSAY
+        SET TITLE = #{title, jdbcType=VARCHAR}, LIKES = #{likes}, VIEWS = #{views},
+            HASHTAG = #{hashtag, jdbcType=VARCHAR}, DATE_UPDATE = sysdate, IMAGE_NAME = #{imageName, jdbcType=VARCHAR},
+            FIXED = #{fixed}
+        WHERE RNO = #{rno}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM essay WHERE rno = #{rno}
+    </delete>
+
+    <!--이 위로 쓰는 것.-->
+
+    <select id="getAll" resultType="essay">
+        SELECT * FROM essay
+    </select>
 </mapper>
