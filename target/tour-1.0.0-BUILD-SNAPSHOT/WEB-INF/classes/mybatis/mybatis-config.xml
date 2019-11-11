@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE configuration  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+
     <typeAliases>
         <typeAlias type="com.travelmaker.comment.domain.CommentDTO"
                    alias="comment"/>
@@ -8,8 +12,7 @@
         <typeAlias type="com.travelmaker.essay.domain.EssayDTO"
                    alias="essay"/>
 
-        <typeAlias type="com.travelmaker.essay.domain.EssayImageDTO"
-				   alias="essayImage"/>
+        <typeAlias type="com.travelmaker.essay.domain.EssaySearchFilter" alias="essaySearchFilter"/>
 
         <typeAlias type="com.travelmaker.etcboard.domain.InquiryDTO"
                    alias="inquiry"/>
@@ -42,7 +45,5 @@
                    alias="follow"/>
         <typeAlias type="com.travelmaker.user.domain.UserDTO"
                    alias="user"/>
-
-
     </typeAliases>
 </configuration>

@@ -1,24 +1,20 @@
 package com.travelmaker.essay.dao;
 
 import com.travelmaker.essay.domain.EssayDTO;
-import com.travelmaker.essay.domain.EssayImageDTO;
+import com.travelmaker.essay.domain.EssaySearchFilter;
 
 import java.util.List;
 
 public interface EssayDAO {
-    List<EssayDTO> getAll();
+   public EssayDTO readOne(int rno);
 
-    EssayDTO getOne(int rno);
+   public List<EssayDTO> readAll();
 
-    int saveEssayTmp(EssayDTO essayDTO);
+   public List<EssayDTO> readAll(EssaySearchFilter essaySearchFilter);
 
-    int saveImage(EssayImageDTO essayImageDTO);
+   public EssayDTO create(EssayDTO essayDTO);
 
-    int saveEssay(EssayDTO essayDTO);
+   public EssayDTO update(EssayDTO essayDTO);
 
-    List<EssayDTO> getEssayTmpBySeq(int seq);
-
-    String deleteImage(int rno);
-
-    String delete(int rno);
+   public void delete(int rno);
 }

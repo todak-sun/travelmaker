@@ -8,19 +8,25 @@ pageEncoding="UTF-8" %>
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <link
       rel="stylesheet"
-      href="../../../resources/css/common/bootstrap-reboot.css"
+      href="${pageContext.request.contextPath}/resources/css/common/bootstrap-reboot.css"
     />
-    <link rel="stylesheet" href="../../../resources/css/common/bootstrap.css" />
     <link
       rel="stylesheet"
-      href="../../../resources/summernote/summernote-bs4.css"
+      href="${pageContext.request.contextPath}/resources/css/common/bootstrap.css"
     />
-    <link rel="stylesheet" href="../../../resources/css/essay/write.css" />
-    <script src="../../../resources/js/common/popper.min.js"></script>
-    <script src="../../../resources/js/common/jquery-3.4.1.js"></script>
-    <script src="../../../resources/js/common/bootstrap.js"></script>
-    <script src="../../../resources/summernote/summernote-bs4.js"></script>
-    <script src="../../../resources/summernote/lang/summernote-ko-KR.js"></script>
+    <link
+      rel="stylesheet"
+      href="${pageContext.request.contextPath}/resources/summernote/summernote-bs4.css"
+    />
+    <link
+      rel="stylesheet"
+      href="${pageContext.request.contextPath}/resources/css/essay/write.css"
+    />
+    <script src="${pageContext.request.contextPath}/resources/js/common/popper.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/common/jquery-3.4.1.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/common/bootstrap.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/summernote/summernote-bs4.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/summernote/lang/summernote-ko-KR.js"></script>
     <title>에세이 작성</title>
   </head>
   <body>
@@ -30,48 +36,60 @@ pageEncoding="UTF-8" %>
       accept="image/jpg, image/jpeg image/png"
       style="display:none"
     />
-    <div class="container-fluid text-center">
+    <div class="container">
       <h1>글쓰기</h1>
       <div class="row">
-        <div class="editor-zone border-dark bg-light col col-sm-9">
-          <div id="img-background"></div>
-          <input id="title" type="text" placeholder="제목" />
-          <button id="btn-upload-mainimg" class="btn btn-outline-info">
-            대표이미지 설정
-          </button>
+        <div class="editor-zone col col-sm-9">
+          <div id="img-background" class="main-image">
+            클릭하셔서 대표 이미지를 설정해주세요!
+          </div>
+          <input
+            id="title"
+            type="text"
+            class="content-title"
+            placeholder="제목"
+          />
           <div id="editor"></div>
         </div>
-        <div class="tool-zone bg-primary col col-sm-3">
-          <div>
-            <button id="btn-save-tmp">임시저장</button>
-            <button id="btn-save">발행하기</button>
-          </div>
-          <div class="row">
-            <div class="col">
-              <button id="btn-image">이미지</button>
+        <div class="tool-zone col col-sm-3">
+          <div class="tool-box">
+            <div>
+              <button id="btn-save-tmp" class="btn btn-secondary">
+                임시저장
+              </button>
+              <button id="btn-save" class="btn btn-secondary">발행하기</button>
             </div>
-            <div class="col">
-              <button id="btn-map">지도</button>
+            <div class="row">
+              <div class="col">
+                <button id="btn-image" class="btn btn-outline-success">
+                  이미지
+                </button>
+              </div>
+              <div class="col">
+                <button id="btn-map" class="btn btn-outline-success">
+                  지도
+                </button>
+              </div>
+              <div class="w-100"></div>
+              <div class="col">
+                <button id="btn-video" class="btn btn-outline-success">
+                  동영상
+                </button>
+              </div>
+              <div class="col">
+                <button id="btn-breakline" class="btn btn-outline-success">
+                  구분선
+                </button>
+              </div>
             </div>
-            <div class="w-100"></div>
-            <div class="col">
-              <button id="btn-video">동영상</button>
+            <div class="jumbotron">
+              <h2>해쉬태그</h2>
+              <div id="box-hashtag" class="form-control"></div>
             </div>
-            <div class="col">
-              <button id="btn-hashtag">해시태그</button>
+            <div class="jumbotron">
+              <h2>임시저장 리스트</h2>
+              <ul id="tmp-content-group"></ul>
             </div>
-            <div class="w-100"></div>
-            <div class="col">
-              <button id="btn-breakline">구분선</button>
-            </div>
-          </div>
-          <div class="jumbotron">
-            <h2>해쉬태그</h2>
-            <div id="box-hashtag" class="form-control"></div>
-          </div>
-          <div class="jumbotron">
-            <h2>임시저장 리스트</h2>
-            <ul id="tmp-content-list-group"></ul>
           </div>
         </div>
       </div>
@@ -113,6 +131,6 @@ pageEncoding="UTF-8" %>
       async
       defer
     ></script>
-    <script src="../../../resources/js/essay/write.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/essay/write.js"></script>
   </body>
 </html>

@@ -1,7 +1,7 @@
 package com.travelmaker.essay.dao;
 
 import com.travelmaker.essay.domain.EssayDTO;
-import com.travelmaker.essay.domain.EssayImageDTO;
+import com.travelmaker.essay.domain.EssaySearchFilter;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -15,48 +15,35 @@ public class EssayDAOMybatis implements EssayDAO {
     private SqlSession sqlSession;
 
     @Override
-    public List<EssayDTO> getAll() {
-        return sqlSession.selectList("essaySQL.getAll");
+    public EssayDTO readOne(int rno) {
+        return sqlSession.selectOne("essaySQL.readOne", rno);
     }
 
     @Override
-    public EssayDTO getOne(int rno) {
-        return sqlSession.selectOne("essaySQL.getOne", rno);
+    public List<EssayDTO> readAll(EssaySearchFilter essaySearchFilter) {
+        return sqlSession.selectList("essaySQL.search", essaySearchFilter);
     }
 
     @Override
-    public int saveEssayTmp(EssayDTO essayDTO) {
-        sqlSession.insert("essaySQL.saveEssayTmp", essayDTO);
-        return sqlSession.selectOne("essaySQL.getRno");
+    public EssayDTO create(EssayDTO essayDTO) {
+        sqlSession.insert("essaySQL.create", essayDTO);
+        return sqlSession.selectOne("essaySQL.readOne", essayDTO.getRno());
     }
 
     @Override
-    public int saveImage(EssayImageDTO essayImageDTO) {
-        return sqlSession.insert("essaySQL.saveImage", essayImageDTO);
+    public EssayDTO update(EssayDTO essayDTO) {
+        sqlSession.update("essaySQL.update", essayDTO);
+        return sqlSession.selectOne("essaySQL.readOne", essayDTO.getRno());
     }
 
     @Override
-    public int saveEssay(EssayDTO essayDTO) {
-        return sqlSession.update("essaySQL.saveEssay", essayDTO);
-    }
-
-    @Override
-    public List<EssayDTO> getEssayTmpBySeq(int seq) {
-        return sqlSession.selectList("essaySQL.getEssayTmpBySeq", seq);
-    }
-
-    @Override
-    public String deleteImage(int rno) {
-        String imagename = sqlSession.selectOne("essaySQL.getImageName", rno);
-        sqlSession.delete("essaySQL.deleteImage", rno);
-        return imagename;
-    }
-
-    @Override
-    public String delete(int rno) {
-        String filename = sqlSession.selectOne("essaySQL.getFilepath", rno);
+    public void delete(int rno) {
         sqlSession.delete("essaySQL.delete", rno);
-        return filename;
+    }
+
+    @Override
+    public List<EssayDTO> readAll() {
+        return sqlSession.selectList("essaySQL.getAll");
     }
 
 }

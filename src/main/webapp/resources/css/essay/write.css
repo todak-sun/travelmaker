@@ -4,6 +4,38 @@
   min-height: 500px;
 }
 
+.editor-zone {
+  min-width: 700px;
+}
+
+.editor-zone .main-image {
+  width: 100%;
+  height: 200px;
+  cursor: pointer;
+}
+
+.editor-zone .content-title {
+  width: 100%;
+  font-size: 1.5rem;
+  text-align: center;
+  outline: none;
+  border: none;
+  background: none;
+  border-bottom: 2px solid gray;
+  margin-bottom: 1.75rem;
+}
+
+.tool-zone {
+  position: relative;
+  min-width: 250px;
+}
+
+.tool-zone .tool-box {
+  position: fixed;
+  width: 300px;
+  min-width: 250px;
+}
+
 .hide {
   display: none;
 }
@@ -93,14 +125,6 @@
 
 #target {
   width: 345px;
-}
-
-#img-background {
-  width: 100%;
-  height: 200px;
-  background-repeat: no-repeat;
-  background-image: url('http://placehold.it/500X300');
-  background-size: cover;
 }
 
 #tmp-content-list-group {

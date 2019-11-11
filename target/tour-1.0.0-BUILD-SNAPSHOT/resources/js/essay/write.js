@@ -1,4 +1,5 @@
 const setting = {
+  url: `http://${location.host}`,
   summernote: {
     placeholder: '내용',
     airMode: true,
@@ -45,6 +46,48 @@ $(function() {
   let hashes = [];
   let rno;
 
+  let requestData = {
+    rno: '',
+    seq: 1,
+    title: '',
+    content: '',
+    hashcode: '',
+    fixed: 0,
+    isDomestic: +getJSONfromQueryString().isDomestic
+  };
+
+  function setData(data) {
+    requestData = {
+      ...requestData,
+      ...data
+    };
+    console.log(requestData);
+  }
+
+  function getData() {
+    return requestData;
+  }
+
+  //   function getData() {
+  //     return {
+  //       seq: 1,
+  //       title: title.value,
+  //       hashtag: hashes.join(','),
+  //       content: $editor.summernote('code'),
+  //       fixed: 0,
+  //       isDomestic: +getJSONfromQueryString().isDomestic
+  //     };
+  //   }
+
+  function getFormData(imageFile) {
+    const { rno } = getData();
+    const formData = new FormData();
+    console.log(imageFile);
+    formData.append('imageFile', imageFile);
+    formData.append('rno', rno);
+    return formData;
+  }
+
   const $editor = $('#editor');
   const $modal = $('.modal');
 
@@ -53,100 +96,112 @@ $(function() {
     btnImage,
     btnMap,
     btnVideo,
-    btnHashtag,
     btnBreakLine,
     btnSaveTmp,
     boxHashTag,
-    btnUploadMainImg,
     imgBackground,
     inputFileUpload,
-    btnSave
+    btnSave,
+    tmpContentGroup
   ] = getEls(
     document,
     '#title',
     '#btn-image',
     '#btn-map',
     '#btn-video',
-    '#btn-hashtag',
     '#btn-breakline',
     '#btn-save-tmp',
     '#box-hashtag',
-    '#btn-upload-mainimg',
     '#img-background',
     '#input-file-upload',
-    '#btn-save'
+    '#btn-save',
+    'tmp-content-group'
   );
 
-  btnUploadMainImg.addEventListener('click', btnUploadMainImgHandler);
   inputFileUpload.addEventListener('change', inputFileUploadHandler);
+  title.addEventListener('change', titleChangeHandler);
+
   btnImage.addEventListener('click', btnImageHandler);
   btnMap.addEventListener('click', btnMapHandler);
   btnVideo.addEventListener('click', btnVideoHandler);
-  btnHashtag.addEventListener('click', btnHahstagHandler);
   btnBreakLine.addEventListener('click', btnBreakLineHandler);
   btnSave.addEventListener('click', btnSaveHandler);
   btnSaveTmp.addEventListener('click', btnSaveTmpHandler);
+  boxHashTag.addEventListener('click', hashBoxHandler);
+  imgBackground.addEventListener('click', imgBackgroundHandler);
+
+  function titleChangeHandler(e) {
+    setData({ title: this.value });
+  }
+
+  initOnLoad();
+
+  function initOnLoad() {
+    // setData({ rno: rno, content: $editor.summernote('code') });
+    ajaxCreate(getData())
+      .then((ret) => {
+        rno = ret.data.rno;
+        setData({ rno: ret.data.rno });
+        console.log(ret.data);
+      })
+      .catch(console.error);
+
+    ajaxGetEssayListTmp(1, 0)
+      .then((ret) => console.log(ret.data))
+      .catch(console.error);
+    //todo console 코드 다음에 지울 것.
+  }
+
+  function imgBackgroundHandler(e) {
+    inputFileUpload.click();
+  }
+
+  //   if (!rno) {
+  //     save(getData())
+  //       .then((ret) => {
+  //         rno = +ret;
+  //         console.log('임시저장');
+  //       })
+  //       .catch(console.error);
+  //   } else {
+  //     saveTmp(getData())
+  //       .then((ret) => console.log('임시저장'))
+  //       .catch(console.error);
+  //   }
 
   function btnSaveTmpHandler(e) {
-    if (!rno) {
-      save(getData())
-        .then((ret) => {
-          rno = +ret;
-          console.log('임시저장');
-        })
-        .catch(console.error);
-    } else {
-      saveTmp(getData())
-        .then((ret) => console.log('임시저장'))
-        .catch(console.error);
-    }
+    setData({ fixed: 0, content: $editor.summernote('code') });
+    ajaxUpdate(getData())
+      .then((ret) => console.log('임시저장', ret.data))
+      .catch(console.error);
   }
+
+  //   if (!rno) {
+  //     save(getData())
+  //       .then((ret) => {
+  //         rno = +ret;
+  //         return saveFixed(getData());
+  //       })
+  //       .then((ret) => console.log('저장완료'))
+  //       .catch(console.error);
+  //   } else {
+  //     saveFixed(getData())
+  //       .then((ret) => console.log('저장완료'))
+  //       .catch(console.error);
+  //   }
 
   function btnSaveHandler(e) {
-    if (!rno) {
-      save(getData())
-        .then((ret) => {
-          rno = +ret;
-          return saveFixed(getData());
-        })
-        .then((ret) => console.log('저장완료'))
-        .catch(console.error);
-    } else {
-      saveFixed(getData())
-        .then((ret) => console.log('저장완료'))
-        .catch(console.error);
-    }
+    setData({ fixed: 1, content: $editor.summernote('code') });
+    ajaxUpdate(getData())
+      .then((ret) => console.log('발행', ret.data))
+      .catch(console.error);
   }
-
-  //   {
-  //     "bno": 1,
-  //     "rno": 1,
-  //     "seq": 1,
-  //     "title": null,
-  //     "likes": 0,
-  //     "views": 0,
-  //     "hashtag": null,
-  //     "dateWrite": "2019-11-07 03:14:03.0",
-  //     "dateUpdate": "2019-11-07 03:14:03.0",
-  //     "cmt": 0,
-  //     "content": "<p><br></p>",
-  //     "fixed": 0,
-  //     "isDomestic": 1
-  // },
-
-  getTmpEssay(1).then((essayTmps) => {
-    essayTmps.forEach((essay) => {
-      const { title, dateUpdate } = essay;
-      console.log('제목', title || '제목없음');
-      console.log('최근 수정일', dateUpdate);
-    });
-  });
 
   function btnVideoHandler(e) {
     $editor.summernote('videoDialog.show');
   }
 
-  function btnHahstagHandler(e) {
+  function hashBoxHandler(e) {
     const titleContent = '해쉬태그';
     const bodyContent = getTemplateHashModal();
     setModal($modal, titleContent, bodyContent);
@@ -170,48 +225,12 @@ $(function() {
     else initGoogleMap();
   }
 
-  function btnUploadMainImgHandler(e) {
-    inputFileUpload.click();
-  }
-
   function inputFileUploadHandler(e) {
-    if (!rno) {
-      save(getData())
-        .then((ret) => {
-          rno = +ret;
-          console.log(rno);
-          return deleteMainImage(rno);
-        })
-        .then(() => {
-          let formData = new FormData();
-          formData.append('file', this.files[0]);
-          formData.append('rno', rno);
-          return saveMainImage(formData);
-        })
-        .then((ret) => {
-          console.log(ret);
-          imgBackground.style.setProperty(
-            'background-image',
-            'url(../../../resources/storage/essay/' + ret + ')'
-          );
-        })
-        .catch(console.error);
-    } else {
-      deleteMainImage(rno)
-        .then(() => {
-          let formData = new FormData();
-          formData.append('file', this.files[0]);
-          formData.append('rno', rno);
-          return saveMainImage(formData);
-        })
-        .then((ret) => {
-          console.log(ret);
-          imgBackground.style.setProperty(
-            'background-image',
-            'url(../../../resources/storage/essay/' + ret + ')'
-          );
-        });
-    }
+    console.log(this.files[0]);
+    const formData = getFormData(this.files[0]);
+    ajaxImageUpload(rno, formData)
+      .then((ret) => console.log('이미지 업로드', ret))
+      .catch(console.error);
   }
 
   function btnImageHandler(e) {
@@ -241,6 +260,7 @@ $(function() {
       }
       inputHashtag.value = '';
       inputHashtag.focus();
+      setData({ hashcode: hashes.join(',') });
     });
 
     btnAddAtModal.addEventListener('click', function(e) {
@@ -694,85 +714,54 @@ $(function() {
     return JSON.parse(JSON.stringify(obj));
   }
 
-  function getData() {
-    return {
-      seq: 1,
-      title: title.value,
-      hashtag: hashes.join(','),
-      content: $editor.summernote('code'),
-      fixed: 0,
-      isDomestic: +getJSONfromQueryString().isDomestic
-    };
+  //ajax호출 모음
+
+  function ajaxGetEssayListTmp(seq, fixed) {
+    return $.ajax({
+      type: 'GET',
+      contentType: 'applictaion.json',
+      data: { seq, fixed },
+      url: setting.url + '/api/essay'
+    });
   }
 
-  //ajax호출 모음
-  function save(data) {
+  function ajaxCreate(data) {
     return $.ajax({
       type: 'POST',
       contentType: 'application/json',
-      data: JSON.stringify(data),
+      data: JSON.stringify({ data }),
       dataType: 'json',
-      url: 'http://localhost:8080/api/essay'
+      url: setting.url + '/api/essay'
     });
   }
 
-  function saveFixed(data) {
-    data = {
-      ...data,
-      rno,
-      fixed: 1
-    };
+  function ajaxImageUpload(rno, formData) {
+    return $.ajax({
+      type: 'POST',
+      contentType: false,
+      processData: false,
+      dataType: 'text',
+      data: formData,
+      url: setting.url + '/api/essay/' + rno + '/image'
+    });
+  }
+
+  function ajaxUpdate(data) {
     return $.ajax({
       type: 'PUT',
       contentType: 'application/json',
-      data: JSON.stringify(data),
-      dataType: 'text',
-      url: 'http://localhost:8080/api/essay'
-    });
-  }
-
-  function saveTmp(data) {
-    return $.ajax({
-      type: 'PUT',
-      contentType: 'application/json',
-      data: JSON.stringify({ ...data, rno, fixed: 0 }),
-      dataType: 'text',
-      url: 'http://localhost:8080/api/essay'
-    });
-  }
-
-  function getTmpEssay(seq) {
-    return $.ajax({
-      type: 'GET',
-      contentType: 'application/json',
+      data: JSON.stringify({ data }),
       dataType: 'json',
-      url: 'http://localhost:8080/api/essaytmp/' + seq
+      url: setting.url + '/api/essay'
     });
   }
 
-  function deleteEssay(rno) {
+  function ajaxDelete(rno) {
     return $.ajax({
       type: 'DELETE',
       contentType: 'application/json',
       dataType: 'json',
-      url: 'http://localhost:8080/api/essay/' + rno
-    });
-  }
-
-  function deleteMainImage(rno) {
-    return $.ajax({
-      url: 'http://localhost:8080/upload/img/' + rno,
-      type: 'DELETE'
-    });
-  }
-
-  function saveMainImage(formData) {
-    return $.ajax({
-      url: 'http://localhost:8080/upload/img',
-      type: 'POST',
-      processData: false,
-      contentType: false,
-      data: formData
+      url: setting.url + '/api/essay/' + rno
     });
   }
 });
