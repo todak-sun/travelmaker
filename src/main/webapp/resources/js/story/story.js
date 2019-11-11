@@ -8,6 +8,24 @@ $(function() {
     getList()
       .then(function(result) {
         console.log(result);
+        console.log(result.length);
+        let $frag = $(document.createDocumentFragment());
+        for (let i = 1; i < result.length; i++) {
+          let $div = $(`
+          <div class="item">
+          <a href="../story/list">
+          <div class="card">
+          <h3>${result[i].title}</h3>
+          <div class="thumb"></div>
+          <div class="user">${result[i].nickname}</div>
+          <div class="info"></div>
+          </div>
+          </a>
+          </div>
+          `);
+          $frag.append($div);
+        }
+        $('.list').append($frag);
       })
       .catch(function(error) {
         console.log(error);
