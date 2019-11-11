@@ -7,8 +7,10 @@ $(function() {
   function test() {
     getList()
       .then(function(result) {
-        console.log(result);
-        console.log(result.length);
+        console.log('리절트', result);
+        // console.log(result);
+        // console.log(data.length);
+        // console.log(Object.keys(result).length);
         let $frag = $(document.createDocumentFragment());
         for (let i = 1; i < result.length; i++) {
           let $div = $(`
