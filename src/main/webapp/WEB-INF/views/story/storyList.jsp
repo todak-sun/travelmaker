@@ -14,7 +14,8 @@ pageEncoding="UTF-8"%>
     <title>스토리페이지</title>
   </head>
   <body>
-    <button type="button" id="loadList"></button>
+    <button type="button" id="loadList" value="리스트 불러오기"></button>
+    <div></div>
 
     <script src="../../../resources/js/common/jquery-3.4.1.js"></script>
     <script src="../../../resources/js/common/bootstrap.js"></script>
