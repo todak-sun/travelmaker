@@ -9,5 +9,5 @@ public class RouteImageDTO {
 	private int ino;
 	private int crno;
 	private String img;
-	private int order;
+	private int imgOrder;
 }
