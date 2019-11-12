@@ -15,6 +15,8 @@ pageEncoding="UTF-8"%>
   </head>
   <body>
     <button type="button" id="loadList">리스트</button>
+    <button type="button" onclick="location.href='/story/routeStoryView?bno=110'">전송 테스트</button>
+    
     <div class="list">
       <!-- <div class="item">
         <a href="../story/list">

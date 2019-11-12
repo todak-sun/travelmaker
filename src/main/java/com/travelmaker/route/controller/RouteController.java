@@ -63,7 +63,7 @@ public class RouteController {
 		
 		int crno = routeService.saveCourse(routeContentDTO); //저장한 코스의 crno 반환
 		
-		String filePath = "C:\\FinalProject\\travelmaker\\src\\main\\webapp\\storage"; // 이미지저장경로
+		String filePath = "C:\\Users\\bitcamp\\Documents\\GitHub\\travelmaker\\src\\main\\webapp\\storage"; // 이미지저장경로
 
 		int i = 1; // 이미지 순서
 		for(MultipartFile img : routeContentDTO.getImages()) {
