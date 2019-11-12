@@ -9,4 +9,6 @@ public interface StoryService {
 
 	public List<StoryDTO> getStory(Map<String, String> map);
 
+	public String selectBoard(int bno);
+
 }

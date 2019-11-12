@@ -22,5 +22,10 @@ public class StoryDAOMybatis implements StoryDAO {
 			
 		return sqlSession.selectList("storySQL.getList",map);
 	}
+
+	@Override
+	public String selectBoard(int bno) {
+		return sqlSession.selectOne("storySQL.selectEssay",bno)==null?"route":"essay";
+	}
 	
 }

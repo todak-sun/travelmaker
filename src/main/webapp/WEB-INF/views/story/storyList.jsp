@@ -14,19 +14,11 @@ pageEncoding="UTF-8"%>
     <title>스토리페이지</title>
   </head>
   <body>
-    <button type="button" id="loadList">리스트</button>
+    <!-- <button type="button" id="loadList">리스트</button> -->
     <div class="list">
-      <!-- <div class="item">
-        <a href="../story/list">
-          <div class="card">
-            <h3></h3>
-            <div class="thumb"></div>
-            <div class="user"></div>
-            <div class="info"></div>
-          </div>
-        </a> -->
-      </div>
+      페이지 로딩중
     </div>
+    <button type="button" id="loadList">더 보기</button>
 
     <script src="../../../resources/js/common/jquery-3.4.1.js"></script>
     <script src="../../../resources/js/common/bootstrap.js"></script>

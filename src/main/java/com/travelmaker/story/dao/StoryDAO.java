@@ -9,5 +9,7 @@ public interface StoryDAO {
 
 	public List<StoryDTO> getStory(Map<String, String> map);
 
+	public String selectBoard(int bno);
+
 
 }

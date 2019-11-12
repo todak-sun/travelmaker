@@ -21,6 +21,12 @@ public class StoryServiceImpl implements StoryService {
 	
 	public List<StoryDTO> getStory(Map<String, String> map){
 		return storyDAO.getStory(map);
+	}
+
+	@Override
+	public String selectBoard(int bno) {
+		
+		return storyDAO.selectBoard(bno) ;
 	};
 
 	

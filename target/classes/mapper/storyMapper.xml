@@ -6,14 +6,20 @@
 	<select id="getList" parameterType="java.util.Map" resultType="story" >
 		SELECT * FROM(
 		    SELECT ROWNUM RN, B.* FROM(
-		        SELECT bno, rno, nickname, title, likes, views, hashtag, dateWrite, dateUpdate, cmt, fixed, isDomestic 
+		        SELECT bno, rno, seq, title, likes, views, hashtag, date_write, date_update, fixed, is_domestic 
 		        FROM essay
 		        UNION
-		        SELECT bno, rno, nickname, title, likes, views, hashtag, dateWrite, dateUpdate, cmt, fixed, isDomestic 
+		        SELECT bno, rno, seq, title, likes, views, hashtag, date_write, date_update, fixed, is_domestic 
 		        FROM route
-		        ORDER BY dateUpdate DESC
+		        ORDER BY date_update DESC
 		    ) B WHERE ROWNUM &lt; #{endNum}
 		) WHERE RN &gt; #{startNum}
 	</select>
 	
+	<select id="selectEssay" parameterType="Integer" resultType="Integer">
+		SELECT RNO FROM Essay WHERE BNO=#{BNO}
+	</select>
+	<select id="selectRoute" parameterType="Integer" resultType="Integer">
+		SELECT RNO FROM ROUTE WHERE BNO=#{BNO}
+	</select>
 </mapper>
