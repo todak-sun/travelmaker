@@ -172,7 +172,7 @@ $(function() {
       $('#searchBtn').removeAttr('data-target');
     }
 
-    //기본으로 오늘 날짜 입력되게 하기
+    //기본값으로 오늘 날짜 입력되게 하기
     let today = `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}`;
     document.querySelector('input[name=dateStart]').value = today;
     document.querySelector('input[name=dateEnd]').value = today;

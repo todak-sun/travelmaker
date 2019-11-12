@@ -7,14 +7,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -46,12 +43,15 @@ public class RouteApiController {
 		
 		int crno = routeService.saveCourse(routeContentDTO); //저장한 코스의 crno 반환
 		
-		String filePath = "C:\\FinalProject\\travelmaker\\src\\main\\webapp\\storage"; // 이미지저장경로
+		String filePath = "C:\\spring\\workSTS\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\travelmaker\\storage"; // 이미지저장경로
 
 		int i = 1; // 이미지 순서
 		for(MultipartFile img : routeContentDTO.getImages()) {
 			String fileName = img.getOriginalFilename();
 			File file = new File(filePath, fileName);
+			
+			System.out.println(filePath);
+			System.out.println(fileName);
 			
 			try {
 				FileCopyUtils.copy(img.getInputStream(), new FileOutputStream(file));

@@ -19,6 +19,7 @@ public class StoryServiceImpl implements StoryService {
 	@Autowired
 	StoryDAO storyDAO;
 	
+	@Override
 	public List<StoryDTO> getStory(Map<String, String> map){
 		return storyDAO.getStory(map);
 	}
@@ -26,7 +27,10 @@ public class StoryServiceImpl implements StoryService {
 	@Override
 	public String selectBoard(int bno) {
 		
-		return storyDAO.selectBoard(bno) ;
+		return storyDAO.selectBoard(bno);
+	}
+	
+	@Override
 	public RouteDTO getRoute(String bno) {
 		return storyDAO.getRoute(bno);
 	}
