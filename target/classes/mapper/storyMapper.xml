@@ -22,4 +22,14 @@
 	<select id="selectRoute" parameterType="Integer" resultType="Integer">
 		SELECT RNO FROM ROUTE WHERE BNO=#{BNO}
 	</select>
+	<select id="getRoute" parameterType="String" resultType="route">
+		SELECT * FROM route WHERE BNO = #{bno}
+	</select>
+	<select id="getRouteContentStory" parameterType="int" resultType="routeContent">
+		SELECT * FROM route_content WHERE RNO = #{rno}
+	</select>
+	<select id="getRouteImageStory" parameterType="int" resultType="routeImage">
+		SELECT img FROM route_image WHERE CRNO = #{CRNO}
+	</select>
+	
 </mapper>
