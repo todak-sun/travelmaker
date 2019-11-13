@@ -7,7 +7,7 @@
         SELECT * FROM essay WHERE rno = #{rno}
     </select>
 
-    <insert id="create">
+    <insert id="create" parameterType="essay">
         <selectKey keyProperty="rno" resultType="Integer" order="BEFORE">
             SELECT rno.nextval from dual
         </selectKey>
