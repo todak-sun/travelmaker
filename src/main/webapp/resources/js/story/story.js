@@ -40,7 +40,7 @@ $(function() {
     });
   }
 
-  // json 내용을 화면에 html로 추가해주는 함수
+  // json 내용을 화면에 html로 추가해주는 함수 d
   function addList(result) {
     let $frag = $(document.createDocumentFragment());
     for (let i = 0; i < result.length; i++) {
