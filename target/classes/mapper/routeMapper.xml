@@ -4,13 +4,13 @@
 <mapper namespace="routeSQL">
 
 	<insert id="setRoute" parameterType="route">
-		INSERT INTO route (bno, rno, nickname, title, fixed, isDomestic)
-		VALUES (seq_bno.NEXTVAL, seq_rno.NEXTVAL, #{nickname}, #{title}, 0, #{isDomestic})
+		INSERT INTO route (bno, rno, seq, title, fixed, is_domestic)
+		VALUES (seq_bno.NEXTVAL, seq_rno.NEXTVAL, #{seq}, #{title}, 0, #{isDomestic})
 	</insert>
 	
 	<update id="saveRoute" parameterType="route">
 	begin
-		UPDATE route SET content=#{content}, hashtag=#{hashtag}, datewrite=SYSDATE, dateupdate=SYSDATE, fixed=1 where rno = #{rno} and nickname = #{nickname};
+		UPDATE route SET content=#{content}, hashtag=#{hashtag}, date_write=SYSDATE, date_update=SYSDATE, fixed=1 where rno = #{rno} and seq = #{seq};
 		UPDATE route_content SET fixed=1 WHERE rno=#{rno};
 	end;
 	</update>
@@ -24,7 +24,7 @@
 	</select>
 	
 	<insert id="saveCourse" parameterType="routeContent">
-		INSERT INTO route_content (crno, rno, content, lat, lng, location, dateStart, dateEnd, score, fixed)
+		INSERT INTO route_content (crno, rno, content, lat, lng, location, date_start, date_end, score, fixed)
 		VALUES (seq_crno.NEXTVAL, #{rno}, #{content}, #{lat}, #{lng}, #{location}, TO_DATE('${dateStart}','YYYY-MM-DD'), TO_DATE('${dateEnd}','YYYY-MM-DD'), #{score}, 0)
 	</insert>
 
@@ -33,7 +33,7 @@
 	</select>
 	
 	<update id="updateCourse" parameterType="routeContent">
-		UPDATE route_content SET (rno, content, lat, lng, location, dateStart, dateEnd, score, fixed)
+		UPDATE route_content SET (rno, content, lat, lng, location, date_start, date_end, score, fixed)
 		VALUES (#{rno}, #{content}, #{lat}, #{lng}, #{location}, TO_DATE('${dateStart}','YYYY-MM-DD'), TO_DATE('${dateEnd}','YYYY-MM-DD'), #{score}, #{fixed})
 	</update>
 	
