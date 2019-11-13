@@ -25,19 +25,19 @@ $(function() {
   const saveBtn = document.querySelector('#save-btn');
   const nextBtn = document.querySelector('#next-btn');
 
-  previousBtn.addEventListener('click', clickBtn);
-  saveBtn.addEventListener('click', clickBtn);
-  nextBtn.addEventListener('click', clickBtn);
+  previousBtn.addEventListener('click', selectCommand);
+  saveBtn.addEventListener('click', selectCommand);
+  nextBtn.addEventListener('click', selectCommand);
 
-  // 루트 글작성 폼으로 이동
-  $('#route-write-btn').on('click', function() {
-    location.href = '/route/write';
-  });
+  // // 루트 글작성 폼으로 이동
+  // $('#route-write-btn').on('click', function() {
+  //   location.href = '/route/write';
+  // });
 
   // 버튼 클릭 이벤트 모음
-  function clickBtn(e) {
-    selectCommand(e);
-  }
+  // function clickBtn(e) {
+  //   selectCommand(e);
+  // }
 
   function selectCommand(e) {
     return new Promise(function() {
