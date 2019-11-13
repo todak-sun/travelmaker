@@ -1,0 +1,25 @@
+{
+  "name": "travelmaker",
+  "version": "1.0.0",
+  "description": "final project in bitcamp",
+  "main": "index.js",
+  "dependencies": {
+    "@types/jquery": "^3.3.31"
+  },
+  "devDependencies": {
+    "prettier": "^1.19.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tjsdydwn/travelmaker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tjsdydwn/travelmaker/issues"
+  },
+  "homepage": "https://github.com/tjsdydwn/travelmaker#readme"
+}

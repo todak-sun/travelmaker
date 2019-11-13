@@ -4,7 +4,7 @@
     <settings>
         <setting name="mapUnderscoreToCamelCase" value="true"/>
     </settings>
-
+    
     <typeAliases>
         <typeAlias type="com.travelmaker.comment.domain.CommentDTO"
                    alias="comment"/>
@@ -40,10 +40,18 @@
                 alias="routeContent"/>
         <typeAlias type="com.travelmaker.route.domain.RouteImageDTO"
                    alias="routeImage"/>
+                   
+        <typeAlias type="com.travelmaker.story.domain.StoryDTO"
+                  alias="story" />
 
         <typeAlias type="com.travelmaker.user.domain.FollowDTO"
                    alias="follow"/>
         <typeAlias type="com.travelmaker.user.domain.UserDTO"
                    alias="user"/>
     </typeAliases>
+
+    <typeHandlers>
+        <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="com.travelmaker.etcboard.domain.ReportCategory"/>
+    </typeHandlers>
+
 </configuration>

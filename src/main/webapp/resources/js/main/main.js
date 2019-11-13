@@ -84,22 +84,26 @@ $(function() {
         $frag.append(getTemplateModal(title, body));
         return $frag;
     }
+  }
 
-    function initWriteSelector() {
-        const btnToWrite = document.querySelector('#btn-to-write');
-        btnToWrite.addEventListener('click', btnToWriteHandler);
+  //모달창 생성
+  function createModal(title, body) {
+    const $frag = $(document.createDocumentFragment());
+    $frag.append(getTemplateModal(title, body));
+    return $frag;
+  }
 
-        function btnToWriteHandler() {
-            const writeType = document.querySelector(
-                'input[name="writeType"]:checked'
-            ).value;
-            const isDomestic = document.querySelector(
-                'input[name="isDomestic"]:checked'
-            ).value;
+  function initWriteSelector() {
+    const btnToWrite = document.querySelector("#btn-to-write");
+    btnToWrite.addEventListener("click", btnToWriteHandler);
 
-            console.log(writeType, isDomestic);
-            moveTo(writeType, isDomestic);
-        }
+    function btnToWriteHandler() {
+      const writeType = document.querySelector(
+        'input[name="writeType"]:checked'
+      ).value;
+      const isDomestic = document.querySelector(
+        'input[name="isDomestic"]:checked'
+      ).value;
 
         function moveTo(writeType, isDomestic) {
             const defaultLink = 'http://' + location.host;
@@ -309,10 +313,10 @@ $(function() {
                   </div>
               </div>
               `;
-    }
+  }
 
-    function getTemplateWriteSelector() {
-        return `
+  function getTemplateWriteSelector() {
+    return `
         <div class="row justify-content-center">
             <lable>여행루트 글쓰기</label>
             <input name="writeType" value="route" type="radio" checked />
@@ -327,7 +331,7 @@ $(function() {
         </div>
         <button id="btn-to-write" class="btn btn-outline-info">글쓰러 가기</button>
       `;
-    }
+  }
 
     // 로그인 템플릿
     function getTemplateLogin() {
