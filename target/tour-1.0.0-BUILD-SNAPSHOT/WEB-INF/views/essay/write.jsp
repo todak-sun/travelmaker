@@ -27,6 +27,7 @@ pageEncoding="UTF-8" %>
     <script src="${pageContext.request.contextPath}/resources/js/common/bootstrap.js"></script>
     <script src="${pageContext.request.contextPath}/resources/summernote/summernote-bs4.js"></script>
     <script src="${pageContext.request.contextPath}/resources/summernote/lang/summernote-ko-KR.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/common/travelmaker.js"></script>
     <title>에세이 작성</title>
   </head>
   <body>
@@ -41,7 +42,7 @@ pageEncoding="UTF-8" %>
       <div class="row">
         <div class="editor-zone col col-sm-9">
           <div id="img-background" class="main-image">
-            클릭하셔서 대표 이미지를 설정해주세요!
+            <h3>클릭하시면, 대표이미지를 설정할 수 있어요!</h3>
           </div>
           <input
             id="title"
@@ -53,42 +54,50 @@ pageEncoding="UTF-8" %>
         </div>
         <div class="tool-zone col col-sm-3">
           <div class="tool-box">
-            <div>
-              <button id="btn-save-tmp" class="btn btn-secondary">
+            <div class="tool-box-tmp">
+              <button>임시저장목록</button>
+              <ul id="tmp-content-group">
+                <li class="tmp-content-item">
+                  <img
+                    src="http://placehold.it/50X50"
+                    class="img-thumbnail"
+                    alt="제목"
+                  />
+                  <div class="tmp-content-box">
+                    <span class="location badge badge-info">국내</span>
+                    <p class="tmp-content-title">
+                      제목없asdfasdfsdfsdfsfsdfasdfasfasfdaf음
+                    </p>
+                    <span class="date text-muted small">2019.10.10</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="tool-box-save">
+              <button id="btn-save-tmp" class="btn btn-outline-secondary">
                 임시저장
               </button>
-              <button id="btn-save" class="btn btn-secondary">발행하기</button>
+              <button id="btn-save" class="btn btn-outline-secondary">
+                발행하기
+              </button>
             </div>
-            <div class="row">
-              <div class="col">
-                <button id="btn-image" class="btn btn-outline-success">
-                  이미지
-                </button>
-              </div>
-              <div class="col">
-                <button id="btn-map" class="btn btn-outline-success">
-                  지도
-                </button>
-              </div>
-              <div class="w-100"></div>
-              <div class="col">
-                <button id="btn-video" class="btn btn-outline-success">
-                  동영상
-                </button>
-              </div>
-              <div class="col">
-                <button id="btn-breakline" class="btn btn-outline-success">
-                  구분선
-                </button>
-              </div>
+            <div class="tool-box-btn">
+              <button id="btn-image" class="btn btn-outline-success">
+                이미지
+              </button>
+              <button id="btn-map" class="btn btn-outline-success">
+                지도
+              </button>
+              <button id="btn-video" class="btn btn-outline-success">
+                동영상
+              </button>
+              <button id="btn-breakline" class="btn btn-outline-success">
+                구분선
+              </button>
             </div>
-            <div class="jumbotron">
-              <h2>해쉬태그</h2>
+            <div class="tool-box-hash">
+              <h4>해쉬태그</h4>
               <div id="box-hashtag" class="form-control"></div>
-            </div>
-            <div class="jumbotron">
-              <h2>임시저장 리스트</h2>
-              <ul id="tmp-content-group"></ul>
             </div>
           </div>
         </div>
@@ -131,6 +140,7 @@ pageEncoding="UTF-8" %>
       async
       defer
     ></script>
-    <script src="${pageContext.request.contextPath}/resources/js/essay/write.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/essay/write2.js"></script>
+<%--    <script src="${pageContext.request.contextPath}/resources/js/essay/write.js"></script>--%>
   </body>
 </html>
