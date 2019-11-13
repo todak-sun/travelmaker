@@ -45,7 +45,7 @@ $(function() {
     let $frag = $(document.createDocumentFragment());
     for (let i = 0; i < result.length; i++) {
       let $div = $(`
-      <div class="item">
+      <div class="item" id=${result[i].bno}>
       <a href="../story/list/${result[i].bno}">
       <div class="card">
       <h3>${result[i].title}</h3>
