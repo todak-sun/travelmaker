@@ -13,7 +13,7 @@ $(function() {
     qs = qs.split('&');
 
     const obj = {};
-    qs.forEach((q) => {
+    qs.forEach(q => {
       q = q.split('=');
       obj[q[0]] = decodeURIComponent(q[1] || '');
     });
@@ -25,19 +25,19 @@ $(function() {
   const saveBtn = document.querySelector('#save-btn');
   const nextBtn = document.querySelector('#next-btn');
 
-  previousBtn.addEventListener('click', clickBtn);
-  saveBtn.addEventListener('click', clickBtn);
-  nextBtn.addEventListener('click', clickBtn);
+  previousBtn.addEventListener('click', selectCommand);
+  saveBtn.addEventListener('click', selectCommand);
+  nextBtn.addEventListener('click', selectCommand);
 
-  // 루트 글작성 폼으로 이동
-  $('#route-write-btn').on('click', function() {
-    location.href = '/route/write';
-  });
+  // // 루트 글작성 폼으로 이동
+  // $('#route-write-btn').on('click', function() {
+  //   location.href = '/route/write';
+  // });
 
   // 버튼 클릭 이벤트 모음
-  function clickBtn(e) {
-    selectCommand(e);
-  }
+  // function clickBtn(e) {
+  //   selectCommand(e);
+  // }
 
   function selectCommand(e) {
     return new Promise(function() {
@@ -108,6 +108,7 @@ $(function() {
 
   function showEpilogueForm() {
     // 코스가 1개 이상 저장되어있는지 확인 후
+
     // 루트 인포 숨기기
     $('.route-info-form').hide();
     $('.route-epilogue-form').show();
@@ -145,43 +146,33 @@ $(function() {
   function showWriteFormAjax(title) {
     return $.ajax({
       type: 'post',
-      url: '/route/showWriteForm',
+      url: '/api/route/showWriteForm',
       data: {
         nickname: 'test1',
         title: title,
-        // destination: destination,
-        isDomestic: isDomestic
+        seq: '1',
+        isDomestic: isDomestic,
       },
-      dataType: 'json'
+      dataType: 'json',
     });
   }
   // DB에 route 임시저장 -->
 
   // <-- 국내 해외 폼 보여주기
   function showWriteForm2() {
-	  // 국내 (Kakao Map)
+    // 국내 (Kakao Map)
     if (isDomestic == 1) {
       $('.abroad-info').hide();
       // 구글 지도 모달창 없애기
       $('#googleMapModal').remove();
       // 해외 (Google Map)
-    } else if(isDomestic == 0) {
-    	// 카카오 지도 모달 연결 속성 없애기
-    	$('#searchBtn').removeAttr('data-toggle');
-    	$('#searchBtn').removeAttr('data-target');
+    } else if (isDomestic == 0) {
+      // 카카오 지도 모달 연결 속성 없애기
+      $('#searchBtn').removeAttr('data-toggle');
+      $('#searchBtn').removeAttr('data-target');
     }
-    // switch (destination) {
-    //   case 'domestic':
-    //     $('.abroad-info').hide();
-    //     break;
 
-    //   case 'abroad':
-    //     break;
-
-    //   default:
-    //     alert('잘못된 명령어');
-    //     break;
-    // }
+    //기본값으로 오늘 날짜 입력되게 하기
     let today = `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()}`;
     document.querySelector('input[name=dateStart]').value = today;
     document.querySelector('input[name=dateEnd]').value = today;
@@ -285,10 +276,10 @@ $(function() {
     function saveCourseAjax(formData) {
       return $.ajax({
         type: 'post',
-        url: '/route/saveCourse',
+        url: '/api/route/saveCourse',
         processData: false,
         contentType: false,
-        data: formData
+        data: formData,
       });
     }
     // 2.DB에 코스 임시저장 >
@@ -324,20 +315,20 @@ $(function() {
     // rno = document.querySelector('#rno');
     $.ajax({
       type: 'post',
-      url: '/route/saveRoute',
+      url: '/api/route/saveRoute',
       data: {
         title: title.value,
         content: epilogue.value,
         hashtag: hashtag.value,
         rno: rno,
-        nickname: 'test1'
+        nickname: 'test1',
       },
       success: function(data) {
         alert('저장 성공');
       },
       error: function(error) {
         console.log(error);
-      }
+      },
     });
   }
   // 루트 저장 -->

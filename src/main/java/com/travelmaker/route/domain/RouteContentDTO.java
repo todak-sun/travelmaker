@@ -1,5 +1,7 @@
 package com.travelmaker.route.domain;
 
+import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Getter;
@@ -19,4 +21,5 @@ public class RouteContentDTO {
 	private String score;
 	private int fixed;
 	private MultipartFile[] images;
+	private List<String> imgs;
 }
