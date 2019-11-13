@@ -15,7 +15,7 @@ pageEncoding="UTF-8"%>
   </head>
   <body>
 
-    <button type="button" onclick="location.href='/story/routeStoryView?bno=293'">전송 테스트</button>
+    <button type="button" onclick="location.href='/story/routeStoryView?bno=25'">전송 테스트</button>
     
     <div class="list">
       페이지 로딩중
