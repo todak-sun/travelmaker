@@ -27,10 +27,10 @@ public class StoryDAOMybatis implements StoryDAO {
 			
 		return sqlSession.selectList("storySQL.getList",map);
 	}
-
+	
 	@Override
 	public RouteDTO getRoute(String bno) {
-		return sqlSession.selectOne("storySQL.getRoute", bno);
+		return sqlSession.selectOne("storySQL.getRoute",bno);
 	}
 
 	@Override
@@ -50,5 +50,11 @@ public class StoryDAOMybatis implements StoryDAO {
 		}
 		return list;
 	}
-	
+
+
+	@Override
+	public String selectBoard(int bno) {
+		
+		return sqlSession.selectOne("storySQL.selectEssay",bno)==null?"route":"essay";
+	}
 }

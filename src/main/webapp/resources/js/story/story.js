@@ -2,46 +2,62 @@
  *
  */
 $(function() {
-  document.querySelector('#loadList').addEventListener('click', test);
+  document.querySelector('#loadList').addEventListener('click', moreShowList);
 
-  function test() {
+  // 들어오자마자 리스트 12개 출력
+  showList();
+  function showList() {
+    $('.list').empty();
     getList()
-      .then(function(result) {
-        console.log(result);
-        console.log(result.length);
-        let $frag = $(document.createDocumentFragment());
-        for (let i = 1; i < result.length; i++) {
-          let $div = $(`
-          <div class="item">
-          <a href="../story/list">
-          <div class="card">
-          <h3>${result[i].title}</h3>
-          <div class="thumb"></div>
-          <div class="user">${result[i].nickname}</div>
-          <div class="info"></div>
-          </div>
-          </a>
-          </div>
-          `);
-          $frag.append($div);
-        }
-        $('.list').append($frag);
-      })
+      .then(addList)
       .catch(function(error) {
         console.log(error);
       });
   }
 
-  // <-- DB에 route 임시저장
   function getList() {
     return $.ajax({
       type: 'post',
-      url: '/story/getList',
+      url: '/api/story/list',
       dataType: 'json',
-      data: {
-        startNum: 1,
-        endNum: 5
-      }
     });
+  }
+
+  // 리스트 더 보기 눌렀을 때 리스트 9개 출력
+  function moreShowList() {
+    getMoreList(document.querySelector('.list').childElementCount)
+      .then(addList)
+      .catch(function(error) {
+        console.log(error);
+      });
+  }
+
+  function getMoreList(start) {
+    return $.ajax({
+      type: 'get',
+      url: `../api/story/list/${start}/${start + 8}`,
+      dataType: 'json',
+    });
+  }
+
+  // json 내용을 화면에 html로 추가해주는 함수 d
+  function addList(result) {
+    let $frag = $(document.createDocumentFragment());
+    for (let i = 0; i < result.length; i++) {
+      let $div = $(`
+      <div class="item" id=${result[i].bno}>
+      <a href="../story/list/${result[i].bno}">
+      <div class="card">
+      <h3>${result[i].title}</h3>
+      <div class="thumb"></div>
+      <div class="user">${result[i].seq}</div>
+      <div class="info"></div>
+      </div>
+      </a>
+      </div>
+      `);
+      $frag.append($div);
+    }
+    $('.list').append($frag);
   }
 });
