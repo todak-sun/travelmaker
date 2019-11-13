@@ -7,14 +7,14 @@ function indcludeJs(jsFilePath){
 }
 /* 로그인 API 임포트 */ 
 function initJsFile(){
-		indcludeJs("http://apis.google.com/js/platform.js");
-		indcludeJs("http://developers.kakao.com/sdk/js/kakao.min.js");
-		indcludeJs("https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.0.js");
-		indcludeJs("https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js");
+
+		 indcludeJs("http://developers.kakao.com/sdk/js/kakao.min.js");
+		 indcludeJs("https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.0.js");
+		 indcludeJs("https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js");
 }
 
 function loginBtnDraw(){
-   	/*카카오 버튼 그려주는곳*/
+   	/* 카카오 버튼 그려주는곳 */
 	Kakao.init('551e0a44c2899be91bf29306234db441');
 	kakaoLogin();
 	var naverLogin = new naver.LoginWithNaverId({
@@ -32,7 +32,7 @@ function loginBtnDraw(){
 
 
 $(function() {
-	initJsFile(); //처음화면 로드
+	initJsFile(); // 처음화면 로드
 	
     const $modal = $('#modal-area'); // 모달
     
@@ -45,8 +45,15 @@ $(function() {
     var csrfTokenValue = document.getElementById('csrfTokenValue').value;
     
     btnWrite.addEventListener('click', createModalHandler);
-    btnLogin.addEventListener('click', createModalHandler);
-    btnRegist.addEventListener('click', createModalHandler);
+    
+    if(btnLogin!=null){
+    	btnLogin.addEventListener('click', createModalHandler);    	
+    }
+    if(btnRegist!=null)
+	{
+        btnRegist.addEventListener('click', createModalHandler);
+	}
+    
     
     // 모달 생성 담당 핸들러
     function createModalHandler(e) {
@@ -55,7 +62,10 @@ $(function() {
         $modal.append(createModal(title, body));
         if (initFunction) initFunction();
        	$modal.modal('show');
-       	loginBtnDraw();
+       	if(title=='로그인'){
+       		loginBtnDraw();
+       	}
+       	
     }
 
     // 어떤 버튼을 클릭했는지 감지해서
@@ -69,7 +79,8 @@ $(function() {
             case 'btn-write':
                 return ['글선택', getTemplateWriteSelector(), initWriteSelector];
             case 'btn-login':
-                initJsFile();
+                //initJsFile();
+            	indcludeJs("http://apis.google.com/js/platform.js");
                 return ['로그인', getTemplateLogin(), initLoginSelector];
             case 'btn-regist':
             	return ['회원가입', getTemplateRegister(), initRegisterSelector];
@@ -84,20 +95,15 @@ $(function() {
         $frag.append(getTemplateModal(title, body));
         return $frag;
     }
-  }
+  
 
-  //모달창 생성
-  function createModal(title, body) {
-    const $frag = $(document.createDocumentFragment());
-    $frag.append(getTemplateModal(title, body));
-    return $frag;
-  }
 
   function initWriteSelector() {
     const btnToWrite = document.querySelector("#btn-to-write");
     btnToWrite.addEventListener("click", btnToWriteHandler);
 
     function btnToWriteHandler() {
+    	
       const writeType = document.querySelector(
         'input[name="writeType"]:checked'
       ).value;
@@ -116,7 +122,7 @@ $(function() {
         }
         
     }
-    
+  }
     function initLoginSelector(){
     	
     	const btnLogin = document.querySelector('#loginBtn');
