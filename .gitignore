@@ -34,3 +34,4 @@ out/
 .vscode/
 *.DS_STORE
 *.keep
+.prettierrc

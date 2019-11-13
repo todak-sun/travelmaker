@@ -109,7 +109,6 @@ $(function() {
 
   inputFileUpload.addEventListener('change', inputFileUploadHandler);
   title.addEventListener('change', titleChangeHandler);
-
   btnImage.addEventListener('click', btnImageHandler);
   btnMap.addEventListener('click', btnMapHandler);
   btnVideo.addEventListener('click', btnVideoHandler);
@@ -123,23 +122,22 @@ $(function() {
     setData({ title: this.value });
   }
 
-  initOnLoad();
-
-  function initOnLoad() {
-    $editor.summernote({
-      ...setting.summernote,
-      callbacks: {
-        onInit: function() {
-          title.focus();
-        }
+  // initOnLoad();
+  $editor.summernote({
+    ...setting.summernote,
+    callbacks: {
+      onInit: function() {
+        title.focus();
       }
-    });
-
+    }
+  });
+  function initOnLoad() {
     ajaxCreate(getData())
       .then((ret) => {
         rno = ret.data.rno;
         setData({ rno: ret.data.rno });
         console.log(ret.data);
+        console.log('그냥 데이터', ret);
       })
       .catch(console.error);
 
@@ -679,7 +677,7 @@ $(function() {
   function ajaxGetEssayListTmp(seq, fixed) {
     return $.ajax({
       type: 'GET',
-      contentType: 'applictaion.json',
+      contentType: 'application/json',
       data: { seq, fixed },
       url: setting.url + '/api/essay'
     });
