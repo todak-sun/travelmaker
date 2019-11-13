@@ -166,10 +166,11 @@
 			// RouteView GoogleMap 마커 경로 표시
 			// callback 함수
 			function initMap(flightPlanCoordinates) {
+				console.log(flightPlanCoordinates[0]['lat']);
 				// 구글 지도 생성
 				var map = new google.maps.Map(document.getElementById('map'), {
 					zoom: 12,
-					center: {lat : 37.538541, lng : 126.9686362},
+					center: {lat : flightPlanCoordinates[0]['lat'], lng : flightPlanCoordinates[0]['lng']},
 					mapTypeId: 'satellite'//'roadmap'
 				});
 				
