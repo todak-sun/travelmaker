@@ -66,7 +66,7 @@
         <property name="url"
                   value="jdbc:oracle:thin:@Localhost:1521:xe"/>
         <property name="username" value="java"/>
-        <property name="password" value="dkdlxl"/>
+        <property name="password" value="tkdtn"/>
         <property name="maxTotal" value="20"/>
         <property name="minIdle" value="3"/>
     </bean>
