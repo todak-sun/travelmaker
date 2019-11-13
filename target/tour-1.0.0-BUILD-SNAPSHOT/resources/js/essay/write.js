@@ -68,17 +68,6 @@ $(function() {
     return requestData;
   }
 
-  //   function getData() {
-  //     return {
-  //       seq: 1,
-  //       title: title.value,
-  //       hashtag: hashes.join(','),
-  //       content: $editor.summernote('code'),
-  //       fixed: 0,
-  //       isDomestic: +getJSONfromQueryString().isDomestic
-  //     };
-  //   }
-
   function getFormData(imageFile) {
     const { rno } = getData();
     const formData = new FormData();
@@ -120,7 +109,6 @@ $(function() {
 
   inputFileUpload.addEventListener('change', inputFileUploadHandler);
   title.addEventListener('change', titleChangeHandler);
-
   btnImage.addEventListener('click', btnImageHandler);
   btnMap.addEventListener('click', btnMapHandler);
   btnVideo.addEventListener('click', btnVideoHandler);
@@ -134,15 +122,22 @@ $(function() {
     setData({ title: this.value });
   }
 
-  initOnLoad();
-
+  // initOnLoad();
+  $editor.summernote({
+    ...setting.summernote,
+    callbacks: {
+      onInit: function() {
+        title.focus();
+      }
+    }
+  });
   function initOnLoad() {
-    // setData({ rno: rno, content: $editor.summernote('code') });
     ajaxCreate(getData())
       .then((ret) => {
         rno = ret.data.rno;
         setData({ rno: ret.data.rno });
         console.log(ret.data);
+        console.log('그냥 데이터', ret);
       })
       .catch(console.error);
 
@@ -156,39 +151,12 @@ $(function() {
     inputFileUpload.click();
   }
 
-  //   if (!rno) {
-  //     save(getData())
-  //       .then((ret) => {
-  //         rno = +ret;
-  //         console.log('임시저장');
-  //       })
-  //       .catch(console.error);
-  //   } else {
-  //     saveTmp(getData())
-  //       .then((ret) => console.log('임시저장'))
-  //       .catch(console.error);
-  //   }
-
   function btnSaveTmpHandler(e) {
     setData({ fixed: 0, content: $editor.summernote('code') });
     ajaxUpdate(getData())
       .then((ret) => console.log('임시저장', ret.data))
       .catch(console.error);
   }
-
-  //   if (!rno) {
-  //     save(getData())
-  //       .then((ret) => {
-  //         rno = +ret;
-  //         return saveFixed(getData());
-  //       })
-  //       .then((ret) => console.log('저장완료'))
-  //       .catch(console.error);
-  //   } else {
-  //     saveFixed(getData())
-  //       .then((ret) => console.log('저장완료'))
-  //       .catch(console.error);
-  //   }
 
   function btnSaveHandler(e) {
     setData({ fixed: 1, content: $editor.summernote('code') });
@@ -289,16 +257,6 @@ $(function() {
       return btn;
     }
   }
-
-  //에디터 세팅
-  $editor.summernote({
-    ...setting.summernote,
-    callbacks: {
-      onInit: function() {
-        title.focus();
-      }
-    }
-  });
 
   function initMap() {
     let markers = [];
@@ -719,7 +677,7 @@ $(function() {
   function ajaxGetEssayListTmp(seq, fixed) {
     return $.ajax({
       type: 'GET',
-      contentType: 'applictaion.json',
+      contentType: 'application/json',
       data: { seq, fixed },
       url: setting.url + '/api/essay'
     });

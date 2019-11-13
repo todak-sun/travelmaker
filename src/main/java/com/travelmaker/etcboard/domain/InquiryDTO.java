@@ -1,16 +1,22 @@
 package com.travelmaker.etcboard.domain;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Accessors(chain = true)
 public class InquiryDTO {
 	private int bno;
-	private int ino;
-	private String nickname;
+	private int iqno;
+	private int seq;
 	private String title;
 	private String content;
-	private int privated;
+	private int isPrivate;
 	private String dateWrite;
 }

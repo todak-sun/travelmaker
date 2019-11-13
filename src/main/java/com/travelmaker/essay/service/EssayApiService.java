@@ -96,7 +96,6 @@ public class EssayApiService implements EssayApiInterface<EssayApiRequest, Essay
         Optional<EssayDTO> optional = Optional.ofNullable(essayDAO.readOne(data.getRno()));
         return optional.map(essayDTO -> {
             saveFile(data.getContent(), essayDTO.getFileName());
-
             essayDTO.setTitle(data.getTitle())
                     .setLikes(data.getLikes())
                     .setViews(data.getViews())
