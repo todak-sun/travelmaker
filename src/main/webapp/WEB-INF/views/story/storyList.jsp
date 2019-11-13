@@ -14,9 +14,8 @@ pageEncoding="UTF-8"%>
     <title>스토리페이지</title>
   </head>
   <body>
+    <button type="button" id="pushgo">푸쉬 테스트</button>
 
-    <button type="button" onclick="location.href='/story/routeStoryView?bno=293'">전송 테스트</button>
-    
     <div class="list">
       페이지 로딩중
     </div>

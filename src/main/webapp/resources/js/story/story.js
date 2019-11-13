@@ -4,6 +4,15 @@
 $(function() {
   document.querySelector('#loadList').addEventListener('click', moreShowList);
 
+  document.querySelector('#pushgo').addEventListener('click', pushfunction);
+  function pushfunction() {
+    history.pushState(
+      { total: document.querySelector('.list').childElementCount },
+      'title입니다',
+      '/api/story/list/10/25'
+    );
+  }
+
   // 들어오자마자 리스트 12개 출력
   showList();
   function showList() {
@@ -46,7 +55,7 @@ $(function() {
     for (let i = 0; i < result.length; i++) {
       let $div = $(`
       <div class="item" id=${result[i].bno}>
-      <a href="../story/list/${result[i].bno}">
+      <a href="/story/list/${result[i].bno}">
       <div class="card">
       <h3>${result[i].title}</h3>
       <div class="thumb"></div>
