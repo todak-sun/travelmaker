@@ -6,13 +6,15 @@
 <meta charset="UTF-8">
 <title>루트 게시물</title>
 <!-- BootStrap -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 <style type="text/css">
 #map {
 	height: 100%;
 	width: 800px;
 	display: inline-block;
 }
+
 .carousel-inner img {
 	width: 50%;
 	height: 50%;
@@ -21,6 +23,9 @@
 </head>
 <body style="background-color: gray;">
 	<input type="hidden" value="${routeDTO.rno }" id="rno">
+	<input type="hidden" value="${routeDTO.isDomestic }" id="isdomestic">
+	<input type="hidden" value="${routeDTO.content }" id="epilogue">
+	<input type="hidden" value="${routeDTO.hashtag }" id="hashtag">
 	<div id="routeContent"
 		style="width: 1400px; height: 100%; text-align: center; background-color: white; margin: 100px;">
 		<div id="routeTitle" style="display: inline-block;">
@@ -37,12 +42,20 @@
 	<!-- Google Map -->
 	<script
 		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCeKdfxBMTEBPFzc4QjjrIJJv25EuWL4gY"
-		async defer></script> <!-- &callback=initMap -->
+		async defer></script>
+	<!-- &callback=initMap -->
+	<!-- Kakao Map -->
+	<script type="text/javascript"
+		src="//dapi.kakao.com/v2/maps/sdk.js?appkey=58d9a72c9db8da0b849a32734093767e"></script>
 	<!-- JQuery -->
 	<script type="text/javascript"
 		src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 	<!-- BootStrap -->
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<script type="text/javascript"
+		src="../../../resources/js/story/story.js"></script>
+
 	<script type="text/javascript">	
 			$().ready(function(){
 				console.log('rno = ' + $('#rno').val());
@@ -52,8 +65,10 @@
 					data: {'rno' : $('#rno').val()},
 					dataType: 'json',
 					success: function(data){
+						// 맵쪽에 뿌려줄 좌표를 담을 배열
 						var flightPlanCoordinates = [];
 						
+						// 작은 Route Content를 동적으로 뿌려줌
 						$.each(data.list, function(index, items){
 							$('<div/>', {
 								class: 'conts_story',
@@ -135,8 +150,11 @@
 							var routeContentId = $('#routeContent').children().last();
 							/* routeLat.push(items.lat);
 							routeLng.push(items.lng); */
+							
+							// 좌표 담기
 							flightPlanCoordinates.push({lat : items.lat, lng : items.lng});
 							
+							// 작은 Route Content 안에 있는 이미지 배열을 뿌림
 							$.each(items.imgs, function(indexImgs, img){
 								console.log(img);
 								$('<li/>', {
@@ -151,68 +169,36 @@
 								})).appendTo(routeContentId.find('.carousel-inner'));
 							});
 							console.log('-----------------------');
+							
+							// 부트스트랩 사진 전환에 쓸 class 생성
 							routeContentId.find('.carousel-indicators').children().first().attr('class', 'active');
 							routeContentId.find('.carousel-inner').children().first().attr('class', 'carousel-item active');
 						});
 						console.log(flightPlanCoordinates);
-						initMap(flightPlanCoordinates);
+						
+						// 해외
+						if($('#isdomestic').val() == 0) {
+							googleMap(flightPlanCoordinates);	
+						} else { // 국내
+							kakaoMap(flightPlanCoordinates);
+						}
+						
+						// 에필로그랑 해시태그
+						$('<div/>', {
+							id: 'routeFooter'
+						}).append($('<span>', {
+							id: 'routeEpilogue',
+							text: 'Epilogue : ' + $('#epilogue').val()
+						})).append($('<span/>', {
+							id: 'routeHashtag',
+							text: 'HashTag : ' + $('#hashtag').val()
+						})).appendTo($('#routeContent'));
 					},
 					error: function(error){
 						console.log(error);
 					}
 				});
 			});
-
-			// RouteView GoogleMap 마커 경로 표시
-			// callback 함수
-			function initMap(flightPlanCoordinates) {
-				// 구글 지도 생성
-				var map = new google.maps.Map(document.getElementById('map'), {
-					zoom: 12,
-					center: {lat : 37.538541, lng : 126.9686362},
-					mapTypeId: 'satellite'//'roadmap'
-				});
-				
-				// 장소 위치들 저장
-				/* var flightPlanCoordinates = [
-					 {lat: 37.772, lng: -122.214},
-			         {lat: 21.291, lng: -157.821},
-			         {lat: -18.142, lng: 178.431},
-			         {lat: -27.467, lng: 153.027}
-				]; */
-				var markers = [];
-				
-				// 마커 생성
-				for(var i = 0; i < flightPlanCoordinates.length; i++) {
-					markers.push(new google.maps.Marker({
-						position: flightPlanCoordinates[i],
-						map: map
-					}));
-				}
-				// 마커 이미지 커스텀
-				/* markers.push(new google.maps.Marker({
-					map : map,
-					/* icon: icon, */
-				/* 	title : place.name,
-					position : place.geometry.location
-				})); */
-				
-				// 마커들을 선을 경로 표시
-				var flightPath = new google.maps.Polyline({
-					path: flightPlanCoordinates,
-					geodesic: true,
-					strokeColor: '#00FA9A',
-					strokeOpacity: 0.5,
-					strokeWeight: 10
-				});
-				
-				// 맵에 마커 뿌림
-				markers.forEach(function(marker) {
-					marker.setMap(map);
-				});
-				// 마커들 경로 표시
-				flightPath.setMap(map);
-			}
 		</script>
 </body>
 </html>
