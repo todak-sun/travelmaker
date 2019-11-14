@@ -27,7 +27,7 @@ pageEncoding="UTF-8" %>
     <script src="${pageContext.request.contextPath}/resources/js/common/bootstrap.js"></script>
     <script src="${pageContext.request.contextPath}/resources/summernote/summernote-bs4.js"></script>
     <script src="${pageContext.request.contextPath}/resources/summernote/lang/summernote-ko-KR.js"></script>
-    <script src="${pageContext.request.contextPath}/resources/js/common/travelmaker.js"></script>
+<%--    <script src="${pageContext.request.contextPath}/resources/js/common/travelmaker.js"></script>--%>
     <title>에세이 작성</title>
   </head>
   <body>
@@ -140,7 +140,7 @@ pageEncoding="UTF-8" %>
       async
       defer
     ></script>
-    <script src="${pageContext.request.contextPath}/resources/js/essay/write2.js"></script>
-<%--    <script src="${pageContext.request.contextPath}/resources/js/essay/write.js"></script>--%>
+<%--    <script src="${pageContext.request.contextPath}/resources/js/essay/write2.js"></script>--%>
+    <script src="${pageContext.request.contextPath}/resources/js/essay/write.js"></script>
   </body>
 </html>

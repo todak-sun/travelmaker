@@ -57,7 +57,7 @@ $(function() {
             console.log(writeType, isDomestic);
             moveTo(writeType, isDomestic);
         }
-
+    }
         function moveTo(writeType, isDomestic) {
             const defaultLink = 'http://' + location.host;
             if (writeType === 'essay') {
@@ -67,7 +67,8 @@ $(function() {
                 location.href = defaultLink + '/route/write?isDomestic=' + isDomestic;
             }
         }
-    }
+    
+    
 
     //모달 템플릿
     function getTemplateModal(title, body) {
