@@ -41,6 +41,9 @@
         <typeAlias type="com.travelmaker.route.domain.RouteImageDTO"
                    alias="routeImage"/>
 
+        <typeAlias type="com.travelmaker.story.domain.StoryDTO"
+                alias="story" />
+
         <typeAlias type="com.travelmaker.user.domain.FollowDTO"
                    alias="follow"/>
         <typeAlias type="com.travelmaker.user.domain.UserDTO"
