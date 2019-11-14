@@ -8,6 +8,7 @@ import lombok.Setter;
 public class StoryDTO {
 	private int bno; //rno 따라다님
 	private int rno; //웹에서
+	private int seq;
 	private String nickname; //세션에서?
 	private String title; //웹&DB 비교
 	private int likes; //디폴트
@@ -19,4 +20,5 @@ public class StoryDTO {
 	private int fixed; //웹에서
 	private int isDomestic; //웹&DB 비교
 	private String thumb; //대표이미지 경로
+	private String filepath; //route와 essay 구분용
 }
