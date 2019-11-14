@@ -1,71 +1,70 @@
 /*외부 임포트 함수*/
-function indcludeJs(jsFilePath){
-	var js = document.createElement("script");
-	js.type = "text/javascript";
-	js.src = jsFilePath;
-	document.body.appendChild(js);
-}
-/* 로그인 API 임포트 */ 
-function initJsFile(){
-
-		 indcludeJs("http://developers.kakao.com/sdk/js/kakao.min.js");
-		 indcludeJs("https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.0.js");
-		 indcludeJs("https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js");
+function indcludeJs(jsFilePath) {
+    var js = document.createElement("script");
+    js.type = "text/javascript";
+    js.src = jsFilePath;
+    document.body.appendChild(js);
 }
 
-function loginBtnDraw(){
-   	/* 카카오 버튼 그려주는곳 */
-	Kakao.init('551e0a44c2899be91bf29306234db441');
-	kakaoLogin();
-	var naverLogin = new naver.LoginWithNaverId({
-		clientId : "tq8xdJqWevoI0Tbj3WgL",
-		callbackUrl : "http://localhost:8080/user/naverLogin",
-		isPopup : true,
-		loginButton : {
-			color : "green",
-			type : 3,
-			height : 60
-		}
-	});
-	naverLogin.init();
+/* 로그인 API 임포트 */
+function initJsFile() {
+    indcludeJs("http://developers.kakao.com/sdk/js/kakao.min.js");
+    indcludeJs("https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.0.js");
+    indcludeJs("https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js");
+}
+
+function loginBtnDraw() {
+    /* 카카오 버튼 그려주는곳 */
+    Kakao.init('551e0a44c2899be91bf29306234db441');
+    kakaoLogin();
+    var naverLogin = new naver.LoginWithNaverId({
+        clientId: "tq8xdJqWevoI0Tbj3WgL",
+        callbackUrl: "http://localhost:8080/user/naverLogin",
+        isPopup: true,
+        loginButton: {
+            color: "green",
+            type: 3,
+            height: 60
+        }
+    });
+    naverLogin.init();
 }
 
 
-$(function() {
-	initJsFile(); // 처음화면 로드
-	
+$(function () {
+    initJsFile(); // 처음화면 로드
+
     const $modal = $('#modal-area'); // 모달
-    
+
     const btnWrite = document.querySelector('#btn-write');
     const btnLogin = document.querySelector('#btn-login');
     const btnRegist = document.querySelector('#btn-regist');
     const idpwdSearch = document.querySelector('#idpwdSearch');
-    
+
     var csrfTokenName = document.getElementById('csrfTokenName').value;
     var csrfTokenValue = document.getElementById('csrfTokenValue').value;
-    
+
     btnWrite.addEventListener('click', createModalHandler);
-    
-    if(btnLogin!=null){
-    	btnLogin.addEventListener('click', createModalHandler);    	
+
+    if (btnLogin != null) {
+        btnLogin.addEventListener('click', createModalHandler);
     }
-    if(btnRegist!=null)
-	{
+    if (btnRegist != null) {
         btnRegist.addEventListener('click', createModalHandler);
-	}
-    
-    
+    }
+
+
     // 모달 생성 담당 핸들러
     function createModalHandler(e) {
         let [title, body, initFunction] = setTitleAndBody(e.target.id);
         $modal.html('');
         $modal.append(createModal(title, body));
         if (initFunction) initFunction();
-       	$modal.modal('show');
-       	if(title=='로그인'){
-       		loginBtnDraw();
-       	}
-       	
+        $modal.modal('show');
+        if (title == '로그인') {
+            loginBtnDraw();
+        }
+
     }
 
     // 어떤 버튼을 클릭했는지 감지해서
@@ -74,16 +73,16 @@ $(function() {
         // case에는 해당하는 아이디의 값을,
         // return은 배열로 지정후 첫번째 값은 title,
         // 두번째 값은 body에 들어갈 template를 넣어줌.
-    	
+
         switch (id) {
             case 'btn-write':
                 return ['글선택', getTemplateWriteSelector(), initWriteSelector];
             case 'btn-login':
                 //initJsFile();
-            	indcludeJs("http://apis.google.com/js/platform.js");
+                indcludeJs("http://apis.google.com/js/platform.js");
                 return ['로그인', getTemplateLogin(), initLoginSelector];
             case 'btn-regist':
-            	return ['회원가입', getTemplateRegister(), initRegisterSelector];
+                return ['회원가입', getTemplateRegister(), initRegisterSelector];
             default:
                 throw new Error('잘못된 id값을 입력했습니다');
         }
@@ -95,208 +94,216 @@ $(function() {
         $frag.append(getTemplateModal(title, body));
         return $frag;
     }
-  
 
 
-  function initWriteSelector() {
-    const btnToWrite = document.querySelector("#btn-to-write");
-    btnToWrite.addEventListener("click", btnToWriteHandler);
+    function initWriteSelector() {
+        const btnToWrite = document.querySelector("#btn-to-write");
+        btnToWrite.addEventListener("click", btnToWriteHandler);
 
-    function btnToWriteHandler() {
-    	
-      const writeType = document.querySelector(
-        'input[name="writeType"]:checked'
-      ).value;
-      const isDomestic = document.querySelector(
-        'input[name="isDomestic"]:checked'
-      ).value;
+        function btnToWriteHandler() {
 
-        function moveTo(writeType, isDomestic) {
-            const defaultLink = 'http://' + location.host;
-            if (writeType === 'essay') {
-                location.href = defaultLink + '/essay/write?isDomestic=' + isDomestic;
-            } else if (writeType === 'route') {
-                // 여기다 맞는 url 설정
-                location.href = defaultLink + '/route/write?isDomestic=' + isDomestic;
+            const writeType = document.querySelector(
+                'input[name="writeType"]:checked'
+            ).value;
+            const isDomestic = document.querySelector(
+                'input[name="isDomestic"]:checked'
+            ).value;
+
+            function moveTo(writeType, isDomestic) {
+                const defaultLink = 'http://' + location.host;
+                if (writeType === 'essay') {
+                    location.href = defaultLink + '/essay/write?isDomestic=' + isDomestic;
+                } else if (writeType === 'route') {
+                    // 여기다 맞는 url 설정
+                    location.href = defaultLink + '/route/write?isDomestic=' + isDomestic;
+                }
+            }
+
+        }
+    }
+
+    function initLoginSelector() {
+
+        const btnLogin = document.querySelector('#loginBtn');
+        btnLogin.addEventListener('click', btnLoginHandler);
+
+        function btnLoginHandler(e) {
+            // e.preventDefault();
+            if ($('#login_id').val() == '') {
+                alert('아이디를 입력해주세요');
+            } else if ($('#login_pwd').val() == '') {
+                alert('비밀번호를 입력해주세요');
+            } else {
+                $('#login_id').val($('#login_id').val() + '===travelMaker');
+                document.loginForm.submit();
             }
         }
-        
+
+        $('#login_id').focusout(function () {
+            if ($('#login_id').val() == '') {
+                // $('#registerIdDiv').css({"color" : "black", })
+                $('#spanCheckID').text('아이디를 입력하세요')
+                $('#spanCheckID').css({'color': 'red', 'font-size': '8pt', 'font-weight': 'bold'});
+            } else {
+                $('#spanCheckID').text('OK')
+                $('#spanCheckID').css({'color': 'blue', 'font-size': '8pt', 'font-weight': 'bold'});
+            }
+        });
+        $('#login_pwd').focusout(function () {
+            if ($('#login_pwd').val() == '') {
+                $('#spanCheckPWD').text('패스워드를 입력하세요')
+                $('#spanCheckPWD').css({'color': 'red', 'font-size': '8pt', 'font-weight': 'bold'});
+            } else {
+                $('#spanCheckPWD').text('OK')
+                $('#spanCheckPWD').css({'color': 'blue', 'font-size': '8pt', 'font-weight': 'bold'});
+            }
+        });
+
     }
-  }
-    function initLoginSelector(){
-    	
-    	const btnLogin = document.querySelector('#loginBtn');
-    	btnLogin.addEventListener('click',btnLoginHandler);
-    	
-    	function btnLoginHandler(e){
-    		// e.preventDefault();
-    		if ($('#login_id').val() == '') {
-    			alert('아이디를 입력해주세요');
-    		} else if ($('#login_pwd').val() == '') {
-    			alert('비밀번호를 입력해주세요');
-    		} else {
-    			$('#login_id').val($('#login_id').val() + '===travelMaker');
-    			document.loginForm.submit();
-    		}
-    	}
-    	
-    	$('#login_id').focusout(function() {
-    		if ($('#login_id').val() == '') {
-    			// $('#registerIdDiv').css({"color" : "black", })
-    			$('#spanCheckID').text('아이디를 입력하세요')
-    			$('#spanCheckID').css({'color':'red','font-size':'8pt','font-weight':'bold'});
-    		} else {
-    			$('#spanCheckID').text('OK')
-    			$('#spanCheckID').css({'color':'blue','font-size':'8pt','font-weight':'bold'});
-    		}
-    	});
-    	$('#login_pwd').focusout(function() {
-    		if ($('#login_pwd').val() == '') {
-    			$('#spanCheckPWD').text('패스워드를 입력하세요')
-    			$('#spanCheckPWD').css({'color':'red','font-size':'8pt','font-weight':'bold'});
-    		} else {
-    			$('#spanCheckPWD').text('OK')
-    			$('#spanCheckPWD').css({'color':'blue','font-size':'8pt','font-weight':'bold'});
-    		}
-    	});
-    	
+
+    function initRegisterSelector() {
+        $('#userAgreeBoxAll').click('click', function (e) {
+            if ($(this).prop('checked')) {
+                $('.userAgreeBox').prop('checked', true);
+            } else {
+                $('.userAgreeBox').prop('checked', false);
+            }
+        });
+
+        $('.userAgreeBox').click('click', function (e) {
+            if ($('input.userAgreeBox:checked').length === 3) {
+                $('#userAgreeBoxAll').click();
+            } else {
+                $('#userAgreeBoxAll').prop('checked', false);
+            }
+        });
+
+        /* 회원가입 submit */
+        $('#userRegisterBtn').click(
+            function () {
+                $('#realnameDiv').empty();
+                $('#emailDiv').empty();
+                $('#phoneDiv').empty();
+                $('#birthdateDiv').empty();
+
+                if ($('#userAgreeBoxAll').prop('checked') == false) {
+                    alert('약관 동의를 해주세요');
+                } else if ($('#realname').val() == '') {
+                    $('#realnameDiv').text('이름을 입력하세요')
+                    $('#realnameDiv').css({'color': 'red', 'font-size': '8pt', 'font-weight': 'bold'});
+                } else if ($('#registerId').val() == '') {
+                    $('#registerIdDiv').text('아이디를 입력하세요')
+                    $('#registerIdDiv').css({'color': 'red', 'font-size': '8pt', 'font-weight': 'bold'});
+                } else if ($('#registerPassword').val() == '') {
+                    $('#RegisterPasswordDiv').text('비밀번호를 입력하세요')
+                    $('#RegisterPasswordDiv').css({'color': 'red', 'font-size': '8pt', 'font-weight': 'bold'});
+                } else if ($('#registerEmail1').val() == '', $('#registerEmail2')
+                    .val() == '') {
+                    $('#emailDiv').text('이메일을 입력하세요')
+                    $('#emailDiv').css({'color': 'red', 'font-size': '8pt', 'font-weight': 'bold'});
+                } else if ($('#phone2').val() == '', $('#phone3').val() == '') {
+                    $('#phoneDiv').text('휴대전화를 입력하세요')
+                    $('#phoneDiv').css({'color': 'red', 'font-size': '8pt', 'font-weight': 'bold'});
+                } else if ($('#birthdate').val() == '') {
+                    $('#birthdateDiv').text('생년월일를 입력하세요')
+                    $('#birthdateDiv').css({'color': 'red', 'font-size': '8pt', 'font-weight': 'bold'});
+                } else {
+                    if ($('#registerIdDiv').text() != '사용 가능') {
+                        alert("ID 중복체크 해주세요");
+                    } else if ($('#RegisterPasswordDiv').text() != '사용 가능') {
+                        alert("비밀번호를 확인해주세요");
+                    } else {
+                        document.registerEmailForm.submit();
+                    }
+                }
+            })
+
+        /* 아이디 중복확인 */
+        $('#registerId')
+            .focusout(
+                function () {
+                    /* 숫자 포함 형태의 6~15자리 이내의 암호 정규식 */
+                    var passRule = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+
+                    if ($('#registerId').val() == '') {
+                        $('#registerIdDiv').text('아이디를 입력하세요')
+                        $('#registerIdDiv').css({'color': 'red', 'font-size': '8pt', 'font-weight': 'bold'});
+                    } else if (!passRule
+                        .test($("input[id='registerId']").val())) {
+                        $('#registerIdDiv').text('이메일 형식으로 아이디를 설정해주세요')
+                        $('#registerIdDiv').css({'color': 'red', 'font-size': '8pt', 'font-weight': 'bold'});
+                    } else {
+                        $('#registerIdDiv').empty();
+                        var token = $("meta[name='_csrf']").attr("content");
+                        var header = $("meta[name='_csrf_header']").attr(
+                            "content");
+
+                        $.ajax({
+                            type: 'post',
+                            url: './user/checkId',
+                            data: 'id=' + $('#registerId').val()
+                                + '&registerMethod='
+                                + $('#registerMethod').val(),
+                            dataType: 'text',
+                            beforeSend: function (xhr) {
+                                // here it is
+                                xhr.setRequestHeader(header, token);
+                            },
+                            success: function (data) {
+                                if (data == 'exist') {
+                                    $('#registerIdDiv').text('사용 불가능')
+                                    $('#registerIdDiv').css({
+                                        'color': 'red',
+                                        'font-size': '8pt',
+                                        'font-weight': 'bold'
+                                    });
+
+                                } else if (data == 'not_exist') {
+                                    $('#registerIdDiv').text('사용 가능')
+                                    $('#registerIdDiv').css({
+                                        'color': 'blue',
+                                        'font-size': '8pt',
+                                        'font-weight': 'bold'
+                                    });
+                                }
+                            },
+                            error: function (err) {
+                                console.log(err);
+                                alert("실패");
+                            }
+                        });
+                    }
+                });
+
+        /* 패스워드 정규표현 만족 */
+        $('#registerPassword')
+            .focusout(
+                function () {
+                    /* 특수문자 / 문자 / 숫자 포함 형태의 8~15자리 이내의 암호 정규식 */
+                    var passRule = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
+
+                    if (!passRule.test($("input[id='registerPassword']").val())) {
+                        $('#RegisterPasswordDiv').text(
+                            '특수문자 / 문자 / 숫자 포함 형태의 8~15자리 비밀번호로 설정해주세요')
+                        $('#RegisterPasswordDiv').css({'color': 'red', 'font-size': '8pt', 'font-weight': 'bold'});
+                    } else {
+                        $('#RegisterPasswordDiv').text('사용 가능')
+                        $('#RegisterPasswordDiv').css({'color': 'blue', 'font-size': '8pt', 'font-weight': 'bold'});
+                    }
+                });
+
+        /* 아이디,이름,패스워드 공백체크 */
+        function noSpaceForm(obj) { // 공백사용못하게
+            var str_space = /\s/; // 공백체크
+            if (str_space.exec(obj.value)) { // 공백 체크
+                alert("해당 항목에는 공백을 사용할수 없습니다.\n\n공백은 자동적으로 제거 됩니다.");
+                obj.focus();
+                obj.value = obj.value.replace(' ', ''); // 공백제거
+            }
+        }
+
     }
-    
-    function initRegisterSelector(){
-    	$('#userAgreeBoxAll').click('click', function(e) {
-    		if ($(this).prop('checked')) {
-    			$('.userAgreeBox').prop('checked', true);
-    		} else {
-    			$('.userAgreeBox').prop('checked', false);
-    		}
-    	});
 
-    	$('.userAgreeBox').click('click', function(e) {
-    		if ($('input.userAgreeBox:checked').length === 3) {
-    			$('#userAgreeBoxAll').click();
-    		} else {
-    			$('#userAgreeBoxAll').prop('checked', false);
-    		}
-    	});
-
-    	/* 회원가입 submit */
-    	$('#userRegisterBtn').click(
-    			function() {
-    				$('#realnameDiv').empty();
-    				$('#emailDiv').empty();
-    				$('#phoneDiv').empty();
-    				$('#birthdateDiv').empty();
-
-    				if ($('#userAgreeBoxAll').prop('checked') == false) {
-    					alert('약관 동의를 해주세요');
-    				} else if ($('#realname').val() == '') {
-    					$('#realnameDiv').text('이름을 입력하세요')
-    					$('#realnameDiv').css({'color':'red','font-size':'8pt','font-weight':'bold'});
-    				} else if ($('#registerId').val() == '') {
-    					$('#registerIdDiv').text('아이디를 입력하세요')
-    					$('#registerIdDiv').css({'color':'red','font-size':'8pt','font-weight':'bold'});
-    				} else if ($('#registerPassword').val() == '') {
-    					$('#RegisterPasswordDiv').text('비밀번호를 입력하세요')
-    					$('#RegisterPasswordDiv').css({'color':'red','font-size':'8pt','font-weight':'bold'});
-    				} else if ($('#registerEmail1').val() == '', $('#registerEmail2')
-    						.val() == '') {
-    					$('#emailDiv').text('이메일을 입력하세요')
-    					$('#emailDiv').css({'color':'red','font-size':'8pt','font-weight':'bold'});
-    				} else if ($('#phone2').val() == '', $('#phone3').val() == '') {
-    					$('#phoneDiv').text('휴대전화를 입력하세요')
-    					$('#phoneDiv').css({'color':'red','font-size':'8pt','font-weight':'bold'});
-    				} else if ($('#birthdate').val() == '') {
-    					$('#birthdateDiv').text('생년월일를 입력하세요')
-    					$('#birthdateDiv').css({'color':'red','font-size':'8pt','font-weight':'bold'});
-    				} else {
-    					if ($('#registerIdDiv').text() != '사용 가능') {
-    						alert("ID 중복체크 해주세요");
-    					} else if ($('#RegisterPasswordDiv').text() != '사용 가능') {
-    						alert("비밀번호를 확인해주세요");
-    					} else {
-    						document.registerEmailForm.submit();
-    					}
-    				}
-    			})
-
-    	/* 아이디 중복확인 */
-    	$('#registerId')
-    			.focusout(
-    					function() {
-    						/* 숫자 포함 형태의 6~15자리 이내의 암호 정규식 */
-    						var passRule = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-
-    						if ($('#registerId').val() == '') {
-    							$('#registerIdDiv').text('아이디를 입력하세요')
-    							$('#registerIdDiv').css({'color':'red','font-size':'8pt','font-weight':'bold'});
-    						} else if (!passRule
-    								.test($("input[id='registerId']").val())) {
-    							$('#registerIdDiv').text('이메일 형식으로 아이디를 설정해주세요')
-    							$('#registerIdDiv').css({'color':'red','font-size':'8pt','font-weight':'bold'});
-    						} else {
-    							$('#registerIdDiv').empty();
-    							var token = $("meta[name='_csrf']").attr("content");
-    							var header = $("meta[name='_csrf_header']").attr(
-    									"content");
-
-    							$.ajax({
-    								type : 'post',
-    								url : './user/checkId',
-    								data : 'id=' + $('#registerId').val()
-    										+ '&registerMethod='
-    										+ $('#registerMethod').val(),
-    								dataType : 'text',
-    								beforeSend : function(xhr) {
-    									// here it is
-    									xhr.setRequestHeader(header, token);
-    								},
-    								success : function(data) {
-    									if (data == 'exist') {
-    										$('#registerIdDiv').text('사용 불가능')
-    										$('#registerIdDiv').css({'color':'red','font-size':'8pt','font-weight':'bold'});
-
-    									} else if (data == 'not_exist') {
-    										$('#registerIdDiv').text('사용 가능')
-    										$('#registerIdDiv').css({'color':'blue','font-size':'8pt','font-weight':'bold'});
-    									}
-    								},
-    								error : function(err) {
-    									console.log(err);
-    									alert("실패");
-    								}
-    							});
-    						}
-    					});
-
-    	/* 패스워드 정규표현 만족 */
-    	$('#registerPassword')
-    			.focusout(
-    					function() {
-    						/* 특수문자 / 문자 / 숫자 포함 형태의 8~15자리 이내의 암호 정규식 */
-    						var passRule = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
-
-    						if (!passRule.test($("input[id='registerPassword']").val())) {
-    							$('#RegisterPasswordDiv').text(
-    									'특수문자 / 문자 / 숫자 포함 형태의 8~15자리 비밀번호로 설정해주세요')
-    							$('#RegisterPasswordDiv').css({'color':'red','font-size':'8pt','font-weight':'bold'});
-    						} else {
-    							$('#RegisterPasswordDiv').text('사용 가능')
-    							$('#RegisterPasswordDiv').css({'color':'blue','font-size':'8pt','font-weight':'bold'});
-    						}
-    					});
-
-    	/* 아이디,이름,패스워드 공백체크 */
-    	function noSpaceForm(obj) { // 공백사용못하게
-    		var str_space = /\s/; // 공백체크
-    		if (str_space.exec(obj.value)) { // 공백 체크
-    			alert("해당 항목에는 공백을 사용할수 없습니다.\n\n공백은 자동적으로 제거 됩니다.");
-    			obj.focus();
-    			obj.value = obj.value.replace(' ', ''); // 공백제거
-    		}
-    	}
-    	
-    }
-    
 
     // 모달 템플릿
     function getTemplateModal(title, body) {
@@ -319,10 +326,10 @@ $(function() {
                   </div>
               </div>
               `;
-  }
+    }
 
-  function getTemplateWriteSelector() {
-    return `
+    function getTemplateWriteSelector() {
+        return `
         <div class="row justify-content-center">
             <lable>여행루트 글쓰기</label>
             <input name="writeType" value="route" type="radio" checked />
@@ -337,11 +344,11 @@ $(function() {
         </div>
         <button id="btn-to-write" class="btn btn-outline-info">글쓰러 가기</button>
       `;
-  }
+    }
 
     // 로그인 템플릿
     function getTemplateLogin() {
-    	
+
         return `
         <div class="login_display">
         <form name="loginForm" method="post"
@@ -383,9 +390,9 @@ $(function() {
 
       `;
     }
-    
-    function getTemplateRegister(){
-    	return `
+
+    function getTemplateRegister() {
+        return `
     	<div class="registerForm_email">
 			<form name="registerEmailForm" action="/user/register" method="post">
 				<input type="hidden" name="${csrfTokenName}"
@@ -464,6 +471,6 @@ $(function() {
 		</div>
     	`;
     }
-    
+
 });
 
