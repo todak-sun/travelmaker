@@ -40,3 +40,4 @@ out/
 
 package-lock.json
 package.json
+/src/main/webapp/storage/
