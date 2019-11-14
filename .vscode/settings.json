@@ -1,4 +1,5 @@
 {
+    "prettier.jsxBracketSameLine": false,
     "javascript.format.enable": false,
     "[html]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans:beans
+	xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+           http://www.springframework.org/schema/security
+           http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+
+	<http auto-config='true' use-expressions="true">
+		<intercept-url pattern="user/login" access="permitAll" />
+		<intercept-url pattern="/resources/**"
+			access="permitAll" />
+
+		<!-- <intercept-url pattern="/**" access="hasRole('ROLE_USER')" /> -->
+
+
+		<form-login login-page="/user/login"
+			default-target-url="/" username-parameter="id"
+			password-parameter="pwd"
+			authentication-failure-url="/loginFail"
+			always-use-default-target='true' />
+		<logout invalidate-session="true"
+			logout-url="/logout" logout-success-url="/" />
+
+
+		<!-- <remember-me token-validity-seconds="1209600"
+			remember-me-parameter="remember-me" data-source-ref="dataSource" /> -->
+			
+		<!-- enable csrf protection -->
+		<csrf />
+		
+	</http>
+
+	<authentication-manager>
+		<authentication-provider
+			user-service-ref="userServiceImple" />
+	</authentication-manager>
+
+	<beans:bean id="userServiceImple"
+		class="com.travelmaker.user.service.UserServiceImpl">
+	</beans:bean>
+	
+	<beans:bean id="bcryptPasswordEncoder"
+        class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+
+
+</beans:beans>
+
+
+

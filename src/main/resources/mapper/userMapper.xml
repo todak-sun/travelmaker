@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="userSQL">
+	<select id="getUserByID" parameterType="user" resultType="user">
+		select
+		*
+		from users where id = #{id} and registerMethod = #{registerMethod}
+	</select>
+
+	<insert id="UserInsert" parameterType="user">
+		insert into
+		users(seq,id,realname,password,email1,email2,gender,phone1,phone2,phone3,birthdate,agreeNeed,registerMethod,dateRegist)
+		values(seq_users.nextval,#{id},#{realname},#{password},#{email1},#{email2},#{gender},#{phone1},#{phone2},#{phone3},#{birthdate},#{agreeNeed},#{registerMethod},sysdate)
+	</insert>
+
+	<select id="checkMethod" parameterType="user" resultType="user">
+		select
+		*
+		from users where id = #{id} and realname =#{realname} and
+		registerMethod =#{registerMethod}
+	</select>
+
+
+	<select id="checkPassword" parameterType="user"
+		resultType="user">
+		select
+		*
+		from users where id = #{id} and registerMethod =
+		#{registerMethod} and password = #{password}
+	</select>
+
+	<update id="userModify" parameterType="user">
+
+		update users set realname = #{realname}
+		, nickname = #{nickname}
+		, email1 = #{email1}
+		, email2 = #{email2}
+		, password = #{password}
+		, gender = #{gender}
+		, phone1 = #{phone1}
+		, phone2 = #{phone2}
+		, phone3 = #{phone3}
+		, postcode = #{postcode}
+		, addr1 = #{addr1}
+		, addr2 = #{addr2}
+		, contentProfile = #{contentProfile}
+		, account = #{account}
+		, dateRegist=sysdate where id=#{id} and registerMethod =#{registerMethod}
+
+	</update>
+
+	<update id="userWithdrawal" parameterType="user">
+
+		delete users where id=#{id} and registerMethod =#{registerMethod}
+
+	</update>
+
+</mapper>
