@@ -73,10 +73,7 @@ public class RouteApiController {
 	
 	@RequestMapping(value = "/saveRoute", method = RequestMethod.POST)
 	public Map<String, Object> saveRoute(Model model, @ModelAttribute RouteDTO routeDTO){
-//		System.out.println(routeDTO.getBno());
-//		System.out.println(routeDTO.getContent());
-//		System.out.println(routeDTO.getFixed());
-//		System.out.println(routeDTO.getBno());
+
 		Map<String, Object> map = new HashMap<String, Object>();
 		routeService.saveRoute(routeDTO);
 		// ajax로 리턴해서 자바스크립트에서 양식 뿌려주기

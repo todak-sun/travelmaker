@@ -19,9 +19,6 @@ public class RoutePageController {
     @Autowired
     RouteService routeService;
 
-    @Autowired
-    StoryService storyService;
-
     @RequestMapping(value = "write")
     public String routeWirteForm(Model model, @RequestParam int isDomestic) {
         model.addAttribute("isDomestic", isDomestic);
@@ -29,10 +26,11 @@ public class RoutePageController {
         return "/route/routeWriteForm";
     }
 
-    @RequestMapping(value = "/view/{bno}", method = RequestMethod.GET)
-    public String routeStoryView(@PathVariable String bno, Model model) {
-        System.out.println("bno = " + bno);
-        RouteDTO routeDTO = storyService.getRoute(bno);
+    //////
+    @RequestMapping(value = "/view/{rno}", method = RequestMethod.GET)
+    public String routeStoryView(@PathVariable int rno, Model model) {
+        System.out.println("rno = " + rno);
+        RouteDTO routeDTO = routeService.getRoute(rno);
         System.out.println(routeDTO.getBno());
         model.addAttribute("routeDTO", routeDTO);
 
@@ -46,7 +44,7 @@ public class RoutePageController {
         int rno = routeDTO.getRno();
         System.out.println(rno);
 
-        List<RouteContentDTO> list = storyService.getRouteContentStory(rno);
+        List<RouteContentDTO> list = routeService.getRouteContentStory(rno);
 
         System.out.println("리스트 = " + list.size());
         System.out.println("image 총사이즈 : " + list.get(0).getImgs().size());

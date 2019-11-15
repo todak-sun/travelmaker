@@ -2,34 +2,29 @@
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="storySQL">
-
-	<select id="getList" parameterType="java.util.Map" resultType="story" >
-		SELECT * FROM(
-		    SELECT ROWNUM RN, B.* FROM(
-		        SELECT bno, rno, seq, title, likes, views, hashtag, date_write, date_update, fixed, is_domestic 
-		        FROM essay
-		        UNION
-		        SELECT bno, rno, seq, title, likes, views, hashtag, date_write, date_update, fixed, is_domestic 
-		        FROM route
-		        ORDER BY date_update DESC
-		    ) B WHERE ROWNUM &lt; #{endNum}
-		) WHERE RN &gt; #{startNum}
+	
+	<select id="getList" parameterType="storySearchFilter" resultType="story" >
+		SELECT C.*, D.cmt FROM(
+		    SELECT * FROM(
+		        SELECT ROWNUM RN, A.*, B.nickname, B.imgprofile FROM(
+		            SELECT bno, rno, seq, title, likes, views, hashtag, date_write, date_update, file_name, image_name, fixed, is_domestic 
+		            FROM essay
+		            WHERE fixed = 1
+		            UNION
+		            SELECT bno, rno, seq, title, likes, views, hashtag, date_write, date_update, '' AS file_name, image_name, fixed, is_domestic 
+		            FROM route
+		            WHERE fixed = 1
+		            ORDER BY rno DESC
+		        ) A JOIN users B on A.seq = B.seq WHERE (nickname like '%${keyword}%' or title like '%${keyword}%' or hashtag like '%${keyword}%')
+		    ) WHERE RN &gt; #{start} AND RN &lt; #{end}
+		) C LEFT OUTER JOIN (SELECT COUNT(*) CMT, BNO FROM CMT GROUP BY BNO) D on C.bno = D.bno ORDER BY RNO DESC
 	</select>
 	
-	<select id="selectEssay" parameterType="Integer" resultType="Integer">
+<!-- 	<select id="selectEssay" parameterType="Integer" resultType="Integer">
 		SELECT RNO FROM Essay WHERE BNO=#{BNO}
 	</select>
 	<select id="selectRoute" parameterType="Integer" resultType="Integer">
 		SELECT RNO FROM ROUTE WHERE BNO=#{BNO}
-	</select>
-	<select id="getRoute" parameterType="String" resultType="route">
-		SELECT * FROM route WHERE BNO = #{bno}
-	</select>
-	<select id="getRouteContentStory" parameterType="int" resultType="routeContent">
-		SELECT * FROM route_content WHERE RNO = #{rno}
-	</select>
-	<select id="getRouteImageStory" parameterType="int" resultType="routeImage">
-		SELECT img FROM route_image WHERE CRNO = #{CRNO}
-	</select>
+	</select> -->
 	
 </mapper>

@@ -52,7 +52,7 @@ uri="http://java.sun.com/jsp/jstl/functions"%>
       <div id="inner-main-nav" class="collapse navbar-collapse">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <a id="link-review" class="nav-link" href="/story/list">글목록</a>
+            <a id="link-review" class="nav-link" href="/story">글목록</a>
           </li>
           <li class="nav-item"><a class="nav-link" href="#">스토어</a></li>
           <li class="nav-item">

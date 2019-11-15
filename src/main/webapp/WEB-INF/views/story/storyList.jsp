@@ -14,12 +14,17 @@ pageEncoding="UTF-8"%>
     <title>스토리페이지</title>
   </head>
   <body>
-    <button type="button" id="pushgo">푸쉬 테스트</button>
-
-    <div class="list">
-      페이지 로딩중
+    <div id="div-search" class="search">
+      <input
+        type="text"
+        id="input-search"
+        placeholder="제목, 장소, 작성자명을 검색하세요"
+        title="검색"
+      />
+      <h3><span></span></h3>
     </div>
-    <button type="button" id="loadList">더 보기</button>
+    <div id="div-list" class="list"></div>
+    <button type="button" id="btn-list" value="${listNum}">더 보기</button>
 
     <script src="../../../resources/js/common/jquery-3.4.1.js"></script>
     <script src="../../../resources/js/common/bootstrap.js"></script>
