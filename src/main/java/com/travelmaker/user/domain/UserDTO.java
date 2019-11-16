@@ -1,11 +1,12 @@
 package com.travelmaker.user.domain;
 
-import java.sql.Date;
-
 import lombok.Data;
+
+import java.sql.Date;
 
 @Data
 public class UserDTO {
+	private int seq;
 	private String nickname; //별명
 	private String realname; //실명
 	private String id;

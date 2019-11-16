@@ -3,7 +3,9 @@
     height: 100%;
     min-height: 500px;
 }
-
+.container{
+    margin-top:60px;
+}
 .editor-zone {
     min-width: 700px;
     min-height: 800px;

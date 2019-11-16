@@ -1,0 +1,35 @@
+.container {
+    margin-top: 60px;
+    border:1px solid gray;
+}
+
+.container > div{
+    border:1px solid gray;
+    height: 250px;
+    margin-bottom:1.25rem;
+}
+
+.wrap-images{
+
+}
+
+.wrap-story{
+    /*border:1px solid gray;*/
+}
+
+.register-form-email .group-checkbox{
+    list-style: none;
+}
+
+.modal-dialog{
+    max-width: 500px;
+    min-width: 400px;
+    padding:0;
+}
+
+.btn-api-login{
+    display:none;
+    position:absolute;
+    top:-9999px;
+    left:-9999px;
+}

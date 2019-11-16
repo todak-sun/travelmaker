@@ -6,14 +6,7 @@ pageEncoding="UTF-8" %>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link
-      rel="stylesheet"
-      href="${pageContext.request.contextPath}/resources/css/common/bootstrap-reboot.css"
-    />
-    <link
-      rel="stylesheet"
-      href="${pageContext.request.contextPath}/resources/css/common/bootstrap.css"
-    />
+    <jsp:include page="../common/head-css.jsp"/>
     <link
       rel="stylesheet"
       href="${pageContext.request.contextPath}/resources/summernote/summernote-bs4.css"
@@ -22,15 +15,10 @@ pageEncoding="UTF-8" %>
       rel="stylesheet"
       href="${pageContext.request.contextPath}/resources/css/essay/write.css"
     />
-    <script src="${pageContext.request.contextPath}/resources/js/common/popper.min.js"></script>
-    <script src="${pageContext.request.contextPath}/resources/js/common/jquery-3.4.1.js"></script>
-    <script src="${pageContext.request.contextPath}/resources/js/common/bootstrap.js"></script>
-    <script src="${pageContext.request.contextPath}/resources/summernote/summernote-bs4.js"></script>
-    <script src="${pageContext.request.contextPath}/resources/summernote/lang/summernote-ko-KR.js"></script>
-<%--    <script src="${pageContext.request.contextPath}/resources/js/common/travelmaker.js"></script>--%>
     <title>에세이 작성</title>
   </head>
   <body>
+    <jsp:include page="../common/navbar.jsp"/>
     <input
       id="input-file-upload"
       type="file"
@@ -134,13 +122,9 @@ pageEncoding="UTF-8" %>
       id="map-container"
       style="width:750px;height:350px;visibility: hidden;position:absolute;top:0;left:0;"
     ></div>
-    <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=16307053f83634ad7b4af335a5094194&libraries=services"></script>
-    <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCeKdfxBMTEBPFzc4QjjrIJJv25EuWL4gY&libraries=places"
-      async
-      defer
-    ></script>
-<%--    <script src="${pageContext.request.contextPath}/resources/js/essay/write2.js"></script>--%>
+    <jsp:include page="../common/editor-js.jsp"/>
+    <script src="${pageContext.request.contextPath}/resources/summernote/summernote-bs4.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/summernote/lang/summernote-ko-KR.js"></script>
     <script src="${pageContext.request.contextPath}/resources/js/essay/write.js"></script>
   </body>
 </html>
