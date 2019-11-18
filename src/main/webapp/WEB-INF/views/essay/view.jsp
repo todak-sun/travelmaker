@@ -15,7 +15,8 @@
 <input id="seq" type="hidden" value="${essayDTO.seq}"/>
 <div class="container-fluid">
     <header class="header-box">
-        <div class="main-image" style="background-image:url('${pageContext.request.contextPath}/resources/storage/essay/${essayDTO.imageName}')"></div>
+        <div class="main-image"
+             style="background-image:url('${pageContext.request.contextPath}/resources/storage/essay/${essayDTO.imageName}')"></div>
         <h1 class="header-title">${essayDTO.title}<span>written by 홍길동</span></h1>
         <!-- 해쉬태그 영역 -->
         <c:set var="hashes" value="${fn:split(essayDTO.hashtag, ',')}"/>
@@ -23,9 +24,9 @@
             <c:forEach items="${hashes}" var="hash">
                 <span class="hash">#${hash}</span>
             </c:forEach>
-<%--            <span class="hash">#다녀옴</span>--%>
-<%--            <span class="hash">#다녀옴</span>--%>
-<%--            <span class="hash">#다녀옴</span>--%>
+            <%--            <span class="hash">#다녀옴</span>--%>
+            <%--            <span class="hash">#다녀옴</span>--%>
+            <%--            <span class="hash">#다녀옴</span>--%>
         </div>
         <!-- 해쉬태그 영역 -->
         <div class="header-info">
@@ -43,44 +44,11 @@
         </div>
         <div id="comment-zone">
             <div class="input-group">
-          <textarea
-                  id="comment-content"
-                  type="text"
-                  class="form-control"
-          ></textarea>
+                <textarea id="comment-content" class="form-control"></textarea>
                 <button id="btn-add-comment" class="input-group-append">작성</button>
             </div>
             <div>
-                <ul id="comment-group" style="list-style:none;">
-                    <li>
-                        <%--                <div class="media text-muted pt-3">--%>
-                        <%--                  <svg--%>
-                        <%--                          class="bd-placeholder-img mr-2 rounded"--%>
-                        <%--                          width="32"--%>
-                        <%--                          height="32"--%>
-                        <%--                          xmlns="http://www.w3.org/2000/svg"--%>
-                        <%--                          preserveAspectRatio="xMidYMid slice"--%>
-                        <%--                          focusable="false"--%>
-                        <%--                          role="img"--%>
-                        <%--                          aria-label="Placeholder: 32x32"--%>
-                        <%--                  >--%>
-                        <%--                    <rect width="100%" height="100%" fill="#6f42c1" />--%>
-                        <%--                    <text x="50%" y="50%" fill="#6f42c1" dy=".3em">32x32</text>--%>
-                        <%--                  </svg>--%>
-                        <%--                  <p--%>
-                        <%--                          class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray"--%>
-                        <%--                  >--%>
-                        <%--                    <strong class="d-block text-gray-dark">@아이디</strong>--%>
-                        <%--                    내용을 적는곳--%>
-                        <%--                  </p>--%>
-                        <%--                  <div class="btn-group btn-group-sm">--%>
-                        <%--                    <button class="btn-primary">좋아요</button>--%>
-                        <%--                    <button class="btn-danger">싫어요</button>--%>
-                        <%--                    <button class="btn-outline-secondary">답글</button>--%>
-                        <%--                  </div>--%>
-                        <%--                </div>--%>
-                    </li>
-                </ul>
+                <ul id="comment-group" style="list-style:none;"></ul>
             </div>
         </div>
     </section>

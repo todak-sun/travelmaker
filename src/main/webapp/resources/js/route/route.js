@@ -1,5 +1,8 @@
 $(function () {
     // 전역변수들
+
+
+
     let routeData = {
         rno: null,
         seq: null,
