@@ -43,7 +43,7 @@ public class RouteApiController {
 		
 		int crno = routeService.saveCourse(routeContentDTO); //저장한 코스의 crno 반환
 		
-		String filePath = "C:\\spring\\workSTS\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\travelmaker\\storage"; // 이미지저장경로
+		String filePath = "D:\\Spring\\FinalProject\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\travelmaker\\storage"; // 이미지저장경로
 
 		int i = 1; // 이미지 순서
 		for(MultipartFile img : routeContentDTO.getImages()) {

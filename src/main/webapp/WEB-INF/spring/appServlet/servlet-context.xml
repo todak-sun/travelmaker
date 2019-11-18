@@ -31,7 +31,12 @@
 	<context:component-scan
 		base-package="com.travelmaker.user.controller" />
 	<context:component-scan
+		base-package="com.travelmaker.store.controller" />
+	<context:component-scan
 		base-package="com.travelmaker.home.controller" />
+
+	<context:component-scan
+		base-package="com.travelmaker.error.controller" />
 
 	<context:component-scan
 		base-package="com.travelmaker.config" />
