@@ -1,8 +1,8 @@
 package com.travelmaker.user.domain;
 
-import java.sql.Date;
-
 import lombok.Data;
+
+import java.sql.Date;
 
 @Data
 public class UserDTO {

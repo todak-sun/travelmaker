@@ -1,99 +1,130 @@
-$(function() {
+$(function () {
+    const {useState, setRequestHeader, getEl, getEls} = new travelmaker.utils();
+    const {comment, reComment} = new travelmaker.template();
+    const ajax = new travelmaker.ajax();
 
-  let requestData = {
-    cno: '',
-    seq : +document.querySelector('#seq').value,
-    content : '',
-    likes : 0,
-    unlikes : 0
-  };
+    const bno = +getEl('#bno').value;
+    const seq = +getEl('#seq').value;
 
-  function setData(data){
-    requestData = {
-      ...requestData,
-      ...data
+    let commentData = {
+        bno: 0,
+        cno: 0,
+        seq: 0,
+        content: '',
+        likes: 0,
+        unlikes: 0,
+        dateWrite: null
     };
-    console.log(requestData)
-    //todo 테스트 코드, 삭제합시다~!
-  }
 
-  function getData(){
-    return requestData;
-  }
+    let essayData = {
+        rno: '',
+        seq: 1,
+        title: '',
+        content: '',
+        hashtag: '',
+        fixed: 0,
+        isDomestic: 0
+    };
 
-  const bno = +document.querySelector('#bno').value;
+    const [setComment, getComment] = useState(commentData);
+    const [setReComment, getReComment] = useState(commentData);
 
-  const [btnAddComment, commentContent] = getEls(
-    document,
-    '#btn-add-comment',
-    '#comment-content'
-  );
+    const [btnAddComment, commentContent, commentGroup] = getEls(
+        document,
+        '#btn-add-comment',
+        '#comment-content',
+        '#comment-group'
+    );
 
-  btnAddComment.addEventListener('click', btnAddCommentHandler);
+    commentContent.addEventListener('change', commentContentHandler);
+    btnAddComment.addEventListener('click', btnAddCommentHandler);
 
-  function btnAddCommentHandler(e) {
-    createComment(bno, { seq, content: commentContent.value })
-      .then((ret) => {
-        console.log(ret);
-      })
-      .catch(console.error);
-  }
+    initOnLoad();
 
-  getComment(bno)
-    .then((ret) => {
-      console.log(ret);
-    })
-    .catch(console.error);
+    function initOnLoad() {
+        ajax.getCommentList(bno)
+            .then(getCommentList)
+            .then(renderComment)
+            .catch(console.error);
+    }
 
-  function getComment(bno) {
-    return $.ajax({
-      type: 'GET',
-      url: `http://localhost:8080/api/board/${bno}/comment`,
-      dataType: 'json'
-    });
-  }
+    function initCommentGroup() {
+        const btnRecommentList = Array.from(document.querySelectorAll('.btn-recomment'));
+        const btnLikeComment = Array.from(document.querySelectorAll('.btn-like-comment'));
+        const btnUnlikeComment = Array.from(document.querySelectorAll('.btn-unlike-comment'));
+        const btnRemoveComment = Array.from(document.querySelectorAll('.btn-recomment-remove'));
 
-  function createComment(bno, data) {
-    return $.ajax({
-      type: 'POST',
-      url: `http://localhost:8080/api/board/${bno}/comment`,
-      contentType: 'application/json',
-      dataType: 'json',
-      data: JSON.stringify(data)
-    });
-  }
+        btnRecommentList.forEach(btnRe => btnRe.addEventListener('click', btnReHandler));
+        btnRemoveComment.forEach(btnRemove => btnRemove.addEventListener('click', btnRemoveHandler));
+    }
 
-  function createReComment(bno, cno, data) {
-    return $.ajax({
-      type: 'POST',
-      url: `http://localhost:8080/api/board/${bno}/comment/${cno}`,
-      contentType: 'application/json',
-      dataType: 'json',
-      data: data
-    });
-  }
+    function btnAddCommentHandler(e) {
+        setComment({bno: bno, seq: seq});
+        ajax.createComment(bno, getComment())
+            .then((ret) => {
+                commentContent.value = '';
+                return ajax.getCommentList(bno);
+            })
+            .then(getCommentList)
+            .then(renderComment)
+            .catch(console.error);
+    }
 
-  function updateComment(bno, data) {
-    return $.ajax({
-      type: 'PUT',
-      url: `http://localhost:8080/api/board/${bno}/comment/`,
-      contentType: 'application/json',
-      dataType: 'json',
-      data: data
-    });
-  }
+    //handler
+    function btnRemoveHandler(e) { //댓글 삭제 핸들러
+        if (!confirm('해당 댓글을 삭제하시겠습니까?')) return;
+        ajax.deleteComment(bno, +this.dataset.cno);
+        $(this).parents('li')[0].remove();
+    }
 
-  function deleteComment(bno, cno) {
-    return $.ajax({
-      type: 'DELETE',
-      url: `http://localhost:8080/api/board/${bno}/comment/${cno}`,
-      dataType: 'text'
-    });
-  }
+    function btnReHandler(e) { //댓글 추가 영역소환하는 핸들러
+        if (this.dataset.on === 'false') {
+            $(this).parents('li').after(reComment(this.dataset.cno));
+            this.dataset.on = 'true';
+            const recommentContent = getEl('#recomment-content');
+            const btnReComment = getEl('#btn-add-recomment');
 
-  function getEls(parent, ...targets) {
-    let els = [];
-    targets.forEach((target) => els.push(parent.querySelector(target)));
-    return els;
-  }
+            recommentContent.addEventListener('change', function (e) {
+                setReComment({content: this.value});
+            });
+
+            btnReComment.addEventListener('click', function (e) {
+                setReComment({seq: seq, cno: +this.dataset.cno, bno: bno});
+                ajax.createReComment(bno, getReComment().cno, getReComment())
+                    .then((ret) => {
+                        return ajax.getCommentList(bno)
+                    })
+                    .then(getCommentList)
+                    .then(renderComment)
+                    .catch(console.error);
+            });
+        } else {
+            $(this).parents('li').next()[0].remove();
+            this.dataset.on = 'false';
+        }
+    }
+
+    function commentContentHandler(e) {
+        setComment({content: this.value});
+    }
+
+    //util
+    function renderComment(ret) {
+        resetCommentGroup();
+        $(commentGroup).append(ret);
+        initCommentGroup();
+    }
+
+    function resetCommentGroup() {  //댓글영역 초기화
+        commentGroup.innerHTML = '';
+    }
+
+    function getCommentList(ret) { //가져온 데이터로 모든 댓글을 다시 그려준 후 반환
+        const commentList = ret.data;
+        const $frag = $(document.createDocumentFragment());
+        Array.from(commentList).forEach(cmt => {
+            $frag.append($(comment(cmt)));
+        });
+        return $frag;
+    }
 });

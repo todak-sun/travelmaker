@@ -1,32 +1,21 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8"/>
     <title>route-write-form</title>
-    <link
-            rel="stylesheet"
-            href="${pageContext.request.contextPath}/resources/css/common/bootstrap-reboot.css"
-    />
-    <link
-            rel="stylesheet"
-            href="${pageContext.request.contextPath}/resources/css/common/bootstrap.css"
-    />
+    <jsp:include page="../common/head-css.jsp"/>
     <link
             rel="stylesheet"
             href="${pageContext.request.contextPath}/resources/css/route/write.css"
     />
-    <script src="${pageContext.request.contextPath}/resources/js/common/popper.min.js"></script>
-    <script src="${pageContext.request.contextPath}/resources/js/common/jquery-3.4.1.js"></script>
-    <script src="${pageContext.request.contextPath}/resources/js/common/bootstrap.js"></script>
 </head>
 <body>
+<jsp:include page="../common/navbar.jsp"/>
 <div class="container">
     <div class="editor-zone">
-
         <!-- 제목설정 박스 -->
-        <div class="editor-title" style="display:none;">
+        <div class="editor-title">
             <h4>여행기 제목</h4>
             <input
                     type="text"
@@ -97,7 +86,7 @@
         <!-- 경로저장 박스 -->
 
         <!-- 에필로그 박스 -->
-        <div class="route-epilogue-form" style="">
+        <div class="route-epilogue-form" style="display: none;">
             <h4>에필로그</h4>
             <textarea
                     id="route-epilogue"
@@ -259,24 +248,10 @@
     </div>
 </div>
 <!-- kakao map -->
-<script
-        type="text/javascript"
-        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=58d9a72c9db8da0b849a32734093767e&libraries=services"
-></script>
-<!-- Google Map -->
-<script
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCeKdfxBMTEBPFzc4QjjrIJJv25EuWL4gY&libraries=places"
-        async
-        defer
-></script>
+<jsp:include page="../common/editor-js.jsp"/>
 <script
         type="text/javascript"
         src="${pageContext.request.contextPath}/resources/js/route/route.js"
 ></script>
 </body>
-
-<%--  <script--%>
-<%--    type="text/javascript"--%>
-<%--    src="${pageContext.request.contextPath}/resources/js/route/routeMap.js"--%>
-<%--  ></script>--%>
 </html>

@@ -12,17 +12,26 @@
             SELECT rno.nextval from dual
         </selectKey>
         INSERT INTO ESSAY(BNO, RNO, SEQ, TITLE, HASHTAG, FILE_NAME, IMAGE_NAME)
-        VALUES(bno.nextval, #{rno}, #{seq}, #{title, jdbcType=VARCHAR}, #{hashtag, jdbcType=VARCHAR}, #{fileName}, #{imageName, jdbcType=VARCHAR})
+        VALUES(bno.nextval, #{rno}, #{seq}, #{title, jdbcType=VARCHAR}, #{hashtag, jdbcType=VARCHAR}, #{fileName},
+        #{imageName, jdbcType=VARCHAR})
     </insert>
 
     <select id="search" parameterType="essaySearchFilter" resultType="essay">
-        SELECT * FROM essay WHERE seq = #{seq} AND fixed = #{fixed}
+        SELECT *
+        FROM essay
+        WHERE seq = #{seq}
+        AND fixed = #{fixed}
+        ORDER BY ${order} DESC
     </select>
 
     <update id="update" parameterType="essay">
         UPDATE ESSAY
-        SET TITLE = #{title, jdbcType=VARCHAR}, LIKES = #{likes}, VIEWS = #{views},
-            HASHTAG = #{hashtag, jdbcType=VARCHAR}, DATE_UPDATE = sysdate, IMAGE_NAME = #{imageName, jdbcType=VARCHAR},
+        SET TITLE = #{title, jdbcType=VARCHAR},
+            LIKES = #{likes},
+            VIEWS = #{views},
+            HASHTAG = #{hashtag, jdbcType=VARCHAR},
+            DATE_UPDATE = sysdate,
+            IMAGE_NAME = #{imageName, jdbcType=VARCHAR},
             FIXED = #{fixed}
         WHERE RNO = #{rno}
     </update>

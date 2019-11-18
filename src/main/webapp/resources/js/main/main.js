@@ -32,24 +32,32 @@ function loginBtnDraw() {
 
 $(function() {
   initJsFile(); // 처음화면 로드
-  const $modal = $('#modal-area'); // 모달
+  //클래스 임포트
+  const template = new travelmaker.template(); //템플릿 모아둔 곳.
+  const myRegex = new travelmaker.regex(); //정규식 모아둔 곳.
+  const {
+    getEl,
+    setRequestHeader,
+    setInValid,
+    setValid,
+    changeValid,
+    changeInValid,
+    isValid,
+    getRegisterMethod,
+    getFeedbackBox,
+    resetMessageHandler
+  } = new travelmaker.utils();
 
+  const $modal = $('#modal-area'); // 모달
   const btnWrite = document.querySelector('#btn-write');
   const btnLogin = document.querySelector('#btn-login');
   const btnRegist = document.querySelector('#btn-regist');
-  const idpwdSearch = document.querySelector('#idpwdSearch');
+  const csrfTokenName = document.getElementById('csrfTokenName').value;
+  const csrfTokenValue = document.getElementById('csrfTokenValue').value;
 
-  var csrfTokenName = document.getElementById('csrfTokenName').value;
-  var csrfTokenValue = document.getElementById('csrfTokenValue').value;
-
-  btnWrite.addEventListener('click', createModalHandler);
-
-  if (btnLogin != null) {
-    btnLogin.addEventListener('click', createModalHandler);
-  }
-  if (btnRegist != null) {
-    btnRegist.addEventListener('click', createModalHandler);
-  }
+  if (btnLogin) btnLogin.addEventListener('click', createModalHandler);
+  if (btnRegist) btnRegist.addEventListener('click', createModalHandler);
+  if (btnWrite) btnWrite.addEventListener('click', createModalHandler);
 
   // 모달 생성 담당 핸들러
   function createModalHandler(e) {
@@ -57,8 +65,12 @@ $(function() {
     $modal.html('');
     $modal.append(createModal(title, body));
     if (initFunction) initFunction();
-    $modal.modal('show');
-    if (title == '로그인') {
+    // $modal.modal('show');
+    $modal.modal({
+      show: true,
+      backdrop: 'static'
+    });
+    if (title === '로그인') {
       loginBtnDraw();
     }
   }
@@ -69,16 +81,24 @@ $(function() {
     // case에는 해당하는 아이디의 값을,
     // return은 배열로 지정후 첫번째 값은 title,
     // 두번째 값은 body에 들어갈 template를 넣어줌.
-
     switch (id) {
       case 'btn-write':
-        return ['글선택', getTemplateWriteSelector(), initWriteSelector];
+        return ['글선택', template.storySelector(), initWriteSelector];
       case 'btn-login':
+        //initJsFile();
         indcludeJs('http://developers.kakao.com/sdk/js/kakao.min.js');
         indcludeJs('http://apis.google.com/js/platform.js');
-        return ['로그인', getTemplateLogin(), initLoginSelector];
+        return [
+          '로그인',
+          template.login(csrfTokenName, csrfTokenValue),
+          initLoginSelector
+        ];
       case 'btn-regist':
-        return ['회원가입', getTemplateRegister(), initRegisterSelector];
+        return [
+          '회원가입',
+          template.register(csrfTokenName, csrfTokenValue),
+          initRegisterSelector
+        ];
       default:
         throw new Error('잘못된 id값을 입력했습니다');
     }
@@ -87,21 +107,17 @@ $(function() {
   // 모달창 생성
   function createModal(title, body) {
     const $frag = $(document.createDocumentFragment());
-    $frag.append(getTemplateModal(title, body));
+    $frag.append(template.modal(title, body));
     return $frag;
   }
 
   function initWriteSelector() {
-    const btnToWrite = document.querySelector('#btn-to-write');
+    const btnToWrite = getEl('#btn-to-write');
     btnToWrite.addEventListener('click', btnToWriteHandler);
 
-    function btnToWriteHandler() {
-      const writeType = document.querySelector(
-        'input[name="writeType"]:checked'
-      ).value;
-      const isDomestic = document.querySelector(
-        'input[name="isDomestic"]:checked'
-      ).value;
+    function btnToWriteHandler(e) {
+      const writeType = getEl('input[name="writeType"]:checked').value;
+      const isDomestic = getEl('input[name="isDomestic"]:checked').value;
 
       function moveTo(writeType, isDomestic) {
         const defaultLink = 'http://' + location.host;
@@ -112,407 +128,249 @@ $(function() {
           location.href = defaultLink + '/route/write?isDomestic=' + isDomestic;
         }
       }
+      moveTo(writeType, isDomestic);
     }
   }
 
   function initLoginSelector() {
-    const btnLogin = document.querySelector('#loginBtn');
-    btnLogin.addEventListener('click', btnLoginHandler);
+    let btnGoogle;
+    const btnLogin = getEl('#loginBtn');
+    const btnNa = getEl('#btn-login-na');
+    const btnKa = getEl('#btn-login-ka');
+    const btnGo = getEl('#btn-login-go');
+    const loginId = getEl('#login_id');
+    const loginPwd = getEl('#login_pwd');
 
-    function btnLoginHandler(e) {
-      // e.preventDefault();
-      if ($('#login_id').val() == '') {
-        alert('아이디를 입력해주세요');
-      } else if ($('#login_pwd').val() == '') {
-        alert('비밀번호를 입력해주세요');
-      } else {
-        $('#login_id').val($('#login_id').val() + '===travelMaker');
-        document.loginForm.submit();
-      }
+    btnLogin.addEventListener('click', btnLoginHandler);
+    btnNa.addEventListener('click', loginNaHandler);
+    btnKa.addEventListener('click', loginKaHandler);
+    btnGo.addEventListener('click', loginGoHandler);
+    loginId.addEventListener('blur', loginIdHandler);
+    loginPwd.addEventListener('blur', loginPwdHandler);
+
+    function loginNaHandler(e) {
+      getEl('#naverIdLogin_loginButton').click();
     }
 
-    $('#login_id').focusout(function() {
-      if ($('#login_id').val() == '') {
-        // $('#registerIdDiv').css({"color" : "black", })
-        $('#spanCheckID').text('아이디를 입력하세요');
-        $('#spanCheckID').css({
-          color: 'red',
-          'font-size': '8pt',
-          'font-weight': 'bold'
-        });
-      } else {
-        $('#spanCheckID').text('OK');
-        $('#spanCheckID').css({
-          color: 'blue',
-          'font-size': '8pt',
-          'font-weight': 'bold'
-        });
-      }
-    });
-    $('#login_pwd').focusout(function() {
-      if ($('#login_pwd').val() == '') {
-        $('#spanCheckPWD').text('패스워드를 입력하세요');
-        $('#spanCheckPWD').css({
-          color: 'red',
-          'font-size': '8pt',
-          'font-weight': 'bold'
-        });
-      } else {
-        $('#spanCheckPWD').text('OK');
-        $('#spanCheckPWD').css({
-          color: 'blue',
-          'font-size': '8pt',
-          'font-weight': 'bold'
-        });
-      }
-    });
+    function loginKaHandler(e) {
+      getEl('#kakao-login-btn').click();
+    }
+
+    function loginGoHandler(e) {
+      btnGoogle.click();
+    }
+
+    function btnLoginHandler(e) {
+      if (!isValid(loginId)) return loginId.focus();
+      if (!isValid(loginPwd)) return loginPwd.focus();
+      loginId.value += '===travelMaker';
+      document.loginForm.submit();
+    }
+  }
+
+  function loginIdHandler(e) {
+    const [inFeedback] = getFeedbackBox(e);
+    const id = e.target.value;
+    if (!id) return setInValid(e, inFeedback, '아이디를 입력하세요.');
+    changeValid(e);
+  }
+
+  function loginPwdHandler(e) {
+    const [inFeedback] = getFeedbackBox(e);
+    const pwd = e.target.value;
+    if (!pwd) return setInValid(e, inFeedback, '비밀번호를 입력하세요');
+    changeValid(e);
+  }
+
+  const removeForced = setInterval(function() {
+    btnGoogle = getEl('.abcRioButton');
+    if (btnGoogle) stopRemoveForced();
+  }, 10);
+
+  function stopRemoveForced() {
+    clearInterval(removeForced);
+    btnGoogle.innerHTML = '';
+    btnGoogle.style = null;
   }
 
   function initRegisterSelector() {
-    $('#userAgreeBoxAll').click('click', function(e) {
-      if ($(this).prop('checked')) {
-        $('.userAgreeBox').prop('checked', true);
-      } else {
-        $('.userAgreeBox').prop('checked', false);
-      }
+    //필요한 변수를 모두 잡아옴.
+    const registerForm = getEl('#register-form');
+    const realname = getEl('#realname');
+    const registerId = getEl('#register-id');
+    const registerPassword = getEl('#register-password');
+    const registerRepassword = getEl('#register-repassword');
+    const bntUserRegister = getEl('#btn-user-register');
+    const userAgreeBoxAll = getEl('#user-agree-box-all');
+    const email1 = getEl('#register-email1');
+    const email2 = getEl('#register-email2');
+    const phone1 = getEl('#phone1');
+    const phone2 = getEl('#phone2');
+    const phone3 = getEl('#phone3');
+    const userAgreeBoxList = document.querySelectorAll('.user-agree-box');
+
+    //이벤트 추가.
+    email1.addEventListener('blur', emailHandler);
+    email2.addEventListener('blur', emailHandler);
+    phone1.addEventListener('blur', phoneHandler);
+    phone2.addEventListener('blur', phoneHandler);
+    phone3.addEventListener('blur', phoneHandler);
+    realname.addEventListener('blur', realnameHandler);
+    realname.addEventListener('input', resetMessageHandler);
+    registerId.addEventListener('blur', registerIdHandler);
+    registerId.addEventListener('input', resetMessageHandler);
+    registerPassword.addEventListener('blur', registerPasswordHandler);
+    registerPassword.addEventListener('input', resetMessageHandler);
+    registerPassword.addEventListener('change', registerChangeHandler);
+    registerRepassword.addEventListener('blur', registerRepasswordHandler);
+    bntUserRegister.addEventListener('click', btnUserHandler);
+    userAgreeBoxAll.addEventListener('click', userAgreeBoxAllHandler);
+    Array.from(userAgreeBoxList).forEach((agree) => {
+      agree.addEventListener('click', userAgreeHandler);
     });
+  }
 
-    $('.userAgreeBox').click('click', function(e) {
-      if ($('input.userAgreeBox:checked').length === 3) {
-        $('#userAgreeBoxAll').click();
-      } else {
-        $('#userAgreeBoxAll').prop('checked', false);
-      }
-    });
+  //핸들러 선언부
+  function phoneHandler(e) {
+    const regex = myRegex.number;
+    const [inFeedback] = getFeedbackBox(e);
+    const value = e.target.value;
+    if (!value) return setInValid(e, inFeedback, '휴대폰번호를 입력해주세요.');
+    if (!regex.test(value))
+      return setInValid(e, inFeedback, '숫자가 아닌 값은 입력할 수 없습니다.');
+    changeValid(e);
+  }
 
-    /* 회원가입 submit */
-    $('#userRegisterBtn').click(function() {
-      $('#realnameDiv').empty();
-      $('#emailDiv').empty();
-      $('#phoneDiv').empty();
-      $('#birthdateDiv').empty();
+  function emailHandler(e) {
+    let regex;
+    if (e.target.name === 'email1') regex = myRegex.englishAndNumber;
+    if (e.target.name === 'email2') regex = myRegex.englishWithPoint;
 
-      if ($('#userAgreeBoxAll').prop('checked') == false) {
-        alert('약관 동의를 해주세요');
-      } else if ($('#realname').val() == '') {
-        $('#realnameDiv').text('이름을 입력하세요');
-        $('#realnameDiv').css({
-          color: 'red',
-          'font-size': '8pt',
-          'font-weight': 'bold'
-        });
-      } else if ($('#registerId').val() == '') {
-        $('#registerIdDiv').text('아이디를 입력하세요');
-        $('#registerIdDiv').css({
-          color: 'red',
-          'font-size': '8pt',
-          'font-weight': 'bold'
-        });
-      } else if ($('#registerPassword').val() == '') {
-        $('#RegisterPasswordDiv').text('비밀번호를 입력하세요');
-        $('#RegisterPasswordDiv').css({
-          color: 'red',
-          'font-size': '8pt',
-          'font-weight': 'bold'
-        });
-      } else if (
-        ($('#registerEmail1').val() == '', $('#registerEmail2').val() == '')
-      ) {
-        $('#emailDiv').text('이메일을 입력하세요');
-        $('#emailDiv').css({
-          color: 'red',
-          'font-size': '8pt',
-          'font-weight': 'bold'
-        });
-      } else if (($('#phone2').val() == '', $('#phone3').val() == '')) {
-        $('#phoneDiv').text('휴대전화를 입력하세요');
-        $('#phoneDiv').css({
-          color: 'red',
-          'font-size': '8pt',
-          'font-weight': 'bold'
-        });
-      } else if ($('#birthdate').val() == '') {
-        $('#birthdateDiv').text('생년월일를 입력하세요');
-        $('#birthdateDiv').css({
-          color: 'red',
-          'font-size': '8pt',
-          'font-weight': 'bold'
-        });
-      } else {
-        if ($('#registerIdDiv').text() != '사용 가능') {
-          alert('ID 중복체크 해주세요');
-        } else if ($('#RegisterPasswordDiv').text() != '사용 가능') {
-          alert('비밀번호를 확인해주세요');
-        } else {
-          document.registerEmailForm.submit();
-        }
-      }
-    });
+    const [inFeedback] = getFeedbackBox(e);
+    const value = e.target.value;
+    if (!value) return setInValid(e, inFeedback, '이메일을 입력해주세요.');
+    if (!regex.test(value))
+      return setInValid(e, inFeedback, '정확한 이메일을 입력해주세요.');
+    changeValid(e);
+  }
 
-    /* 아이디 중복확인 */
-    $('#registerId').focusout(function() {
-      /* 숫자 포함 형태의 6~15자리 이내의 암호 정규식 */
-      var passRule = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+  function realnameHandler(e) {
+    const regex = myRegex.koreaName;
+    const [inFeedback] = getFeedbackBox(e);
+    const realname = e.target.value;
+    if (!realname) return setInValid(e, inFeedback, '이름을 입력해주세요.');
+    if (!regex.test(realname))
+      return setInValid(
+        e,
+        inFeedback,
+        '2 ~ 5글자의 정확한 이름을 입력해주세요.'
+      );
+    changeValid(e);
+  }
 
-      if ($('#registerId').val() == '') {
-        $('#registerIdDiv').text('아이디를 입력하세요');
-        $('#registerIdDiv').css({
-          color: 'red',
-          'font-size': '8pt',
-          'font-weight': 'bold'
-        });
-      } else if (!passRule.test($("input[id='registerId']").val())) {
-        $('#registerIdDiv').text('이메일 형식으로 아이디를 설정해주세요');
-        $('#registerIdDiv').css({
-          color: 'red',
-          'font-size': '8pt',
-          'font-weight': 'bold'
-        });
-      } else {
-        $('#registerIdDiv').empty();
-        var token = $("meta[name='_csrf']").attr('content');
-        var header = $("meta[name='_csrf_header']").attr('content');
-
-        $.ajax({
-          type: 'post',
-          url: './user/checkId',
-          data:
-            'id=' +
-            $('#registerId').val() +
-            '&registerMethod=' +
-            $('#registerMethod').val(),
-          dataType: 'text',
-          beforeSend: function(xhr) {
-            // here it is
-            xhr.setRequestHeader(header, token);
-          },
-          success: function(data) {
-            if (data == 'exist') {
-              $('#registerIdDiv').text('사용 불가능');
-              $('#registerIdDiv').css({
-                color: 'red',
-                'font-size': '8pt',
-                'font-weight': 'bold'
-              });
-            } else if (data == 'not_exist') {
-              $('#registerIdDiv').text('사용 가능');
-              $('#registerIdDiv').css({
-                color: 'blue',
-                'font-size': '8pt',
-                'font-weight': 'bold'
-              });
-            }
-          },
-          error: function(err) {
-            console.log(err);
-            alert('실패');
-          }
-        });
-      }
-    });
-
-    /* 패스워드 정규표현 만족 */
-    $('#registerPassword').focusout(function() {
-      /* 특수문자 / 문자 / 숫자 포함 형태의 8~15자리 이내의 암호 정규식 */
-      var passRule = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
-
-      if (!passRule.test($("input[id='registerPassword']").val())) {
-        $('#RegisterPasswordDiv').text(
-          '특수문자 / 문자 / 숫자 포함 형태의 8~15자리 비밀번호로 설정해주세요'
-        );
-        $('#RegisterPasswordDiv').css({
-          color: 'red',
-          'font-size': '8pt',
-          'font-weight': 'bold'
-        });
-      } else {
-        $('#RegisterPasswordDiv').text('사용 가능');
-        $('#RegisterPasswordDiv').css({
-          color: 'blue',
-          'font-size': '8pt',
-          'font-weight': 'bold'
-        });
-      }
-    });
-
-    /* 아이디,이름,패스워드 공백체크 */
-    function noSpaceForm(obj) {
-      // 공백사용못하게
-      var str_space = /\s/; // 공백체크
-      if (str_space.exec(obj.value)) {
-        // 공백 체크
-        alert(
-          '해당 항목에는 공백을 사용할수 없습니다.\n\n공백은 자동적으로 제거 됩니다.'
-        );
-        obj.focus();
-        obj.value = obj.value.replace(' ', ''); // 공백제거
-      }
+  function userAgreeBoxAllHandler(e) {
+    const isClicked = e.target.checked;
+    if (isClicked) {
+      Array.from(userAgreeBoxList).forEach((agree) => {
+        agree.checked = true;
+      });
+    } else {
+      Array.from(userAgreeBoxList).forEach((agree) => {
+        agree.checked = false;
+      });
     }
   }
 
-  // 모달 템플릿
-  function getTemplateModal(title, body) {
-    return `<div class="modal-dialog modal-lg" role="document">
-                  <div class="modal-content">
-                      <div class="modal-header">
-                      <h5 class="modal-title">${title}</h5>
-                      <button
-                          type="button"
-                          class="close"
-                          data-dismiss="modal"
-                          aria-label="Close"
-                      >
-                          <span aria-hidden="true">&times;</span>
-                      </button>
-                      </div>
-                      <div class="modal-body">
-                      ${body}
-                      </div>
-                  </div>
-              </div>
-              `;
+  function registerChangeHandler(e) {
+    const pwd = e.target.value;
+    const repwd = registerRepassword.value;
+    if (repwd)
+      if (pwd !== repwd) {
+        registerRepassword.classList.add('is-invalid');
+        registerRepassword.classList.remove('is-valid');
+      }
   }
 
-  function getTemplateWriteSelector() {
-    return `
-        <div class="row justify-content-center">
-            <lable>여행루트 글쓰기</label>
-            <input name="writeType" value="route" type="radio" checked />
-            <label>여행에세이 글쓰기</label>
-            <input name="writeType" value="essay" type="radio" />
-        </div>
-        <div class="row justify-content-center">
-            <lable>국내</label>
-            <input name="isDomestic" value="1" type="radio" checked />
-            <label>해외</label>
-            <input name="isDomestic" value="0" type="radio" />
-        </div>
-        <button id="btn-to-write" class="btn btn-outline-info">글쓰러 가기</button>
-      `;
+  function registerPasswordHandler(e) {
+    const password = e.target.value;
+    const [inFeedback, vaFeedback] = getFeedbackBox(e);
+    const regex = myRegex.password;
+    if (!regex.test(password))
+      return setInValid(
+        e,
+        inFeedback,
+        '특수문자 / 문자 / 숫자 포함 형태의 8~15자리 비밀번호로 설정해주세요'
+      );
+    return setValid(e, vaFeedback, '사용 가능한 비밀번호 입니다.');
   }
 
-  // 로그인 템플릿
-  function getTemplateLogin() {
-    return `
-        <div class="login_display">
-        <form name="loginForm" method="post"
-				action="j_spring_security_check " autocomplete="off">
-        
-		<input type="hidden" id="csrfToken" name="${csrfTokenName}"
-				value="${csrfTokenValue}" />
-    
-        <div class="input-group">
-            <label class="input-group-text">계정</label>
-            <input name="id" type="text" id="login_id" class="form-control"><span id="spanCheckID"></span>
-        </div>
-        
-        <div class="input-group">
-            <label class="input-group-text">비밀번호</label>
-            <input name="pwd" type="password" id="login_pwd" class="form-control"><span id="spanCheckPWD"></span>
-        </div>
-        
-        <button type="button" class="btn btn-outline-info" id="loginBtn">로그인</button> 
-        </form>
-         <button type="button" class="btn btn-outline-info" id="idpwdSearch">아이디찾기/비밀번호 찾기</button> 
-		<table id="loginMeue">
-				<tr>
-					<td>
-					<td><a id="kakao-login-btn"></a></td>
-				</tr>
-				<tr>
-					<td><div class="g-signin2" data-onsuccess="onSignIn"></div></td>
-				</tr>
-				<tr>
-				<td><div id="naverIdLogin"></div></td>
-				</tr>
-		</table>
-		
-		<div>
-			<input type="hidden" id="naverId"> <input type="hidden"
-				id="naverEmail">
-		</div>
-
-      `;
+  function registerRepasswordHandler(e) {
+    const [inFeedback, vaFeedback] = getFeedbackBox(e);
+    const pwd = registerPassword.value;
+    const repwd = e.target.value;
+    if (pwd !== repwd)
+      return setInValid(e, inFeedback, '동일한 비밀번호를 입력해주세요.');
+    if (!isValid(registerPassword))
+      return setInValid(
+        e,
+        inFeedback,
+        '유효한 비밀번호 설정후 다시 시도해주세요'
+      );
+    setValid(e, vaFeedback, '동일한 비밀번호를 입력하셨습니다.');
   }
 
-  function getTemplateRegister() {
-    return `
-    	<div class="registerForm_email">
-			<form name="registerEmailForm" action="/user/register" method="post">
-				<input type="hidden" name="${csrfTokenName}"
-					value="${csrfTokenValue}" /> <input type="hidden"
-					name="registerMethod" id="registerMethod" value="travelMaker" />
-				<div>
-					<input type="checkbox" id="userAgreeBoxAll">회원약관 전체에 동의합니다
-					</br> <input type="checkbox" class="userAgreeBox">서비스 이용약관 <a
-						onclick="">약관보기</a> </br> <input type="checkbox" class="userAgreeBox">위치서비스
-					이용약관 <a onclick="">약관보기</a> </br> <input type="checkbox"
-						class="userAgreeBox"> 개인정보취급방침 <a onclick="">약관보기</a> </br> </br>
-				</div>
-				<div>
-					<div>필수입력 사항</div>
-					</br> <span class="icon"></span> <input type="text" name="realname"
-						id="realname" placeholder="사용자 이름" onkeyup="noSpaceForm(this)"
-						onchange="noSpaceForm(this)">
-					<div id="realnameDiv"></div>
-				</div>
+  function userAgreeHandler(e) {
+    userAgreeBoxAll.checked =
+      document.querySelectorAll('.user-agree-box:checked').length === 3;
+  }
 
-				<div>
-					<span class="icon"></span> <input type="text" name="id"
-						id="registerId" placeholder="아이디" onkeyup="noSpaceForm(this)"
-						onchange="noSpaceForm(this)">
-					<div id="registerIdDiv"></div>
-				</div>
-				<br>
-				<div>
-					<span class="icon"></span> <input type="password" name="password"
-						id="registerPassword" placeholder="비밀번호"
-						onkeyup="noSpaceForm(this)" onchange="noSpaceForm(this)">
-					<div id="RegisterPasswordDiv"></div>
-				</div>
-				<div>
-					<span class="icon"></span> <input type="text" name="email1"
-						id="registerEmail1" placeholder="이메일"> @ <input
-						type="text" name="email2" id="registerEmail2" placeholder="직접입력"
-						list="list" style="width: 150px;">
-					<datalist id=list>
-						<option value="naver.com">naver.com</option>
-						<option value="daum.net">daum.net</option>
-						<option value="google.com">google.com</option>
-						<option value="nate.net">nate.net</option>
-					</datalist>
-					<div id="emailDiv"></div>
-				</div>
-				<div>
-					<span class="icon"></span> <select name="phone1" id="phone1">
-						<option value="010">010</option>
-						<option value="011">011</option>
-						<option value="019">016</option>
-					</select><input type="text" name="phone2" id="phone2" placeholder="0000"
-						maxlength="4"> <input type="text" name="phone3"
-						id="phone3" placeholder="0000" maxlength="4">
-					<div id="phoneDiv"></div>
-				</div>
+  function btnUserHandler(e) {
+    if (!userAgreeBoxAll.checked) return alert('약관에 동의 해주세요.');
+    if (!isValid(realname)) return realname.focus();
+    if (!isValid(registerId)) return registerId.focus();
+    if (!isValid(registerPassword)) return registerPassword.focus();
+    if (!isValid(registerRepassword)) return registerRepassword.focus();
+    if (!isValid(email1)) return email1.focus();
+    if (!isValid(email2)) return email2.focus();
+    if (!isValid(phone1)) return phone1.focus();
+    if (!isValid(phone2)) return phone2.focus();
+    if (!isValid(phone3)) return phone3.focus();
+    // console.log('유효성 검사 통과');
+    registerForm.submit();
+  }
 
+  function registerIdHandler(e) {
+    const regex = myRegex.email;
+    const id = e.target.value;
+    const [inFeedback, vaFeedback] = getFeedbackBox(e);
+    if (!id) return setInValid(e, inFeedback, '아이디를 입력해주세요.');
+    if (!regex.test(id))
+      return setInValid(
+        e,
+        inFeedback,
+        '아이디는 이메일 형식으로 입력해주세요.'
+      );
+    ajaxCheckId({ id: id, registerMethod: getRegisterMethod() })
+      .then((ret) => {
+        if (ret === 'exist') {
+          return setInValid(
+            e,
+            inFeedback,
+            '이미 사용중인 아이디입니다. 다시 입력해주세요.'
+          );
+        }
+        return setValid(e, vaFeedback, '사용 가능한 아이디 입니다.');
+      })
+      .catch(console.error);
+  }
 
-				<div>선택 항목</div>
-
-				<div>
-					<span class="icon"></span> <input type="date" name="birthdate"
-						id="birthdate" placeholder="생년월일">
-					<div id="birthdateDiv"></div>
-				</div>
-
-				<div>
-					<input type="radio" name="gender" value="0" id="gender"
-						checked="checked">남 <input type="radio" name="gender"
-						value="1">여
-				</div>
-
-				<input type="button" value="회원가입" id="userRegisterBtn"
-					style="WIDTH: 90pt; HEIGHT: 30pt">
-			</form>
-		</div>
-    	`;
+  function ajaxCheckId(data) {
+    return $.ajax({
+      type: 'POST',
+      url: `http://${location.host}`,
+      data: JSON.stringify(data),
+      dataType: 'text',
+      beforeSend: setRequestHeader
+    });
   }
 });
