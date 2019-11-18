@@ -1,99 +1,88 @@
-$(function() {
+$(function () {
+    const {useState} = new travelmaker.utils();
 
-  let requestData = {
-    cno: '',
-    seq : +document.querySelector('#seq').value,
-    content : '',
-    likes : 0,
-    unlikes : 0
-  };
-
-  function setData(data){
-    requestData = {
-      ...requestData,
-      ...data
+    let commentData = {
+        bno: +document.querySelector('#bno').value,
+        cno: '',
+        seq: +document.querySelector('#seq').value,
+        content: '',
+        likes: 0,
+        unlikes: 0
     };
-    console.log(requestData)
-    //todo 테스트 코드, 삭제합시다~!
-  }
 
-  function getData(){
-    return requestData;
-  }
+    const [setComment, getComment] = useState(commentData);
 
-  const bno = +document.querySelector('#bno').value;
+    const [btnAddComment, commentContent] = getEls(
+        document,
+        '#btn-add-comment',
+        '#comment-content'
+    );
 
-  const [btnAddComment, commentContent] = getEls(
-    document,
-    '#btn-add-comment',
-    '#comment-content'
-  );
+    btnAddComment.addEventListener('click', btnAddCommentHandler);
 
-  btnAddComment.addEventListener('click', btnAddCommentHandler);
+    function btnAddCommentHandler(e) {
+        ajaxCreateComment(bno, {seq, content: commentContent.value})
+            .then((ret) => {
+                console.log(ret);
+            })
+            .catch(console.error);
+    }
 
-  function btnAddCommentHandler(e) {
-    createComment(bno, { seq, content: commentContent.value })
-      .then((ret) => {
-        console.log(ret);
-      })
-      .catch(console.error);
-  }
+    ajaxGetComment(bno)
+        .then((ret) => {
+            console.log(ret);
+        })
+        .catch(console.error);
 
-  getComment(bno)
-    .then((ret) => {
-      console.log(ret);
-    })
-    .catch(console.error);
+    function ajaxGetComment(bno) {
+        return $.ajax({
+            type: 'GET',
+            url: `http://localhost:8080/api/board/${bno}/comment`,
+            dataType: 'json'
+        });
+    }
 
-  function getComment(bno) {
-    return $.ajax({
-      type: 'GET',
-      url: `http://localhost:8080/api/board/${bno}/comment`,
-      dataType: 'json'
-    });
-  }
+    function ajaxCreateComment(bno, data) {
+        return $.ajax({
+            type: 'POST',
+            url: `http://localhost:8080/api/board/${bno}/comment`,
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify(data)
+        });
+    }
 
-  function createComment(bno, data) {
-    return $.ajax({
-      type: 'POST',
-      url: `http://localhost:8080/api/board/${bno}/comment`,
-      contentType: 'application/json',
-      dataType: 'json',
-      data: JSON.stringify(data)
-    });
-  }
+    function ajaxCreateReComment(bno, cno, data) {
+        return $.ajax({
+            type: 'POST',
+            url: `http://localhost:8080/api/board/${bno}/comment/${cno}`,
+            contentType: 'application/json',
+            dataType: 'json',
+            data: data
+        });
+    }
 
-  function createReComment(bno, cno, data) {
-    return $.ajax({
-      type: 'POST',
-      url: `http://localhost:8080/api/board/${bno}/comment/${cno}`,
-      contentType: 'application/json',
-      dataType: 'json',
-      data: data
-    });
-  }
+    function ajaxUpdateComment(bno, data) {
+        return $.ajax({
+            type: 'PUT',
+            url: `http://localhost:8080/api/board/${bno}/comment/`,
+            contentType: 'application/json',
+            dataType: 'json',
+            data: data
+        });
+    }
 
-  function updateComment(bno, data) {
-    return $.ajax({
-      type: 'PUT',
-      url: `http://localhost:8080/api/board/${bno}/comment/`,
-      contentType: 'application/json',
-      dataType: 'json',
-      data: data
-    });
-  }
+    function ajaxDeleteComment(bno, cno) {
+        return $.ajax({
+            type: 'DELETE',
+            url: `http://localhost:8080/api/board/${bno}/comment/${cno}`,
+            dataType: 'text'
+        });
+    }
 
-  function deleteComment(bno, cno) {
-    return $.ajax({
-      type: 'DELETE',
-      url: `http://localhost:8080/api/board/${bno}/comment/${cno}`,
-      dataType: 'text'
-    });
-  }
-
-  function getEls(parent, ...targets) {
-    let els = [];
-    targets.forEach((target) => els.push(parent.querySelector(target)));
-    return els;
-  }
+    function getEls(parent, ...targets) {
+        let els = [];
+        targets.forEach((target) => els.push(parent.querySelector(target)));
+        return els;
+    }
 });

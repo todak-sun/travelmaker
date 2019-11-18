@@ -1,4 +1,4 @@
-const utils = new travelmaker.utils();
+const utils = new travelmaker2.utils();
 
 let requestData = {
     rno: '',
@@ -10,5 +10,5 @@ let requestData = {
     isDomestic: +utils.getJSONfromQueryString().isDomestic
 };
 
-const essay = new travelmaker.essay(requestData, $('#editor'));
+const essay = new travelmaker2.essay(requestData, $('#editor'));
 // essay.init();

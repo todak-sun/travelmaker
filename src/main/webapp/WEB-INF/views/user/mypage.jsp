@@ -6,15 +6,17 @@
 <meta charset="UTF-8">
 <meta name="_csrf" content="${_csrf.token}" />
 <meta name="_csrf_header" content="${_csrf.headerName}" />
+	<jsp:include page="../common/head-css.jsp"/>
 <title>TravelMaker</title>
+	<style>
+		form[name="userModifyForm"]{
+			margin-top:60px;
+		}
+	</style>
 </head>
 <body>
-	<a href="http://localhost:8080/">[홈으로]</a>
+<jsp:include page="../common/navbar.jsp"/>
 	<form name="userModifyForm" method="post" action="/user/userModify">
-		<input type="hidden" name="${_csrf.parameterName}"
-			value="${_csrf.token}" /> <input type="hidden" id="registerMethod" name="registerMethod"
-			value="${userDTO.registerMethod }" />
-
 		<table border="1" cellspacing="0" cellpadding="5">
 			<tr>
 				<th width="80">아이디</th>
@@ -32,10 +34,6 @@
 				<td><input type="text" name="nickname"
 					value="${userDTO.nickname }" style="width: 200px;"></td>
 			</tr>
-
-
-
-
 			<tr>
 				<th width="80">이메일</th>
 				<td><input type="text" name="email1" value="${userDTO.email1 }"
@@ -48,8 +46,6 @@
 						<option value="nate.net">nate.net</option>
 					</datalist></td>
 			</tr>
-
-
 			<tr>
 				<th width="45">현재 비밀번호</th>
 				<td><input type="password" name="Password" id="prePassword"
@@ -70,7 +66,6 @@
 					<div id="nextPasswordConfirmDiv"></div></td>
 				</td>
 			</tr>
-
 			<tr>
 				<th width="80">성별</th>
 				<td><input type="radio" name="gender" value="0">남 <input
@@ -107,33 +102,25 @@
 					accept=".jpg, .png" />
 				</td>
 			</tr>
-
 			<tr>
 				<th>프로필 내용</th>
 				<td><textarea name="contentProfile" id="contentProfile"
 						rows="20" cols="40">${userDTO.contentProfile}</textarea>
 			</tr>
-
 			<tr>
 				<th width="80">계좌 번호</th>
 				<td><input type="text" name="account" style="width: 230px;" value="${userDTO.account}"></td>
 			</tr>
-
-
 			<tr>
 				<td colspan="2" align="center"><input type="button"
 					value="회원정보수정" onclick="modifyUser()"> <input type="button"
 					value="회원탈퇴" onclick="WithdrawalUser()"></td>
 			</tr>
-
 		</table>
 	</form>
 </body>
 <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
-<script type="text/javascript"
-	src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script type="text/javascript" src="../../../resources/js/user/user.js"></script>
-
+<jsp:include page="../common/foot-js.jsp"/>
 <script type="text/javascript">
 	window.onload = function() {
 		document.userModifyForm.gender['${userDTO.gender}'].checked = true;

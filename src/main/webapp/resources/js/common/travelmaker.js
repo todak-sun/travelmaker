@@ -1,301 +1,146 @@
-/**
- * 반드시 jQuery 임포트 후 추가할 것~!
- */
-let travelmaker = (function (window, jQuery) {
+let travelmaker = (function (window) {
+    const _w = window;
     const travelmaker = {};
-    const w = window;
-    const d = w.document;
-    const url = 'http://' + location.host;
-    const $ = jQuery;
-    const setting = {
-        summernote: {
-            placeholder: '내용',
-            airMode: true,
-            lang: 'ko-KR',
-            popover: {
-                image: [
-                    [
-                        'image',
-                        ['resizeFull', 'resizeHalf', 'resizeQuarter', 'resizeNone']
-                    ],
-                    ['float', ['floatLeft', 'floatRight', 'floatNone']],
-                    ['remove', ['removeMedia']]
-                ],
-                link: [['link', ['linkDialogShow', 'unlink']]],
-                table: [
-                    ['add', ['addRowDown', 'addRowUp', 'addColLeft', 'addColRight']],
-                    ['delete', ['deleteRow', 'deleteCol', 'deleteTable']]
-                ],
-                air: [
-                    ['color', ['color']],
-                    ['font', ['bold', 'underline', 'clear']],
-                    ['para', ['ul', 'paragraph']],
-                    ['table', ['table']],
-                    ['insert', ['link', 'map']]
-                ]
-            },
-            // map: {
-            //     apiKey: 'AIzaSyCeKdfxBMTEBPFzc4QjjrIJJv25EuWL4gY',
-            //     center: {
-            //         lat: -33.8688,
-            //         lng: 151.2195
-            //     },
-            //     zoom: 13
-            // }
-        },
-        G_KEY: 'AIzaSyCeKdfxBMTEBPFzc4QjjrIJJv25EuWL4gY',
-        G_MAP: {
-            center: {lat: -33.8688, lng: 151.2195},
-            zoom: 13,
-            mapTypeId: 'roadmap',
-            fullscreenControl: false,
-            mapTypeControl: false
-        }
-    };
+    const url = _w.location.host;
 
-    //에세이
-    const Essay /** @class */ = (function (d, url) {
-        function Essay(requestData, editor) {
-            this.hashes = [];
-            this.data = requestData;
-            this.editor = editor;
-            this.elems = getElsToObj(
-                ['title', 'btnImage', 'btnMap', 'btnVideo',
-                    'btnBreakLine', 'btnSaveTmp', 'boxHashTag', 'imgBackground',
-                    'inputFileUpload', 'btnSave', 'tmpContentGroup'],
-                ['#title', '#btn-image',
-                    '#btn-map', '#btn-video', '#btn-breakline',
-                    '#btn-save-tmp', '#box-hashtag', '#img-background',
-                    '#input-file-upload', '#btn-save', '#tmp-content-group']);
-            this.init();
-        }
-
-        // const $editor = this.editor;
-        const $modal = $('.modal');
-
-        Essay.prototype.getData = function () {
-            return this.data
+    const Utils = (function (w) {
+        const Utils = function () {
         };
 
-        Essay.prototype.setData = function (data) {
-            this.data = {...this.data, ...data}
+        Utils.prototype.getEl = getEl;
+
+        Utils.prototype.setRequestHeader = function (xhr) {
+            const token = getEl('meta[name="_csrf"]').getAttribute('content');
+            const header = getEl('meta[name="_csrf_header"]').getAttribute('content');
+            xhr.setRequestHeader(header, token);
         };
 
-        Essay.prototype.init = function () {
-            const {
-                inputFileUpload, title, btnImage, btnMap, btnVideo, btnBreakLine, btnSave, btnSaveTmp, boxHashTag,
-                imgBackground
-            } = this.elems;
-
-            inputFileUpload.addEventListener('change', inputFileUploadHandler.bind(this), false);
-            title.addEventListener('change', titleChangeHandler.bind(this), false);
-            btnImage.addEventListener('click', btnImageHandler);
-            btnMap.addEventListener('click', btnMapHandler);
-            btnVideo.addEventListener('click', btnVideoHandler);
-            btnBreakLine.addEventListener('click', btnBreakLineHandler);
-            btnSave.addEventListener('click', btnSaveHandler);
-            btnSaveTmp.addEventListener('click', btnSaveTmpHandler);
-            boxHashTag.addEventListener('click', hashBoxHandler);
-            imgBackground.addEventListener('click', imgBackgroundHandler.bind(this, inputFileUpload), false);
-
-            console.log('초기화 무사히 됨');
-
-            // ajaxCreate(this.getData())
-            //             //     .then((ret) => {
-            //             //         // this.data.rno = ret.data.rno;
-            //             //         this.setData({rno: ret.data.rno});
-            //             //         console.log(ret.data);
-            //             //         console.log('그냥 데이터', ret);
-            //             //     })
-            //             //     .catch(console.error);
-            //             //
-            //             // ajaxGetEssayListTmp(this.data.seq, 0)
-            //             //     .then((ret) => console.log(ret.data))
-            //             //     .catch(console.error);
-            //             // //todo console 코드 다음에 지울 것.
+        Utils.prototype.setInValid = function (e, el, message) {
+            el.innerText = message;
+            e.target.classList.add('is-invalid');
+            e.target.classList.remove('is-valid');
         };
 
-        Essay.prototype.getFormData = function (data) {
-            console.log(data);
-            const formData = new FormData();
-            const keys = Object.keys(data);
-            const values = Object.values(data);
-            for (let i = 0; i < keys.length; i++) {
-                formData.append(keys[i], values[i]);
+        Utils.prototype.getJSONfromQueryString = function(){
+            let qs = location.search.slice(1);
+            qs = qs.split('&');
+
+            const obj = {};
+            qs.forEach((q) => {
+                q = q.split('=');
+                obj[q[0]] = decodeURIComponent(q[1] || '');
+            });
+            return JSON.parse(JSON.stringify(obj));
+        };
+
+        Utils.prototype.setValid = function (e, el, message) {
+            el.innerText = message;
+            e.target.classList.add('is-valid');
+            e.target.classList.remove('is-invalid');
+        };
+
+        Utils.prototype.changeValid = function (e) {
+            e.target.classList.add('is-valid');
+            e.target.classList.remove('is-invalid');
+        };
+
+        Utils.prototype.changeInValid = function (e) {
+            e.target.classList.add('is-invalid');
+            e.target.classList.remove('is-valid');
+        };
+
+        Utils.prototype.isValid = function (el) {
+            return el.classList.contains('is-valid');
+        };
+
+        Utils.prototype.resetMessageHandler = function (e) {
+            if (!e.target.value) {
+                e.target.classList.remove('is-invalid');
+                e.target.classList.remove('is-valid');
             }
-            return formData;
         };
 
-        function btnImageHandler(e) {
-            $editor.summernote('imageDialog.show');
+        Utils.prototype.getRegisterMethod = function () {
+            return getEl('#registerMethod').value;
+        };
+
+        Utils.prototype.getFeedbackBox = function (e) {
+            return [e.target.parentElement.querySelector('.invalid-feedback'),
+                e.target.parentElement.querySelector('.valid-feedback')]
+        };
+
+        Utils.prototype.useState = function (data) {
+            let state = data;
+
+            function setState(newState) {
+                state = {
+                    ...state,
+                    ...newState
+                };
+                console.log(state);
+            }
+
+            function getState() {
+                return state;
+            }
+
+            return [setState, getState];
+        };
+
+        function getEl(selector) {
+            return document.querySelector(selector);
         }
 
-        function titleChangeHandler(e) {
-            console.log('실행');
-            this.setData({title: e.target.value});
-        }
-
-        function inputFileUploadHandler(e) {
-            console.log(e.target.files[0]);
-            const formData = this.getFormData({imageFile: e.target.files[0]});
-            console.log(formData);
-            // ajaxImageUpload(this.data.rno, formData)
-            //     .then((ret) => console.log('이미지 업로드', ret))
-            //     .catch(console.error);
-        }
-
-        function imgBackgroundHandler(inputFileUpload) {
-            inputFileUpload.click();
-        }
-
-        function btnSaveTmpHandler(e) {
-            setData({fixed: 0, content: $editor.summernote('code')});
-            ajaxUpdate(getData())
-                .then((ret) => console.log('임시저장', ret.data))
-                .catch(console.error);
-        }
-
-        function btnSaveHandler(e) {
-            this.setData({fixed: 1, content: $editor.summernote('code')});
-            ajaxUpdate(getData())
-                .then((ret) => console.log('발행', ret.data))
-                .catch(console.error);
-        }
-
-        function btnVideoHandler(e) {
-            $editor.summernote('videoDialog.show');
-        }
-
-        function hashBoxHandler(e) {
-            const titleContent = '해쉬태그';
-            const bodyContent = getTemplateHashModal();
-            setModal($modal, titleContent, bodyContent);
-            $modal.modal('show');
-            initHashtag();
-        }
-
-        function btnBreakLineHandler(e) {
-            const hr = document.createElement('hr');
-            $editor.summernote('insertNode', hr);
-        }
-
-        function btnMapHandler(e) {
-            $editor.summernote('saveRange');
-            const titleContent = '지도검색';
-            const bodyContent = getTemplateMapModal();
-            setModal($modal, titleContent, bodyContent);
-            $modal.modal('show');
-
-            if (confirm('다음은 O, 구글은 X')) initMap();
-            else initGoogleMap();
-        }
-
-        function ajaxGetEssayListTmp(seq, fixed) {
-            return $.ajax({
-                type: 'GET',
-                contentType: 'application/json',
-                data: {seq, fixed},
-                url: url + '/api/essay'
-            });
-        }
-
-        function ajaxCreate(data) {
-            return $.ajax({
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({data}),
-                dataType: 'json',
-                url: url + '/api/essay'
-            });
-        }
-
-        function ajaxImageUpload(rno, formData) {
-            return $.ajax({
-                type: 'POST',
-                contentType: false,
-                processData: false,
-                dataType: 'text',
-                data: formData,
-                url: url + '/api/essay/' + rno + '/image'
-            });
-        }
-
-        function ajaxUpdate(data) {
-            return $.ajax({
-                type: 'PUT',
-                contentType: 'application/json',
-                data: JSON.stringify({data}),
-                dataType: 'json',
-                url: url + '/api/essay'
-            });
-        }
-
-        function ajaxDelete(rno) {
-            return $.ajax({
-                type: 'DELETE',
-                contentType: 'application/json',
-                dataType: 'json',
-                url: url + '/api/essay/' + rno
-            });
-        }
-
-        return Essay;
-    })(d, url);
-
-    //공통 유틸 메소드
-    const Utils /** @class */ = (function () {
-        function Utils() {
-        }
-
-        Utils.prototype.getJSONfromQueryString = getJSONfromQueryString;
-        Utils.prototype.getEls = getEls;
         return Utils;
-    })();
+    })(_w);
 
-    // const utils = new Utils();
-    // const essay = new Essay(utils);
+    const Regex = (function (w) {
+        const Regex = function () {
+            this.email = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+            this.password = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
+            this.koreaName = /^[가-힣]{2,4}$/;
+            this.englishAndNumber = /^[a-zA-Z0-9]+$/;
+            this.englishWithPoint = /[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+            this.number = /^[0-9]+$/;
+        };
 
-    function getJSONfromQueryString() {
-        let qs = location.search.slice(1).split('%');
-        const obj = {};
-        qs.forEach((q) => {
-            q = q.split('=');
-            obj[q[0]] = decodeURIComponent(q[1] || '');
-        });
-        return JSON.parse(JSON.stringify(obj));
-    }
+        return Regex;
+    })(_w);
 
-    function getEl(selector) {
-        return d.querySelector(selector);
-    }
+    const Template = (function (w) {
+        const Template = function () {
+        };
 
-    function getEls(parent, ...selectors) {
-        let els = [];
-        selectors.forEach((sel) => els.push(parent.querySelector(sel)));
-        return els;
-    }
+        Template.prototype.infoWindow = function (place, address) {
+            return `<div>
+              지명 : ${place}
+              주소 : ${address}
+              <button id="btn-add-map">추가</button>
+            </div>`;
+        };
 
-    function getElsToObj(keynames, selectors) {
-        let obj = {};
-        for (let i = 0; i < keynames.length; i++) {
-            obj[keynames[i]] = getEl(selectors[i]);
-        }
-        return obj;
-    }
+        Template.prototype.staticMap = function (link, imgUrl, description) {
+            return `
+            <a href="${link}">
+              <img src="${imgUrl}"/>
+            </a>
+            <p>${description}</p>
+            `;
+        };
 
-    const Modal = (function () {
-        function Modal() {
+        Template.prototype.hashBox = function () {
+            return `
+                <div>
+                    <div class="input-group">
+                      <input id="hashtag" type="text" class="form-control"/>
+                      <button id="btn-add-hashtag">추가</button>
+                    </div>
+                    <div id="content-hashtag" class="form-control"></div>
+                </div>
+                `;
+        };
 
-        }
-
-        function setModal($modal, titleContent, bodyContent) {
-            const modal = $modal[0];
-            const [title, body] = this.getEls(modal, '.modal-title', '.modal-body');
-            title.innerHTML = titleContent;
-            body.innerHTML = bodyContent;
-        }
-
-        function getTemplateMap() {
+        Template.prototype.map = function () {
             return `
             <div class="row">
               <div class="col col-sm-3 bg-light" style="padding:0">
@@ -310,29 +155,337 @@ let travelmaker = (function (window, jQuery) {
               <div id="map" class="col col-sm-9"></div>
             </div>
             `;
-        }
+        };
 
-        function getTemplateHash() {
+        Template.prototype.register = function (csrfTokenName, csrfTokenValue) {
             return `
-            <div>
-                <div class="input-group">
-                  <input id="hashtag" type="text" class="form-control"/>
-                  <button id="btn-add-hashtag">추가</button>
-                </div>
-                <div id="content-hashtag" class="form-control"></div>
+    	<div class="register-form-email">
+      <form id="register-form" action="/user/register" method="post">
+        <input
+          type="hidden"
+          name="${csrfTokenName}"
+          value="${csrfTokenValue}"
+        />
+        <input
+          type="hidden"
+          name="registerMethod"
+          id="registerMethod"
+          value="travelMaker"
+        />
+        <div>
+          <ul class="group-checkbox">
+            <li>
+              <input type="checkbox" id="user-agree-box-all"/>
+              <label for="user-agree-box-all">회원약관 전체에 동의합니다</label>
+            </li>
+            <li>
+              <input id="agree-1" type="checkbox" class="user-agree-box" />
+              <label for="agree-1">서비스 이용약관</label>
+              <a onclick="">약관보기</a>
+            </li>
+            <li>
+              <input id="agree-3" type="checkbox" class="user-agree-box" />
+              <label for="agree-3">위치서비스 이용약관</label>
+              <a onclick="">약관보기</a>
+            </li>
+            <li>
+              <input id="agree-4" type="checkbox" class="user-agree-box" />
+              <label for="agree-4">개인정보취급방침</label>
+              <a onclick="">약관보기</a>
+            </li>
+          </ul>
+        </div>
+        <h4>필수입력 사항</h4>
+        <div class="input-group">
+          <label for="realname" class="input-group-text">이름</label>
+          <input
+            type="text"
+            name="realname"
+            id="realname"
+            class="form-control"
+            placeholder="이름"
+          />
+          <div class="invalid-feedback"></div>
+        </div>
+
+        <div class="input-group">
+          <label for="register-id" class="input-group-text">아이디</label>
+          <input
+            type="text"
+            name="id"
+            id="register-id"
+            class="form-control"
+            placeholder="id"
+          />
+          <div class="invalid-feedback"></div>
+          <div class="valid-feedback"></div>
+        </div>
+        <div class="input-group">
+          <label for="register-password" class="input-group-text">비밀번호</label>
+          <input
+            type="password"
+            name="password"
+            id="register-password"
+            class="form-control"
+            placeholder="password"
+          />
+          <div class="invalid-feedback"></div>
+          <div class="valid-feedback"></div>
+        </div>
+        <div class="input-group">
+          <label for="register-repassword" class="input-group-text">재확인</label>
+          <input
+            type="password"
+            id="register-repassword"
+            class="form-control"
+            placeholder="password"
+          />
+          <div class="invalid-feedback"></div>
+          <div class="valid-feedback"></div>
+        </div>
+        <div>
+          <div class="input-group">
+              <label for="register-email1" class="input-group-text">이메일</label>
+              <input
+                type="text"
+                name="email1"
+                id="register-email1"
+                class="form-control"
+                placeholder="이메일"
+              />
+              <span class="input-group-text">@</span>
+              <input
+                type="text"
+                name="email2"
+                id="register-email2"
+                placeholder="직접입력"
+                class="form-control"
+                list="list"
+                style="width: 150px;"
+              />
+              <datalist id="list">
+                <option value="naver.com">naver.com</option>
+                <option value="daum.net">daum.net</option>
+                <option value="google.com">google.com</option>
+                <option value="nate.net">nate.net</option>
+              </datalist>
+              <button class="btn btn-secondary input-group-append">인증</button>
+              <div class="invalid-feedback"></div>
+          </div>
+        </div>
+        <div>
+        <div class="input-group">
+          <label for="phone1" class="input-group-text">휴대폰번호</label>
+          <select name="phone1" id="phone1" class="form-control">
+            <option value="010">010</option>
+            <option value="011">011</option>
+            <option value="019">016</option>
+          </select>
+          <input
+            type="text"
+            name="phone2"
+            id="phone2"
+            class="form-control"
+            placeholder="0000"
+            maxlength="4"
+          />
+          <input
+            type="text"
+            name="phone3"
+            id="phone3"
+            placeholder="0000"
+            class="form-control"
+            maxlength="4"
+          />
+         <div class="invalid-feedback"></div> 
+         </div>
+        </div>
+        
+        <h4>선택 항목</h4>
+        <div>
+          <input
+            type="date"
+            name="birthdate"
+            id="birthdate"
+            placeholder="생년월일"
+          />
+          <div id="birthdateDiv"></div>
+        </div>
+
+        <div>
+          <input
+            type="radio"
+            name="gender"
+            value="0"
+            id="gender-mail"
+            checked="checked"
+          />
+          <label for="gender-mail">남</label>
+          <input id="gender-femail" type="radio" name="gender" value="1" />
+          <label for="gender-femail">여</label>
+        </div>
+        <button
+          id="btn-user-register"
+          type="button"
+          class="btn btn-outline-secondary"
+        >
+          회원가입
+        </button>
+      </form>
+    </div>
+    	`;
+        };
+
+        Template.prototype.login = function (csrfTokenName, csrfTokenValue) {
+            return `
+            <div class="login_display">
+            <form name="loginForm" method="post"
+                    action="j_spring_security_check " autocomplete="off">
+            
+            <input type="hidden" id="csrfToken" name="${csrfTokenName}"
+                    value="${csrfTokenValue}" />
+        
+            <div class="input-group">
+                <label class="input-group-text">계정</label>
+                <input name="id" type="text" id="login_id" class="form-control">
+                <div class="invalid-feedback"></div>
+                <div class="valid-feedback"></div>
             </div>
-            `;
+            
+            <div class="input-group">
+                <label class="input-group-text">비밀번호</label>
+                <input name="pwd" type="password" id="login_pwd" class="form-control">
+                <div class="invalid-feedback"></div>
+                <div class="valid-feedback"></div>
+            </div>
+            
+            <button type="button" class="btn btn-outline-info" id="loginBtn">로그인</button> 
+            </form>
+             <button type="button" class="btn btn-outline-info" id="idpwdSearch">아이디찾기/비밀번호 찾기</button> 
+            <div id="loginMeue">
+                <button id="btn-login-na" class="btn btn-secondary">네이버로 로그인하기</button>
+                <button id="btn-login-ka" class="btn btn-secondary">카카오로 로그인하기</button>
+                <button id="btn-login-go" class="btn btn-secondary">구글로 로그인하기</button>
+            </div>
+            <div>
+                <input type="hidden" id="naverId"> <input type="hidden"
+                    id="naverEmail">
+            </div>
+            <a id="kakao-login-btn" class="btn-api-login"></a>
+            <div id="naverIdLogin" class="btn-api-login"></div>
+            <div class="g-signin2" class="btn-api-login" data-onsuccess="onSignIn"></div>
+          `;
+        };
+
+        Template.prototype.storySelector = function () {
+            return `
+            <div class="row justify-content-center">
+                <lable>여행루트 글쓰기</label>
+                <input name="writeType" value="route" type="radio" checked />
+                <label>여행에세이 글쓰기</label>
+                <input name="writeType" value="essay" type="radio" />
+            </div>
+            <div class="row justify-content-center">
+                <lable>국내</label>
+                <input name="isDomestic" value="1" type="radio" checked />
+                <label>해외</label>
+                <input name="isDomestic" value="0" type="radio" />
+            </div>
+            <button id="btn-to-write" class="btn btn-outline-info">글쓰러 가기</button>
+          `;
+        };
+
+        Template.prototype.modal = function (title, body) {
+            return `<div class="modal-dialog modal-lg" role="document">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                      <h5 class="modal-title">${title}</h5>
+                      <button
+                          type="button"
+                          class="close"
+                          data-dismiss="modal"
+                          aria-label="Close"
+                      >
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                      </div>
+                      <div class="modal-body">
+                      ${body}
+                      </div>
+                  </div>
+              </div>
+              `;
+        };
+
+        Template.prototype.essayTemp = function (essay) {
+            const {rno, title, imageName, isDomestic, dateWrite} = essay;
+            return `
+                <li class="tmp-content-item" data-rno="${rno}">
+                    <img
+                            src="http://placehold.it/50X50"
+                            class="img-thumbnail"
+                            alt="제목"
+                    />
+                    <div class="btn-group-sm">
+                        <button data-rno="${rno}" class="badge badge-secondary btn-tmp-remove">X</button>
+                        <button data-rno="${rno}" class="badge badge-secondary btn-tmp-get">불러오기</button>
+                    </div>
+                    <div class="tmp-content-box">
+                        <span class="location badge badge-info">${isDomestic === 0 ? '국내' : '해외'}</span>
+                        <h5 class="tmp-content-title">${title === null ? '제목없음' : title}</h5>
+                        <span class="date text-muted small">${dateWrite}</span>
+                    </div>
+                </li>            
+            `
         }
 
-        return Modal;
-    })();
+        return Template;
+    })(_w);
 
-    travelmaker.modal = Modal;
-    travelmaker.essay = Essay;
+    const Editor = (function (w) {
+        const Editor = function () {
+            this.summernote = {
+                placeholder: '내용',
+                airMode: true,
+                lang: 'ko-KR',
+                popover: {
+                    image: [
+                        ['image', ['resizeFull', 'resizeHalf', 'resizeQuarter', 'resizeNone']],
+                        ['float', ['floatLeft', 'floatRight', 'floatNone']],
+                        ['remove', ['removeMedia']]
+                    ],
+                    link: [['link', ['linkDialogShow', 'unlink']]],
+                    table: [
+                        ['add', ['addRowDown', 'addRowUp', 'addColLeft', 'addColRight']],
+                        ['delete', ['deleteRow', 'deleteCol', 'deleteTable']]
+                    ],
+                    air: [
+                        ['color', ['color']],
+                        ['font', ['bold', 'underline', 'clear']],
+                        ['para', ['ul', 'paragraph']],
+                        ['table', ['table']],
+                        ['insert', ['link', 'map']]
+                    ]
+                }
+            };
+            this.G_KEY = 'AIzaSyCeKdfxBMTEBPFzc4QjjrIJJv25EuWL4gY';
+            this.G_MAP = {
+                center: {lat: -33.8688, lng: 151.2195},
+                zoom: 13,
+                mapTypeId: 'roadmap',
+                fullscreenControl: false,
+                mapTypeControl: false
+            };
+        };
+        return Editor;
+    })(_w);
+
+    travelmaker.url = url;
     travelmaker.utils = Utils;
+    travelmaker.template = Template;
+    travelmaker.regex = Regex;
+    travelmaker.editor = Editor;
 
-    w.travelmaker = travelmaker;
+    _w.travelmaker = travelmaker;
     return travelmaker;
-})(this, jQuery);
-
-
+})(window);
