@@ -35,4 +35,9 @@ out/
 *.DS_STORE
 *.keep
 .prettierrc
-/target/
+/target/*
+/node_modules/
+
+package-lock.json
+package.json
+/src/main/webapp/storage/
