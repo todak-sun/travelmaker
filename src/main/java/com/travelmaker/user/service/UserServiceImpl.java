@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,6 +18,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.travelmaker.user.dao.UserDAOImpl;
 import com.travelmaker.user.domain.UserDTO;
+import com.travelmaker.user.domain.UserDetails;
 
 @Service
 public class UserServiceImpl implements UserDetailsService, UserService {
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		} else {
 			roles.add(new SimpleGrantedAuthority("ROLE_USER"));
 		}
-		UserDetails user;
+		User user;
 		
 		//System.out.println("인코딩 PW"+passwordEncoder.encode(originPwd));
 		
@@ -78,8 +78,9 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		//System.out.println("user Password :" + user.getPassword());
 		//System.out.println("[UserDetails user :" + user.toString() + "]");
 		//System.out.println("[roles Size : " + roles.size() + "]");
-
-		return user;
+		UserDetails userDetail = new UserDetails(user,userDTO);
+		
+		return userDetail;
 	}
 
 	@Override

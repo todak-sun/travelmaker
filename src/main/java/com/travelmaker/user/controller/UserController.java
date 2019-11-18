@@ -146,7 +146,6 @@ public class UserController {
 		 */
 		
 		userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-		
 		userServiceImpl.userModify(userDTO);
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("user/modifyOK");

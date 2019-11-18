@@ -6,6 +6,7 @@ import lombok.Data;
 
 @Data
 public class UserDTO {
+	private int seq;
 	private String nickname; //별명
 	private String realname; //실명
 	private String id;
