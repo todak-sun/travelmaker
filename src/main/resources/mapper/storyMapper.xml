@@ -20,11 +20,4 @@
 		) C LEFT OUTER JOIN (SELECT COUNT(*) CMT, BNO FROM CMT GROUP BY BNO) D on C.bno = D.bno ORDER BY RNO DESC
 	</select>
 	
-<!-- 	<select id="selectEssay" parameterType="Integer" resultType="Integer">
-		SELECT RNO FROM Essay WHERE BNO=#{BNO}
-	</select>
-	<select id="selectRoute" parameterType="Integer" resultType="Integer">
-		SELECT RNO FROM ROUTE WHERE BNO=#{BNO}
-	</select> -->
-	
 </mapper>
