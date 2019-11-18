@@ -7,7 +7,6 @@ function indcludeJs(jsFilePath){
 }
 /* 로그인 API 임포트 */ 
 function initJsFile(){
-
 		 indcludeJs("http://developers.kakao.com/sdk/js/kakao.min.js");
 		 indcludeJs("https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.0.js");
 		 indcludeJs("https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js");
@@ -33,7 +32,6 @@ function loginBtnDraw(){
 
 $(function() {
 	initJsFile(); // 처음화면 로드
-	
     const $modal = $('#modal-area'); // 모달
     
     const btnWrite = document.querySelector('#btn-write');
@@ -79,7 +77,7 @@ $(function() {
             case 'btn-write':
                 return ['글선택', getTemplateWriteSelector(), initWriteSelector];
             case 'btn-login':
-                //initJsFile();
+            	indcludeJs("http://developers.kakao.com/sdk/js/kakao.min.js");
             	indcludeJs("http://apis.google.com/js/platform.js");
                 return ['로그인', getTemplateLogin(), initLoginSelector];
             case 'btn-regist':
