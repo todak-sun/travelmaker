@@ -42,11 +42,11 @@
 					href="/story/list">글목록</a></li>
 				<li class="nav-item"><a class="nav-link" href="#">스토어</a></li>
 				<li class="nav-item"><a id="link-list" class="nav-link"
-					href="#">커뮤니티</a></li>
+					href="/community">커뮤니티</a></li>
 				<sec:authentication var="userDetail" property="principal" />
 				<sec:authorize access="hasRole('ROLE_USER') and isAuthenticated()">
 					<%-- <p>어서와 방갑다 ${fn:substringBefore(user.username,"%")} 쉬볼세끼야</p> --%>
-					<p>어서와 방갑다 ${userDetail} 쉬볼세끼야</p>
+					<p>${userDetail.id}</p>
 				</sec:authorize>
 			</ul>
 			<button id="btn-write" class="btn btn-outline-light">글쓰기</button>
@@ -95,50 +95,14 @@
 	<input type="text" id="message" />
 	<input type="button" id="sendBtn" value="전송" />
 	<div id="data"></div>
+	
+	
 </body>
 <script src="../../../resources/js/common/jquery-3.4.1.js"></script>
 	<script src="../../../resources/js/common/bootstrap.js"></script>
 	<script src="../../../resources/js/main/main.js"></script>
 	<script type="text/javascript" src="../../../resources/js/user/user.js"></script>
 	<script src="http://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js"></script>
-	
-<script type="text/javascript">
-	$(document).ready(function() {
-		$("#sendBtn").click(function() {
-			sendMessage();
-			$('#message').val('')
-		});
-		$("#message").keydown(function(key) {
-			if (key.keyCode == 13) {// 엔터
-				sendMessage();
-				$('#message').val('')
-			}
-		});
-	});
-
-	// 웹소켓을 지정한 url로 연결한다.
-	let sock = new SockJS("<c:url value="/echo"/>");
-	sock.onmessage = onMessage;
-	sock.onclose = onClose;
-
-	// 메시지 전송
-	function sendMessage() {
-		sock.send($("#message").val());
-	}
-
-	// 서버로부터 메시지를 받았을 때
-
-	function onMessage(msg) {
-		var data = msg.data;
-		$("#data").append(data + "<br/>");
-	}
-
-	// 서버와 연결을 끊었을 때
-
-	function onClose(evt) {
-		$("#data").append("연결 끊김");
-	}
-</script>
-
+	<script src="../../../resources/js/websocket/websocket.js"></script>
 </body>
 </html>
