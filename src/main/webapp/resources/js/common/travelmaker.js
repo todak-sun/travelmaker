@@ -21,6 +21,18 @@ let travelmaker = (function (window) {
             e.target.classList.remove('is-valid');
         };
 
+        Utils.prototype.getJSONfromQueryString = function(){
+            let qs = location.search.slice(1);
+            qs = qs.split('&');
+
+            const obj = {};
+            qs.forEach((q) => {
+                q = q.split('=');
+                obj[q[0]] = decodeURIComponent(q[1] || '');
+            });
+            return JSON.parse(JSON.stringify(obj));
+        };
+
         Utils.prototype.setValid = function (e, el, message) {
             el.innerText = message;
             e.target.classList.add('is-valid');
@@ -41,7 +53,7 @@ let travelmaker = (function (window) {
             return el.classList.contains('is-valid');
         };
 
-        Utils.prototype.resetMessageHandler = function(e){
+        Utils.prototype.resetMessageHandler = function (e) {
             if (!e.target.value) {
                 e.target.classList.remove('is-invalid');
                 e.target.classList.remove('is-valid');
@@ -405,13 +417,74 @@ let travelmaker = (function (window) {
               `;
         };
 
+        Template.prototype.essayTemp = function (essay) {
+            const {rno, title, imageName, isDomestic, dateWrite} = essay;
+            return `
+                <li class="tmp-content-item" data-rno="${rno}">
+                    <img
+                            src="http://placehold.it/50X50"
+                            class="img-thumbnail"
+                            alt="제목"
+                    />
+                    <div class="btn-group-sm">
+                        <button data-rno="${rno}" class="badge badge-secondary btn-tmp-remove">X</button>
+                        <button data-rno="${rno}" class="badge badge-secondary btn-tmp-get">불러오기</button>
+                    </div>
+                    <div class="tmp-content-box">
+                        <span class="location badge badge-info">${isDomestic === 0 ? '국내' : '해외'}</span>
+                        <h5 class="tmp-content-title">${title === null ? '제목없음' : title}</h5>
+                        <span class="date text-muted small">${dateWrite}</span>
+                    </div>
+                </li>            
+            `
+        }
+
         return Template;
+    })(_w);
+
+    const Editor = (function (w) {
+        const Editor = function () {
+            this.summernote = {
+                placeholder: '내용',
+                airMode: true,
+                lang: 'ko-KR',
+                popover: {
+                    image: [
+                        ['image', ['resizeFull', 'resizeHalf', 'resizeQuarter', 'resizeNone']],
+                        ['float', ['floatLeft', 'floatRight', 'floatNone']],
+                        ['remove', ['removeMedia']]
+                    ],
+                    link: [['link', ['linkDialogShow', 'unlink']]],
+                    table: [
+                        ['add', ['addRowDown', 'addRowUp', 'addColLeft', 'addColRight']],
+                        ['delete', ['deleteRow', 'deleteCol', 'deleteTable']]
+                    ],
+                    air: [
+                        ['color', ['color']],
+                        ['font', ['bold', 'underline', 'clear']],
+                        ['para', ['ul', 'paragraph']],
+                        ['table', ['table']],
+                        ['insert', ['link', 'map']]
+                    ]
+                }
+            };
+            this.G_KEY = 'AIzaSyCeKdfxBMTEBPFzc4QjjrIJJv25EuWL4gY';
+            this.G_MAP = {
+                center: {lat: -33.8688, lng: 151.2195},
+                zoom: 13,
+                mapTypeId: 'roadmap',
+                fullscreenControl: false,
+                mapTypeControl: false
+            };
+        };
+        return Editor;
     })(_w);
 
     travelmaker.url = url;
     travelmaker.utils = Utils;
     travelmaker.template = Template;
     travelmaker.regex = Regex;
+    travelmaker.editor = Editor;
 
     _w.travelmaker = travelmaker;
     return travelmaker;

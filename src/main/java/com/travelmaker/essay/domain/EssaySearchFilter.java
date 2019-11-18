@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class EssaySearchFilter {
     private int seq;
     private int fixed;
+    private String order;
 }

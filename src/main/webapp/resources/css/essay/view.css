@@ -1,3 +1,7 @@
+.container-fluid {
+    margin-top: 60px;
+}
+
 .header-box {
     position: relative;
     width: 100%;

@@ -1,76 +1,25 @@
 const setting = {
     url: `http://${location.host}`,
-    summernote: {
-        placeholder: '내용',
-        airMode: true,
-        lang: 'ko-KR',
-        popover: {
-            image: [
-                ['image', ['resizeFull', 'resizeHalf', 'resizeQuarter', 'resizeNone']],
-                ['float', ['floatLeft', 'floatRight', 'floatNone']],
-                ['remove', ['removeMedia']]
-            ],
-            link: [['link', ['linkDialogShow', 'unlink']]],
-            table: [
-                ['add', ['addRowDown', 'addRowUp', 'addColLeft', 'addColRight']],
-                ['delete', ['deleteRow', 'deleteCol', 'deleteTable']]
-            ],
-            air: [
-                ['color', ['color']],
-                ['font', ['bold', 'underline', 'clear']],
-                ['para', ['ul', 'paragraph']],
-                ['table', ['table']],
-                ['insert', ['link', 'map']]
-            ]
-        },
-        map: {
-            apiKey: 'AIzaSyCeKdfxBMTEBPFzc4QjjrIJJv25EuWL4gY',
-            center: {
-                lat: -33.8688,
-                lng: 151.2195
-            },
-            zoom: 13
-        }
-    },
-    G_KEY: 'AIzaSyCeKdfxBMTEBPFzc4QjjrIJJv25EuWL4gY',
-    G_MAP: {
-        center: {lat: -33.8688, lng: 151.2195},
-        zoom: 13,
-        mapTypeId: 'roadmap',
-        fullscreenControl: false,
-        mapTypeControl: false
-    }
 };
 
 $(function () {
     const template = new travelmaker.template();
+    const editor = new travelmaker.editor();
+    const {setRequestHeader, useState, getJSONfromQueryString} = new travelmaker.utils();
 
     let hashes = [];
-    let rno;
-
-    const utils = new travelmaker.utils();
 
     let requestData = {
         rno: '',
         seq: 1,
         title: '',
         content: '',
-        hashcode: '',
+        hashtag: '',
         fixed: 0,
         isDomestic: +getJSONfromQueryString().isDomestic
     };
 
-    const [setEssay, getEssay] = utils.useState(requestData);
-
-
-    function getFormData(imageFile) {
-        const {rno} = getData();
-        const formData = new FormData();
-        console.log(imageFile);
-        formData.append('imageFile', imageFile);
-        formData.append('rno', rno);
-        return formData;
-    }
+    const [setEssay, getEssay] = useState(requestData);
 
     const $editor = $('#editor');
     const $modal = $('.modal');
@@ -99,7 +48,7 @@ $(function () {
         '#img-background',
         '#input-file-upload',
         '#btn-save',
-        'tmp-content-group'
+        '#tmp-content-group'
     );
 
     inputFileUpload.addEventListener('change', inputFileUploadHandler);
@@ -117,31 +66,73 @@ $(function () {
         setEssay({title: this.value});
     }
 
-    // initOnLoad();
+    initOnLoad();
 
     function initOnLoad() {
         ajaxCreate(getEssay())
-            .then((ret) => {
-                rno = ret.data.rno;
-                setEssay({rno: ret.data.rno});
-                console.log(ret.data);
-                console.log('그냥 데이터', ret);
-            })
+            .then((ret) => setEssay({rno: ret.data.rno}))
             .catch(console.error);
 
-        ajaxGetEssayListTmp(1, 0)
-            .then((ret) => console.log(ret.data))
+        ajaxGetEssayListTmp(1, 0, 'date_write')
+            .then(printTmpList)
+            .then(() => setTmpEvents())
             .catch(console.error);
 
         $editor.summernote({
-          ...setting.summernote,
-          callbacks: {
-            onInit: function () {
-              title.focus();
+            ...editor.summernote,
+            callbacks: {
+                onInit: function () {
+                    title.focus();
+                }
             }
-          }
         });
-        //todo console 코드 다음에 지울 것.
+    }
+
+    function setTmpEvents() {
+        const btnGetList = document.querySelectorAll('.btn-tmp-get');
+        const btnRemoveList = document.querySelectorAll('.btn-tmp-remove');
+
+        Array.from(btnGetList).forEach(btn => {
+            btn.addEventListener('click', getEssayTmpHandler);
+        });
+        Array.from(btnRemoveList).forEach(btn => {
+            btn.addEventListener('click', deleteEssayTmpHandler)
+        });
+    }
+
+    function deleteEssayTmpHandler(e) {
+        const item = this.parentElement.parentElement;
+        if (!confirm('해당 임시글을 삭제하시겠습니까?')) return;
+        ajaxDelete(this.dataset.rno)
+            .then((ret) => item.remove())
+    }
+
+    function getEssayTmpHandler(e) {
+        if (!confirm('임시저장 한 글을 불러오시겠습니까?')) return;
+        const item = this.parentElement.parentElement;
+
+        ajaxGetEssay(this.dataset.rno)
+            .then(({data}) => {
+                setEssay(data);
+                title.value = data.title || '';
+                if (data.content) $editor.summernote('code', data.content);
+                changeBackground(imgBackground, data.imageName);
+                item.remove();
+            })
+            .catch(console.error);
+    }
+
+    function getBackgroundImage(el){
+        let style = window.getComputedStyle(el, null);
+        return style.backgroundImage.slice(5, -2);
+    }
+
+    function printTmpList({data}) {
+        const $frag = $(document.createDocumentFragment());
+        data.forEach(essay => {
+            $frag.append(template.essayTemp(essay));
+        });
+        $(tmpContentGroup).append($frag);
     }
 
     function imgBackgroundHandler(e) {
@@ -192,12 +183,37 @@ $(function () {
     }
 
     function inputFileUploadHandler(e) {
-        // console.log(this.files[0]);
+        console.log(this.files[0]);
         if (!this.files[0]) return;
         const formData = getFormData(this.files[0]);
-        ajaxImageUpload(rno, formData)
-            .then((ret) => console.log('이미지 업로드', ret))
+        ajaxImageUpload(getEssay().rno, formData)
+            .then((ret) => {
+                changeBackground(imgBackground, ret);
+            })
             .catch(console.error);
+    }
+
+    function getFormData(imageFile) {
+        const essay = getEssay();
+        const keys = Object.keys(essay);
+        const values = Object.values(essay);
+
+        const formData = new FormData();
+        formData.append('imageFile', imageFile);
+        for (let i = 0; i < keys.length; i++) {
+            formData.append(keys[i], values[i]);
+        }
+        return formData;
+    }
+
+    function changeBackground(el, imageName) {
+        if (imageName) {
+            el.style.backgroundImage = `url("/resources/storage/essay/${imageName}")`;
+            el.innerHTML = '';
+        } else {
+            el.style.background = `url("/resources/img/essay-default-background.jpg")`;
+            el.innerHTML = '<h3>클릭하시면, 대표이미지를 설정할 수 있어요!</h3>'
+        }
     }
 
     function btnImageHandler(e) {
@@ -227,7 +243,7 @@ $(function () {
             }
             inputHashtag.value = '';
             inputHashtag.focus();
-            setData({hashcode: hashes.join(',')});
+            setEssay({hashtag: hashes.join(',')});
         });
 
         btnAddAtModal.addEventListener('click', function (e) {
@@ -379,7 +395,7 @@ $(function () {
                         $editor.summernote('restoreRange');
                         $editor.summernote(
                             'insertNode',
-                            createStaticMap(link, imgUrl, description)
+                            template.staticMap(link, imgUrl, description)
                         );
                         staticMapContainer.innerHTML = '';
                     });
@@ -503,7 +519,7 @@ $(function () {
 
         let map = new google.maps.Map(
             document.getElementById('map'),
-            setting.G_MAP
+            editor.G_MAP
         );
 
         // input태그를 잡아와서 search box로 만드는 부분.
@@ -566,13 +582,13 @@ $(function () {
                                 let width = 750;
                                 let height = 350;
                                 let link = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
-                                let imgUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=12&size=${width}x${height}&markers=color:red%7C${lat},${lng}&key=${setting.G_KEY}`;
+                                let imgUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=12&size=${width}x${height}&markers=color:red%7C${lat},${lng}&key=${editor.G_KEY}`;
 
                                 $modal.modal('hide');
                                 $editor.summernote('restoreRange');
                                 $editor.summernote(
                                     'insertNode',
-                                    createStaticMap(link, imgUrl, place.formatted_address)
+                                    template.staticMap(link, imgUrl, place.formatted_address)
                                 );
                             });
                     });
@@ -593,60 +609,6 @@ $(function () {
         });
     }
 
-    //유틸메소드 모음
-    function getTemplateStaticMap(link, imgUrl, description) {
-        return `
-    <a href="${link}">
-      <img src="${imgUrl}"/>
-    </a>
-    <p>${description}</p>`;
-    }
-
-    function getTemplateMapModal() {
-        return `
-    <div class="row">
-      <div class="col col-sm-3 bg-light" style="padding:0">
-          <div class="input-group">
-              <input type="text" id="keyword" class="form-control"/>
-              <button id="btn-keyword-search">검색</button>
-          </div>
-          <ul id="placesList" class="list-group list-group-flush" style="height:350px;overflow-y:auto;padding:0;">
-          </ul>
-          <ul id="pagination" class="pagination"></ul>
-      </div>
-      <div id="map" class="col col-sm-9"></div>
-    </div>
-    `;
-    }
-
-    function getTemplateHashModal() {
-        return `
-    <div>
-        <div class="input-group">
-          <input id="hashtag" type="text" class="form-control"/>
-          <button id="btn-add-hashtag">추가</button>
-        </div>
-        <div id="content-hashtag" class="form-control"></div>
-    </div>
-    `;
-    }
-
-    function getTemplateInfowindow(place, address) {
-        return `<div>
-              지명 : ${place}
-              주소 : ${address}
-              <button id="btn-add-map">추가</button>
-            </div>`;
-    }
-
-    function createStaticMap(link, imgUrl, description) {
-        let frag = document.createDocumentFragment();
-        let div = document.createElement('div');
-        div.innerHTML = template.staticMap(link, imgUrl, description);
-        frag.appendChild(div);
-        return frag;
-    }
-
     function getEls(parent, ...targets) {
         let els = [];
         targets.forEach((target) => els.push(parent.querySelector(target)));
@@ -660,25 +622,22 @@ $(function () {
         body.innerHTML = bodyContent;
     }
 
-    function getJSONfromQueryString() {
-        let qs = location.search.slice(1);
-        qs = qs.split('&');
-
-        const obj = {};
-        qs.forEach((q) => {
-            q = q.split('=');
-            obj[q[0]] = decodeURIComponent(q[1] || '');
-        });
-        return JSON.parse(JSON.stringify(obj));
-    }
 
     //ajax호출 모음
 
-    function ajaxGetEssayListTmp(seq, fixed) {
+    function ajaxGetEssay(rno) {
         return $.ajax({
             type: 'GET',
             contentType: 'application/json',
-            data: {seq, fixed},
+            url: setting.url + '/api/essay/' + rno
+        });
+    }
+
+    function ajaxGetEssayListTmp(seq, fixed, order) {
+        return $.ajax({
+            type: 'GET',
+            contentType: 'application/json',
+            data: {seq, fixed, order},
             url: setting.url + '/api/essay'
         });
     }
@@ -689,7 +648,8 @@ $(function () {
             contentType: 'application/json',
             data: JSON.stringify({data}),
             dataType: 'json',
-            url: setting.url + '/api/essay'
+            url: setting.url + '/api/essay',
+            beforeSend: setRequestHeader
         });
     }
 
@@ -700,7 +660,8 @@ $(function () {
             processData: false,
             dataType: 'text',
             data: formData,
-            url: setting.url + '/api/essay/' + rno + '/image'
+            url: setting.url + '/api/essay/' + rno + '/image',
+            beforeSend: setRequestHeader
         });
     }
 
@@ -710,7 +671,8 @@ $(function () {
             contentType: 'application/json',
             data: JSON.stringify({data}),
             dataType: 'json',
-            url: setting.url + '/api/essay'
+            url: setting.url + '/api/essay',
+            beforeSend: setRequestHeader
         });
     }
 
@@ -719,7 +681,8 @@ $(function () {
             type: 'DELETE',
             contentType: 'application/json',
             dataType: 'json',
-            url: setting.url + '/api/essay/' + rno
+            url: setting.url + '/api/essay/' + rno,
+            beforeSend: setRequestHeader
         });
     }
 });

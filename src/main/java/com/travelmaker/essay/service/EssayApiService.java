@@ -52,6 +52,7 @@ public class EssayApiService implements EssayApiInterface<EssayApiRequest, Essay
     public Header<EssayApiResponse> readOne(int rno) {
         Optional<EssayDTO> optional = Optional.ofNullable(essayDAO.readOne(rno));
         return optional.map(essayDTO -> {
+            System.out.println(essayDTO.getImageName());
             essayDTO.setContent(readFile(essayDTO.getFileName()));
             Optional.ofNullable(commentDAO.readAll(essayDTO.getBno()))
                     .ifPresent(essayDTO::setCommentDTOList);
@@ -136,6 +137,7 @@ public class EssayApiService implements EssayApiInterface<EssayApiRequest, Essay
                 .likes(essayDTO.getLikes())
                 .views(essayDTO.getLikes())
                 .hashtag(essayDTO.getHashtag())
+                .imageName(essayDTO.getImageName())
                 .dateWrite(essayDTO.getDateWrite())
                 .dateUpdate(essayDTO.getDateUpdate())
                 .content(essayDTO.getContent())
@@ -155,6 +157,7 @@ public class EssayApiService implements EssayApiInterface<EssayApiRequest, Essay
                     .title(essayDTO.getTitle())
                     .likes(essayDTO.getLikes())
                     .views(essayDTO.getLikes())
+                    .imageName(essayDTO.getImageName())
                     .hashtag(essayDTO.getHashtag())
                     .dateWrite(essayDTO.getDateWrite())
                     .dateUpdate(essayDTO.getDateUpdate())
