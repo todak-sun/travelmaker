@@ -1,10 +1,12 @@
 $().ready(function() {
   console.log("rno = " + $("#rno").val());
+  const { useState, setRequestHeader } = new travelmaker.utils();
   $.ajax({
     type: "post",
-    url: "/story/getRouteContentStory",
+    url: "/route/getRouteView",
     data: { rno: $("#rno").val() },
     dataType: "json",
+    beforeSend: setRequestHeader,
     success: function(data) {
       // 맵쪽에 뿌려줄 좌표를 담을 배열
       var flightPlanCoordinates = [];
@@ -100,13 +102,13 @@ $().ready(function() {
                       }).append(
                         $("<span/>", {
                           class: "loc_txt",
-                          text: items.location
+                          text: "위치 : " + items.location
                         })
                           .append($("<br/>"))
                           .append(
                             $("<span/>", {
                               class: "loc_addr",
-                              text: items.location
+                              text: "위치 : " + items.location
                             })
                           )
                       )
@@ -116,7 +118,7 @@ $().ready(function() {
               .append(
                 $("<div/>", {
                   class: "course_story",
-                  text: items.content
+                  text: "코스내용 : " + items.content
                 })
               )
               .append(
@@ -190,7 +192,7 @@ $().ready(function() {
           })
             .append(
               $("<img/>", {
-                src: "../../../storage/" + img
+                src: "/resources/storage/route/" + img
               })
             )
             .appendTo(routeContentId.find(".carousel-inner"));

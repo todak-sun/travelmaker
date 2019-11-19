@@ -25,7 +25,7 @@ public class StoryPageController {
 	
 		model.addAttribute("listNum",listNum.isPresent() ? listNum.get() : 12);
 		model.addAttribute("keyword",keyword.isPresent() ? keyword.get() : "");
-		return "/story/storyList";
+		return "/story/list";
 	}
 
 }

@@ -19,30 +19,30 @@ public class RoutePageController {
     @Autowired
     RouteService routeService;
 
-    @RequestMapping(value = "write")
+    @RequestMapping(value = "/write")
     public String routeWirteForm(Model model, @RequestParam int isDomestic) {
         model.addAttribute("isDomestic", isDomestic);
         // dto를 서버DB에 저장
-        return "/route/routeWriteForm";
+        return "route/write";
     }
 
     //////
     @RequestMapping(value = "/view/{rno}", method = RequestMethod.GET)
-    public String routeStoryView(@PathVariable int rno, Model model) {
+    public String routeView(@PathVariable int rno, Model model) {
         System.out.println("rno = " + rno);
         RouteDTO routeDTO = routeService.getRoute(rno);
         System.out.println(routeDTO.getBno());
         model.addAttribute("routeDTO", routeDTO);
 
-        return "/story/routeStoryView";
+        return "route/view";
     }
 
-    @RequestMapping(value = "getRouteContentStory", method = RequestMethod.POST)
+    @RequestMapping(value = "getRouteView", method = RequestMethod.POST)
     @ResponseBody
-    public ModelAndView getRouteContentStory(@ModelAttribute RouteDTO routeDTO) {
+    public ModelAndView getRouteView(@ModelAttribute RouteDTO routeDTO) {
         ModelAndView modelAndView = new ModelAndView();
         int rno = routeDTO.getRno();
-        System.out.println(rno);
+        System.out.println("getRouteView rno 값 : "+rno);
 
         List<RouteContentDTO> list = routeService.getRouteContentStory(rno);
 
@@ -54,4 +54,5 @@ public class RoutePageController {
 
         return modelAndView;
     }
+    
 }
