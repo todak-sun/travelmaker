@@ -211,7 +211,7 @@ $(function() {
         break;
     }
   }
-
+  //
   function backToLevel(level) {
     // 뒤로 가기 버튼들
     switch (level) {
