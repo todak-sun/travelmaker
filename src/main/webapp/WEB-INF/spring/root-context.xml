@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		">
 
-    <!-- Root Context: defines shared resources visible to all other web components -->
+	<!-- Root Context: defines shared resources visible to all other web components -->
 
 	<context:component-scan
 		base-package="com.travelmaker.comment.service" />
@@ -23,6 +24,8 @@
 		base-package="com.travelmaker.story.service" />
 	<context:component-scan
 		base-package="com.travelmaker.user.service" />
+	<context:component-scan
+		base-package="com.travelmaker.store.service" />
 
 	<context:component-scan
 		base-package="com.travelmaker.comment.dao" />
@@ -40,6 +43,8 @@
 		base-package="com.travelmaker.story.dao" />
 	<context:component-scan
 		base-package="com.travelmaker.user.dao" />
+	<context:component-scan
+		base-package="com.travelmaker.store.dao" />
 
 	<context:component-scan
 		base-package="com.travelmaker.comment.domain" />
@@ -57,32 +62,45 @@
 		base-package="com.travelmaker.story.domain" />
 	<context:component-scan
 		base-package="com.travelmaker.user.domain" />
+	<context:component-scan
+		base-package="com.travelmaker.store.domain" />
+
+	<context:component-scan
+		base-package="com.travelmaker.util.websockethandler" />
 
 
-    <bean id="dataSource"
-          class="org.apache.tomcat.dbcp.dbcp2.BasicDataSource">
-        <property name="driverClassName"
-                  value="oracle.jdbc.driver.OracleDriver"/>
-        <property name="url"
-                  value="jdbc:oracle:thin:@database-2.cwmwyrme2oij.ap-northeast-2.rds.amazonaws.com:1521:ORCL"/>
-        <property name="username" value="admin"/>
-        <property name="password" value="qlxmaos12"/>
-        <property name="maxTotal" value="20"/>
-        <property name="minIdle" value="3"/>
-    </bean>
+	<bean id="dataSource"
+		class="org.apache.tomcat.dbcp.dbcp2.BasicDataSource">
+		<property name="driverClassName"
+			value="oracle.jdbc.driver.OracleDriver" />
+		<property name="url"
+			value="jdbc:oracle:thin:@database-2.cwmwyrme2oij.ap-northeast-2.rds.amazonaws.com:1521:ORCL" />
+		<property name="username" value="admin" />
+		<property name="password" value="qlxmaos12" />
+		<property name="maxTotal" value="20" />
+		<property name="minIdle" value="3" />
+	</bean>
 
-    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <property name="dataSource" ref="dataSource"/>
-        <property name="configLocation" value="classpath:mybatis/mybatis-config.xml"/>
-        <property name="mapperLocations" value="classpath:mapper/*.xml"/>
-    </bean>
+	<bean id="sqlSessionFactory"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation"
+			value="classpath:mybatis/mybatis-config.xml" />
+		<property name="mapperLocations"
+			value="classpath:mapper/*.xml" />
+	</bean>
 
-    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
-        <constructor-arg ref="sqlSessionFactory"/>
-    </bean>
+	<bean id="sqlSession"
+		class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="sqlSessionFactory" />
+	</bean>
 
-    <bean id="dataSourceTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="dataSource"/>
-    </bean>
+	<bean id="dataSourceTransactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="websocketHandler"
+		class="com.travelmaker.util.websockethandler.WebsocketHandler" />
 
 </beans>
