@@ -36,6 +36,16 @@ public class RoutePageController {
 
         return "route/view";
     }
+    
+    @RequestMapping(value = "/preview/{rno}", method = RequestMethod.GET)
+    public String routePreview(@PathVariable int rno, Model model) {
+    	System.out.println("rno = " + rno);
+    	RouteDTO routeDTO = routeService.getRoute(rno);
+    	System.out.println(routeDTO.getBno());
+    	model.addAttribute("routeDTO", routeDTO);
+    	
+    	return "route/preview";
+    }
 
     @RequestMapping(value = "getRouteView", method = RequestMethod.POST)
     @ResponseBody

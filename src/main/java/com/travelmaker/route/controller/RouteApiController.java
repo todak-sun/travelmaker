@@ -56,7 +56,7 @@ public class RouteApiController {
 		RouteImageDTO routeImageDTO = new RouteImageDTO();
 		String filePath = servletContext.getRealPath("/resources/storage/route");
 		int crno = routeService.saveCourse(routeContentDTO); //저장한 코스의 crno 반환
-		
+		System.out.println(routeContentDTO.getImages());
 		if(routeContentDTO.getImages()!=null) { // 이미지가 있을 때
 			int i = 1; // 이미지 순서
 			for(MultipartFile img : routeContentDTO.getImages()) {
