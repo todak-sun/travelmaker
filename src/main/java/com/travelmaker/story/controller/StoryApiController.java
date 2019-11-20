@@ -1,19 +1,16 @@
 package com.travelmaker.story.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.travelmaker.story.domain.StoryDTO;
+import com.travelmaker.story.domain.StorySearchFilter;
 import com.travelmaker.story.service.StoryService;
 
 @RestController
@@ -23,32 +20,17 @@ public class StoryApiController {
 	@Autowired
 	StoryService storyService;
 
-	@RequestMapping(value = "/list")
-	public List<StoryDTO> getList() {
-		
-		Map<String, String> pagingMap = new HashMap<String, String>();
-		pagingMap.put("startNum", "0");
-		pagingMap.put("endNum", "13");
-		List<StoryDTO> list = storyService.getStory(pagingMap);
-		
-		return list;
-	}
-	
-	@RequestMapping(value = "/list/{start}/{end}", method = RequestMethod.GET)
-	public List<StoryDTO> showList(@PathVariable int start, @PathVariable int end) {
-		
-		Map<String, String> pagingMap = new HashMap<String, String>();
-		pagingMap.put("startNum", (start-1)+"");
-		pagingMap.put("endNum", (end+1)+"");
-		List<StoryDTO> list = storyService.getStory(pagingMap);
-		
-		return list;
-	}
-	
-	@GetMapping(value = "/list/{bno}")
-	public String view(@PathVariable int bno) {
-		String board = storyService.selectBoard(bno);
-		return board+"/view/"+bno;
-	}
+	@GetMapping(path = {"/{start}/{end}/{keyword}","/{start}/{end}"})
+	public List<StoryDTO> getKeywordList(@PathVariable int start, @PathVariable int end, @PathVariable Optional<String> keyword) {
 
+		StorySearchFilter storySearchFilter = new StorySearchFilter();
+		storySearchFilter.setStart(start);
+		storySearchFilter.setEnd(end+1);
+		storySearchFilter.setKeyword(keyword.isPresent() ? keyword.get() : "");
+		
+		List<StoryDTO> list = storyService.getStory(storySearchFilter);
+		System.out.println("가져온게시글 수 : "+list.size());
+		return list;
+	}
+	
 }

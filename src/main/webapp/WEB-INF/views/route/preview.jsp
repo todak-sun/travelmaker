@@ -1,19 +1,14 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-pageEncoding="UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
   <head>
-    <meta charset="UTF-8" />
-    <title>루트 게시물</title>
-    <!-- BootStrap -->
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-    />
+    <%@include file="../common/head-meta.jsp" %> <%@include
+    file="../common/head-css.jsp" %>
+    <title>루트 View</title>
     <style type="text/css">
       #map {
         height: 100%;
-        width: 800px;
+        width: 800px; /* 지도 넓이 */
         display: inline-block;
       }
 
@@ -28,14 +23,15 @@ pageEncoding="UTF-8"%>
     <input type="hidden" value="${routeDTO.isDomestic }" id="isdomestic" />
     <input type="hidden" value="${routeDTO.content }" id="epilogue" />
     <input type="hidden" value="${routeDTO.hashtag }" id="hashtag" />
+    <!-- 지도 넓이에 맞춤 -->
     <div
       id="routeContent"
-      style="width: 1400px; height: 100%; text-align: center; background-color: white; margin: 100px;"
+      style="width: 800px; height: 100%; text-align: center; background-color: white;"
     >
       <div id="routeTitle" style="display: inline-block;">
-        <h1 style="margin: 0;">${routeDTO.title }</h1>
+        <h1 style="margin: 0;">제목 : ${routeDTO.title }</h1>
         <br />
-        <strong>${routeDTO.nickname }</strong>
+        <strong>유저별명 : ${routeDTO.nickname }</strong>
       </div>
       <hr style="width: 100%;" />
       <div
@@ -58,16 +54,10 @@ pageEncoding="UTF-8"%>
       type="text/javascript"
       src="//dapi.kakao.com/v2/maps/sdk.js?appkey=58d9a72c9db8da0b849a32734093767e"
     ></script>
-    <!-- JQuery -->
+    <%@include file="../common/foot-js.jsp" %>
     <script
       type="text/javascript"
-      src="https://code.jquery.com/jquery-3.4.1.min.js"
-    ></script>
-    <!-- BootStrap -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script
-      type="text/javascript"
-      src="../../../resources/js/route/routeView.js"
+      src="${pageContext.request.contextPath}/resources/js/route/routeView.js"
     ></script>
   </body>
 </html>

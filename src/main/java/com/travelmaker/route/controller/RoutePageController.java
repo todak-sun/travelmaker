@@ -19,34 +19,42 @@ public class RoutePageController {
     @Autowired
     RouteService routeService;
 
-    @Autowired
-    StoryService storyService;
-
-    @RequestMapping(value = "write")
+    @RequestMapping(value = "/write")
     public String routeWirteForm(Model model, @RequestParam int isDomestic) {
         model.addAttribute("isDomestic", isDomestic);
         // dto를 서버DB에 저장
-        return "/route/routeWriteForm";
+        return "route/write";
     }
 
-    @RequestMapping(value = "/view/{bno}", method = RequestMethod.GET)
-    public String routeStoryView(@PathVariable String bno, Model model) {
-        System.out.println("bno = " + bno);
-        RouteDTO routeDTO = storyService.getRoute(bno);
+    //////
+    @RequestMapping(value = "/view/{rno}", method = RequestMethod.GET)
+    public String routeView(@PathVariable int rno, Model model) {
+        System.out.println("rno = " + rno);
+        RouteDTO routeDTO = routeService.getRoute(rno);
         System.out.println(routeDTO.getBno());
         model.addAttribute("routeDTO", routeDTO);
 
-        return "/story/routeStoryView";
+        return "route/view";
+    }
+    
+    @RequestMapping(value = "/preview/{rno}", method = RequestMethod.GET)
+    public String routePreview(@PathVariable int rno, Model model) {
+    	System.out.println("rno = " + rno);
+    	RouteDTO routeDTO = routeService.getRoute(rno);
+    	System.out.println(routeDTO.getBno());
+    	model.addAttribute("routeDTO", routeDTO);
+    	
+    	return "route/preview";
     }
 
-    @RequestMapping(value = "getRouteContentStory", method = RequestMethod.POST)
+    @RequestMapping(value = "getRouteView", method = RequestMethod.POST)
     @ResponseBody
-    public ModelAndView getRouteContentStory(@ModelAttribute RouteDTO routeDTO) {
+    public ModelAndView getRouteView(@ModelAttribute RouteDTO routeDTO) {
         ModelAndView modelAndView = new ModelAndView();
         int rno = routeDTO.getRno();
-        System.out.println(rno);
+        System.out.println("getRouteView rno 값 : "+rno);
 
-        List<RouteContentDTO> list = storyService.getRouteContentStory(rno);
+        List<RouteContentDTO> list = routeService.getRouteContentStory(rno);
 
         System.out.println("리스트 = " + list.size());
         System.out.println("image 총사이즈 : " + list.get(0).getImgs().size());
@@ -56,4 +64,5 @@ public class RoutePageController {
 
         return modelAndView;
     }
+    
 }
