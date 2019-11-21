@@ -21,7 +21,9 @@
 <body>
 	<input type="hidden" id="csrfTokenName" value="${_csrf.parameterName}" />
 	<input type="hidden" id="csrfTokenValue" value="${_csrf.token}" />
+	
 	<sec:authentication var="userDetail" property="principal" />
+	
 	<h2>동행 글쓰기(큰틀)</h2>
 	<br />
 	<form name="writeForm" id="writeForm" action="/friend/setWrite"

@@ -25,7 +25,7 @@ public class FriendPageController {
 	
 	// 글쓰기 페이지 이동
 	@RequestMapping(value = "/write/{is_domestic}", method = RequestMethod.GET)
-	public String friendWrite(@PathVariable String is_domestic, Model model) {
+	public String write(@PathVariable String is_domestic, Model model) {
 		model.addAttribute("is_domestic", is_domestic);
 		
 		return "/friend/write";

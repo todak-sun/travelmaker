@@ -46,9 +46,9 @@ $().ready(function() {
 	});
 
 	$('#domestic').click(function() {
-		location.href = '/friend/friendWrite?is_domestic=' + $(this).val();
+		location.href = '/friend/write?is_domestic=' + $(this).val();
 	});
 	$('#overseas').click(function() {
-		location.href = '/friend/friendWrite?is_domestic=' + $(this).val();
+		location.href = '/friend/write?is_domestic=' + $(this).val();
 	});
 });
