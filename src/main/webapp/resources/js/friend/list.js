@@ -2,11 +2,17 @@
  * 
  */
 
-$().ready(function(){
+$().ready(function() {
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+
 	$.ajax({
 		type : 'post',
 		url : '/friend/getList',
 		dataType : 'json',
+		beforeSend : function(xhr) {
+			xhr.setRequestHeader(header, token);
+		},
 		success : function(data) {
 			console.log('success');
 			alert(data.responseText);
@@ -19,7 +25,7 @@ $().ready(function(){
 				} else {
 					is_finish = '마감';
 				}
-				
+
 				$('<tr/>').append($('<td/>', {
 					text : items.fno
 				})).append($('<td/>', {

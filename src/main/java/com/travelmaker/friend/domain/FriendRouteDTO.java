@@ -2,11 +2,11 @@ package com.travelmaker.friend.domain;
 
 import org.springframework.stereotype.Component;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @Component
 public class FriendRouteDTO {
 	private int fno;

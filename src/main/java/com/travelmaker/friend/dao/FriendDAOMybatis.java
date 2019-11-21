@@ -29,7 +29,7 @@ public class FriendDAOMybatis implements FriendDAO {
 	@Override
 	public int setWrite(FriendDTO friendDTO) {
 		sqlSession.insert("friendSQL.setWrite", friendDTO);
-		return sqlSession.selectOne("friendSQL.getSelectFno", friendDTO.getNickname());
+		return sqlSession.selectOne("friendSQL.getSelectFno", friendDTO.getSeq());
 	}
 
 	@Override

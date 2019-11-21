@@ -2,15 +2,14 @@ package com.travelmaker.friend.domain;
 
 import org.springframework.stereotype.Component;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 @Component
 public class FriendDTO {
 	private int fno;
-	private String nickname;
+	private int seq;
+	private String id;
 	private String title;
 	private String is_domestic;
 	private String date_start;
