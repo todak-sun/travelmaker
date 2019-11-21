@@ -4,6 +4,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="_csrf" content="${_csrf.token}" />
+<meta name="_csrf_header" content="${_csrf.headerName}" />
 <title>동행 리스트</title>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/common/bootstrap-reboot.css" />

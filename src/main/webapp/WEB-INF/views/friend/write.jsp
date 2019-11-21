@@ -19,17 +19,17 @@
 	href="${pageContext.request.contextPath}/resources/css/friend/write.css" />
 </head>
 <body>
-	<input type="hidden" id="csrfTokenName" value="${_csrf.parameterName}" />
-	<input type="hidden" id="csrfTokenValue" value="${_csrf.token}" />
-	
+
 	<sec:authentication var="userDetail" property="principal" />
-	
+
 	<h2>동행 글쓰기(큰틀)</h2>
 	<br />
 	<form name="writeForm" id="writeForm" action="/friend/setWrite"
 		method="post">
-		<input type="hidden" name="is_domestic" value="${is_domestic }">
-		<input type="hidden" name="seq" value="${userDetail.seq }">
+		<input type="hidden" name="${_csrf.parameterName}"
+			value="${_csrf.token}" /> <input type="hidden" name="is_domestic"
+			value="${is_domestic }"> <input type="hidden" name="seq"
+			value="${userDetail.seq }">
 
 		<table class="table">
 			<thead>
@@ -41,8 +41,7 @@
 				</tr>
 				<tr>
 					<th>아이디</th>
-					<td>
-						<input type="text" name="id" readonly="readonly"
+					<td><input type="text" name="id" readonly="readonly"
 						value="${userDetail.id }"></td>
 				</tr>
 				<tr>

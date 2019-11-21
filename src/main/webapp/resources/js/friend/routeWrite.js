@@ -74,10 +74,17 @@ $('#nextBtn').click(function(){
 	} else if(lat == '' || lng == '' || city == '') {
 		searchPlaceDiv.css('font-size', '12px').css('font-style', 'bold').css('color', 'red').text('장소 검색을 해주세요.');
 	} else {
+		
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+		
 		$.ajax({
 			type: 'post',
 			url: '/friend/setRouteWrite',
 			data: $('#routeWriteForm').serialize(),
+			beforeSend : function(xhr) {
+				xhr.setRequestHeader(header, token);
+			},
 			success: function(){			
 				$('<table/>', {
 					class: 'table table-dark table-striped'
