@@ -1,0 +1,70 @@
+@charset "UTF-8";
+
+#container {
+	text-align: center;
+}
+
+.table {
+	width: 60%;
+	margin: auto;
+}
+
+#friendModal {
+	text-align: center;
+}
+
+.imgContainer content1 {
+	position: relative;
+	float: left;
+	width: 20%;
+	left: 50px;
+	cursor: pointer;
+}
+
+.imgContainer content2 {
+	position: relative;
+	float: left;
+	width: 20%;
+	top: -252px;
+	left: 400px;
+	cursor: pointer;
+}
+
+.row {
+	height: 250px;
+}
+
+figure {
+	width: 61%;
+	position: relative;
+}
+
+figure .overlay {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	overflow: hidden;
+	width: 100%;
+	height: 0;
+	color: #fff;
+	background: rgba(0, 0, 0, 0.6);
+	-webkit-transition: .6s ease;
+	transition: .6s ease;
+}
+
+figure .overlay .description {
+	font-size: 20px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	text-align: center;
+}
+
+figure:hover .overlay {
+	display: block;
+	height: 100%;
+}

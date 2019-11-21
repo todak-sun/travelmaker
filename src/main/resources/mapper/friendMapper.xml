@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="friendSQL">
+	<select id="getList" resultType="friend">
+		SELECT fno, nickname, title, is_domestic, TO_CHAR(date_start, 'YYYY-MM-DD') as date_start, TO_CHAR(date_end, 'YYYY-MM-DD') as date_end, is_finish, kakao_chat, TO_CHAR(date_of_issue, 'YYYY-MM-DD') as date_of_issue FROM friends
+	</select>
+	
+	<insert id="setWrite" parameterType="friend">
+		INSERT INTO friends values(seq_fno.nextval, #{nickname}, #{title}, #{is_domestic}, #{date_start}, #{date_end}, 0, 'sdfsdf', sysdate)
+	</insert>
+	<select id="getSelectFno" parameterType="String" resultType="int">
+		SELECT * FROM (SELECT fno FROM friends WHERE nickname = #{nickname} order by fno desc) where rownum = 1
+	</select>
+	<insert id="setRouteWrite" parameterType="friendRoute">
+		INSERT INTO friends_route values(#{fno}, seq_fcno.nextval, #{date_start}, #{date_end}, #{content}, 0, 0, #{lat}, #{lng}, #{city})
+	</insert>
+	<delete id="cancelWrite" parameterType="int">
+		DELETE FROM friends WHERE fno = #{fno}
+	</delete>
+	<delete id="cancelRouteWrite" parameterType="int">
+		DELETE FROM friends_route WHERE fno = #{fno}
+	</delete>
+	
+	<select id="getView" parameterType="int" resultType="friend">
+		SELECT * FROM friends WHERE fno = #{fno}
+	</select>
+</mapper>

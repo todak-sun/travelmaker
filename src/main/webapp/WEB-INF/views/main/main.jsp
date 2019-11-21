@@ -41,8 +41,12 @@
 				<li class="nav-item"><a id="link-review" class="nav-link"
 					href="/story/list">글목록</a></li>
 				<li class="nav-item"><a class="nav-link" href="#">스토어</a></li>
-				<li class="nav-item"><a id="link-list" class="nav-link"
-					href="/community">커뮤니티</a></li>
+				<li class="nav-item"><a id="link-list" class="dropdown-toggle"
+					data-toggle="dropdown" href="#">커뮤니티<span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a href="#">대리구매</a></li>
+						<li><a href="/friend/list">동행 구하기</a></li>
+					</ul></li>
 				<sec:authentication var="userDetail" property="principal" />
 				<sec:authorize access="hasRole('ROLE_USER') and isAuthenticated()">
 					<%-- <p>어서와 방갑다 ${fn:substringBefore(user.username,"%")} 쉬볼세끼야</p> --%>
@@ -89,20 +93,18 @@
 	<br>
 	<br>
 	<br>
-
-
-	<body>
+<body>
 	<input type="text" id="message" />
 	<input type="button" id="sendBtn" value="전송" />
 	<div id="data"></div>
-	
-	
+
+
 </body>
 <script src="../../../resources/js/common/jquery-3.4.1.js"></script>
-	<script src="../../../resources/js/common/bootstrap.js"></script>
-	<script src="../../../resources/js/main/main.js"></script>
-	<script type="text/javascript" src="../../../resources/js/user/user.js"></script>
-	<script src="http://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js"></script>
-	<script src="../../../resources/js/websocket/websocket.js"></script>
+<script src="../../../resources/js/common/bootstrap.js"></script>
+<script src="../../../resources/js/main/main.js"></script>
+<script type="text/javascript" src="../../../resources/js/user/user.js"></script>
+<script src="http://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js"></script>
+<script src="../../../resources/js/websocket/websocket.js"></script>
 </body>
 </html>

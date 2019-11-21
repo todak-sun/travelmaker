@@ -8,14 +8,15 @@ import lombok.Setter;
 @Getter
 @Setter
 @Component
-public class FriendDTO {
+public class FriendRouteDTO {
 	private int fno;
-	private String nickname;
-	private String title;
-	private String is_domestic;
+	private int fcno;
 	private String date_start;
 	private String date_end;
+	private String content;
+	private int fcnt;
 	private int is_finish;
-	private String kakao_chat;
-	private String data_of_issue;
+	private String lat;
+	private String lng;
+	private String city;
 }
