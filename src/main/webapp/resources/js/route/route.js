@@ -29,7 +29,7 @@ $(function() {
 
   const [setRoute, getRoute] = useState(routeData);
   const [setRouteContent, getRouteContent] = useState(routeContentData);
-
+  // let preloadImages = [];
   setRoute({
     isDomestic: +getJSONfromQueryString().isDomestic,
     seq: +getEl("#seq").value,
@@ -67,6 +67,8 @@ $(function() {
     setRouteContent({ score: score });
   }
 
+  // getEl("#test1").addEventListener("click", test);
+
   // 코스 입력칸 초기화 함수
   function initCourseForm() {
     // 입력칸 초기화
@@ -92,12 +94,18 @@ $(function() {
   $starRatings.on("click", starRatingHandler);
 
   // 버튼 변수 선언 & 클릭 이벤트 부여
-  const previousBtn = getEl("#previous-btn");
-  const saveBtn = getEl("#save-btn");
-  const nextBtn = getEl("#next-btn");
-  previousBtn.addEventListener("click", selectCommand);
-  saveBtn.addEventListener("click", selectCommand);
-  nextBtn.addEventListener("click", selectCommand);
+  const btnPrevious = getEl("#btn-previous"); // 이전(2(왼) 3(왼))
+  const btnNext = getEl("#btn-next"); // 다음(1(가) 2(가))
+  const btnRouteSave = getEl("#btn-route-save"); // 저장(3(가))
+  const btnPreview = getEl("#btn-preview"); // 미리보기(3(오))
+  const btnCourseSave = getEl("#btn-course-save"); // 코스저장(2(오))
+
+  // const previousBtn = getEl("#previous-btn");
+  // const saveBtn = getEl("#save-btn");
+  // const nextBtn = getEl("#next-btn");
+  // previousBtn.addEventListener("click", selectCommand);
+  // saveBtn.addEventListener("click", selectCommand);
+  // nextBtn.addEventListener("click", selectCommand);
 
   //사용자 입력값 & 이벤트
   const title = getEl("#route-title");
@@ -113,7 +121,15 @@ $(function() {
   const score = getEl("input[name=score]");
 
   addSameEvent("change", routeDataBindHandler, title, epilogue, hashtag);
-  // addSameEvent("blur", title);
+  addSameEvent(
+    "click",
+    selectCommand,
+    btnPrevious,
+    btnNext,
+    btnRouteSave,
+    btnPreview,
+    btnCourseSave
+  );
   addSameEvent(
     "change",
     routeContentBindHandler,
@@ -137,13 +153,13 @@ $(function() {
     return new Promise(function() {
       let command = e.target.name;
       switch (command) {
-        case "previous-btn-2":
+        case "previous-btn-2": // 1단계로 빽
           return backToLevel(1);
-        case "previous-btn-3":
+        case "previous-btn-3": // 2단계로 빽
           return backToLevel(2);
-        case "next-btn-1":
+        case "next-btn-1": // 2단계로 전진
           return showLevel(2);
-        case "next-btn-2":
+        case "next-btn-2": // 3단계로 전진
           return showLevel(3);
         case "course-save-btn": // 코스 저장 버튼
           return saveCourse();
@@ -161,27 +177,55 @@ $(function() {
   function showCommand(commandLevel) {
     switch (commandLevel) {
       case 1:
-        previousBtn.setAttribute("disabled", "disabled");
-        saveBtn.setAttribute("disabled", "disabled");
-        nextBtn.name = "next-btn-1";
+        btnPrevious.setAttribute("disabled", "disabled"); //
+        btnPrevious.name = "previous-btn-1";
+
+        btnNext.removeAttribute("disabled"); //
+        btnNext.name = "next-btn-1";
+
+        btnCourseSave.setAttribute("disabled", "disabled"); //
+        btnCourseSave.name = "course-save-btn";
         break;
       case 2:
-        previousBtn.removeAttribute("disabled");
-        previousBtn.name = "previous-btn-2";
-        saveBtn.removeAttribute("disabled");
-        saveBtn.name = "course-save-btn";
-        saveBtn.value = "코스저장";
-        nextBtn.name = "next-btn-2";
-        nextBtn.value = "다음";
-        nextBtn.removeAttribute("data-target");
-        nextBtn.removeAttribute("data-toggle");
+        btnPrevious.removeAttribute("disabled"); //
+        btnPrevious.name = "previous-btn-2";
+
+        btnNext.removeAttribute("disabled"); //
+        btnNext.name = "next-btn-2";
+        btnNext.classList.remove("hide");
+
+        btnRouteSave.setAttribute("disabled", "disabled");
+        btnRouteSave.name = "route-save-btn";
+        btnRouteSave.classList.add("hide");
+
+        btnPreview.setAttribute("disabled", "disabled");
+        btnPreview.name = "preview-btn";
+        btnPreview.classList.add("hide");
+
+        btnCourseSave.removeAttribute("disabled"); //
+        btnCourseSave.name = "course-save-btn";
+        btnCourseSave.classList.remove("hide");
+
         break;
       case 3:
-        previousBtn.name = "previous-btn-3";
-        saveBtn.name = "route-save-btn";
-        saveBtn.value = "저장";
-        nextBtn.name = "preview-btn";
-        nextBtn.value = "미리보기";
+        btnPrevious.removeAttribute("disabled"); //
+        btnPrevious.name = "previous-btn-3";
+
+        btnNext.setAttribute("disabled", "disabled");
+        btnNext.name = "next-btn-3";
+        btnNext.classList.add("hide");
+
+        btnRouteSave.removeAttribute("disabled"); //
+        btnRouteSave.name = "route-save-btn";
+        btnRouteSave.classList.remove("hide");
+
+        btnPreview.removeAttribute("disabled"); //
+        btnPreview.name = "preview-btn";
+        btnPreview.classList.remove("hide");
+
+        btnCourseSave.setAttribute("disabled", "disabled");
+        btnCourseSave.name = "course-save-btn";
+        btnCourseSave.classList.add("hide");
         break;
       default:
         alert("코딩 다시해");
@@ -340,15 +384,25 @@ $(function() {
     if (patchedCourse)
       $savedCourses[0].removeChild(patchedCourse.parentElement);
 
+    // <h4>${place.value}</h4>
+    // <span>날짜 : ${dateStart.value} - ${dateEnd.value}</span>
+    // <button name="modify-course">수정</button><button name="delete-course">삭제</button>
+    // <input type="hidden" name="crno" value=${crno}>
+
     // 임시저장코스 추가
     const $frag = $(document.createDocumentFragment());
     const $li = $(`
                     <li draggable="true" droppable="true" style="[draggable='true'] {
                       -khtml-user-drag: element; }" >
-                      <h4>${place.value}</h4>
-                      <span>날짜 : ${dateStart.value} - ${dateEnd.value}</span>
-                      <button name="modify-course">수정</button><button name="delete-course">삭제</button>
-                      <input type="hidden" name="crno" value=${crno}>
+                      <div class="route-item">
+                        <span class="delete" name="delete-course">&times;</span>
+                        <h5>${place.value}</h5>
+                        <div class="route-info">
+                          <p><span>${dateStart.value}</span> ~ <span>${dateEnd.value}</span></p>
+                          <button name="modify-course">수정</button>
+                          <input type="hidden" name="crno" value=${crno}>
+                        </div>
+                      </div>
                     </li>
                 `);
     $frag.append($li);
@@ -378,59 +432,43 @@ $(function() {
     const crno = e.target.parentElement.children.namedItem("crno").value;
     alert(crno + "에이작스로 수정할 게시글 불러오기 추가");
 
-    getCourseAjax(crno).then(function(result) {
+    getCourseAjax(crno).then(result => {
       console.log(result);
       // 불러 온 후에 불러온 내용 루트컨텐트에 저장
       // 에이작스 석세스시 추가할 내용
-      const {
-        crno,
-        rno,
-        content,
-        lat,
-        lng,
-        location,
-        dateStart,
-        dateEnd,
-        score
-      } = result;
-      let arrLocation = location.split("_");
-      let nation = null;
-      let city = null;
-      let place = null;
+      let arrLocation = result.location.split("_");
+      location.value = result.location;
       if (arrLocation.length == 1) {
         place = arrLocation[0];
+        console.log(arrLocation[0]);
       } else {
         nation = arrLocation[0];
         city = arrLocation[1];
         place = arrLocation[2];
+        console.log(arrLocation[0]);
       }
+      content.value = result.content;
 
-      // nation.value = "";
-      // city.value = "";
-      // place.value = "";
-      // location.value = "";
-      // content.value = "";
-      // // 데이터셋 초기화
-      alert(place);
+      // 데이터셋 로드
       setRouteContent({
-        crno: crno,
-        rno: rno,
-        content: content,
-        lat: lat,
-        lng: lng,
-        place: place,
-        location: location,
-        dateStart: dateStart,
-        dateEnd: dateEnd,
-        score: score,
+        crno: result.crno,
+        rno: result.rno,
+        content: result.content,
+        lat: result.lat,
+        lng: result.lng,
+        place: result.place,
+        location: result.location,
+        dateStart: result.dateStart,
+        dateEnd: result.dateEnd,
+        score: result.score,
         fixed: 0
       });
-      if (arrLocation.length == 1) {
-        setRouteContent({
-          nation: nation,
-          city: city
-        });
-      }
+      // if (arrLocation.length == 1) {
+      //   setRouteContent({
+      //     nation: nation,
+      //     city: city
+      //   });
+      // }
     });
   }
 
@@ -461,9 +499,9 @@ $(function() {
   function drop(ev) {
     const moving = document.querySelector(".moving");
     const dropped = ev.target;
-    console.log(
-      "moving : " + moving.offsetTop + " // dropped : " + dropped.offsetTop
-    );
+    // console.log(
+    //   "moving : " + moving.offsetTop + " // dropped : " + dropped.offsetTop
+    // );
 
     if (moving.offsetTop > dropped.offsetTop) {
       // 위로 이동시킬 경우
@@ -498,6 +536,44 @@ $(function() {
     // 이동 완료 후 이동클래스 제거
     moving.classList.remove("moving");
   }
+  // function test() {
+  //   // let images = document.querySelector("input[name=images]").files;
+  //   // console.log(images.length);
+  //   // getImages(images);
+  //   testImage();
+  // }
+  // document.getElementById("files").addEventListener("change", testImage);
+  // function testImage() {
+  //   let reader = new FileReader();
+
+  //   reader.onload = function(e) {
+  //     document.getElementById("image").src = e.target.result;
+  //   };
+
+  //   reader.readAsDataURL(this.files[0]);
+  // }
+
+  // function getImages(images) {
+  //   if (!preloadImages.list) {
+  //     preloadImages.list = [];
+  //   }
+  //   let list = preloadImages.list;
+  //   for (let i = 0; i < images.length; i++) {
+  //     let img = new Image();
+  //     img.onload = function() {
+  //       let index = list.indexOf(this);
+  //       if (index !== -1) {
+  //         // remove image from the array once it's loaded
+  //         // for memory consumption reasons
+  //         list.splice(index, 1);
+  //       }
+  //     };
+  //     list.push(img);
+  //     img.src = images[i];
+  //     console.log("img.src : " + img.src);
+  //   }
+  //   console.log("list : " + list);
+  // }
 
   function getFormData(data) {
     const formData = new FormData();
@@ -536,33 +612,6 @@ $(function() {
     // 지도 넓이에 맞춤
     window.open(url, "", "width=815,height=600,left=300");
   }
-
-  // function getPreviewAjax(data) {
-  //   // 미리보기 가져오기
-  //   return $.ajax({
-  //     type: "GET",
-  //     url: "/api/route/getRouteView/" + data,
-  //     // contentType: "application/json",
-  //     // data: { rno: data },
-  //     dataType: "json"
-  //     // beforeSend: setRequestHeader
-  //   });
-  // }
-
-  // function getPreviewAjax2(data) {
-  //   // 미리보기 가져오기
-  //   return $.ajax({
-  //     type: "GET",
-  //     url: "/route/view/" + data,
-  //     dataType: "html"
-  //   });
-  // }
-
-  // function getPreviewAjaxSuccess2(result) {
-  //   let wnd = window.open("", "new window", "width=200,height=100");
-  //   wnd.document.write(result);
-  //   console.log(result);
-  // }
 
   function getOrder() {
     let orderJson = new Array();
