@@ -25,6 +25,8 @@ $(function() {
     fixed: 0
   };
 
+  // *******페이지 첫 로딩 시 필요한 처리들*******
+
   const [setRoute, getRoute] = useState(routeData);
   const [setRouteContent, getRouteContent] = useState(routeContentData);
 
@@ -35,16 +37,55 @@ $(function() {
   });
 
   getEl("#isDomestic").value = getRoute().isDomestic;
+  const $savedCourses = $(".saved-courses");
 
-  // $(".saved-courses>li").draggable({
-  //   stop: function(ev, ui) {
-  //     if (ui.originalPosition.top - ui.offset.top < 0) {
-  //       console.log("Dragged Down");
-  //     } else {
-  //       console.log("Dragged Up");
-  //     }
-  //   }
-  // });
+  // 데이터 바인드 관련 함수들
+  function routeDataBindHandler(e) {
+    const name = e.target.name;
+    const value = e.target.value;
+    setRoute({ [name]: value });
+  }
+
+  function routeContentBindHandler(e) {
+    const name = e.target.name;
+    const value = e.target.value;
+    setRouteContent({ [name]: value });
+  }
+
+  function starRatingHandler(e) {
+    e.preventDefault();
+    const $this = $(this);
+    $this
+      .parent()
+      .children("a")
+      .removeClass("on");
+    $this
+      .addClass("on")
+      .prevAll("a")
+      .addClass("on");
+    const score = $(".star_rating a.on").length;
+    setRouteContent({ score: score });
+  }
+
+  // 코스 입력칸 초기화 함수
+  function initCourseForm() {
+    // 입력칸 초기화
+    $("#images").val("");
+    nation.value = "";
+    city.value = "";
+    place.value = "";
+    location.value = "";
+    content.value = "";
+    // 데이터셋 초기화
+    setRouteContent({
+      crno: 0,
+      content: null,
+      lat: 0,
+      lng: 0,
+      location: null,
+      fixed: 0
+    });
+  }
 
   // 별점수 매기기
   const $starRatings = $(".star_rating a");
@@ -84,6 +125,13 @@ $(function() {
     dateStart,
     dateEnd
   );
+  // *******페이지 첫 로딩 시 필요한 처리들 끝*******
+  //
+  //
+  //
+  //
+  //
+  // 클릭 선택으로부터 페이지 시작!!!!!!!!!!!!!! 분기점 모음!!!!!!!!!!!!!!!!!!!!!
 
   function selectCommand(e) {
     return new Promise(function() {
@@ -141,82 +189,38 @@ $(function() {
     }
   }
 
-  function routeDataBindHandler(e) {
-    const name = e.target.name;
-    const value = e.target.value;
-    setRoute({ [name]: value });
-  }
-
-  function routeContentBindHandler(e) {
-    const name = e.target.name;
-    const value = e.target.value;
-    setRouteContent({ [name]: value });
-  }
-
-  function starRatingHandler(e) {
-    e.preventDefault();
-    const $this = $(this);
-    $this
-      .parent()
-      .children("a")
-      .removeClass("on");
-    $this
-      .addClass("on")
-      .prevAll("a")
-      .addClass("on");
-    const score = $(".star_rating a.on").length;
-    setRouteContent({ score: score });
-  }
-
-  function initCourseForm() {
-    // $("#images").replaceWith($("#images").clone(true));
-    // other browser 일때 초기화
-    // $("#images").val("");
-    // let inputFile = document.querySelector("input[name=images]");
-    // inputFile.select();
-    // document.selection.clear;
-    // let tempForm = document.createElement("form");
-    // tempForm.appendChild();
-    $("#images").val("");
-    nation.value = "";
-    city.value = "";
-    place.value = "";
-    location.value = "";
-    content.value = "";
-  }
-
+  // 단계별 실행 내용
   function showLevel(level) {
     switch (level) {
       case 2:
-        // 제목, 국내&해외 변수값 선언
+        let route = getRoute();
         // 제목 작성 여부 체크
-        if (!title.value) {
-          alert("제목을 입력해주세요");
-        } else {
-          // 제목이 빈칸이 아니면 DB에 route 틀 저장 및 작성 폼 생성
-          // showWriteFormAjax(routeTitle.value, destination)
-          let route = getRoute();
-          showLevel2Ajax(route)
+        if (!title.value) alert("제목을 입력해주세요");
+        // 제목이 빈칸이 아니면 DB에 route 틀 저장 및 작성 폼 생성
+        else
+          return showLevel2Ajax(route)
             .then(function(result) {
               showWriteForm(route.isDomestic);
               showCommand(level);
               $(".route-info-form").show();
-              $(".route-destination").hide();
               setRoute({ rno: result.rno });
               setRouteContent({ rno: result.rno, score: 3 });
               title.disabled = true;
             })
             .catch(console.error);
-        }
         break;
+
       case 3:
         // 코스가 1개 이상 저장되어있는지 확인 후
-        // 루트 인포 숨기기
-        $(".route-info-form").hide();
-        $(".route-epilogue-form").show();
-        $("#kakaoMapDiv").empty();
-        showCommand(level);
-        // 에필로그 작성창 열기
+        // DB에 저장된 순서 반영 & 루트 인포 숨기기 & 에필로그 작성창 열기
+        if ($savedCourses.length > 0)
+          return saveOrderAjax(getOrder())
+            .then(function() {
+              $(".route-info-form").hide();
+              $(".route-epilogue-form").show();
+              showCommand(level);
+            })
+            .catch(console.error);
         break;
 
       default:
@@ -224,13 +228,12 @@ $(function() {
     }
   }
 
+  // 단계별 뒤로 가기 실행 내용
   function backToLevel(level) {
-    // 뒤로 가기 버튼들
     switch (level) {
       case 1:
         showCommand(level);
         $(".route-info-form").hide();
-        $(".route-destination").show();
         setRoute({ rno: null });
         setRouteContent({ rno: null });
         title.disabled = false;
@@ -244,6 +247,19 @@ $(function() {
         break;
     }
   }
+  //
+  //
+  //
+  //
+  // 분기점 모음 끝!!!!!!!!!!!!!!!!
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
 
   function showWriteForm(isDomestic) {
     // <-- 국내 해외 폼 보여주기
@@ -273,10 +289,11 @@ $(function() {
     getEl("input[name=dateEnd]").value = today;
   }
 
-  // <-- 코스 저장
+  // <-- 코스 저장 관련
   function saveCourse() {
     const { isDomestic } = getRoute();
     const {
+      crno,
       content,
       place,
       city,
@@ -298,26 +315,188 @@ $(function() {
     // <- DB에 코스 임시저장 프로미스
     const formData = getFormData(getRouteContent());
 
-    saveCourseAjax(formData)
-      .then(() => {
-        saveCourseAjaxSuccess();
-      })
-      .catch(console.error);
+    if (crno == 0) {
+      // 처음 저장할 때
+      saveCourseAjax(formData)
+        .then(result => {
+          courseAjaxSuccess(result.crno);
+        })
+        .catch(console.error);
+    } else {
+      // 수정 저장할 때
+      alert("수정할때 들어오는 곳");
+      modifyCourseAjax(formData)
+        .then(result => {
+          courseAjaxSuccess(result.crno);
+        })
+        .catch(console.error);
+    }
   }
 
-  function saveCourseAjaxSuccess() {
+  function courseAjaxSuccess(crno) {
     // < 3.웹페이지에 코스 임시저장
+    // 수정된 임시저장코스 삭제(삭제할 게 있을 경우만)
+    let patchedCourse = document.querySelector(`li input[value='${crno}']`);
+    if (patchedCourse)
+      $savedCourses[0].removeChild(patchedCourse.parentElement);
+
+    // 임시저장코스 추가
     const $frag = $(document.createDocumentFragment());
     const $li = $(`
-                          <li>
-                            <h4>${place.value}</h4>
-                                <span>날짜 : ${dateStart.value} - ${dateEnd.value}</span>
-                            <input type="button" value="위로">
-                          </li>
-                          `);
+                    <li draggable="true" droppable="true" style="[draggable='true'] {
+                      -khtml-user-drag: element; }" >
+                      <h4>${place.value}</h4>
+                      <span>날짜 : ${dateStart.value} - ${dateEnd.value}</span>
+                      <button name="modify-course">수정</button><button name="delete-course">삭제</button>
+                      <input type="hidden" name="crno" value=${crno}>
+                    </li>
+                `);
     $frag.append($li);
-    $(".saved-courses").append($frag);
+    $savedCourses.append($frag);
+
+    Array.from($savedCourses[0].children).forEach(li => {
+      // addEvent(li, "dragstart", function(event) {
+      //   event.dataTransfer.setData("Text", this.id);
+      // });
+      li.addEventListener("dragstart", dragstart, false);
+      li.addEventListener("dragover", dragover, false);
+      // li.addEventListener("dragenter", dragenter, false);
+      // li.addEventListener("dragleave", dragleave, false);
+      li.addEventListener("drop", drop, false);
+      li.children
+        .namedItem("modify-course")
+        .addEventListener("click", modifyCourse);
+      li.children
+        .namedItem("delete-course")
+        .addEventListener("click", deleteCourse);
+    });
+
     initCourseForm();
+  }
+
+  function modifyCourse(e) {
+    const crno = e.target.parentElement.children.namedItem("crno").value;
+    alert(crno + "에이작스로 수정할 게시글 불러오기 추가");
+
+    getCourseAjax(crno).then(function(result) {
+      console.log(result);
+      // 불러 온 후에 불러온 내용 루트컨텐트에 저장
+      // 에이작스 석세스시 추가할 내용
+      const {
+        crno,
+        rno,
+        content,
+        lat,
+        lng,
+        location,
+        dateStart,
+        dateEnd,
+        score
+      } = result;
+      let arrLocation = location.split("_");
+      let nation = null;
+      let city = null;
+      let place = null;
+      if (arrLocation.length == 1) {
+        place = arrLocation[0];
+      } else {
+        nation = arrLocation[0];
+        city = arrLocation[1];
+        place = arrLocation[2];
+      }
+
+      // nation.value = "";
+      // city.value = "";
+      // place.value = "";
+      // location.value = "";
+      // content.value = "";
+      // // 데이터셋 초기화
+      alert(place);
+      setRouteContent({
+        crno: crno,
+        rno: rno,
+        content: content,
+        lat: lat,
+        lng: lng,
+        place: place,
+        location: location,
+        dateStart: dateStart,
+        dateEnd: dateEnd,
+        score: score,
+        fixed: 0
+      });
+      if (arrLocation.length == 1) {
+        setRouteContent({
+          nation: nation,
+          city: city
+        });
+      }
+    });
+  }
+
+  function deleteCourse(e) {
+    const crno = e.target.parentElement.children.namedItem("crno").value;
+    alert(crno + "에이작스로 삭제하기");
+    deleteCourseAjax(crno).then(result => {
+      let patchedCourse = document.querySelector(`li input[value='${crno}']`);
+      if (patchedCourse)
+        $savedCourses[0].removeChild(patchedCourse.parentElement);
+      console.log(result);
+      alert(crno + "코스를 삭제했습니다");
+    });
+  }
+
+  function dragstart(ev) {
+    // 선택한 코스에 이동할 대상이라는 클래스 추가
+    ev.dataTransfer.setData("Text", this.id);
+    ev.target.classList.add("moving");
+  }
+  function dragover(ev) {
+    ev.preventDefault();
+  }
+  // function dragenter(ev) {
+  // }
+  // function dragleave(ev) {
+  // }
+  function drop(ev) {
+    const moving = document.querySelector(".moving");
+    const dropped = ev.target;
+    console.log(
+      "moving : " + moving.offsetTop + " // dropped : " + dropped.offsetTop
+    );
+
+    if (moving.offsetTop > dropped.offsetTop) {
+      // 위로 이동시킬 경우
+      if (dropped.localName === "li") {
+        // li 선택한 경우
+        $savedCourses[0].insertBefore(moving, dropped);
+      } else if (dropped.parentElement.localName === "li") {
+        // li의 child를 선택한 경우
+        $savedCourses[0].insertBefore(moving, dropped.parentElement);
+      }
+    } else {
+      // 아래로 이동시킬 경우
+      // < -- 맨 아래로 이동시킬 경우 시작
+      if (
+        dropped.nextElementSibling === null ||
+        dropped.parentElement.nextElementSibling === null
+      ) {
+        $savedCourses[0].appendChild(moving);
+      }
+      // 맨 아래로 이동시킬 경우 끝 -->
+      if (dropped.localName === "li") {
+        // li 선택한 경우
+        $savedCourses[0].insertBefore(moving, dropped.nextElementSibling);
+      } else if (dropped.parentElement.localName === "li") {
+        // li의 child를 선택한 경우
+        $savedCourses[0].insertBefore(
+          moving,
+          dropped.parentElement.nextElementSibling
+        );
+      }
+    }
+    // 이동 완료 후 이동클래스 제거
+    moving.classList.remove("moving");
   }
 
   function getFormData(data) {
@@ -325,12 +504,9 @@ $(function() {
     let images = document.querySelector("input[name=images]").files;
     if (images.length > 5) return alert("이미지는 5개까지만 업로드 가능합니다");
     Array.from(images).forEach((image, idx) => {
-      console.log(idx + " : " + image);
+      // console.log(idx + " : " + image);
       formData.append("images", image);
     });
-    // for (let i = 0; i < images.length; i++) {
-    //   formData.append("images", images[i]);
-    // }
     const keys = Object.keys(data);
     const values = Object.values(data);
     for (let i = 0; i < keys.length; i++) {
@@ -359,45 +535,63 @@ $(function() {
     }`;
     // 지도 넓이에 맞춤
     window.open(url, "", "width=815,height=600,left=300");
-
-    // getPreviewAjax2(getRoute().rno)
-    //   .then(function(result) {
-    //     getPreviewAjaxSuccess2(result);
-    //   })
-    //   .catch(console.error);
-
-    // getPreviewAjax(getRoute().rno)
-    //   .then(getPreviewAjaxSuccess)
-    //   .catch(console.error);
   }
 
-  function getPreviewAjax(data) {
-    // 미리보기 가져오기
-    return $.ajax({
-      type: "GET",
-      url: "/api/route/getRouteView/" + data,
-      // contentType: "application/json",
-      // data: { rno: data },
-      dataType: "json"
-      // beforeSend: setRequestHeader
+  // function getPreviewAjax(data) {
+  //   // 미리보기 가져오기
+  //   return $.ajax({
+  //     type: "GET",
+  //     url: "/api/route/getRouteView/" + data,
+  //     // contentType: "application/json",
+  //     // data: { rno: data },
+  //     dataType: "json"
+  //     // beforeSend: setRequestHeader
+  //   });
+  // }
+
+  // function getPreviewAjax2(data) {
+  //   // 미리보기 가져오기
+  //   return $.ajax({
+  //     type: "GET",
+  //     url: "/route/view/" + data,
+  //     dataType: "html"
+  //   });
+  // }
+
+  // function getPreviewAjaxSuccess2(result) {
+  //   let wnd = window.open("", "new window", "width=200,height=100");
+  //   wnd.document.write(result);
+  //   console.log(result);
+  // }
+
+  function getOrder() {
+    let orderJson = new Array();
+    Array.from($savedCourses[0].children).forEach(course => {
+      let crno = course.children.namedItem("crno").value;
+      orderJson.push(crno);
     });
+    return orderJson;
   }
 
-  function getPreviewAjax2(data) {
-    // 미리보기 가져오기
-    return $.ajax({
-      type: "GET",
-      url: "/route/view/" + data,
-      dataType: "html"
-    });
-  }
-
-  function getPreviewAjaxSuccess2(result) {
-    let wnd = window.open("", "new window", "width=200,height=100");
-    wnd.document.write(result);
-    console.log(result);
-  }
-
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
   //유효성 검사하는 부분.
   function checkValidation(data, isDomestic) {
     const { content, dateStart, dateEnd, nation, city, place } = data;
@@ -415,7 +609,7 @@ $(function() {
   function checkPlaceValidation(value) {
     if (!value) {
       //유효성 검사 실패 로직
-      alert("컨텐츠를 입력해주세요");
+      alert("장소를 입력해주세요");
       place.focus();
       return false;
     }
@@ -426,7 +620,7 @@ $(function() {
   function checkCityValidation(value) {
     if (!value) {
       //유효성 검사 실패 로직
-      alert("컨텐츠를 입력해주세요");
+      alert("도시를 입력해주세요");
       city.focus();
       return false;
     }
@@ -437,7 +631,7 @@ $(function() {
   function checkDateValidation(value) {
     if (!value) {
       //유효성 검사 실패 로직
-      alert("컨텐츠를 입력해주세요");
+      alert("날짜를 입력해주세요");
       dateStart.focus();
       return false;
     }
@@ -448,7 +642,7 @@ $(function() {
   function checkNationValidation(value) {
     if (!value) {
       //유효성 검사 실패 로직
-      alert("컨텐츠를 입력해주세요");
+      alert("나라를 입력해주세요");
       nation.focus();
       return false;
     }
@@ -460,7 +654,7 @@ $(function() {
     if (!value) {
       //유효성 검사 실패 로직
       content.focus();
-      alert("컨텐츠를 입력해주세요");
+      alert("내용을 입력해주세요");
       return false;
     }
 
@@ -475,7 +669,25 @@ $(function() {
     }
   }
 
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
   //ajax 메소드 모음
+  // 글 전체 저장
   function saveRouteAjax(data) {
     return $.ajax({
       type: "POST",
@@ -486,14 +698,55 @@ $(function() {
     });
   }
 
+  // 코스 저장
   function saveCourseAjax(formData) {
-    // < 2.DB에 코스 임시저장
     return $.ajax({
       type: "POST",
-      url: "/api/route/saveCourse",
+      url: "/api/route/Course",
       processData: false,
       contentType: false,
       data: formData,
+      beforeSend: setRequestHeader
+    });
+  }
+
+  // 코스 불러오기(수정하기 위해)
+  function getCourseAjax(crno) {
+    return $.ajax({
+      type: "GET",
+      url: "/api/route/Course/" + crno,
+      beforeSend: setRequestHeader
+    });
+  }
+
+  // 코스 수정
+  function modifyCourseAjax(formData) {
+    return $.ajax({
+      type: "POST",
+      url: "/api/route/Course-Modify",
+      processData: false,
+      contentType: false,
+      data: formData,
+      beforeSend: setRequestHeader
+    });
+  }
+
+  // 코스 삭제
+  function deleteCourseAjax(crno) {
+    return $.ajax({
+      type: "DELETE",
+      url: "/api/route/Course/" + crno,
+      beforeSend: setRequestHeader
+    });
+  }
+
+  // 코스 순서 수정
+  function saveOrderAjax(order) {
+    return $.ajax({
+      type: "PATCH",
+      contentType: "application/json",
+      url: "/api/route/saveOrder",
+      data: JSON.stringify(order), //순서 가져옴
       beforeSend: setRequestHeader
     });
   }
@@ -509,6 +762,25 @@ $(function() {
       beforeSend: setRequestHeader
     });
   }
+
+  ////////////////////////////////////////// 카카오맵 ////////////////////////////////////////
+  ////////////////////////////////////////// 카카오맵 ////////////////////////////////////////
+  ////////////////////////////////////////// 카카오맵 ////////////////////////////////////////
+  ////////////////////////////////////////// 카카오맵 ////////////////////////////////////////
+  ////////////////////////////////////////// 카카오맵 ////////////////////////////////////////
+  ////////////////////////////////////////// 카카오맵 ////////////////////////////////////////
+  ////////////////////////////////////////// 카카오맵 ////////////////////////////////////////
+  ////////////////////////////////////////// 카카오맵 ////////////////////////////////////////
+  ////////////////////////////////////////// 카카오맵 ////////////////////////////////////////
+  ////////////////////////////////////////// 카카오맵 ////////////////////////////////////////
+  ////////////////////////////////////////// 카카오맵 ////////////////////////////////////////
+  ////////////////////////////////////////// 카카오맵 ////////////////////////////////////////
+  ////////////////////////////////////////// 카카오맵 ////////////////////////////////////////
+  ////////////////////////////////////////// 카카오맵 ////////////////////////////////////////
+  ////////////////////////////////////////// 카카오맵 ////////////////////////////////////////
+  ////////////////////////////////////////// 카카오맵 ////////////////////////////////////////
+  ////////////////////////////////////////// 카카오맵 ////////////////////////////////////////
+  ////////////////////////////////////////// 카카오맵 ////////////////////////////////////////
 
   // Kakao Map
   let markers, mapContainer, mapOption, map, ps, infowindow;
@@ -862,6 +1134,36 @@ $(function() {
   }
 });
 
+////////////////////////////////////////// 카카오맵 ////////////////////////////////////////
+////////////////////////////////////////// 카카오맵 ////////////////////////////////////////
+////////////////////////////////////////// 카카오맵 ////////////////////////////////////////
+////////////////////////////////////////// 카카오맵 ////////////////////////////////////////
+////////////////////////////////////////// 카카오맵 ////////////////////////////////////////
+////////////////////////////////////////// 카카오맵 ////////////////////////////////////////
+////////////////////////////////////////// 카카오맵 ////////////////////////////////////////
+////////////////////////////////////////// 카카오맵 ////////////////////////////////////////
+////////////////////////////////////////// 카카오맵 ////////////////////////////////////////
+////////////////////////////////////////// 카카오맵 ////////////////////////////////////////
+////////////////////////////////////////// 카카오맵 ////////////////////////////////////////
+////////////////////////////////////////// 카카오맵 ////////////////////////////////////////
+////////////////////////////////////////// 카카오맵 ////////////////////////////////////////
+////////////////////////////////////////// 카카오맵 ////////////////////////////////////////
+////////////////////////////////////////// 카카오맵 ////////////////////////////////////////
+////////////////////////////////////////// 카카오맵 ////////////////////////////////////////
+////////////////////////////////////////// 카카오맵 ////////////////////////////////////////
+////////////////////////////////////////// 카카오맵 ////////////////////////////////////////
+//
+//
+//
+//
+//
+//
+// 기능함수들 모음
+//
+//
+//
+
+// 주소에서 값따오는 함수
 function getJSONfromQueryString() {
   let qs = location.search.slice(1).split("%");
   const obj = {};
@@ -872,6 +1174,7 @@ function getJSONfromQueryString() {
   return JSON.parse(JSON.stringify(obj));
 }
 
+// 이벤트 거는 함수
 function addSameEvent(event, handler, ...targets) {
   targets.forEach(target => {
     target.addEventListener(event, handler);

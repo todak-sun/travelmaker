@@ -30,7 +30,7 @@
 			remember-me-parameter="remember-me" data-source-ref="dataSource" /> -->
 			
 		<!-- enable csrf protection -->
-		<!-- <csrf /> -->
+		<csrf />
 		
 	</http>
 

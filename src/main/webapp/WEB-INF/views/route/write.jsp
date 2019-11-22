@@ -172,31 +172,15 @@
             value="다음"
           />
 
-          <ol class="saved-courses">
-            <%--
-            <li>
-              --%> <%--
-              <h4>첫번째 제목</h4>
-              --%> <%-- <span>날짜 : 2019-11-11 - 2019-12-12</span>--%> <%--
-              <input type="button" value="위로" />--%> <%--
-            </li>
-            --%> <%--
-            <li>
-              --%> <%--
-              <h4>두번째 제목</h4>
-              --%> <%-- <span>날짜 : 2019-11-11 - 2019-12-12</span>--%> <%--
-              <input type="button" value="위로" />--%> <%--
-            </li>
-            --%>
-          </ol>
+          <ol class="saved-courses"></ol>
         </div>
         <!-- 커맨드 박스 -->
       </div>
       <form id="route-write-form" name="route-write-form" method="post">
         <div class="route-destination">
           <input type="hidden" id="isDomestic" name="isDomestic" value="" />
-          <input type="hidden" id="seq" value="1" />
-          <input type="hidden" id="nickname" value="testuser" />
+          <input type="hidden" id="seq" value="${userDetail.seq}" />
+          <input type="hidden" id="nickname" value="${userDetail.nickname}" />
         </div>
       </form>
 
@@ -298,6 +282,8 @@
     <!-- kakao map -->
 
     <%@include file="../common/editor-js.jsp" %>
+
+    <!-- <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script> -->
     <script
       type="text/javascript"
       src="${pageContext.request.contextPath}/resources/js/route/route.js"

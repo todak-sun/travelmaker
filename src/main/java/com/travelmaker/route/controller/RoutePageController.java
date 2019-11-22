@@ -21,6 +21,9 @@ public class RoutePageController {
 
     @RequestMapping(value = "/write")
     public String routeWirteForm(Model model, @RequestParam int isDomestic) {
+    	
+    	// 해당 아이디로 작성중인 글이 있었다면 불러오겠냐고 한번 물어봐줌 , 예 하면 불러와주고 아니고 하면 DB에서 삭제함 ========= 나중에 추가할 기능
+    	
         model.addAttribute("isDomestic", isDomestic);
         // dto를 서버DB에 저장
         return "route/write";
