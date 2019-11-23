@@ -55,4 +55,18 @@ public class FriendServiceImpl implements FriendService {
 	public void setRequestWrite(FriendRequestDTO friendRequestDTO) {
 		friendDAO.setRequestWrite(friendRequestDTO);
 	}
+	public FriendRequestDTO getFriendRequestDTO(int data) {
+		return friendDAO.getFriendRequestDTO(data);
+	}
+	
+	@Override
+	public FriendRouteDTO getFriendRouteDTO(int fcno) {
+		return friendDAO.getFriendRouteDTO(fcno);
+	}
+
+	@Override
+	public FriendDTO getFriendDTO(int fno) {
+		return friendDAO.getFriendDTO(fno);
+	}
+
 }

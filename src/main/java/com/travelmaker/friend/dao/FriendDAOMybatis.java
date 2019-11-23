@@ -64,5 +64,22 @@ public class FriendDAOMybatis implements FriendDAO {
 	public void setRequestWrite(FriendRequestDTO friendRequestDTO) {
 		sqlSession.insert("friendSQL.setRequestWrite", friendRequestDTO);
 	}
+	public FriendRequestDTO getFriendRequestDTO(int data) {
+		return sqlSession.selectOne("friendSQL.getFriendRequestDTO", data);
+	}
+
+	@Override
+	public FriendRouteDTO getFriendRouteDTO(int fcno) {
+		return sqlSession.selectOne("friendSQL.getFriendRouteDTO", fcno);
+	}
+
+	@Override
+	public FriendDTO getFriendDTO(int fno) {
+		return sqlSession.selectOne("friendSQL.getFriendDTO",fno);
+	}
+	
+	
+	
+	
 
 }

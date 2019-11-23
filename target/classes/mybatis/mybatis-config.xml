@@ -53,6 +53,9 @@
 			alias="follow" />
 		<typeAlias type="com.travelmaker.user.domain.UserDTO"
 			alias="user" />
+
+		<typeAlias type="com.travelmaker.alarm.domain.AlarmDTO"
+			alias="alarm" />
 	</typeAliases>
 
 	<typeHandlers>

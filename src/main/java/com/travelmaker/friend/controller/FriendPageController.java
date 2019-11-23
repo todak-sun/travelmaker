@@ -37,7 +37,6 @@ public class FriendPageController {
 	@RequestMapping(value = "/setWrite", method = RequestMethod.POST)
 	public String setWrite(@ModelAttribute FriendDTO friendDTO, Model model) {
 		int fno = friendService.setWrite(friendDTO);
-		System.out.println(friendDTO.toString());
 		model.addAttribute("is_domestic", friendDTO.getIs_domestic());
 		model.addAttribute("fno", fno);
 		

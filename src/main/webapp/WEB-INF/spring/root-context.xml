@@ -62,6 +62,13 @@
 	<context:component-scan
 		base-package="com.travelmaker.util.websockethandler" />
 
+	<context:component-scan
+		base-package="com.travelmaker.alarm.domain" />
+	<context:component-scan
+		base-package="com.travelmaker.alarm.dao" />
+	<context:component-scan
+		base-package="com.travelmaker.alarm.service" />
+
 
 	<bean id="dataSource"
 		class="org.apache.tomcat.dbcp.dbcp2.BasicDataSource">
@@ -94,6 +101,7 @@
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 
-	<bean id="websocketHandler" class="com.travelmaker.util.websockethandler.WebsocketHandler" />
+	<bean id="websocketHandler"
+		class="com.travelmaker.util.websockethandler.WebsocketHandler" />
 
 </beans>

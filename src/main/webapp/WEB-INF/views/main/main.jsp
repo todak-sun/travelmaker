@@ -53,6 +53,10 @@
 					<p>${userDetail.id}</p>
 				</sec:authorize>
 			</ul>
+			<sec:authorize access="hasRole('ROLE_USER') and isAuthenticated()">
+			<img src="../../../resources/img/alarm/alarmOff.png" id="alarmOff"  height="30" width="30">
+			<img src="../../../resources/img/alarm/alarmON.jpg" id="alarmOn" onclick="alarmDataload(${userDetail.seq})"  height="30" width="30" style="display: none;">
+			</sec:authorize>
 			<button id="btn-write" class="btn btn-outline-light">글쓰기</button>
 			<div class="btn-group" role="group">
 				<button id="btn-user" class="dropdown-toggle btn btn-outline-light"
@@ -93,10 +97,10 @@
 	<br>
 	<br>
 	<br>
-<body>
-	<input type="text" id="message" />
-	<input type="button" id="sendBtn" value="전송" />
-	<div id="data"></div>
+	<div id="alarmDisplay"  style="display: none;">
+		<input type="button" value="닫기" id="closeAlarm"><br>
+	</div>
+	<input type="button" id="sendBtn" value="전송" onclick="friendAlarm('4','rtr456@naver.com%kakao')"/>
 
 
 </body>

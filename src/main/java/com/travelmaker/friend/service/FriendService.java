@@ -24,4 +24,9 @@ public interface FriendService {
 	public List<FriendRouteDTO> getRouteView(String fno);
 
 	public void setRequestWrite(FriendRequestDTO friendRequestDTO);
+	public FriendRequestDTO getFriendRequestDTO(int data);
+
+	FriendRouteDTO getFriendRouteDTO(int fcno);
+
+	FriendDTO getFriendDTO(int fno);
 }

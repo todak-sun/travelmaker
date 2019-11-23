@@ -1,6 +1,7 @@
 package com.travelmaker.friend.domain;
 
 import org.springframework.stereotype.Component;
+import java.sql.Date;
 
 import lombok.Data;
 
@@ -12,7 +13,7 @@ public class FriendRequestDTO {
 	private int seq;
 	private String content;
 	private int is_permit;
-	private String date_start;
-	private String date_end;
+	private Date date_start;
+	private Date date_end;
 	private int is_read;
 }
