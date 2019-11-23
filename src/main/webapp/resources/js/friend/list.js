@@ -9,15 +9,19 @@ $().ready(function() {
 	$.ajax({
 		type : 'post',
 		url : '/friend/getList',
+		data : {
+			'pg' : $('#pg').val()
+		},
 		dataType : 'json',
 		beforeSend : function(xhr) {
 			xhr.setRequestHeader(header, token);
 		},
 		success : function(data) {
 			console.log('success');
-			alert(data.responseText);
+			// alert(data.responseText);
 			console.log(JSON.stringify(data));
-			$.each(data, function(index, items) {
+
+			$.each(data.list, function(index, items) {
 				var is_finish = '';
 
 				if (items.is_finish == 0) {
@@ -26,10 +30,13 @@ $().ready(function() {
 					is_finish = '마감';
 				}
 
-				$('<tr/>').append($('<td/>', {
+				$('<tr/>', {
+					onclick : 'location.href="/friend/view/' + items.fno + '"',
+					style : 'cursor: pointer;'
+				}).append($('<td/>', {
 					text : items.fno
 				})).append($('<td/>', {
-					text : items.nickname
+					text : items.id
 				})).append($('<td/>', {
 					text : items.title
 				})).append($('<td/>', {
@@ -38,6 +45,8 @@ $().ready(function() {
 					text : is_finish
 				})).appendTo($('#dataTable'));
 			});
+
+			$('.pagination').html(data.friendPaging.pagingHTML);
 		},
 		error : function(error) {
 			console.log('fail');

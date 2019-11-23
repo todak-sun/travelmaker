@@ -15,15 +15,16 @@
 	href="${pageContext.request.contextPath}/resources/css/friend/list.css" />
 </head>
 <body>
+	<input type="hidden" id="pg" value="${pg }">
 	<div id="container">
 		<br />
 		<h2>동행 리스트</h2>
 		<br />
-		<table class="table">
-			<thead>
+		<table class="table table-hover">
+			<thead class="thead-light">
 				<tr>
 					<th>번호</th>
-					<th>이름</th>
+					<th>아이디</th>
 					<th>제목</th>
 					<th>여행기간</th>
 					<th>마감유무</th>
@@ -33,6 +34,8 @@
 
 			</tbody>
 		</table>
+		<br />
+		<ul class="pagination justify-content-center"></ul>
 		<br />
 		<button type="button" id="writeBtn" class="btn btn-dark"
 			data-toggle="modal" data-target="#friendModal">글 쓰기</button>

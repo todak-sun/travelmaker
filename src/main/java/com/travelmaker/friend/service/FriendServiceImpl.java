@@ -1,12 +1,14 @@
 package com.travelmaker.friend.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.travelmaker.friend.dao.FriendDAO;
 import com.travelmaker.friend.domain.FriendDTO;
+import com.travelmaker.friend.domain.FriendRequestDTO;
 import com.travelmaker.friend.domain.FriendRouteDTO;
 
 @Service("friendService")
@@ -15,13 +17,8 @@ public class FriendServiceImpl implements FriendService {
 	FriendDAO friendDAO;
 	
 	@Override
-	public List<FriendDTO> getList() {
-		return friendDAO.getList();
-	}
-
-	@Override
-	public FriendDTO getView(String fno) {
-		return friendDAO.getView(fno);
+	public List<FriendDTO> getList(Map<String, Integer> map) {
+		return friendDAO.getList(map);
 	}
 
 	@Override
@@ -39,4 +36,23 @@ public class FriendServiceImpl implements FriendService {
 		friendDAO.cancelWrite(fno);
 	}
 
+	@Override
+	public int getTotalA() {
+		return friendDAO.getTotalA();
+	}
+
+	@Override
+	public FriendDTO getView(String fno) {
+		return friendDAO.getView(fno);
+	}
+
+	@Override
+	public List<FriendRouteDTO> getRouteView(String fno) {
+		return friendDAO.getRouteView(fno);
+	}
+
+	@Override
+	public void setRequestWrite(FriendRequestDTO friendRequestDTO) {
+		friendDAO.setRequestWrite(friendRequestDTO);
+	}
 }

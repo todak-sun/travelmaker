@@ -2,8 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="friendSQL">
-	<select id="getList" resultType="friend">
-		SELECT fno, seq, id, title, is_domestic, TO_CHAR(date_start, 'YYYY-MM-DD') as date_start, TO_CHAR(date_end, 'YYYY-MM-DD') as date_end, is_finish, kakao_chat, TO_CHAR(date_of_issue, 'YYYY-MM-DD') as date_of_issue FROM friends
+	<select id="getList" parameterType="java.util.Map" resultType="friend">
+		<![CDATA[select * from (select rownum rn, tt.* from (select * from friends order by fno desc) tt) where rn between #{startNum} and #{endNum}]]>
+	</select>
+	<select id="getTotalA" resultType="int">
+		SELECT count(rownum) FROM friends
 	</select>
 	
 	<insert id="setWrite" parameterType="friend">
@@ -25,4 +28,14 @@
 	<select id="getView" parameterType="int" resultType="friend">
 		SELECT * FROM friends WHERE fno = #{fno}
 	</select>
+	<select id="getRouteView" parameterType="int" resultType="friendRoute">
+		SELECT * FROM friends_route WHERE fno = #{fno}
+	</select>
+	<select id="getRequestView" parameterType="int" resultType="friendRequest">
+		SELECT * FROM friend_request WHERE fcno = #{fcno}
+	</select>
+	
+	<insert id="setRequestWrite" parameterType="friendRequest">
+		INSERT INTO friend_request values(#{fcno}, seq_fccno.nextval, #{seq}, #{content}, 0, #{date_start}, #{date_end}, 0)
+	</insert>
 </mapper>

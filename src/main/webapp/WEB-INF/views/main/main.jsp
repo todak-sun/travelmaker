@@ -45,7 +45,7 @@
 					data-toggle="dropdown" href="#">커뮤니티<span class="caret"></span></a>
 					<ul class="dropdown-menu">
 						<li><a href="#">대리구매</a></li>
-						<li><a href="/friend/list">동행 구하기</a></li>
+						<li><a href="/friend/list/1">동행 구하기</a></li>
 					</ul></li>
 				<sec:authentication var="userDetail" property="principal" />
 				<sec:authorize access="hasRole('ROLE_USER') and isAuthenticated()">

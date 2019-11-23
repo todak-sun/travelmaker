@@ -27,6 +27,9 @@
 		<typeAlias
 			type="com.travelmaker.friend.domain.FriendRouteDTO"
 			alias="friendRoute" />
+		<typeAlias
+			type="com.travelmaker.friend.domain.FriendRequestDTO"
+			alias="friendRequest" />
 
 		<typeAlias
 			type="com.travelmaker.purchase.domain.PurchaseAdDTO"

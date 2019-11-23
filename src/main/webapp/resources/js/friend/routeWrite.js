@@ -125,15 +125,21 @@ $('#nextBtn').click(function(){
 
 $('#cancelBtn').click(function(){
 	var result = confirm('정말로 취소하시겠습니까?');
-	
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+
+	if(!result) return;
 	if(result) {
 		$.ajax({
 			type: 'post',
 			url: '/friend/cancelWrite',
-			data: $('#fno').val(),
+			data: {'fno' : $('#fno').val()},
+			beforeSend : function(xhr) {
+				xhr.setRequestHeader(header, token);
+			},
 			success: function(){
 				alert('취소하였습니다.');
-				location.href = '/friend/list';
+				location.href = '/friend/list/1';
 			},
 			error: function(error){
 				console.log(error);
@@ -150,7 +156,7 @@ $('#checkBtn').click(function(){
 		
 		if(result) {
 			alert('저장하였습니다.');
-			location.href = '/friend/list';
+			location.href = '/friend/list/1';
 		}
 	}
 });

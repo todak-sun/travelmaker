@@ -60,6 +60,6 @@ $('#cancel').click(function() {
 
 	if (result) {
 		alert('취소하였습니다.');
-		location.href = '/friend/list';
+		location.href = '/friend/list/1';
 	}
 });

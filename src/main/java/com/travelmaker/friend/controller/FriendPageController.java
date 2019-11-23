@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.travelmaker.friend.domain.FriendDTO;
 import com.travelmaker.friend.service.FriendService;
@@ -18,8 +19,10 @@ public class FriendPageController {
 	FriendService friendService;
 	
 	// 리스트 페이지 이동
-	@RequestMapping(value="/list", method = RequestMethod.GET)
-	public String list() {
+	@RequestMapping(value="/list/{pg}", method = RequestMethod.GET)
+	public String list(@PathVariable String pg, Model model) {
+		model.addAttribute("pg", pg);
+		
 		return "/friend/list";
 	}
 	
@@ -40,11 +43,11 @@ public class FriendPageController {
 		
 		return "/friend/routeWrite";
 	}
-	@RequestMapping(value = "/friendView/{fno}", method = RequestMethod.GET)
+	@RequestMapping(value = "/view/{fno}", method = RequestMethod.GET)
 	public String friendView(@PathVariable String fno, Model model) {
 		FriendDTO friendDTO = friendService.getView(fno);
 		model.addAttribute("friendDTO", friendDTO);
 		
-		return "/friend/friendView";
+		return "/friend/view";
 	}
 }
