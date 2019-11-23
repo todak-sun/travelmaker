@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.travelmaker.friend.domain.FriendDTO;
+import com.travelmaker.friend.domain.FriendRequestDTO;
 import com.travelmaker.friend.domain.FriendRouteDTO;
 
 @Repository("friendDAO")
@@ -42,5 +43,24 @@ public class FriendDAOMybatis implements FriendDAO {
 		sqlSession.delete("friendSQL.cancelWrite", Integer.parseInt(fno));
 		sqlSession.delete("friendSQL.cancelRouteWrite", Integer.parseInt(fno));
 	}
+
+	@Override
+	public FriendRequestDTO getFriendRequestDTO(int data) {
+		return sqlSession.selectOne("friendSQL.getFriendRequestDTO", data);
+	}
+
+	@Override
+	public FriendRouteDTO getFriendRouteDTO(int fcno) {
+		return sqlSession.selectOne("friendSQL.getFriendRouteDTO", fcno);
+	}
+
+	@Override
+	public FriendDTO getFriendDTO(int fno) {
+		return sqlSession.selectOne("friendSQL.getFriendDTO",fno);
+	}
+	
+	
+	
+	
 
 }

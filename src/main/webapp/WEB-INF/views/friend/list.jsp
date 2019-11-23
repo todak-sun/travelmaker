@@ -23,7 +23,7 @@
 			<thead>
 				<tr>
 					<th>번호</th>
-					<th>이름</th>
+					<th>아이디</th>
 					<th>제목</th>
 					<th>여행기간</th>
 					<th>마감유무</th>

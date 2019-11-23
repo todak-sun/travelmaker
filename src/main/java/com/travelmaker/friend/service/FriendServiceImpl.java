@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.travelmaker.friend.dao.FriendDAO;
 import com.travelmaker.friend.domain.FriendDTO;
+import com.travelmaker.friend.domain.FriendRequestDTO;
 import com.travelmaker.friend.domain.FriendRouteDTO;
 
 @Service("friendService")
@@ -37,6 +38,21 @@ public class FriendServiceImpl implements FriendService {
 	@Override
 	public void cancelWrite(String fno) {
 		friendDAO.cancelWrite(fno);
+	}
+
+	@Override
+	public FriendRequestDTO getFriendRequestDTO(int data) {
+		return friendDAO.getFriendRequestDTO(data);
+	}
+	
+	@Override
+	public FriendRouteDTO getFriendRouteDTO(int fcno) {
+		return friendDAO.getFriendRouteDTO(fcno);
+	}
+
+	@Override
+	public FriendDTO getFriendDTO(int fno) {
+		return friendDAO.getFriendDTO(fno);
 	}
 
 }

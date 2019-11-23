@@ -29,7 +29,7 @@ $().ready(function() {
 				$('<tr/>').append($('<td/>', {
 					text : items.fno
 				})).append($('<td/>', {
-					text : items.nickname
+					text : items.id
 				})).append($('<td/>', {
 					text : items.title
 				})).append($('<td/>', {

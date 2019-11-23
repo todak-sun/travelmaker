@@ -9,4 +9,5 @@ public interface UserDAO {
 	public UserDTO checkPassword(UserDTO userDTO);
 	public void userModify(UserDTO userDTO);
 	public void userWithdrawal(UserDTO userDTO);
+	public UserDTO getUserDTO(int seq);
 }

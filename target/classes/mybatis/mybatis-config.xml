@@ -27,6 +27,9 @@
 		<typeAlias
 			type="com.travelmaker.friend.domain.FriendRouteDTO"
 			alias="friendRoute" />
+		<typeAlias
+			type="com.travelmaker.friend.domain.FriendRequestDTO"
+			alias="friendRequestDTO" />
 
 		<typeAlias
 			type="com.travelmaker.purchase.domain.PurchaseAdDTO"
@@ -50,6 +53,9 @@
 			alias="follow" />
 		<typeAlias type="com.travelmaker.user.domain.UserDTO"
 			alias="user" />
+
+		<typeAlias type="com.travelmaker.alarm.domain.AlarmDTO"
+			alias="alarm" />
 	</typeAliases>
 
 	<typeHandlers>
