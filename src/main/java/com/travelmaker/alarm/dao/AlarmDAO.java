@@ -10,4 +10,6 @@ public interface AlarmDAO {
 
 	public List<AlarmDTO> getAlarmList(String seq);
 
+	public int alarmChange(int ano);
+
 }

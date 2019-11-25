@@ -28,6 +28,7 @@
 <body>
 	<input type="hidden" id="csrfTokenName" value="${_csrf.parameterName}" />
 	<input type="hidden" id="csrfTokenValue" value="${_csrf.token}" />
+	
 	<!-- 네비게이션 영역 시작 -->
 	<nav id="main-nav"
 		class="navbar navbar-expand-sm navbar-dark bg-dark fixed-top">
@@ -54,7 +55,7 @@
 				</sec:authorize>
 			</ul>
 			<sec:authorize access="hasRole('ROLE_USER') and isAuthenticated()">
-			<img src="../../../resources/img/alarm/alarmOff.png" id="alarmOff"  height="30" width="30">
+			<img src="../../../resources/img/alarm/alarmOff.png" id="alarmOff" onclick="alarmDataload(${userDetail.seq})" data-seq="${userDetail.seq}" height="30" width="30">
 			<img src="../../../resources/img/alarm/alarmON.jpg" id="alarmOn" onclick="alarmDataload(${userDetail.seq})"  height="30" width="30" style="display: none;">
 			</sec:authorize>
 			<button id="btn-write" class="btn btn-outline-light">글쓰기</button>
@@ -106,9 +107,9 @@
 </body>
 <script src="../../../resources/js/common/jquery-3.4.1.js"></script>
 <script src="../../../resources/js/common/bootstrap.js"></script>
-<script src="../../../resources/js/main/main.js"></script>
-<script type="text/javascript" src="../../../resources/js/user/user.js"></script>
 <script src="http://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js"></script>
 <script src="../../../resources/js/websocket/websocket.js"></script>
+<script src="../../../resources/js/main/main.js"></script>
+<script type="text/javascript" src="../../../resources/js/user/user.js"></script>
 </body>
 </html>

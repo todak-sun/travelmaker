@@ -31,6 +31,10 @@ function loginBtnDraw() {
 }
 
 $(function() {
+	var seq = $('#alarmOff').data('seq');
+	console.log(seq);
+	
+	alarmDataload(seq);
   initJsFile(); // 처음화면 로드
   const $modal = $('#modal-area'); // 모달
 

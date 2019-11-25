@@ -8,6 +8,13 @@
 	</insert>
 	
 	<select id="getAlarmList" parameterType="string" resultType="alarm" >
-		select * from alarm where requestUserFid = #{requestFid}
+		select * from alarm where requestUserFid = #{requestFid} and is_read = 0
+	</select>
+	
+	<update id="alarmIsReadChange" parameterType="int">
+		update alarm set is_read = 1 where ano = #{ano}
+	</update>
+	<select id="getAlarmDataSeq" parameterType="int" resultType="int">
+		select dataSeq from alarm where ano = #{ano}
 	</select>
 </mapper>

@@ -10,4 +10,5 @@ public interface AlarmService {
 
 	public List<AlarmDTO> getAlarmList(String seq);
 
+	public int alarmChange(int ano);
 }

@@ -39,7 +39,7 @@
 	</select>
 
 	<select id="getFriendRequestDTO" parameterType="int"
-		resultType="friendRequestDTO">
+		resultType="friendRequest">
 		SELECT * FROM friend_request where fccno=#{data}
 	</select>
 

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.travelmaker.alarm.dao.AlarmDAO;
 import com.travelmaker.alarm.dao.AlarmDAOImpl;
 import com.travelmaker.alarm.domain.AlarmDTO;
 
@@ -12,15 +13,19 @@ import com.travelmaker.alarm.domain.AlarmDTO;
 public class AlarmServiceImpl implements AlarmService {
 
 	@Autowired
-	private AlarmDAOImpl alarmDAOImpl;
+	private AlarmDAO alarmDAO;
 	
 	@Override
 	public void addAlarm(AlarmDTO alarmDTO) {
-		alarmDAOImpl.addAlarm(alarmDTO);
+		alarmDAO.addAlarm(alarmDTO);
 	}
 	@Override
 	public List<AlarmDTO> getAlarmList(String seq) {
-		return alarmDAOImpl.getAlarmList(seq);
+		return alarmDAO.getAlarmList(seq);
+	}
+	@Override
+	public int alarmChange(int ano) {
+		return alarmDAO.alarmChange(ano);
 	}
 
 }

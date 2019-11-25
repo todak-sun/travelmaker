@@ -100,6 +100,9 @@ function writeClick(id) {
 	$('#fcno').val(id);
 }
 
+//웹소켓을 지정한 url로 연결한다.
+let sock = new SockJS("/echo");
+
 // 동행신청 폼 저장
 $('#requestSaveBtn').click(function(){
 	$.ajax({
@@ -111,12 +114,22 @@ $('#requestSaveBtn').click(function(){
 		},
 		success: function(){
 			console.log('success');
+			alert('신청 완료 하였습니다.');
+			friendAlarm($('#friendFno').val(), $('#username').val());
+			
+			location.href='/friend/list/1';
 		},
 		error: function(error){
 			console.log(error);
 		}
 	});
 });
+
+function friendAlarm(fno, username) {
+	let json = '{"header":"friend","data":{"fno":"' + fno
+			+ '","username":"'+username+'"}}'
+	sock.send(json);
+}
 
 // 카카오맵
 function kakaoMap(flightPlanCoordinates) {

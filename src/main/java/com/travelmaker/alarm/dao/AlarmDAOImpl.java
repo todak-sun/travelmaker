@@ -29,4 +29,10 @@ public class AlarmDAOImpl implements AlarmDAO {
 		return sqlSession.selectList("alarmSQL.getAlarmList",requestFid);
 	}
 
+	@Override
+	public int alarmChange(int ano) {
+		sqlSession.update("alarmSQL.alarmIsReadChange", ano);
+		return sqlSession.selectOne("alarmSQL.getAlarmDataSeq", ano);
+	}
+
 }

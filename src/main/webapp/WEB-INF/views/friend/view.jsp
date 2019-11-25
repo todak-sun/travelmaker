@@ -29,6 +29,7 @@
 	<input type="hidden" id="friendDate_end" value="${friendDTO.date_end }">
 	<input type="hidden" id="friendDate_of_issue"
 		value="${friendDTO.date_of_issue }">
+	<input type="hidden" id="username" value="${userDetail.username }">
 
 	<h2>동행 뷰</h2>
 
@@ -74,7 +75,8 @@
 							</tr>
 							<tr>
 								<td colspan="2" align="center">
-									<button type="button" class="btn btn-success" id="requestSaveBtn">신청하기</button>
+									<button type="button" class="btn btn-success"
+										id="requestSaveBtn">신청하기</button>
 								</td>
 							</tr>
 						</table>
@@ -102,6 +104,8 @@
 	<!-- Kakao Map -->
 	<script type="text/javascript"
 		src="//dapi.kakao.com/v2/maps/sdk.js?appkey=58d9a72c9db8da0b849a32734093767e"></script>
+	<!-- 웹 소켓 -->
+	<script src="http://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/js/friend/view.js"></script>
 </body>
