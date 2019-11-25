@@ -130,4 +130,9 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		userDAOImpl.userWithdrawal(userDTO);
 	}
 
+	@Override
+	public UserDTO getUserDTO(int seq) {
+		return userDAOImpl.getUserDTO(seq);
+	}
+
 }

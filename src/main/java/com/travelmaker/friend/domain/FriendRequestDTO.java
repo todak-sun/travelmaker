@@ -1,16 +1,19 @@
 package com.travelmaker.friend.domain;
 
-import lombok.Getter;
-import lombok.Setter;
+import org.springframework.stereotype.Component;
+import java.sql.Date;
 
-@Getter
-@Setter
+import lombok.Data;
+
+@Data
+@Component
 public class FriendRequestDTO {
-	private int fno;
-	private String nickname;
-	private int accepted;
-	private String dateStart;
-	private String dateEnd;
+	private int fcno;
+	private int fccno;
+	private int seq;
 	private String content;
-	private String dateWrite;
+	private int is_permit;
+	private Date date_start;
+	private Date date_end;
+	private int is_read;
 }
