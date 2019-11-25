@@ -1,6 +1,3 @@
-/**
- *
- */
 $(function() {
   window.onpopstate = function(event) {
     console.log("뒤로가기 버튼 누를시 나오는 내용");

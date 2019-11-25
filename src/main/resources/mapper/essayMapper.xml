@@ -11,9 +11,9 @@
         <selectKey keyProperty="rno" resultType="Integer" order="BEFORE">
             SELECT rno.nextval from dual
         </selectKey>
-        INSERT INTO ESSAY(BNO, RNO, SEQ, TITLE, HASHTAG, FILE_NAME, IMAGE_NAME)
+        INSERT INTO ESSAY(BNO, RNO, SEQ, TITLE, HASHTAG, FILE_NAME, IMAGE_NAME, FIXED, IS_DOMESTIC)
         VALUES(bno.nextval, #{rno}, #{seq}, #{title, jdbcType=VARCHAR}, #{hashtag, jdbcType=VARCHAR}, #{fileName},
-        #{imageName, jdbcType=VARCHAR})
+        #{imageName, jdbcType=VARCHAR}, #{fixed}, #{isDomestic})
     </insert>
 
     <select id="search" parameterType="essaySearchFilter" resultType="essay">

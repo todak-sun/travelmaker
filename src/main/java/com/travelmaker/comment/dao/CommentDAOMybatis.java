@@ -33,8 +33,8 @@ public class CommentDAOMybatis implements CommentDAO{
 
     @Override
     public CommentDTO createRe(CommentDTO commentDTO) {
-        int cno = sqlSession.insert("commentSQL.createRe", commentDTO);
-        CommentDTO savedCommentDTO = sqlSession.selectOne("commentSQL.readOne", cno);
+        sqlSession.insert("commentSQL.createRe", commentDTO);
+        CommentDTO savedCommentDTO = sqlSession.selectOne("commentSQL.readOne", commentDTO.getCno());
         return savedCommentDTO;
     }
 

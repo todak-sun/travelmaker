@@ -4,14 +4,8 @@
 <head>
     <%@include file="../common/head-meta.jsp" %>
     <%@include file="../common/head-css.jsp" %>
-    <link
-            rel="stylesheet"
-            href="${pageContext.request.contextPath}/resources/summernote/summernote-bs4.css"
-    />
-    <link
-            rel="stylesheet"
-            href="${pageContext.request.contextPath}/resources/css/essay/write.css"
-    />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common/bootstrap-reboot.css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common/bootstrap.css"/>
     <title>에세이 작성</title>
 </head>
 <body>

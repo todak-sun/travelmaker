@@ -1,12 +1,6 @@
 const { setRequestHeader, useState, getEl } = new travelmaker.utils();
 
 /* 로그아웃 csrf 토큰값 */
-function logoutSubmit() {
-  getEl('#logoutForm').submit();
-  var auth2 = gapi.auth2.getAuthInstance();
-  auth2.signOut().then(function() {});
-  auth2.disconnect();
-}
 
 const [setUserData, getUserData] = useState({
   id: null,
@@ -113,7 +107,7 @@ function setRegisterByGoogle(ret) {
 function ajaxRegisterMethod(data) {
   return $.ajax({
     type: 'post',
-    url: './user/registerMethod',
+    url: '/user/registerMethod',
     dataType: 'text',
     beforeSend: setRequestHeader,
     data: data
@@ -128,8 +122,8 @@ function emitRegisterEvent() {
 }
 
 function doLogin(id, ret, methodName) {
-  getEl('#login_id').value = id + '===' + methodName;
-  getEl('#login_pwd').value = ret;
+  getEl('#id').value = id + '===' + methodName;
+  getEl('#pwd').value = ret;
   document.loginForm.submit();
 }
 
@@ -145,8 +139,6 @@ function setRegisterForm(id, name, methodName) {
 
   realname.classList.add('is-valid');
   registerId.classList.add('is-valid');
-  // registerId.removeEventListener('blur', 'registerIdHandler');
-  // registerId.removeEventListener('input');
 }
 
 function post_goto(url, parm, target) {
