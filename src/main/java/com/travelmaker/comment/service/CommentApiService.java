@@ -75,6 +75,7 @@ public class CommentApiService implements CommentApiInterface<CommentApiRequest,
                 .orElseGet(() -> Header.ERROR("없는 데이터"));
     }
 
+
     private Header<CommentApiResponse> response(CommentDTO commentDTO) {
         CommentApiResponse commentApiResponse = CommentApiResponse.builder()
                 .cno(commentDTO.getCno())
@@ -93,6 +94,7 @@ public class CommentApiService implements CommentApiInterface<CommentApiRequest,
         commentDTOList.forEach((essayDTO) -> {
             CommentApiResponse essayApiResponse = CommentApiResponse.builder()
                     .cno(essayDTO.getCno())
+                    .pcno(essayDTO.getPcno())
                     .bno(essayDTO.getBno())
                     .seq(essayDTO.getSeq())
                     .likes(essayDTO.getLikes())

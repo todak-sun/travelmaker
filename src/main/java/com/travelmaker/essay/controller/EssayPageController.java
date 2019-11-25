@@ -18,12 +18,12 @@ public class EssayPageController{
 
 	@GetMapping("/write")
 	public String write() {
-		return "/essay/write";
+		return "/essay/write2";
 	}
 
 	@GetMapping("/view")
 	public String view() {
-		return "/essay/view";
+		return "/essay/view2";
 	}
 
 	@GetMapping("/view/{rno}")

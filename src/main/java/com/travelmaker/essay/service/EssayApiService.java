@@ -63,6 +63,7 @@ public class EssayApiService implements EssayApiInterface<EssayApiRequest, Essay
     @Override
     public Header<EssayApiResponse> create(Header<EssayApiRequest> request) {
         EssayApiRequest data = request.getData();
+        String imageName = Optional.ofNullable(data.getImageFile()).map(this::saveImage).orElse(null);
         String fileName = UUID.randomUUID().toString() + LocalDateTime.now().toString() + ".txt";
         saveFile(data.getContent(), fileName);
 
@@ -70,6 +71,9 @@ public class EssayApiService implements EssayApiInterface<EssayApiRequest, Essay
                 .seq(data.getSeq())
                 .title(data.getTitle())
                 .fileName(fileName)
+                .imageName(imageName)
+                .hashtag(data.getHashtag())
+                .fixed(data.getFixed())
                 .isDomestic(data.getIsDomestic())
                 .build();
         EssayDTO newEssayDTO = essayDAO.create(essayDTO);
@@ -97,11 +101,14 @@ public class EssayApiService implements EssayApiInterface<EssayApiRequest, Essay
         Optional<EssayDTO> optional = Optional.ofNullable(essayDAO.readOne(data.getRno()));
         return optional.map(essayDTO -> {
             saveFile(data.getContent(), essayDTO.getFileName());
+            Optional.ofNullable(essayDTO.getImageName()).ifPresent(this::deleteImage);
+            String imageName = Optional.ofNullable(data.getImageFile()).map(this::saveImage).orElse(null);
             essayDTO.setTitle(data.getTitle())
                     .setLikes(data.getLikes())
                     .setViews(data.getViews())
                     .setHashtag(data.getHashtag())
                     .setFixed(data.getFixed())
+                    .setImageName(imageName)
                     .setIsDomestic(data.getIsDomestic());
             return essayDAO.update(essayDTO);
         })

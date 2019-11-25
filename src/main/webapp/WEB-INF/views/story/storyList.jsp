@@ -1,28 +1,358 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html;charset=UTF-8"%>
 <!DOCTYPE html>
 <html lang="ko">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link
-      rel="stylesheet"
-      href="../../../resources/css/common/bootstrap-reboot.css"
-    />
-    <link rel="stylesheet" href="../../../resources/css/common/bootstrap.css" />
+    <%@include file="../common/head-meta.jsp" %>
+    <%@include file="../common/head-css.jsp" %>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/story/story.css">
     <title>스토리페이지</title>
   </head>
   <body>
-    <button type="button" id="pushgo">푸쉬 테스트</button>
-
-    <div class="list">
-      페이지 로딩중
+    <%@include file="../common/navbar2.jsp"%>
+    <div class="btn-wrap">
+      <button id="btn-write">+ 글 작성하러 가기</button>
     </div>
-    <button type="button" id="loadList">더 보기</button>
+    <div class="container-wrap">
+      <section class="sec-story">
+        <!-- 컨텐츠 하나 -->
+        <article class="story">
+          <div class="story-img-wrap">
+            <img
+                    src="https://picsum.photos/300/200?random=1"
+                    alt=""
+                    class="story-img"
+            />
+          </div>
+          <div class="story-content-wrap">
+            <h5 class="story-title">
+              <a href="">에세이예시</a>
+            </h5>
+            <div class="story-info">
+              <span class="info-icon likes">12</span>
+              <span class="info-icon views">11</span>
+              <span class="info-icon comments">20</span>
+            </div>
+          </div>
+          <div class="story-user-wrap">
+            <img
+                    src="https://picsum.photos/300/200?random=2"
+                    alt=""
+                    class="profile-img"
+            />
+            <div class="user-info">
+              <h6>닉네임</h6>
+              <p>2019.11.11</p>
+            </div>
+          </div>
+        </article>
+        <!-- 컨텐츠 하나 -->
+        <!-- 컨텐츠 하나 -->
+        <article class="story">
+          <div class="story-img-wrap">
+            <img
+                    src="https://picsum.photos/300/200?random=1"
+                    alt=""
+                    class="story-img"
+            />
+          </div>
+          <div class="story-content-wrap">
+            <h5 class="story-title">
+              <a href="">루트 예시</a>
+            </h5>
+            <div class="story-info">
+              <span class="info-icon likes">12</span>
+              <span class="info-icon views">11</span>
+              <span class="info-icon comments">20</span>
+            </div>
+          </div>
+          <div class="story-user-wrap">
+            <img
+                    src="https://picsum.photos/300/200?random=2"
+                    alt=""
+                    class="profile-img"
+            />
+            <div class="user-info">
+              <h6>닉네임</h6>
+              <p>2019.11.11</p>
+            </div>
+          </div>
+        </article>
+        <!-- 컨텐츠 하나 -->
+        <!-- 컨텐츠 하나 -->
+        <article class="story">
+          <div class="story-img-wrap">
+            <img
+                    src="https://picsum.photos/300/200?random=1"
+                    alt=""
+                    class="story-img"
+            />
+          </div>
+          <div class="story-content-wrap">
+            <h5 class="story-title">컨텐츠제목</h5>
+            <div class="story-info">
+              <span class="info-icon likes">12</span>
+              <span class="info-icon views">11</span>
+              <span class="info-icon comments">20</span>
+            </div>
+          </div>
+          <div class="story-user-wrap">
+            <img
+                    src="https://picsum.photos/300/200?random=2"
+                    alt=""
+                    class="profile-img"
+            />
+            <div class="user-info">
+              <h6>닉네임</h6>
+              <p>2019.11.11</p>
+            </div>
+          </div>
+        </article>
+        <!-- 컨텐츠 하나 -->
+        <!-- 컨텐츠 하나 -->
+        <article class="story">
+          <div class="story-img-wrap">
+            <img
+                    src="https://picsum.photos/300/200?random=1"
+                    alt=""
+                    class="story-img"
+            />
+          </div>
+          <div class="story-content-wrap">
+            <h5 class="story-title">컨텐츠제목</h5>
+            <div class="story-info">
+              <span class="info-icon likes">12</span>
+              <span class="info-icon views">11</span>
+              <span class="info-icon comments">20</span>
+            </div>
+          </div>
+          <div class="story-user-wrap">
+            <img
+                    src="https://picsum.photos/300/200?random=2"
+                    alt=""
+                    class="profile-img"
+            />
+            <div class="user-info">
+              <h6>닉네임</h6>
+              <p>2019.11.11</p>
+            </div>
+          </div>
+        </article>
+        <!-- 컨텐츠 하나 -->
+        <!-- 컨텐츠 하나 -->
+        <article class="story">
+          <div class="story-img-wrap">
+            <img
+                    src="https://picsum.photos/300/200?random=1"
+                    alt=""
+                    class="story-img"
+            />
+          </div>
+          <div class="story-content-wrap">
+            <h5 class="story-title">컨텐츠제목</h5>
+            <div class="story-info">
+              <span class="info-icon likes">12</span>
+              <span class="info-icon views">11</span>
+              <span class="info-icon comments">20</span>
+            </div>
+          </div>
+          <div class="story-user-wrap">
+            <img
+                    src="https://picsum.photos/300/200?random=2"
+                    alt=""
+                    class="profile-img"
+            />
+            <div class="user-info">
+              <h6>닉네임</h6>
+              <p>2019.11.11</p>
+            </div>
+          </div>
+        </article>
+        <!-- 컨텐츠 하나 -->
+        <!-- 컨텐츠 하나 -->
+        <article class="story">
+          <div class="story-img-wrap">
+            <img
+                    src="https://picsum.photos/300/200?random=1"
+                    alt=""
+                    class="story-img"
+            />
+          </div>
+          <div class="story-content-wrap">
+            <h5 class="story-title">컨텐츠제목</h5>
+            <div class="story-info">
+              <span class="info-icon likes">12</span>
+              <span class="info-icon views">11</span>
+              <span class="info-icon comments">20</span>
+            </div>
+          </div>
+          <div class="story-user-wrap">
+            <img
+                    src="https://picsum.photos/300/200?random=2"
+                    alt=""
+                    class="profile-img"
+            />
+            <div class="user-info">
+              <h6>닉네임</h6>
+              <p>2019.11.11</p>
+            </div>
+          </div>
+        </article>
+        <!-- 컨텐츠 하나 -->
+        <!-- 컨텐츠 하나 -->
+        <article class="story">
+          <div class="story-img-wrap">
+            <img
+                    src="https://picsum.photos/300/200?random=1"
+                    alt=""
+                    class="story-img"
+            />
+          </div>
+          <div class="story-content-wrap">
+            <h5 class="story-title">컨텐츠제목</h5>
+            <div class="story-info">
+              <span class="info-icon likes">12</span>
+              <span class="info-icon views">11</span>
+              <span class="info-icon comments">20</span>
+            </div>
+          </div>
+          <div class="story-user-wrap">
+            <img
+                    src="https://picsum.photos/300/200?random=2"
+                    alt=""
+                    class="profile-img"
+            />
+            <div class="user-info">
+              <h6>닉네임</h6>
+              <p>2019.11.11</p>
+            </div>
+          </div>
+        </article>
+        <!-- 컨텐츠 하나 -->
+        <!-- 컨텐츠 하나 -->
+        <article class="story">
+          <div class="story-img-wrap">
+            <img
+                    src="https://picsum.photos/300/200?random=1"
+                    alt=""
+                    class="story-img"
+            />
+          </div>
+          <div class="story-content-wrap">
+            <h5 class="story-title">컨텐츠제목</h5>
+            <div class="story-info">
+              <span class="info-icon likes">12</span>
+              <span class="info-icon views">11</span>
+              <span class="info-icon comments">20</span>
+            </div>
+          </div>
+          <div class="story-user-wrap">
+            <img
+                    src="https://picsum.photos/300/200?random=2"
+                    alt=""
+                    class="profile-img"
+            />
+            <div class="user-info">
+              <h6>닉네임</h6>
+              <p>2019.11.11</p>
+            </div>
+          </div>
+        </article>
+        <!-- 컨텐츠 하나 -->
+        <!-- 컨텐츠 하나 -->
+        <article class="story">
+          <div class="story-img-wrap">
+            <img
+                    src="https://picsum.photos/300/200?random=1"
+                    alt=""
+                    class="story-img"
+            />
+          </div>
+          <div class="story-content-wrap">
+            <h5 class="story-title">컨텐츠제목</h5>
+            <div class="story-info">
+              <span class="info-icon likes">12</span>
+              <span class="info-icon views">11</span>
+              <span class="info-icon comments">20</span>
+            </div>
+          </div>
+          <div class="story-user-wrap">
+            <img
+                    src="https://picsum.photos/300/200?random=2"
+                    alt=""
+                    class="profile-img"
+            />
+            <div class="user-info">
+              <h6>닉네임</h6>
+              <p>2019.11.11</p>
+            </div>
+          </div>
+        </article>
+        <!-- 컨텐츠 하나 -->
+        <!-- 컨텐츠 하나 -->
+        <article class="story">
+          <div class="story-img-wrap">
+            <img
+                    src="https://picsum.photos/300/200?random=1"
+                    alt=""
+                    class="story-img"
+            />
+          </div>
+          <div class="story-content-wrap">
+            <h5 class="story-title">컨텐츠제목</h5>
+            <div class="story-info">
+              <span class="info-icon likes">12</span>
+              <span class="info-icon views">11</span>
+              <span class="info-icon comments">20</span>
+            </div>
+          </div>
+          <div class="story-user-wrap">
+            <img
+                    src="https://picsum.photos/300/200?random=2"
+                    alt=""
+                    class="profile-img"
+            />
+            <div class="user-info">
+              <h6>닉네임</h6>
+              <p>2019.11.11</p>
+            </div>
+          </div>
+        </article>
+        <!-- 컨텐츠 하나 -->
+        <!-- 컨텐츠 하나 -->
+        <article class="story">
+          <div class="story-img-wrap">
+            <img
+                    src="https://picsum.photos/300/200?random=1"
+                    alt=""
+                    class="story-img"
+            />
+          </div>
+          <div class="story-content-wrap">
+            <h5 class="story-title">컨텐츠제목</h5>
+            <div class="story-info">
+              <span class="info-icon likes">12</span>
+              <span class="info-icon views">11</span>
+              <span class="info-icon comments">20</span>
+            </div>
+          </div>
+          <div class="story-user-wrap">
+            <img
+                    src="https://picsum.photos/300/200?random=2"
+                    alt=""
+                    class="profile-img"
+            />
+            <div class="user-info">
+              <h6>닉네임</h6>
+              <p>2019.11.11</p>
+            </div>
+          </div>
+        </article>
+        <!-- 컨텐츠 하나 -->
+      </section>
+    </div>
+    <!-- 메인 컨텐츠 영역 -->
 
-    <script src="../../../resources/js/common/jquery-3.4.1.js"></script>
-    <script src="../../../resources/js/common/bootstrap.js"></script>
-    <script src="../../../resources/js/story/story.js"></script>
+    <%@include file="../common/foot-js.jsp" %>
+    <script src="${pageContext.request.contextPath}/resources/js/story/story2.js"></script>
   </body>
 </html>

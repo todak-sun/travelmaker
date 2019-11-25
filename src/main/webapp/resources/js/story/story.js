@@ -1,6 +1,3 @@
-/**
- *
- */
 $(function() {
   // window.onpopstate = loadStateContent;
 
