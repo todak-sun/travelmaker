@@ -20,7 +20,7 @@
         </a>
         <nav class="gnb-wrap">
             <ul class="gnb-group">
-                <li class="gnb-item"><a href="/story/list">여행 이야기</a></li>
+                <li class="gnb-item"><a href="/story">여행 이야기</a></li>
                 <li class="gnb-item"><a href="">스토어</a></li>
                 <li class="gnb-item"><a href="">동행</a></li>
                 <li class="gnb-item"><a href="">대리구매</a></li>

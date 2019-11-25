@@ -173,7 +173,7 @@ $().ready(function() {
           .children()
           .last();
         /* routeLat.push(items.lat);
-                routeLng.push(items.lng); */
+                  routeLng.push(items.lng); */
 
         // 좌표 담기
         flightPlanCoordinates.push({ lat: items.lat, lng: items.lng });

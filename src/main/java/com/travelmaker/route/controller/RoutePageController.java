@@ -36,6 +36,8 @@ public class RoutePageController {
         RouteDTO routeDTO = routeService.getRoute(rno);
         System.out.println(routeDTO.getBno());
         model.addAttribute("routeDTO", routeDTO);
+    	List<RouteContentDTO> list = routeService.getRouteContentStory(rno);
+    	model.addAttribute("contentList", list);
 
         return "route/view";
     }
@@ -46,6 +48,9 @@ public class RoutePageController {
     	RouteDTO routeDTO = routeService.getRoute(rno);
     	System.out.println(routeDTO.getBno());
     	model.addAttribute("routeDTO", routeDTO);
+    	List<RouteContentDTO> list = routeService.getRouteContentStory(rno);
+    	model.addAttribute("contentList", list);	
+
     	
     	return "route/preview";
     }
