@@ -7,6 +7,10 @@
 >
     <input type="hidden" id="csrfTokenName" value="${_csrf.parameterName}" />
     <input type="hidden" id="csrfTokenValue" value="${_csrf.token}" />
+    <sec:authentication var="userDetail" property="principal" />
+    <sec:authorize access="hasRole('ROLE_USER') and isAuthenticated()">
+        <input type="hidden" id="seq" value="${userDetail.seq}"/>
+    </sec:authorize>
     <a id="main-logo" href="/" class="navbar-brand">로고</a>
     <button
             class="btn btn-outline-light navbar-toggler"
@@ -28,16 +32,6 @@
             <li class="nav-item">
                 <a id="link-list" class="nav-link" href="#">커뮤니티</a>
             </li>
-            <sec:authentication var="userDetail" property="principal" />
-            <sec:authorize access="hasRole('ROLE_USER') and isAuthenticated()">
-                <%-- <p>어서와 방갑다 ${fn:substringBefore(user.username,"%")} 쉬볼세끼야</p> --%>
-                <p>어서와 방갑다 ${userDetail} 쉬볼세끼야</p>
-            </sec:authorize>
-
-<%--            <sec:authentication var="user" property="principal"/>--%>
-<%--            <sec:authorize access="hasRole('ROLE_USER') and isAuthenticated()">--%>
-<%--                ${fn:substringBefore(user.username,"%")}--%>
-<%--            </sec:authorize>--%>
         </ul>
         <div class="btn-group" role="group">
             <sec:authorize access="hasRole('ROLE_USER') and isAuthenticated()">

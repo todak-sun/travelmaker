@@ -1,19 +1,15 @@
-const setting = {
-    url: `http://${location.host}`,
-};
-
 $(function () {
     const template = new travelmaker.template();
     const editor = new travelmaker.editor();
     const ajax = new travelmaker.ajax();
 
-    const {useState, getJSONfromQueryString, getFormData, getEls} = new travelmaker.utils();
+    const {useState, getJSONfromQueryString, getFormData, getEls, getEl} = new travelmaker.utils();
 
     let hashes = [];
 
     let requestData = {
         rno: '',
-        seq: 1,
+        seq: +getEl('#seq').value,
         title: '',
         content: '',
         hashtag: '',

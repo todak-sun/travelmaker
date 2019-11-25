@@ -8,8 +8,34 @@ let travelmaker = (function (window) {
         };
 
         Utils.prototype.getEl = getEl;
-
         Utils.prototype.getEls = getEls;
+        Utils.prototype.getElList = getElList;
+        Utils.prototype.getFormData = getFormData;
+        Utils.prototype.getTokenCSRF = function () {
+            return getEl('meta[name="_csrf"]').content;
+        };
+        Utils.prototype.addSameHandlerEvent = function (selector, handler, ...events) {
+            let el = document.querySelector(selector);
+            for (let i = 0; i < events.length; i++) {
+                el.addEventListener(events[i], handler);
+            }
+        };
+
+        Utils.prototype.removeSameHandlerEvent = function (selector, handler, ...events) {
+            let el = document.querySelector(selector);
+            if (!el) return;
+            for (let i = 0; i < events.length; i++) {
+                el.removeEventListener(events[i], handler);
+            }
+        };
+
+        Utils.prototype.addAllSameEvent = function (elList, event, handler) {
+            elList.forEach(el => el.addEventListener(event, handler));
+        };
+
+        Utils.prototype.addEvent = function (el, event, handler) {
+            el.addEventListener(event, handler);
+        };
 
         Utils.prototype.setRequestHeader = function (xhr) {
             const token = getEl('meta[name="_csrf"]').getAttribute('content');
@@ -17,11 +43,6 @@ let travelmaker = (function (window) {
             xhr.setRequestHeader(header, token);
         };
 
-        Utils.prototype.setInValid = function (e, el, message) {
-            el.innerText = message;
-            e.target.classList.add('is-invalid');
-            e.target.classList.remove('is-valid');
-        };
 
         Utils.prototype.getJSONfromQueryString = function () {
             let qs = location.search.slice(1);
@@ -35,43 +56,9 @@ let travelmaker = (function (window) {
             return JSON.parse(JSON.stringify(obj));
         };
 
-        Utils.prototype.setValid = function (e, el, message) {
-            el.innerText = message;
-            e.target.classList.add('is-valid');
-            e.target.classList.remove('is-invalid');
-        };
-
-        Utils.prototype.changeValid = function (e) {
-            e.target.classList.add('is-valid');
-            e.target.classList.remove('is-invalid');
-        };
-
-        Utils.prototype.changeInValid = function (e) {
-            e.target.classList.add('is-invalid');
-            e.target.classList.remove('is-valid');
-        };
-
-        Utils.prototype.isValid = function (el) {
-            return el.classList.contains('is-valid');
-        };
-
-        Utils.prototype.resetMessageHandler = function (e) {
-            if (!e.target.value) {
-                e.target.classList.remove('is-invalid');
-                e.target.classList.remove('is-valid');
-            }
-        };
-
         Utils.prototype.getRegisterMethod = function () {
             return getEl('#registerMethod').value;
         };
-
-        Utils.prototype.getFeedbackBox = function (e) {
-            return [e.target.parentElement.querySelector('.invalid-feedback'),
-                e.target.parentElement.querySelector('.valid-feedback')]
-        };
-
-        Utils.prototype.getFormData = getFormData;
 
         Utils.prototype.useState = function (data) {
             let state = data;
@@ -99,6 +86,10 @@ let travelmaker = (function (window) {
             let els = [];
             targets.forEach((target) => els.push(parent.querySelector(target)));
             return els;
+        }
+
+        function getElList(selectors) {
+            return Array.from(document.querySelectorAll(selectors));
         }
 
         function getFormData(imageFile) {
@@ -180,244 +171,6 @@ let travelmaker = (function (window) {
             `;
         };
 
-        Template.prototype.register = function (csrfTokenName, csrfTokenValue) {
-            return `
-    	<div class="register-form-email">
-      <form id="register-form" action="/user/register" method="post">
-        <input
-          type="hidden"
-          name="${csrfTokenName}"
-          value="${csrfTokenValue}"
-        />
-        <input
-          type="hidden"
-          name="registerMethod"
-          id="registerMethod"
-          value="travelMaker"
-        />
-        <div>
-          <ul class="group-checkbox">
-            <li>
-              <input type="checkbox" id="user-agree-box-all"/>
-              <label for="user-agree-box-all">회원약관 전체에 동의합니다</label>
-            </li>
-            <li>
-              <input id="agree-1" type="checkbox" class="user-agree-box" />
-              <label for="agree-1">서비스 이용약관</label>
-              <a onclick="">약관보기</a>
-            </li>
-            <li>
-              <input id="agree-3" type="checkbox" class="user-agree-box" />
-              <label for="agree-3">위치서비스 이용약관</label>
-              <a onclick="">약관보기</a>
-            </li>
-            <li>
-              <input id="agree-4" type="checkbox" class="user-agree-box" />
-              <label for="agree-4">개인정보취급방침</label>
-              <a onclick="">약관보기</a>
-            </li>
-          </ul>
-        </div>
-        <h4>필수입력 사항</h4>
-        <div class="input-group">
-          <label for="realname" class="input-group-text">이름</label>
-          <input
-            type="text"
-            name="realname"
-            id="realname"
-            class="form-control"
-            placeholder="이름"
-          />
-          <div class="invalid-feedback"></div>
-        </div>
-
-        <div class="input-group">
-          <label for="register-id" class="input-group-text">아이디</label>
-          <input
-            type="text"
-            name="id"
-            id="register-id"
-            class="form-control"
-            placeholder="id"
-          />
-          <div class="invalid-feedback"></div>
-          <div class="valid-feedback"></div>
-        </div>
-        <div class="input-group">
-          <label for="register-password" class="input-group-text">비밀번호</label>
-          <input
-            type="password"
-            name="password"
-            id="register-password"
-            class="form-control"
-            placeholder="password"
-          />
-          <div class="invalid-feedback"></div>
-          <div class="valid-feedback"></div>
-        </div>
-        <div class="input-group">
-          <label for="register-repassword" class="input-group-text">재확인</label>
-          <input
-            type="password"
-            id="register-repassword"
-            class="form-control"
-            placeholder="password"
-          />
-          <div class="invalid-feedback"></div>
-          <div class="valid-feedback"></div>
-        </div>
-        <div>
-          <div class="input-group">
-              <label for="register-email1" class="input-group-text">이메일</label>
-              <input
-                type="text"
-                name="email1"
-                id="register-email1"
-                class="form-control"
-                placeholder="이메일"
-              />
-              <span class="input-group-text">@</span>
-              <input
-                type="text"
-                name="email2"
-                id="register-email2"
-                placeholder="직접입력"
-                class="form-control"
-                list="list"
-                style="width: 150px;"
-              />
-              <datalist id="list">
-                <option value="naver.com">naver.com</option>
-                <option value="daum.net">daum.net</option>
-                <option value="google.com">google.com</option>
-                <option value="nate.net">nate.net</option>
-              </datalist>
-              <button class="btn btn-secondary input-group-append">인증</button>
-              <div class="invalid-feedback"></div>
-          </div>
-        </div>
-        <div>
-        <div class="input-group">
-          <label for="phone1" class="input-group-text">휴대폰번호</label>
-          <select name="phone1" id="phone1" class="form-control">
-            <option value="010">010</option>
-            <option value="011">011</option>
-            <option value="019">016</option>
-          </select>
-          <input
-            type="text"
-            name="phone2"
-            id="phone2"
-            class="form-control"
-            placeholder="0000"
-            maxlength="4"
-          />
-          <input
-            type="text"
-            name="phone3"
-            id="phone3"
-            placeholder="0000"
-            class="form-control"
-            maxlength="4"
-          />
-         <div class="invalid-feedback"></div> 
-         </div>
-        </div>
-        
-        <h4>선택 항목</h4>
-        <div>
-          <input
-            type="date"
-            name="birthdate"
-            id="birthdate"
-            placeholder="생년월일"
-          />
-          <div id="birthdateDiv"></div>
-        </div>
-
-        <div>
-          <input
-            type="radio"
-            name="gender"
-            value="0"
-            id="gender-mail"
-            checked="checked"
-          />
-          <label for="gender-mail">남</label>
-          <input id="gender-femail" type="radio" name="gender" value="1" />
-          <label for="gender-femail">여</label>
-        </div>
-        <button
-          id="btn-user-register"
-          type="button"
-          class="btn btn-outline-secondary"
-        >
-          회원가입
-        </button>
-      </form>
-    </div>
-    	`;
-        };
-
-        Template.prototype.login = function (csrfTokenName, csrfTokenValue) {
-            return `
-            <div class="login_display">
-            <form name="loginForm" method="post"
-                    action="j_spring_security_check " autocomplete="off">
-            
-            <input type="hidden" id="csrfToken" name="${csrfTokenName}"
-                    value="${csrfTokenValue}" />
-        
-            <div class="input-group">
-                <label class="input-group-text">계정</label>
-                <input name="id" type="text" id="login_id" class="form-control">
-                <div class="invalid-feedback"></div>
-                <div class="valid-feedback"></div>
-            </div>
-            
-            <div class="input-group">
-                <label class="input-group-text">비밀번호</label>
-                <input name="pwd" type="password" id="login_pwd" class="form-control">
-                <div class="invalid-feedback"></div>
-                <div class="valid-feedback"></div>
-            </div>
-            
-            <button type="button" class="btn btn-outline-info" id="loginBtn">로그인</button> 
-            </form>
-             <button type="button" class="btn btn-outline-info" id="idpwdSearch">아이디찾기/비밀번호 찾기</button> 
-            <div id="loginMeue">
-                <button id="btn-login-na" class="btn btn-secondary">네이버로 로그인하기</button>
-                <button id="btn-login-ka" class="btn btn-secondary">카카오로 로그인하기</button>
-                <button id="btn-login-go" class="btn btn-secondary">구글로 로그인하기</button>
-            </div>
-            <div>
-                <input type="hidden" id="naverId"> <input type="hidden"
-                    id="naverEmail">
-            </div>
-            <a id="kakao-login-btn" class="btn-api-login"></a>
-            <div id="naverIdLogin" class="btn-api-login"></div>
-            <div class="g-signin2" class="btn-api-login" data-onsuccess="onSignIn"></div>
-          `;
-        };
-
-        Template.prototype.storySelector = function () {
-            return `
-            <div class="row justify-content-center">
-                <lable>여행루트 글쓰기</label>
-                <input name="writeType" value="route" type="radio" checked />
-                <label>여행에세이 글쓰기</label>
-                <input name="writeType" value="essay" type="radio" />
-            </div>
-            <div class="row justify-content-center">
-                <lable>국내</label>
-                <input name="isDomestic" value="1" type="radio" checked />
-                <label>해외</label>
-                <input name="isDomestic" value="0" type="radio" />
-            </div>
-            <button id="btn-to-write" class="btn btn-outline-info">글쓰러 가기</button>
-          `;
-        };
-
         Template.prototype.modal = function (title, body) {
             return `<div class="modal-dialog modal-lg" role="document">
                   <div class="modal-content">
@@ -440,30 +193,100 @@ let travelmaker = (function (window) {
               `;
         };
 
+        Template.prototype.story = function () {
+            return `
+               <div class="select-wrap">
+                <div class="select-inner-wrap">
+                  <button id="btn-route" type="button" data-sel="route"></button>
+                  <div class="expression">
+                    <h4>경로형</h4>
+                    <p>
+                      어디에, 어느곳에 다녀왔는지 단계별로 차곡차곡 적을 수 있어요.
+                      완성된 글에는 내가 다녀온 여행 경로가 지도에 짠!
+                    </p>
+                  </div>
+                </div>
+                <div class="select-inner-wrap">
+                  <button id="btn-essay" type="button" data-sel="essay"></button>
+                  <div class="expression">
+                    <h4>에세이형</h4>
+                    <p>
+                      편하고 익숙한 글쓰기 환경에서 마음껏 여행에 대한 이야길 나눌
+                      수 있어요.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            `;
+        };
+
+        Template.prototype.domestic = function () {
+            return `
+              <div class="location-wrap">
+                <h2>국내, 해외 중 어디에 다녀오셨나요?</h2>
+                <div class="btn-wrap">
+                  <button id="btn-korea" data-domestic="1"></button>
+                  <button id="btn-global" data-domestic="0"></button>
+                </div>
+              </div>
+            `
+        };
+
         Template.prototype.essayTemp = function (essay) {
             const {rno, title, imageName, isDomestic, dateWrite} = essay;
             return `
-                <li class="tmp-content-item" data-rno="${rno}">
-                    <img
-                            src="http://placehold.it/50X50"
-                            class="img-thumbnail"
-                            alt="제목"
-                    />
-                    <div class="btn-group-sm">
-                        <button data-rno="${rno}" class="badge badge-secondary btn-tmp-remove">X</button>
-                        <button data-rno="${rno}" class="badge badge-secondary btn-tmp-get">불러오기</button>
+               <li>
+                    <div data-rno="${rno}" class="temp-item">
+                        <span class="delete">&times;</span>
+                        <span class="get">불러오기</span>
+                        <div class="image-wrap">
+                            <img src="${imageName}" alt="${imageName}"/>
+                        </div>
+                        <div class="temp-info">
+                            <span class="mini-badge">${isDomestic ? '국내' : '해외'}</span>
+                            <p>${title}</p>
+                            <span class="date">${dateWrite}</span>
+                        </div>
                     </div>
-                    <div class="tmp-content-box">
-                        <span class="location badge badge-info">${isDomestic === 0 ? '국내' : '해외'}</span>
-                        <h5 class="tmp-content-title">${title === null ? '제목없음' : title}</h5>
-                        <span class="date text-muted small">${dateWrite}</span>
-                    </div>
-                </li>            
+                </li>        
             `
         };
 
         Template.prototype.comment = function (comment) {
             const {cno, bno, content, likes, unlikes, seq, dateWrite, pcno} = comment;
+            if (cno !== pcno) {
+                return `
+            <li>
+                <div class="media text-muted pt-3">
+                  <svg
+                          class="bd-placeholder-img mr-2 rounded"
+                          width="32"
+                          height="32"
+                          xmlns="http://www.w3.org/2000/svg"
+                          preserveAspectRatio="xMidYMid slice"
+                          focusable="false"
+                          role="img"
+                          aria-label="Placeholder: 32x32"
+                  >
+                    <rect width="100%" height="100%" fill="#f783ac" />
+                    <text x="50%" y="50%" fill="#6f42c1" dy=".3em">32x32</text>
+                  </svg>
+                  <p
+                          class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray"
+                  >
+                    <strong class="d-block text-gray-dark">@${seq}</strong>
+                    <span class="comment-content">${content}</span>
+                  </p>
+                  <div class="btn-group btn-group-sm">
+                    <button data-cno="${cno}" data-likes="${likes}" class="btn-primary btn-like-comment">좋아요${likes}</button>
+                    <button data-cno="${cno}" data-unlikes="${unlikes}" class="btn-danger btn-unlike-comment">싫어요${unlikes}</button>
+                    <button data-cno="${pcno}" data-on="false" class="btn btn-outline-secondary btn-recomment">답글</button>
+                    <button data-cno="${cno}" class="btn btn-outline-secondary btn-recomment-remove">삭제</button>
+                  </div>
+                </div>
+            </li>
+            `;
+            }
             return `
             <li>
                 <div class="media text-muted pt-3">
@@ -484,11 +307,11 @@ let travelmaker = (function (window) {
                           class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray"
                   >
                     <strong class="d-block text-gray-dark">@${seq}</strong>
-                    ${content}
+                    <span class="comment-content">${content}</span>
                   </p>
                   <div class="btn-group btn-group-sm">
-                    <button class="btn-primary btn-like-comment">좋아요${likes}</button>
-                    <button class="btn-danger btn-unlike-comment">싫어요${unlikes}</button>
+                    <button data-cno="${cno}" data-likes="${likes}" class="btn-primary btn-like-comment">좋아요${likes}</button>
+                    <button data-cno="${cno}" data-unlikes="${unlikes}" class="btn-danger btn-unlike-comment">싫어요${unlikes}</button>
                     <button data-cno="${cno}" data-on="false" class="btn btn-outline-secondary btn-recomment">답글</button>
                     <button data-cno="${cno}" class="btn btn-outline-secondary btn-recomment-remove">삭제</button>
                   </div>
@@ -505,6 +328,217 @@ let travelmaker = (function (window) {
                 </div>
             `
         }
+
+        Template.prototype.login2 = function (csrfTokenValue) {
+            return `
+                <form name="loginForm" method="post" action="j_spring_security_check" class="form-login" autocomplete="off">
+                <input type="hidden" id="csrfToken" name="_csrf" value="${csrfTokenValue}" />    
+                    <input type="hidden" id="id" name="id">
+                    <div class="input-wrap">
+                      <input 
+                        type="text"
+                        id="mid" 
+                        class="v" 
+                        placeholder="아이디"
+                      />
+                       <div class="v-feed"></div>
+                       <div class="iv-feed"></div>
+                    </div>
+                    <div class="input-wrap">
+                      <input
+                        type="password"
+                        id="pwd"
+                        name="pwd"
+                        class="v"
+                        placeholder="비밀번호"
+                      />
+                       <div class="v-feed"></div>
+                       <div class="iv-feed"></div>
+                    </div>
+                    
+                    <div class="wrap-buttons">
+                      <button type="button" class="btn-register">회원가입</button>
+                      <button type="button" id="btn-login">로그인</button>
+                    </div>
+                    
+                    <div class="wrap-buttons-api">
+                      <button type="button" class="btn-kakao">카카오로 로그인</button>
+                      <button type="button" class="btn-google">구글로 로그인</button>
+                      <button type="button" class="btn-naver">네이버 로그인</button>
+                    </div>
+                </form>
+                <div class="hidden">
+                    <input type="hidden" id="naverId">
+                    <input type="hidden" id="naverEmail">
+                    <a id="kakao-login-btn" class="btn-api-login"></a>
+                    <div id="naverIdLogin" class="btn-api-login"></div>
+                    <div class="g-signin2 btn-api-login" data-onsuccess="onSignIn"></div>
+                </div>
+                `;
+        };
+
+        Template.prototype.tmodal = function () {
+            return `
+                <div class="tmodal-back"></div>
+                <div class="tmodal">
+                  <div class="tmodal-bar">
+                    <span class="close">&times;</span>
+                  </div>
+                  <div class="tmodal-body">
+                  </div>
+                </div>
+               `;
+        };
+
+        Template.prototype.register2 = function (csrfTokenValue) {
+            return `
+            <form action="/user/register" method="post" class="form-register" id="register-form">
+                <input
+                  type="hidden"
+                  name="_csrf"
+                  value="${csrfTokenValue}"
+                />
+                <input
+                  type="hidden"
+                  name="registerMethod"
+                  id="registerMethod"
+                  value="travelMaker"
+                />
+                <div class='input-expression'>
+                  <p>* 표시는 필수 입력 사항입니다</p>
+                </div>
+                <label for="realname" class="label-need">이름</label>
+                <div class="input-wrap-4">
+                  <input type="text" id="realname" name="realname" class="v"/>
+                  <div class="v-feed"></div>
+                  <div class="iv-feed"></div>
+                </div>
+                
+                <label for="register-id" class="label-need">아이디</label>
+                <div class="input-wrap-4">
+                  <input id="register-id" name="id" type="text" class="v"/>
+                  <div class="v-feed"></div>
+                  <div class="iv-feed"></div>
+                </div>
+            
+                <label for="register-password" class="label-need">비밀번호</label>
+                <div class="input-wrap-4">
+                  <input id="register-password" name="password" type="password" class="v"/>
+                  <div class="v-feed"></div>
+                  <div class="iv-feed"></div>
+                </div>
+            
+                <label for="register-repassword" class="label-need">재확인</label>
+                <div class="input-wrap-4">
+                  <input id="register-repassword" type="password" class="v" />
+                  <div class="v-feed"></div>
+                  <div class="iv-feed"></div>
+                </div>
+            
+                <label for="register-email1" class="label-need">이메일</label>
+                <div class="input-wrap">
+                  <input id="register-email1" name="email1" type="text" class="v"/>
+                  <div class="v-feed"></div>
+                  <div class="iv-feed"></div>
+                </div>
+                <div class="input-wrap-3 input-email2-wrap">
+                  <input id="register-email2" name="email2" type="text" list="list" placeholder="직접입력...." class="v v-fail v-pass"/>
+                  <datalist id="list">
+                    <option value="gmail.com">gmail.com</option>
+                    <option value="naver.com">naver.com</option>
+                    <option value="daum.net">daum.net</option>
+                    <option value="nate.com">nate.com</option>
+                  </datalist>
+                  <div class="v-feed"></div>
+                  <div class="iv-feed"></div>
+                </div>
+                <button id="btn-email-check" class="btn-travel-min" type="button">인증</button>
+            
+                <label for="phone1" class="label-need">휴대폰</label>
+                <div class="input-wrap">
+                  <select id="phone1" name="phone1">
+                    <option value="010">010</option>
+                    <option value="011">011</option>
+                    <option value="016">016</option>
+                    <option value="017">017</option>
+                    <option value="018">018</option>
+                    <option value="019">019</option>
+                  </select>
+                </div>
+                <div class="input-wrap">
+                  <input id="phone2" name="phone2" maxlength="4" type="text" class="v"/>
+                  <div class="v-feed"></div>
+                  <div class="iv-feed"></div>
+                </div>
+                <div class="input-wrap">
+                  <input id="phone3" name="phone3" maxlength="4" type="text" class="v" />
+                  <div class="v-feed"></div>
+                  <div class="iv-feed"></div>
+                </div>
+            
+                <label for="">생년월일</label>
+                <div class="input-wrap-4">
+                  <input type="date" id="birthdate" name="birthdate" />
+                </div>
+            
+                <label for="">성별</label>
+                <div class="radio-wrap">
+                    <input id="mail" type="radio" value="0" name="gender" checked="true">
+                    <label for="mail" class="clicked">남</label>
+                    <input id="femail" type="radio" value="1" name="gender">
+                    <label for="femail">여</label>
+                </div>
+                
+                <div class="check-wrap">
+                  <div class="check-item">
+                    <input type="checkbox" name="" id="check-all">
+                    <label for="check-all">회원약관 전체동의</label>
+                  </div>
+                  <div class="check-item">
+                    <input type="checkbox" name="" id="check-service" class="checkbox">
+                    <label for="check-service">서비스 이용동의</label>
+                  </div>
+                  <div class="check-item">
+                    <input type="checkbox" name="" id="check-private" class="checkbox">
+                    <label for="check-private">개인정보 이용동의</label>
+                  </div>
+                  <button id="btn-user-register" class="btn-travel">회원가입</button>
+                </div>
+              </div>
+              
+            </form>
+            `;
+        };
+
+        Template.prototype.request = function () {
+            return `
+            <form class="form-request">
+            <div class="input-box">
+              <label for="">동행 시작일</label>
+              <div class="input-wrap">
+                <input type="date" />
+              </div>
+            </div>
+            
+            <div class="input-box">
+              <label for="">동행 종료일</label>
+              <div class="input-wrap">
+                <input type="date" />
+              </div>
+            </div>
+            
+            <div class="input-box">
+              <label for="">신청 내용</label>
+              <div class="input-wrap textarea">
+                <textarea
+                  placeholder="신청 내용을 구체적으로 적어주세요."
+                ></textarea>
+              </div>
+            </div>
+            <button class="btn-travel">신청하기</button>
+            </form>
+            `;
+        };
 
         return Template;
     })(_w);
@@ -535,7 +569,6 @@ let travelmaker = (function (window) {
                     ]
                 }
             };
-            //
         };
         return Editor;
     })(_w);
@@ -553,6 +586,7 @@ let travelmaker = (function (window) {
             this.createReComment = createReComment;
             this.updateComment = updateComment;
             this.deleteComment = deleteComment;
+            this.checkId = checkId;
         };
 
         const utils = new Utils();
@@ -573,6 +607,16 @@ let travelmaker = (function (window) {
                 contentType: 'application/json',
                 dataType: 'json',
                 data: JSON.stringify({data}),
+                beforeSend: setRequestHeader
+            });
+        }
+
+        function checkId(data) {
+            return $.ajax({
+                type: 'POST',
+                url: `http://${location.host}/user/checkId`,
+                data: data,
+                dataType: 'text',
                 beforeSend: setRequestHeader
             });
         }
@@ -923,7 +967,7 @@ let travelmaker = (function (window) {
     })(_w);
 
     const GoogleMap = (function (w) {
-        const GoogleMap = function ($modal, $editor) {
+        const GoogleMap = function (modal, $editor) {
             this.G_MAP = {
                 center: {lat: -33.8688, lng: 151.2195},
                 zoom: 13,
@@ -931,7 +975,7 @@ let travelmaker = (function (window) {
                 fullscreenControl: false,
                 mapTypeControl: false
             };
-            this.$modal = $modal;
+            this.modal = modal;
             this.$editor = $editor;
         };
 
@@ -948,7 +992,7 @@ let travelmaker = (function (window) {
                 this.G_MAP
             );
 
-            let $modal = this.$modal;
+            let modal = modal;
             let $editor = this.$editor;
             let G_KEY = 'AIzaSyCeKdfxBMTEBPFzc4QjjrIJJv25EuWL4gY';
 
@@ -1005,7 +1049,7 @@ let travelmaker = (function (window) {
 
                         google.maps.event.addListener(infowindow, 'domready', function () {
                             const btnAddMap = document.querySelector('#btn-add-map');
-                            btnAddMap.addEventListener('click', btnAddMapHandler.bind(null, place, $modal, $editor, G_KEY));
+                            btnAddMap.addEventListener('click', btnAddMapHandler.bind(null, place, modal, $editor, G_KEY));
                         });
                         infowindow.open(map, marker);
                         infowindows.push(infowindow);
@@ -1025,7 +1069,7 @@ let travelmaker = (function (window) {
         };
 
 
-        function btnAddMapHandler(place, $modal, $editor, G_KEY) {
+        function btnAddMapHandler(place, modal, $editor, G_KEY) {
             let lat = place.geometry.location.lat();
             let lng = place.geometry.location.lng();
             let width = 750;
@@ -1035,12 +1079,121 @@ let travelmaker = (function (window) {
             let $map = $(document.createDocumentFragment());
             $map.append(template.staticMap(link, imgUrl, place.formatted_address));
 
-            $modal.modal('hide');
+            modal.clear();
             $editor.summernote('restoreRange');
             $editor.summernote('insertNode', $map[0]);
         }
 
         return GoogleMap;
+    })(_w);
+
+    const Modal = (function (w) {
+        const modal = function (selector) {
+            this.m = document.querySelector(selector);
+        };
+
+        const utils = new Utils();
+        const template = new Template();
+        let close, body;
+
+        modal.prototype.create = function (type, initFunction) {
+            this.clear();
+            this.m.innerHTML = template.tmodal();
+            utils.getElList('html, body').forEach((el) => {
+                el.style.overflow = 'hidden';
+                el.style.height = '100%';
+            });
+            utils.addSameHandlerEvent('.tmodal-back', stopEvent, 'scroll', 'touchmove', 'mousewheel');
+            initModal(type, this, initFunction);
+        };
+
+        modal.prototype.setModal = setModal;
+
+        modal.prototype.clear = function () {
+            utils.getElList('html, body').forEach((el) => {
+                el.style.overflow = 'auto';
+                el.style.height = '100%';
+            });
+            utils.removeSameHandlerEvent('.tmodal-back', stopEvent, 'scroll', 'touchmove', 'mousewheel');
+            this.m.innerHTML = '';
+        };
+
+        function initModal(type, modal, initFunction) {
+            close = utils.getEl('.tmodal-bar .close');
+            body = utils.getEl('.tmodal-body');
+            close.addEventListener('click', (e) => modal.clear());
+
+            switch (type) {
+                case 'login':
+                    return setModal(template.login2(utils.getTokenCSRF()), initFunction);
+                case 'register':
+                    return setModal(template.register2(utils.getTokenCSRF()), initFunction);
+                case 'request':
+                    return setModal(template.request(), initFunction);
+                case 'story' :
+                    return setModal(template.story(), initFunction);
+                case 'map' :
+                    return setModal(template.map(), initFunction);
+                default:
+                    throw new Error('정의되지 않은 모달 형식입니다.');
+            }
+        }
+
+        function setModal(template, initFunction) {
+            body.innerHTML = template;
+            if (initFunction) initFunction();
+        }
+
+        function stopEvent(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        return modal;
+    })(_w);
+
+    const Validation = (function (w) {
+        const validation = function () {
+
+        };
+        const {getEl} = new Utils();
+        validation.prototype.setInvalid = function (el, feedBox, message) {
+            feedBox.innerText = message;
+            el.classList.add('v-fail');
+            el.classList.remove('v-pass');
+        };
+
+        validation.prototype.setValid = function (el, feedBox, message) {
+            feedBox.innerText = message;
+            el.classList.add('v-pass');
+            el.classList.remove('v-fail');
+        };
+
+        validation.prototype.getFeedBox = function (el) {
+            return [el.parentElement.querySelector('.v-feed'),
+                el.parentElement.querySelector('.iv-feed')];
+        };
+
+        validation.prototype.isValid = function (el) {
+            return el.classList.contains('v-pass');
+        };
+
+        validation.prototype.changeValid = function (el) {
+            el.classList.add('v-pass');
+            el.classList.remove('v-fail');
+        };
+
+        validation.prototype.changeInvalid = function (el) {
+            el.classList.add('v-fail');
+            el.classList.remove('v-pass');
+        };
+
+        validation.prototype.resetValidClass = function (e) {
+            e.target.classList.remove('v-fail');
+            e.target.classList.remove('v-pass');
+        };
+
+        return validation;
     })(_w);
 
     travelmaker.googleMap = GoogleMap;
@@ -1051,6 +1204,8 @@ let travelmaker = (function (window) {
     travelmaker.regex = Regex;
     travelmaker.editor = Editor;
     travelmaker.ajax = Ajax;
+    travelmaker.modal = Modal;
+    travelmaker.validation = Validation;
 
     _w.travelmaker = travelmaker;
     return travelmaker;

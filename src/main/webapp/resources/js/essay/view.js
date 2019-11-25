@@ -7,9 +7,9 @@ $(function () {
     const seq = +getEl('#seq').value;
 
     let commentData = {
-        bno: 0,
+        bno: bno,
         cno: 0,
-        seq: 0,
+        seq: seq,
         content: '',
         likes: 0,
         unlikes: 0,
@@ -18,7 +18,7 @@ $(function () {
 
     let essayData = {
         rno: '',
-        seq: 1,
+        seq: seq,
         title: '',
         content: '',
         hashtag: '',
@@ -56,10 +56,28 @@ $(function () {
 
         btnRecommentList.forEach(btnRe => btnRe.addEventListener('click', btnReHandler));
         btnRemoveComment.forEach(btnRemove => btnRemove.addEventListener('click', btnRemoveHandler));
+        btnLikeComment.forEach(btnLike => btnLike.addEventListener('click', btnLikeHandler));
+        btnUnlikeComment.forEach(btnUnLike => btnUnLike.addEventListener('click', btnUnlikeHandler));
+    }
+
+    function btnUnlikeHandler(e){
+
+    }
+
+    function btnLikeHandler(e) {
+        let content = this.parentElement.parentElement.querySelector('.comment-content').innerText;
+        setComment({likes: +this.dataset.likes + 1, cno: +this.dataset.cno, content: content});
+        ajax.updateComment(bno, getComment())
+            .then((ret) => {
+                return ajax.getCommentList(bno);
+            })
+            .then(getCommentList)
+            .then(renderComment)
+            .catch(console.error);
     }
 
     function btnAddCommentHandler(e) {
-        setComment({bno: bno, seq: seq});
+        // setComment({bno: bno, seq: seq});
         ajax.createComment(bno, getComment())
             .then((ret) => {
                 commentContent.value = '';

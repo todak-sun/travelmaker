@@ -12,7 +12,7 @@ public interface CommentApiInterface<Request, Response> {
 
     public Header<Response> create(int bno, int cno, Header<Request> request);
 
-    public Header<Response> update (Header<Request> request);
+    public Header<Response> update(Header<Request> request);
 
     public Header delete(int cno);
 

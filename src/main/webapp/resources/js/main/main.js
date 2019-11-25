@@ -1,6 +1,6 @@
 /*외부 임포트 함수*/
-function indcludeJs(jsFilePath) {
-  var js = document.createElement('script');
+function includeJs(jsFilePath) {
+  let js = document.createElement('script');
   js.type = 'text/javascript';
   js.src = jsFilePath;
   document.body.appendChild(js);
@@ -8,16 +8,16 @@ function indcludeJs(jsFilePath) {
 /* 로그인 API 임포트 */
 
 function initJsFile() {
-  indcludeJs('http://developers.kakao.com/sdk/js/kakao.min.js');
-  indcludeJs('https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.0.js');
-  indcludeJs('https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js');
+  includeJs('http://developers.kakao.com/sdk/js/kakao.min.js');
+  includeJs('https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.0.js');
+  includeJs('https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js');
 }
 
 function loginBtnDraw() {
   /* 카카오 버튼 그려주는곳 */
   Kakao.init('551e0a44c2899be91bf29306234db441');
   kakaoLogin();
-  var naverLogin = new naver.LoginWithNaverId({
+  let naverLogin = new naver.LoginWithNaverId({
     clientId: 'tq8xdJqWevoI0Tbj3WgL',
     callbackUrl: 'http://localhost:8080/user/naverLogin',
     isPopup: true,
@@ -47,6 +47,7 @@ $(function() {
     getFeedbackBox,
     resetMessageHandler
   } = new travelmaker.utils();
+
 
   const $modal = $('#modal-area'); // 모달
   const btnWrite = document.querySelector('#btn-write');
@@ -86,8 +87,8 @@ $(function() {
         return ['글선택', template.storySelector(), initWriteSelector];
       case 'btn-login':
         //initJsFile();
-        indcludeJs('http://developers.kakao.com/sdk/js/kakao.min.js');
-        indcludeJs('http://apis.google.com/js/platform.js');
+        includeJs('http://developers.kakao.com/sdk/js/kakao.min.js');
+        includeJs('http://apis.google.com/js/platform.js');
         return [
           '로그인',
           template.login(csrfTokenName, csrfTokenValue),
@@ -184,6 +185,7 @@ $(function() {
 
   const removeForced = setInterval(function() {
     btnGoogle = getEl('.abcRioButton');
+    console.log('돌아가니?');
     if (btnGoogle) stopRemoveForced();
   }, 10);
 
