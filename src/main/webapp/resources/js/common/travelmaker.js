@@ -380,8 +380,10 @@ let travelmaker = (function (window) {
         Template.prototype.login2 = function (csrfTokenValue) {
             return `
                 <form name="loginForm" method="post" action="j_spring_security_check" class="form-login" autocomplete="off">
-                <input type="hidden" id="csrfToken" name="_csrf" value="${csrfTokenValue}" />    
-                    <input type="hidden" id="id" name="id">
+                    <div class="hidden">
+                        <input type="hidden" id="csrfToken" name="_csrf" value="${csrfTokenValue}" />    
+                        <input type="hidden" id="id" name="id">
+                    </div>
                     <div class="input-wrap">
                       <input 
                         type="text"
@@ -438,20 +440,39 @@ let travelmaker = (function (window) {
                `;
         };
 
+        Template.prototype.tmodalMini = function () {
+            return `
+                <div class="tmodal-back tmodal-mini-back"></div>
+                <div class="tmodal tmodal-mini">
+                  <div class="tmodal-bar">
+                    <span class="close">&times;</span>
+                  </div>
+                  <div class="tmodal-body">
+                  </div>
+                </div>
+            `
+        };
+
+        Template.prototype.emailConfirm = function () {
+            return `
+                <div class="timer"></div>
+                <div class="input-wrap">
+                    <input type="text" id="input-email-confirm" class="v" placeholder="인증번호">
+                    <button type="button" id="btn-email-confirm">확인</button>
+                    <div class="v-feed"></div>
+                    <div class="iv-feed"></div>
+                </div>
+            `
+        };
+
         Template.prototype.register2 = function (csrfTokenValue) {
             return `
+            <div id="mini-modal"></div>
             <form action="/user/register" method="post" class="form-register" id="register-form">
-                <input
-                  type="hidden"
-                  name="_csrf"
-                  value="${csrfTokenValue}"
-                />
-                <input
-                  type="hidden"
-                  name="registerMethod"
-                  id="registerMethod"
-                  value="travelMaker"
-                />
+                <div class="hidden">
+                    <input type="hidden" name="_csrf" value="${csrfTokenValue}"/>
+                    <input type="hidden" name="registerMethod" id="registerMethod" value="travelMaker"/>
+                </div>
                 <div class='input-expression'>
                   <p>* 표시는 필수 입력 사항입니다</p>
                 </div>
@@ -1114,7 +1135,7 @@ let travelmaker = (function (window) {
         };
 
         const utils = new Utils();
-        const template = new Template();
+        const t = new Template();
         let close, body;
 
         modal.prototype.createCustom = function (template, initFunction) {
@@ -1125,6 +1146,14 @@ let travelmaker = (function (window) {
         modal.prototype.create = function (type, initFunction) {
             setDefault(this);
             initModal(type, initFunction);
+        };
+
+        modal.prototype.createMini = function (template, initFunction) {
+            this.m.innerHTML = t.tmodalMini();
+            const [close, body] = utils.getEls(this.m, '.close', '.tmodal-body');
+            utils.addEvent(close, 'click', () => this.m.innerHTML = '');
+            body.innerHTML = template;
+            if (initFunction) initFunction();
         };
 
         modal.prototype.setModal = setModal;
@@ -1142,15 +1171,15 @@ let travelmaker = (function (window) {
         function initModal(type, initFunction) {
             switch (type) {
                 case 'login':
-                    return setModal(template.login2(utils.getTokenCSRF()), initFunction);
+                    return setModal(t.login2(utils.getTokenCSRF()), initFunction);
                 case 'register':
-                    return setModal(template.register2(utils.getTokenCSRF()), initFunction);
+                    return setModal(t.register2(utils.getTokenCSRF()), initFunction);
                 case 'request':
-                    return setModal(template.request(), initFunction);
+                    return setModal(t.request(), initFunction);
                 case 'story' :
-                    return setModal(template.story(), initFunction);
+                    return setModal(t.story(), initFunction);
                 case 'domestic' :
-                    return setModal(template.domestic(), initFunction);
+                    return setModal(t.domestic(), initFunction);
                 default:
                     throw new Error('정의되지 않은 모달 형식입니다.');
             }
@@ -1158,7 +1187,7 @@ let travelmaker = (function (window) {
 
         function setDefault(modal) {
             modal.clear();
-            modal.m.innerHTML = template.tmodal();
+            modal.m.innerHTML = t.tmodal();
             utils.getElList('html, body').forEach((el) => {
                 el.style.overflow = 'hidden';
                 el.style.height = '100%';
