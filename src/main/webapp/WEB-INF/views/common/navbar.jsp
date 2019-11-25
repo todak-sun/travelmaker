@@ -31,6 +31,8 @@ prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
         <p>어서와 방갑다 ${fn:substringBefore(user.username,"%")} 쉬볼세끼야</p>
         --%>
         <p>어서와 방갑다 닉네임 : ${userDetail.nickname} </p>
+<%--         <input type="hidden" name="seq" id="seq" value=${userDetail.seq } />
+        <input type="hidden" name="nickname" id="nickname" value=${userDetail.nickname } /> --%>
         <%--
         <p
           >쓸 수 있는 값 : Username, Enabled, AccountNonExpired,

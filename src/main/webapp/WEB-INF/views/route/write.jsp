@@ -6,6 +6,10 @@
     file="../common/head-css.jsp"%>
     <link
       rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reset-css@5.0.1/reset.min.css"
+    />
+    <link
+      rel="stylesheet"
       href="${pageContext.request.contextPath}/resources/css/route/write.css"
     />
     <title>여행경로 추천글 쓰기</title>
@@ -45,24 +49,26 @@
 
             <div class="input-wrap country">
               <label for="">국가</label>
-              <span>대한민국</span>
+              <input type="text" name="nation" id="nation" value="나라나라"/>
             </div>
 
             <div class="input-wrap city">
               <label for="">도시</label>
-              <span>서울특별시</span>
+              <input type="text" name="city" id="city" value="도시도시"/>
             </div>
 
             <div class="input-wrap place">
               <label for="">장소</label>
-              <span>강남대로 11-1</span>
+              <input type="text" name="place" id="place" value="장소장소"/>
               <button class="place-finder" id="searchBtn" data-toggle="modal" data-target="#kakaoMapModal">찾기</button>
             </div>
             <div class="hide">
-              <input type="hidden" name="isDomestic" id="isDomestic">
+              <input type="hidden" name="isDomestic" id="isDomestic" />
               <input type="hidden" name="location" id="location" />
               <input type="hidden" name="lat" id="lat" value="0" />
               <input type="hidden" name="lng" id="lng" value="0" />
+              <input type="hidden" name="seq" id="seq" value=${userDetail.seq} />
+              <input type="hidden" name="nickname" id="nickname" value=${userDetail.nickname} />
               <input type="file" name="images" id="images" multiple="multiple" />
             </div>
             
@@ -95,43 +101,8 @@
             </div>
 
             <div class="image-wrap">
-              <button>+ 이미지 추가</button>
+              <button id="addImage">+ 이미지 추가</button>
               <ul class="image-group empty">
-                <li>
-                  <span class="delete">&times;</span>
-                  <img
-                    src="https://source.unsplash.com/collection/190727/200x300"
-                    alt=""
-                  />
-                </li>
-                <li>
-                  <span class="delete">&times;</span>
-                  <img
-                    src="https://source.unsplash.com/collection/190727/100x100"
-                    alt=""
-                  />
-                </li>
-                <li>
-                  <span class="delete">&times;</span>
-                  <img
-                    src="https://source.unsplash.com/collection/190727/200x100"
-                    alt=""
-                  />
-                </li>
-                <li>
-                  <span class="delete">&times;</span>
-                  <img
-                    src="https://source.unsplash.com/collection/190727/100x100"
-                    alt=""
-                  />
-                </li>
-                <li>
-                  <span class="delete">&times;</span>
-                  <img
-                    src="https://source.unsplash.com/collection/190727/100x100"
-                    alt=""
-                  />
-                </li>
               </ul>
             </div>
           </div>
@@ -172,78 +143,6 @@
 
           <div class="route-wrap">
             <ul class="route-group saved-courses">
-              <!-- 저장된 루트 한 개 -->
-              <li>
-                <div class="route-item">
-                  <span class="delete">&times;</span>
-                  <h5>프랑스 파리 몽마르트 언덕</h5>
-                  <div class="route-info">
-                    <p><span>2019/12/12</span> ~ <span>2019/12/13</span></p>
-                    <button>수정</button>
-                  </div>
-                </div>
-              </li>
-              <!-- 저장된 루트 한 개 -->
-              <!-- 저장된 루트 한 개 -->
-              <li>
-                <div class="route-item">
-                  <span class="delete">&times;</span>
-                  <h5>프랑스 파리 몽마르트 언덕</h5>
-                  <div class="route-info">
-                    <p><span>2019/12/12</span> ~ <span>2019/12/13</span></p>
-                    <button>수정</button>
-                  </div>
-                </div>
-              </li>
-              <!-- 저장된 루트 한 개 -->
-              <!-- 저장된 루트 한 개 -->
-              <li>
-                <div class="route-item">
-                  <span class="delete">&times;</span>
-                  <h5>프랑스 파리 몽마르트 언덕</h5>
-                  <div class="route-info">
-                    <p><span>2019/12/12</span> ~ <span>2019/12/13</span></p>
-                    <button>수정</button>
-                  </div>
-                </div>
-              </li>
-              <!-- 저장된 루트 한 개 -->
-              <!-- 저장된 루트 한 개 -->
-              <li>
-                <div class="route-item">
-                  <span class="delete">&times;</span>
-                  <h5>프랑스 파리 몽마르트 언덕</h5>
-                  <div class="route-info">
-                    <p><span>2019/12/12</span> ~ <span>2019/12/13</span></p>
-                    <button>수정</button>
-                  </div>
-                </div>
-              </li>
-              <!-- 저장된 루트 한 개 -->
-              <!-- 저장된 루트 한 개 -->
-              <li>
-                <div class="route-item">
-                  <span class="delete">&times;</span>
-                  <h5>프랑스 파리 몽마르트 언덕</h5>
-                  <div class="route-info">
-                    <p><span>2019/12/12</span> ~ <span>2019/12/13</span></p>
-                    <button>수정</button>
-                  </div>
-                </div>
-              </li>
-              <!-- 저장된 루트 한 개 -->
-              <!-- 저장된 루트 한 개 -->
-              <li>
-                <div class="route-item">
-                  <span class="delete">&times;</span>
-                  <h5>프랑스 파리 몽마르트 언덕</h5>
-                  <div class="route-info">
-                    <p><span>2019/12/12</span> ~ <span>2019/12/13</span></p>
-                    <button id="1">수정</button>
-                  </div>
-                </div>
-              </li>
-              <!-- 저장된 루트 한 개 -->
             </ul>
           </div>
 

@@ -1,6 +1,6 @@
 $(function() {
+  // 데이타세팅
   const { useState, setRequestHeader } = new travelmaker.utils();
-  // 전역변수들
   let routeData = {
     rno: null,
     seq: null,
@@ -11,7 +11,6 @@ $(function() {
     fixed: null,
     isDomestic: null
   };
-
   let routeContentData = {
     crno: 0,
     rno: null,
@@ -24,21 +23,56 @@ $(function() {
     score: null,
     fixed: 0
   };
-
-  // *******페이지 첫 로딩 시 필요한 처리들*******
-
   const [setRoute, getRoute] = useState(routeData);
   const [setRouteContent, getRouteContent] = useState(routeContentData);
-  // let preloadImages = [];
+
+  // ******* 페이지 첫 로딩 시 필요한 처리들 *******
+
+  // 국내외, 유저정보 입력
   setRoute({
     isDomestic: +getJSONfromQueryString().isDomestic,
     seq: +getEl("#seq").value,
     nickname: getEl("#nickname").value
   });
 
+  // 지도를 위한 국내외 정보 히든값에 입력
   getEl("#isDomestic").value = getRoute().isDomestic;
-  const $savedCourses = $(".saved-courses");
 
+  // ************** 전역변수들 선언
+  // 영역 변수 선언
+  const $savedCourses = $(".saved-courses");
+  const $starRatings = $(".score-group a");
+  const $imageGroup = $(".image-group");
+  const leverBar = getEl(".level-bar");
+  const editorFirst = getEl(".editor-first");
+  const editorSecond = getEl(".editor-second");
+  const editorThird = getEl(".editor-third");
+
+  // 버튼 변수 선언
+  const btnPrevious = getEl("#btn-previous"); // 이전(2(왼) 3(왼))
+  const btnNext = getEl("#btn-next"); // 다음(1(가) 2(가))
+  const btnRouteSave = getEl("#btn-route-save"); // 저장(3(가))
+  const btnPreview = getEl("#btn-preview"); // 미리보기(3(오))
+  const btnCourseSave = getEl("#btn-course-save"); // 코스저장(2(오))
+
+  const btnAddImage = getEl("#addImage");
+
+  // 사용자 입력값 변수 선언
+  const title = getEl("#route-title");
+  const hashtag = getEl("#hashtag");
+  const epilogue = getEl("#route-epilogue");
+  const nation = getEl("input[name=nation]");
+  const city = getEl("input[name=city]");
+  const place = getEl("input[name=place]");
+  const content = getEl("#route-content-content");
+  const location = getEl("input[name=location]");
+  const dateStart = getEl("input[name=dateStart]");
+  const dateEnd = getEl("input[name=dateEnd]");
+  const score = getEl("input[name=score]");
+
+  const $images = $("#images");
+
+  // ************** 함수들 선언
   // 데이터 바인드 관련 함수들
   function routeDataBindHandler(e) {
     const name = e.target.name;
@@ -52,6 +86,7 @@ $(function() {
     setRouteContent({ [name]: value });
   }
 
+  // 별점수 함수
   function starRatingHandler(e) {
     e.preventDefault();
     const $this = $(this);
@@ -63,22 +98,22 @@ $(function() {
       .addClass("on")
       .prevAll("a")
       .addClass("on");
-    const score = $(".star_rating a.on").length;
+    const score = $(".score-group a.on").length;
     setRouteContent({ score: score });
   }
-
-  // getEl("#test1").addEventListener("click", test);
 
   // 코스 입력칸 초기화 함수
   function initCourseForm() {
     // 입력칸 초기화
-    $("#images").val("");
+    $imageGroup.empty();
+    $images.val("");
     nation.value = "";
     city.value = "";
     place.value = "";
     location.value = "";
     content.value = "";
-    // 데이터셋 초기화
+    // 자바스크립트에 저장된 데이터셋 초기화
+    fileList.splice(0);
     setRouteContent({
       crno: 0,
       content: null,
@@ -89,37 +124,13 @@ $(function() {
     });
   }
 
-  // 별점수 매기기
-  const $starRatings = $(".star_rating a");
+  // ************** 이벤트 부여
   $starRatings.on("click", starRatingHandler);
-
-  // 버튼 변수 선언 & 클릭 이벤트 부여
-  const btnPrevious = getEl("#btn-previous"); // 이전(2(왼) 3(왼))
-  const btnNext = getEl("#btn-next"); // 다음(1(가) 2(가))
-  const btnRouteSave = getEl("#btn-route-save"); // 저장(3(가))
-  const btnPreview = getEl("#btn-preview"); // 미리보기(3(오))
-  const btnCourseSave = getEl("#btn-course-save"); // 코스저장(2(오))
-
-  // const previousBtn = getEl("#previous-btn");
-  // const saveBtn = getEl("#save-btn");
-  // const nextBtn = getEl("#next-btn");
-  // previousBtn.addEventListener("click", selectCommand);
-  // saveBtn.addEventListener("click", selectCommand);
-  // nextBtn.addEventListener("click", selectCommand);
-
-  //사용자 입력값 & 이벤트
-  const title = getEl("#route-title");
-  const hashtag = getEl("#hashtag");
-  const epilogue = getEl("#route-epilogue");
-  const nation = getEl("input[name=nation]");
-  const city = getEl("input[name=city]");
-  const place = getEl("input[name=place]");
-  const content = getEl("#route-content-content");
-  const location = getEl("input[name=location]");
-  const dateStart = getEl("input[name=dateStart]");
-  const dateEnd = getEl("input[name=dateEnd]");
-  const score = getEl("input[name=score]");
-
+  $images.on("change", LoadImg);
+  btnAddImage.addEventListener("click", function(e) {
+    e.preventDefault();
+    $images.click();
+  });
   addSameEvent("change", routeDataBindHandler, title, epilogue, hashtag);
   addSameEvent(
     "click",
@@ -141,6 +152,10 @@ $(function() {
     dateStart,
     dateEnd
   );
+
+  // 처음 필요한 작업들 실행
+  showCommand(1);
+
   // *******페이지 첫 로딩 시 필요한 처리들 끝*******
   //
   //
@@ -177,6 +192,11 @@ $(function() {
   function showCommand(commandLevel) {
     switch (commandLevel) {
       case 1:
+        leverBar.children[1].classList.remove("level-2");
+
+        editorFirst.classList.remove("hide");
+        editorSecond.classList.add("hide");
+
         btnPrevious.setAttribute("disabled", "disabled"); //
         btnPrevious.name = "previous-btn-1";
 
@@ -187,6 +207,13 @@ $(function() {
         btnCourseSave.name = "course-save-btn";
         break;
       case 2:
+        leverBar.children[1].classList.add("level-2");
+        leverBar.children[2].classList.remove("level-3");
+
+        editorFirst.classList.add("hide");
+        editorSecond.classList.remove("hide");
+        editorThird.classList.add("hide");
+
         btnPrevious.removeAttribute("disabled"); //
         btnPrevious.name = "previous-btn-2";
 
@@ -208,6 +235,11 @@ $(function() {
 
         break;
       case 3:
+        leverBar.children[2].classList.add("level-3");
+
+        editorSecond.classList.add("hide");
+        editorThird.classList.remove("hide");
+
         btnPrevious.removeAttribute("disabled"); //
         btnPrevious.name = "previous-btn-3";
 
@@ -246,7 +278,7 @@ $(function() {
             .then(function(result) {
               showWriteForm(route.isDomestic);
               showCommand(level);
-              $(".route-info-form").show();
+              // $(".route-info-form").show();
               setRoute({ rno: result.rno });
               setRouteContent({ rno: result.rno, score: 3 });
               title.disabled = true;
@@ -260,8 +292,8 @@ $(function() {
         if ($savedCourses.length > 0)
           return saveOrderAjax(getOrder())
             .then(function() {
-              $(".route-info-form").hide();
-              $(".route-epilogue-form").show();
+              // $(".route-info-form").hide();
+              // $(".route-epilogue-form").show();
               showCommand(level);
             })
             .catch(console.error);
@@ -284,8 +316,8 @@ $(function() {
         break;
       case 2:
         showCommand(level);
-        $(".route-info-form").show();
-        $(".route-epilogue-form").hide();
+        // $(".route-info-form").show();
+        // $(".route-epilogue-form").hide();
         break;
       default:
         break;
@@ -310,8 +342,8 @@ $(function() {
     const $searchBtn = $("#searchBtn");
     // 국내 (Kakao Map)
     if (isDomestic === 1) {
-      //국가, 도시 입력창을 숨김.
-      $(".abroad-info").hide();
+      // //국가, 도시 입력창을 숨김.
+      // $(".abroad-info").hide();
       // 구글 지도 모달창 없애기
       $("#googleMapModal").remove();
       // 해외 (Google Map)
@@ -380,9 +412,13 @@ $(function() {
   function courseAjaxSuccess(crno) {
     // < 3.웹페이지에 코스 임시저장
     // 수정된 임시저장코스 삭제(삭제할 게 있을 경우만)
-    let patchedCourse = document.querySelector(`li input[value='${crno}']`);
+    let patchedCourse = document.querySelector(
+      `.route-info input[value='${crno}']`
+    );
     if (patchedCourse)
-      $savedCourses[0].removeChild(patchedCourse.parentElement);
+      $savedCourses[0].removeChild(
+        patchedCourse.parentElement.parentElement.parentElement
+      );
 
     // <h4>${place.value}</h4>
     // <span>날짜 : ${dateStart.value} - ${dateEnd.value}</span>
@@ -394,10 +430,10 @@ $(function() {
     const $li = $(`
                     <li draggable="true" droppable="true" style="[draggable='true'] {
                       -khtml-user-drag: element; }" >
-                      <div class="route-item">
+                      <div class="route-item" name="item">
                         <span class="delete" name="delete-course">&times;</span>
                         <h5>${place.value}</h5>
-                        <div class="route-info">
+                        <div class="route-info" name="info">
                           <p><span>${dateStart.value}</span> ~ <span>${dateEnd.value}</span></p>
                           <button name="modify-course">수정</button>
                           <input type="hidden" name="crno" value=${crno}>
@@ -417,19 +453,19 @@ $(function() {
       // li.addEventListener("dragenter", dragenter, false);
       // li.addEventListener("dragleave", dragleave, false);
       li.addEventListener("drop", drop, false);
-      li.children
-        .namedItem("modify-course")
-        .addEventListener("click", modifyCourse);
-      li.children
-        .namedItem("delete-course")
-        .addEventListener("click", deleteCourse);
+      li.children[0].children[2].children[1].addEventListener(
+        "click",
+        modifyCourse
+      );
+      li.children[0].children[0].addEventListener("click", deleteCourse);
     });
 
     initCourseForm();
   }
 
   function modifyCourse(e) {
-    const crno = e.target.parentElement.children.namedItem("crno").value;
+    const crno = e.target.nextElementSibling.value;
+    // parentElement.children.namedItem("crno").value;
     alert(crno + "에이작스로 수정할 게시글 불러오기 추가");
 
     getCourseAjax(crno).then(result => {
@@ -439,13 +475,13 @@ $(function() {
       let arrLocation = result.location.split("_");
       location.value = result.location;
       if (arrLocation.length == 1) {
-        place = arrLocation[0];
-        console.log(arrLocation[0]);
+        place.value = arrLocation[0];
+        console.log("국내");
       } else {
-        nation = arrLocation[0];
-        city = arrLocation[1];
-        place = arrLocation[2];
-        console.log(arrLocation[0]);
+        nation.value = arrLocation[0];
+        city.value = arrLocation[1];
+        place.value = arrLocation[2];
+        console.log("해외");
       }
       content.value = result.content;
 
@@ -473,12 +509,18 @@ $(function() {
   }
 
   function deleteCourse(e) {
-    const crno = e.target.parentElement.children.namedItem("crno").value;
+    const crno =
+      e.target.nextElementSibling.nextElementSibling.children["crno"].value;
     alert(crno + "에이작스로 삭제하기");
     deleteCourseAjax(crno).then(result => {
-      let patchedCourse = document.querySelector(`li input[value='${crno}']`);
+      let patchedCourse = document.querySelector(
+        `.route-info input[value='${crno}']`
+      );
       if (patchedCourse)
-        $savedCourses[0].removeChild(patchedCourse.parentElement);
+        $savedCourses[0].removeChild(
+          patchedCourse.parentElement.parentElement.parentElement
+        );
+
       console.log(result);
       alert(crno + "코스를 삭제했습니다");
     });
@@ -498,39 +540,18 @@ $(function() {
   // }
   function drop(ev) {
     const moving = document.querySelector(".moving");
-    const dropped = ev.target;
-    // console.log(
-    //   "moving : " + moving.offsetTop + " // dropped : " + dropped.offsetTop
-    // );
+    const dropped = ev.currentTarget;
 
     if (moving.offsetTop > dropped.offsetTop) {
       // 위로 이동시킬 경우
-      if (dropped.localName === "li") {
-        // li 선택한 경우
-        $savedCourses[0].insertBefore(moving, dropped);
-      } else if (dropped.parentElement.localName === "li") {
-        // li의 child를 선택한 경우
-        $savedCourses[0].insertBefore(moving, dropped.parentElement);
-      }
-    } else {
+      $savedCourses[0].insertBefore(moving, dropped);
+    } else if (moving.offsetTop < dropped.offsetTop) {
       // 아래로 이동시킬 경우
-      // < -- 맨 아래로 이동시킬 경우 시작
-      if (
-        dropped.nextElementSibling === null ||
-        dropped.parentElement.nextElementSibling === null
-      ) {
+      // 맨아래일 경우 append 아닐경우 껴넣기
+      if (dropped.nextElementSibling === null) {
         $savedCourses[0].appendChild(moving);
-      }
-      // 맨 아래로 이동시킬 경우 끝 -->
-      if (dropped.localName === "li") {
-        // li 선택한 경우
+      } else {
         $savedCourses[0].insertBefore(moving, dropped.nextElementSibling);
-      } else if (dropped.parentElement.localName === "li") {
-        // li의 child를 선택한 경우
-        $savedCourses[0].insertBefore(
-          moving,
-          dropped.parentElement.nextElementSibling
-        );
       }
     }
     // 이동 완료 후 이동클래스 제거
@@ -577,9 +598,12 @@ $(function() {
 
   function getFormData(data) {
     const formData = new FormData();
-    let images = document.querySelector("input[name=images]").files;
-    if (images.length > 5) return alert("이미지는 5개까지만 업로드 가능합니다");
-    Array.from(images).forEach((image, idx) => {
+    // let imageFiles = images.files;
+    // if (imageFiles.length > 5)
+    //   return alert("이미지는 5개까지만 업로드 가능합니다");
+    // Array.from(imageFiles).forEach((image, idx) => {
+
+    fileList.forEach((image, idx) => {
       // console.log(idx + " : " + image);
       formData.append("images", image);
     });
@@ -616,7 +640,7 @@ $(function() {
   function getOrder() {
     let orderJson = new Array();
     Array.from($savedCourses[0].children).forEach(course => {
-      let crno = course.children.namedItem("crno").value;
+      let crno = course.children[0].children["info"].children["crno"].value;
       orderJson.push(crno);
     });
     return orderJson;
@@ -810,6 +834,58 @@ $(function() {
       dataType: "json",
       beforeSend: setRequestHeader
     });
+  }
+
+  function LoadImg() {
+    const images = $images[0];
+    listLength = fileList.length;
+    if (images.files.length + fileList.length > 5)
+      return alert("이미지는 5개까지만 업로드 가능합니다");
+
+    Array.from(images.files).forEach(image => {
+      let reader = new FileReader();
+      reader.onload = function(e) {
+        fileList.push(image);
+        // 임시저장코스 추가
+        const $frag = $(document.createDocumentFragment());
+        const $li = $(`
+                      <li>
+                        <span class="delete">&times;</span>
+                        <img
+                          src="${e.target.result}"
+                          alt="${image.name}"
+                        />
+                      </li>
+                    `);
+        $frag.append($li);
+        $imageGroup.append($frag);
+
+        if (fileList.length === $imageGroup[0].childElementCount) {
+          document.querySelectorAll(".image-group span").forEach(span => {
+            span.addEventListener("click", deleteImage);
+          });
+        }
+      };
+      reader.readAsDataURL(image);
+    });
+
+    function deleteImage(e) {
+      // 리스트 index 값 찾아서 이미지 삭제
+      // e.stopPropagation();
+      let li = e.target.parentElement;
+      let parent = li.parentElement;
+      let index = getElementIndex(li);
+      parent.removeChild(parent.children[index]);
+      fileList.splice(index, 1);
+    }
+
+    function getElementIndex(element) {
+      let _i = 0;
+      while ((element = element.previousElementSibling) != null) {
+        _i++;
+      }
+      return _i;
+    }
   }
 
   ////////////////////////////////////////// 카카오맵 ////////////////////////////////////////
@@ -1229,3 +1305,10 @@ function addSameEvent(event, handler, ...targets) {
     target.addEventListener(event, handler);
   });
 }
+
+// 이미지 추가 함수
+// function showImage() {
+//   LoadImg();
+// }
+
+let fileList = [];
