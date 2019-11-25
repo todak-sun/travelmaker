@@ -157,7 +157,7 @@ let travelmaker = (function (window) {
         Template.prototype.map = function () {
             return `
             <div class="row">
-              <div class="col col-sm-3 bg-light" style="padding:0">
+              <div class="">
                   <div class="input-group">
                       <input type="text" id="keyword" class="form-control"/>
                       <button id="btn-keyword-search">검색</button>
@@ -1134,6 +1134,8 @@ let travelmaker = (function (window) {
                     return setModal(template.story(), initFunction);
                 case 'map' :
                     return setModal(template.map(), initFunction);
+                case 'domestic' :
+                    return setModal(template.domestic(), initFunction);
                 default:
                     throw new Error('정의되지 않은 모달 형식입니다.');
             }

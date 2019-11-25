@@ -1,7 +1,4 @@
-/**
- * 
- */
-	
+
 $('#title').focusout(function(){
 	var title = $('#title').val();
 	var titleDiv = $('#titleDiv');
