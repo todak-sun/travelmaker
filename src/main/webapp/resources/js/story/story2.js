@@ -7,9 +7,9 @@ $(function () {
 
     //변수
     const btnWrite = getEl('#btn-write');
-    addEvent(btnWrite, 'click', (e) => {
-        modal.create('story', initStory);
-    });
+    if (btnWrite) {
+        addEvent(btnWrite, 'click', () => modal.create('story', initStory));
+    }
 
     function initStory() {
         const btnEssay = getEl('#btn-essay');

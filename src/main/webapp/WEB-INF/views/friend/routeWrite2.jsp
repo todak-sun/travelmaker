@@ -17,7 +17,7 @@
                 <input type="hidden" name="is_domestic" id="is_domestic" value="${is_domestic}">
                 <input type="hidden" name="fno" value="${fno}">
                 <input type="hidden" name="lat" id="lat">
-                <input type="hidden" name="lnt" id="lng">
+                <input type="hidden" name="lng" id="lng">
                 <input type="hidden" name="city" id="city">
             </div>
 

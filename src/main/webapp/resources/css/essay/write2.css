@@ -253,7 +253,7 @@
 .example {
     border: 2px solid #c8c8c8;
     color: #a3a3a3;
-    cursor:initial;
+    cursor: initial;
 }
 
 .example::after {
@@ -355,3 +355,122 @@
     color: #747474;
 }
 
+/* 지도 모달 레이아웃 */
+
+.map-wrap {
+    display: flex;
+    height: 500px;
+}
+
+.map-wrap .search-area {
+    width: 30%;
+    box-sizing: border-box;
+    border: 2px solid gray;
+    padding: 0.2rem;
+    margin-right: 0.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.map-wrap .search-area .input-wrap {
+    display: flex;
+}
+
+.map-wrap .search-area .input-wrap input {
+    outline: none;
+    width: 80%;
+    padding: 0.2rem;
+    font-size: 1rem;
+}
+
+.map-wrap .search-area .input-wrap button {
+    width: 20%;
+    background-color: #ffffff;
+    border: 2px solid #00c1da;
+    color: #00c1da;
+    padding: 0.3rem 0;
+    font-size: 0.8rem;
+}
+
+.map-wrap .search-area .input-wrap button:hover {
+    background-color: #00c1da;
+    color: #ffffff;
+}
+
+.map-wrap .search-area .result-wrap {
+    box-sizing: border-box;
+    height: 100%;
+    overflow: auto;
+}
+
+.result-wrap .result-item {
+    list-style: none;
+    box-sizing: border-box;
+    padding: 0.2rem;
+}
+
+.result {
+    position: relative;
+    border: 1px solid gray;
+    font-size: 0.9rem;
+    padding: 0.5rem;
+    line-height: 1rem;
+    cursor: pointer;
+}
+
+.result .place-addr {
+    font-size: 0.7rem;
+    color: #707070;
+}
+
+.result .btn-add-map {
+    position: absolute;
+    top: 0.15rem;
+    right: 0.15rem;
+    background-color: #ffffff;
+    border: 2px solid #333333;
+    border-radius: 0.5rem;
+    color: #333333;
+    font-size: 0.7rem;
+}
+
+.result:hover {
+    color: #00c1da;
+    font-weight: 500;
+}
+
+.page-group {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.page-group li {
+    padding: 0.1rem;
+    list-style: none;
+}
+
+.page-group li a {
+    color: #5a5a5a;
+    text-decoration: none;
+}
+
+.page-group li a:hover {
+    color: #00c1da;
+}
+
+.page-group li a.on {
+    color: #00c1da;
+}
+
+.map-wrap .map-area {
+    width: 80%;
+}
+
+.map-wrap .map-area > div {
+    width: 100%;
+    height: 100%;
+    border: 2px solid gray;
+}
+
+/* 지도 모달 레이아웃 */

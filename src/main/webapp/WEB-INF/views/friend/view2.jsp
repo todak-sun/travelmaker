@@ -40,7 +40,7 @@
                         <p>저는 이번여행에서 정말 대단한 발견을 하고 올것임.</p>
                         <div class="button-wrap">
                             <!-- 자신의 글과 비교하여 한 개만 렌더링 -->
-                            <button id="btn-test">신청</button>
+                            <button class="btn-test">신청</button>
                             <!-- <button>신청확인</button> -->
                             <!-- 자신의 글과 비교하여 한 개만 렌더링 -->
                         </div>
@@ -133,5 +133,6 @@
 
 <%@include file="../common/foot-js.jsp" %>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=58d9a72c9db8da0b849a32734093767e"></script>
+<script src="${pageContext.request.contextPath}/resources/js/friend/view2.js"></script>
 </body>
 </html>

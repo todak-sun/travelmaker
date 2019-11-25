@@ -101,6 +101,6 @@
 <%@ include file="../common/editor-js.jsp" %>
 <script src="${pageContext.request.contextPath}/resources/summernote/summernote-bs4.js"></script>
 <script src="${pageContext.request.contextPath}/resources/summernote/lang/summernote-ko-KR.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/essay/write.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/essay/write2.js"></script>
 </body>
 </html>

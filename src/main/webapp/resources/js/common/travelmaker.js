@@ -154,6 +154,54 @@ let travelmaker = (function (window) {
                 `;
         };
 
+        Template.prototype.kmap = function () {
+            return `
+            <div class="map-wrap">
+                <div class="search-area">
+                  <div class="input-wrap">
+                    <input type="text" class="search-location" />
+                    <button id="btn-search-location">검색</button>
+                  </div>
+                  <div class="result-wrap">
+                    <ul class="result-group"></ul>
+                    <ul class="page-group"></ul>
+                  </div>
+                </div>
+                <div class="map-area">
+                  <div id="map"></div>
+                </div>
+          </div>
+            `;
+        };
+
+        Template.prototype.pageItem = function (index, pagination) {
+            let li = document.createElement('li');
+            let a = document.createElement('a');
+            a.href = '#';
+            a.innerText = index;
+            if (index === pagination.current) a.classList.add('on');
+            else a.addEventListener('click', () => pagination.gotoPage(index));
+
+            li.appendChild(a);
+            return li;
+        };
+
+        Template.prototype.kmapResult = function (index, places) {
+            let li = document.createElement('li');
+            let placeName = places.place_name;
+            let placeAddr = places.road_address_name || places.address_name;
+            li.innerHTML = `
+               <li class="result-item">
+                <div class="result">
+                  <h6 class="place-name">${placeName}</h6>
+                  <span class="place-addr">${placeAddr}</span>
+                </div>
+               </li>
+            `;
+            li.classList.add('result-item');
+            return li;
+        };
+
         Template.prototype.map = function () {
             return `
             <div class="row">
@@ -514,28 +562,34 @@ let travelmaker = (function (window) {
             return `
             <form class="form-request">
             <div class="input-box">
-              <label for="">동행 시작일</label>
+              <label for="req-start-date">동행 시작일</label>
               <div class="input-wrap">
-                <input type="date" />
+                <input type="date" id="req-start-date" class="v"/>
+                <div class="v-feed"></div>
+                <div class="iv-feed"></div>
               </div>
             </div>
             
             <div class="input-box">
-              <label for="">동행 종료일</label>
+              <label for="req-end-date">동행 종료일</label>
               <div class="input-wrap">
-                <input type="date" />
+                <input type="date" id="req-end-date" class="v"/>
+                <div class="v-feed"></div>
+                <div class="iv-feed"></div>
               </div>
             </div>
             
             <div class="input-box">
-              <label for="">신청 내용</label>
+              <label for="req-content">신청 내용</label>
               <div class="input-wrap textarea">
-                <textarea
+                <textarea id="req-content" class="v"
                   placeholder="신청 내용을 구체적으로 적어주세요."
                 ></textarea>
+                <div class="v-feed"></div>
+                <div class="iv-feed"></div>
               </div>
             </div>
-            <button class="btn-travel">신청하기</button>
+            <button type="button" id="req-btn-try" class="btn-travel">신청하기</button>
             </form>
             `;
         };
@@ -718,45 +772,49 @@ let travelmaker = (function (window) {
     })(_w);
 
     const KakaoMap = (function (w) {
-        const KakaoMap = function () {
-
-        };
-
-        const {getEls} = new Utils();
-        const template = new Template();
-
-        const $modal = $('.modal');
-        const $editor = $('#editor');
-
-        let markers = [];
-        let map, ps, infowindow, mapContainer, mapOption;
-
-        KakaoMap.prototype.init = function () {
-            const [keyword, btnSearchByKeyword] = getEls(
-                document,
-                '#keyword',
-                '#btn-keyword-search'
-            );
-
-            mapContainer = document.querySelector('#map'); // 지도를 표시할 div
-            mapOption = {
+        const KakaoMap = function (kmap) {
+            this.kmap = kmap;
+            this.mapOption = {
                 center: new kakao.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
                 level: 3 // 지도의 확대 레벨
             };
-
-            map = new kakao.maps.Map(mapContainer, mapOption); //지도생성
-            ps = new kakao.maps.services.Places(); //장소검색
-            infowindow = new kakao.maps.InfoWindow({zIndex: 1}); //인포윈도우
-            btnSearchByKeyword.addEventListener('click', searchPlaces);
         };
 
-        function searchPlaces() {
-            if (!keyword.value.replace(/^\s+|\s+$/g, '')) {
+        const {getEl, addEvent, useState, getEls} = new Utils();
+        const template = new Template();
+        const $editor = $('#editor');
+
+        let markers = [];
+        let map, ps, infoWindow;
+        let setMapData;
+        let _modal, _resultGroup, _pageGroup;
+
+        KakaoMap.prototype.create = function (modal) {
+            const [btnSearch, inputSearch, resultGroup, pageGroup] = getEls(modal.m, '#btn-search-location', '.search-location', '.result-group', '.page-group');
+            map = new kakao.maps.Map(this.kmap, this.mapOption);
+            ps = new kakao.maps.services.Places(); //장소검색
+            infoWindow = new kakao.maps.InfoWindow({zIndex: 1}); //인포윈도우
+            addEvent(btnSearch, 'click', searchPlaces.bind(null, inputSearch));
+            addEvent(inputSearch, 'keyup', (e) => {
+                if (e.keyCode === 13) btnSearch.click();
+            });
+
+            let [setState, getState] = useState({lat: null, lng: null, address: null, placeName: null});
+            setMapData = setState;
+            _modal = modal;
+            _resultGroup = resultGroup;
+            _pageGroup = pageGroup;
+
+            return getState;
+        };
+
+        function searchPlaces(inputSearch) {
+            if (!inputSearch.value.replace(/^\s+|\s+$/g, '')) {
                 alert('키워드를 입력해주세요!');
                 return false;
             }
             // 장소검색 객체를 통해 키워드로 장소검색을 요청합니다
-            ps.keywordSearch(keyword.value, placesSearchCB);
+            ps.keywordSearch(inputSearch.value, placesSearchCB);
         }
 
         // 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
@@ -776,65 +834,73 @@ let travelmaker = (function (window) {
 
         // 검색 결과 목록과 마커를 표출하는 함수입니다
         function displayPlaces(places) {
-            var listEl = document.getElementById('placesList'),
-                fragment = document.createDocumentFragment(),
+            let fragment = document.createDocumentFragment(),
                 bounds = new kakao.maps.LatLngBounds();
 
             // 검색 결과 목록에 추가된 항목들을 제거합니다
-            removeAllChildNods(listEl);
+            removeAllChildNods(_resultGroup);
 
             // 지도에 표시되고 있는 마커를 제거합니다
             removeMarker();
 
             for (let i = 0; i < places.length; i++) {
                 // 마커를 생성하고 지도에 표시합니다
-                let placePosition = new kakao.maps.LatLng(places[i].y, places[i].x),
-                    marker = addMarker(
-                        placePosition,
-                        i,
-                        places[i].road_address_name
-                            ? places[i].road_address_name
-                            : places[i].address_name
-                    ),
-                    itemEl = getListItem(i, places[i]); // 검색 결과 항목 Element를 생성합니다
+                let placePosition = new kakao.maps.LatLng(places[i].y, places[i].x);
+                let marker = addMarker(
+                    placePosition,
+                    i,
+                    places[i].road_address_name
+                        ? places[i].road_address_name
+                        : places[i].address_name
+                );
+                let itemEl = template.kmapResult(i, places[i]); // 검색 결과 항목 Element를 생성합니다
 
                 // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
                 // LatLngBounds 객체에 좌표를 추가합니다
                 bounds.extend(placePosition);
 
                 (function (marker, title) {
-                    const btnAddMap = itemEl.querySelector('.btn-add-map');
-
                     kakao.maps.event.addListener(marker, 'mouseover', function () {
-                        displayInfowindow(marker, title);
+                        displayinfoWindow(marker, title);
                     });
 
                     kakao.maps.event.addListener(marker, 'mouseout', function () {
-                        infowindow.close();
+                        infoWindow.close();
                     });
 
                     kakao.maps.event.addListener(marker, 'click', function () {
+                        setAndCloseModal(marker, title);
                     });
 
                     itemEl.onmouseover = function () {
-                        displayInfowindow(marker, title);
-                        btnAddMap.classList.remove('hide');
+                        displayinfoWindow(marker, title);
                     };
 
                     itemEl.onmouseout = function () {
-                        infowindow.close();
-                        btnAddMap.classList.add('hide');
+                        infoWindow.close();
                     };
-                    //버튼에 이벤트 추가.
-                    btnAddMap.addEventListener('click', btnAddMapHandler.bind(null, marker, title));
+
+                    itemEl.onclick = function () {
+                        setAndCloseModal(marker, title);
+                    }
                 })(marker, places[i].place_name);
                 fragment.appendChild(itemEl);
             }
             // 검색결과 항목들을 검색결과 목록 Elemnet에 추가합니다
-            listEl.appendChild(fragment);
+            _resultGroup.appendChild(fragment);
 
             // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
             map.setBounds(bounds);
+        }
+
+        function setAndCloseModal(marker, title) {
+            setMapData({
+                lat: marker.getPosition().getLat(),
+                lng: marker.getPosition().getLng(),
+                placeName: title,
+                address: marker.getTitle()
+            });
+            _modal.clear();
         }
 
         function btnAddMapHandler(marker, title) {
@@ -843,6 +909,7 @@ let travelmaker = (function (window) {
             let description = marker.getTitle() + title;
 
             let staticMapContainer = document.querySelector('#map-container');
+
             //정적마커의 옵션
             let markerPosition = new kakao.maps.LatLng(lat, lng);
             let staticMarker = {position: markerPosition, text: title};
@@ -862,36 +929,6 @@ let travelmaker = (function (window) {
             $editor.summernote('restoreRange');
             $editor.summernote('insertNode', $sMap[0]);
             staticMapContainer.innerHTML = '';
-        }
-
-        // 검색결과 항목을 Element로 반환하는 함수입니다
-        function getListItem(index, places) {
-            let el = document.createElement('li'),
-                itemStr = `
-                    <div class="box-place">
-                      <h6 class="place-name">
-                      ${places.place_name}
-                      </h6>
-                   `;
-            if (places.road_address_name) {
-                itemStr += `
-                    <span class="place-addr">
-                    ${places.road_address_name}
-                    </span>
-                   `;
-            } else {
-                itemStr += `
-                    <span class="place-addr">
-                    ${places.address_name}
-                    </span>
-                   `;
-            }
-            itemStr += `<button class="btn-add-map hide">추가</button></div>`;
-
-            el.innerHTML = itemStr;
-            el.classList.add('list-group-item');
-
-            return el;
         }
 
         // 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
@@ -915,45 +952,23 @@ let travelmaker = (function (window) {
 
         // 검색결과 목록 하단에 페이지번호를 표시는 함수입니다
         function displayPagination(pagination) {
-            var paginationEl = document.getElementById('pagination'),
-                fragment = document.createDocumentFragment(),
-                i;
-
+            let fragment = document.createDocumentFragment(), i;
             // 기존에 추가된 페이지번호를 삭제합니다
-            while (paginationEl.hasChildNodes()) {
-                paginationEl.removeChild(paginationEl.lastChild);
+            while (_pageGroup.hasChildNodes()) {
+                _pageGroup.removeChild(_pageGroup.lastChild);
             }
-
             for (i = 1; i <= pagination.last; i++) {
-                var li = document.createElement('li');
-                li.className = 'page-item';
-
-                var el = document.createElement('a');
-                el.className = 'page-link';
-                el.href = '#';
-                el.innerHTML = i;
-
-                if (i === pagination.current) {
-                    li.classList.add('active');
-                } else {
-                    el.onclick = (function (i) {
-                        return function () {
-                            pagination.gotoPage(i);
-                        };
-                    })(i);
-                }
-                li.appendChild(el);
-                fragment.appendChild(li);
+                fragment.appendChild(template.pageItem(i, pagination));
             }
-            paginationEl.appendChild(fragment);
+            _pageGroup.appendChild(fragment);
         }
 
         // 검색결과 목록 또는 마커를 클릭했을 때 호출되는 함수입니다
         // 인포윈도우에 장소명을 표시합니다
-        function displayInfowindow(marker, title) {
+        function displayinfoWindow(marker, title) {
             let content = '<div style="padding:5px;z-index:1;">' + title + '</div>';
-            infowindow.setContent(content);
-            infowindow.open(map, marker);
+            infoWindow.setContent(content);
+            infoWindow.open(map, marker);
         }
 
         // 검색결과 목록의 자식 Element를 제거하는 함수입니다
@@ -1088,28 +1103,34 @@ let travelmaker = (function (window) {
     })(_w);
 
     const Modal = (function (w) {
-        const modal = function (selector) {
+        const modal = function (selector, option) {
             this.m = document.querySelector(selector);
+            this.option = {
+                beforeClear: function () {
+                    console.log('beforeClear....');
+                },
+                ...option
+            }
         };
 
         const utils = new Utils();
         const template = new Template();
         let close, body;
 
+        modal.prototype.createCustom = function (template, initFunction) {
+            setDefault(this);
+            this.setModal(template, initFunction);
+        };
+
         modal.prototype.create = function (type, initFunction) {
-            this.clear();
-            this.m.innerHTML = template.tmodal();
-            utils.getElList('html, body').forEach((el) => {
-                el.style.overflow = 'hidden';
-                el.style.height = '100%';
-            });
-            utils.addSameHandlerEvent('.tmodal-back', stopEvent, 'scroll', 'touchmove', 'mousewheel');
-            initModal(type, this, initFunction);
+            setDefault(this);
+            initModal(type, initFunction);
         };
 
         modal.prototype.setModal = setModal;
 
         modal.prototype.clear = function () {
+            this.option.beforeClear();
             utils.getElList('html, body').forEach((el) => {
                 el.style.overflow = 'auto';
                 el.style.height = '100%';
@@ -1118,11 +1139,7 @@ let travelmaker = (function (window) {
             this.m.innerHTML = '';
         };
 
-        function initModal(type, modal, initFunction) {
-            close = utils.getEl('.tmodal-bar .close');
-            body = utils.getEl('.tmodal-body');
-            close.addEventListener('click', (e) => modal.clear());
-
+        function initModal(type, initFunction) {
             switch (type) {
                 case 'login':
                     return setModal(template.login2(utils.getTokenCSRF()), initFunction);
@@ -1132,13 +1149,25 @@ let travelmaker = (function (window) {
                     return setModal(template.request(), initFunction);
                 case 'story' :
                     return setModal(template.story(), initFunction);
-                case 'map' :
-                    return setModal(template.map(), initFunction);
                 case 'domestic' :
                     return setModal(template.domestic(), initFunction);
                 default:
                     throw new Error('정의되지 않은 모달 형식입니다.');
             }
+        }
+
+        function setDefault(modal) {
+            modal.clear();
+            modal.m.innerHTML = template.tmodal();
+            utils.getElList('html, body').forEach((el) => {
+                el.style.overflow = 'hidden';
+                el.style.height = '100%';
+            });
+            utils.addSameHandlerEvent('.tmodal-back', stopEvent, 'scroll', 'touchmove', 'mousewheel');
+
+            close = utils.getEl('.tmodal-bar .close');
+            body = utils.getEl('.tmodal-body');
+            close.addEventListener('click', (e) => modal.clear());
         }
 
         function setModal(template, initFunction) {
