@@ -10,139 +10,20 @@
 <body>
 <%@include file="../common/navbar2.jsp" %>
 <!-- 메인 컨텐츠 영역 -->
+<input type="hidden" id="pg" value="${pg }">
 <div class="container-wrap">
     <div class="header-back">
         <div class="header">
             <div class="description"></div>
-            <button id="btn-friend-write" type="button">동행 구하기</button>
+            <sec:authorize access="hasRole('ROLE_USER') and isAuthenticated()">
+            	<button id="btn-friend-write" type="button">동행 구하기</button>
+            </sec:authorize>
         </div>
     </div>
 
     <div class="content-area">
         <ul class="content-group">
-            <!-- 동행 게시글 하나 -->
-            <li>
-                <div class="content-item">
-                    <div class="user-wrap">
-                        <div class="image-wrap">
-                            <img src="https://source.unsplash.com/collection/190727/200x150" alt=""/>
-                        </div>
-                        <h5 class="author">밥만먹고여행</h5>
-                    </div>
-                    <div class="title-wrap">
-                        <span class="tbadge tbadge-danger">D-7</span>
-                        <h4>유럽일주 함께 하실 분 구해봅니다^^</h4>
-                    </div>
-                    <div class="info-wrap">
-                        <p class="date">
-                  <span class="from">2019.08.01</span
-                  ><span class="to">2019.10.12</span>
-                        </p>
-                        <div class="city-wrap">
-                            <!-- 동행게시글 내부 계획 하나에 걸리는 도시들 목록 -->
-                            <span class="city">파리</span>
-                            <span class="city">런던</span>
-                            <span class="city">룩셈부르크</span>
-                            <span class="city">바르셀로나</span>
-                            <!-- 동행게시글 내부 계획 하나에 걸리는 도시들 목록 -->
-                        </div>
-                        <button onclick="location.href='/friend/view/1'">
-                            상세보기예시
-                        </button>
-                    </div>
-                </div>
-            </li>
-            <!-- 동행 게시글 하나 -->
-            <!-- 동행 게시글 하나 -->
-            <li>
-                <div class="content-item">
-                    <div class="user-wrap">
-                        <div class="image-wrap">
-                            <img src="https://source.unsplash.com/collection/190727/200x150" alt=""/>
-                        </div>
-                        <h5 class="author">밥만먹고여행</h5>
-                    </div>
-                    <div class="title-wrap">
-                        <span class="tbadge tbadge-danger">D-7</span>
-                        <h4>유럽일주 함께 하실 분 구해봅니다^^</h4>
-                    </div>
-                    <div class="info-wrap">
-                        <p class="date">
-                  <span class="from">2019.08.01</span
-                  ><span class="to">2019.10.12</span>
-                        </p>
-                        <div class="city-wrap">
-                            <span class="city">파리</span>
-                            <span class="city">런던</span>
-                            <span class="city">룩셈부르크</span>
-                            <span class="city">바르셀로나</span>
-                        </div>
-                        <button>상세보기</button>
-                    </div>
-                </div>
-            </li>
-            <!-- 동행 게시글 하나 -->
-            <!-- 동행 게시글 하나 -->
-            <li>
-                <div class="content-item">
-                    <div class="user-wrap">
-                        <div class="image-wrap">
-                            <img
-                                    src="https://source.unsplash.com/collection/190727/200x150"
-                                    alt=""
-                            />
-                        </div>
-                        <h5 class="author">밥만먹고여행</h5>
-                    </div>
-                    <div class="title-wrap">
-                        <span class="tbadge tbadge-danger">D-7</span>
-                        <h4>유럽일주 함께 하실 분 구해봅니다^^</h4>
-                    </div>
-                    <div class="info-wrap">
-                        <p class="date">
-                  <span class="from">2019.08.01</span
-                  ><span class="to">2019.10.12</span>
-                        </p>
-                        <div class="city-wrap">
-                            <span class="city">파리</span>
-                            <span class="city">런던</span>
-                            <span class="city">룩셈부르크</span>
-                            <span class="city">바르셀로나</span>
-                        </div>
-                        <button>상세보기</button>
-                    </div>
-                </div>
-            </li>
-            <!-- 동행 게시글 하나 -->
-            <!-- 동행 게시글 하나 -->
-            <li>
-                <div class="content-item">
-                    <div class="user-wrap">
-                        <div class="image-wrap">
-                            <img src="https://source.unsplash.com/collection/190727/200x150" alt=""/>
-                        </div>
-                        <h5 class="author">밥만먹고여행</h5>
-                    </div>
-                    <div class="title-wrap">
-                        <span class="tbadge tbadge-danger">D-7</span>
-                        <h4>유럽일주 함께 하실 분 구해봅니다^^</h4>
-                    </div>
-                    <div class="info-wrap">
-                        <p class="date">
-                  <span class="from">2019.08.01</span
-                  ><span class="to">2019.10.12</span>
-                        </p>
-                        <div class="city-wrap">
-                            <span class="city">파리</span>
-                            <span class="city">런던</span>
-                            <span class="city">룩셈부르크</span>
-                            <span class="city">바르셀로나</span>
-                        </div>
-                        <button>상세보기</button>
-                    </div>
-                </div>
-            </li>
-            <!-- 동행 게시글 하나 -->
+        	
         </ul>
     </div>
 </div>

@@ -2,11 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="friendSQL">
-	<select id="getList" parameterType="java.util.Map" resultType="friend">
-		<![CDATA[select * from (select rownum rn, tt.* from (select * from friends order by fno desc) tt) where rn between #{startNum} and #{endNum}]]>
+	<select id="getList" parameterType="java.util.Map"
+		resultType="friend">
+		<![CDATA[select * from (select rownum rn, tt.* from (select fno, seq, id, title, is_domestic, to_char(dateStart, 'YYYY-MM-DD') as dateStart, to_char(dateEnd, 'YYYY-MM-DD') as dateEnd, is_finish, kakao_chat, to_char(date_of_issue, 'YYYY-MM-DD') as date_of_issue from friends order by fno desc) tt) where rn between #{startNum} and #{endNum}]]>
 	</select>
 	<select id="getTotalA" resultType="int">
-		SELECT count(rownum) FROM friends
+		SELECT count(rownum) FROM
+		friends
 	</select>
 
 	<insert id="setWrite" parameterType="friend">
@@ -21,8 +23,8 @@
 	</select>
 	<insert id="setRouteWrite" parameterType="friendRoute">
 		INSERT INTO
-		friends_route values(#{fno}, seq_fcno.nextval, #{date_start},
-		#{date_end}, #{content}, 0, 0, #{lat}, #{lng}, #{city})
+		friends_route values(#{fno}, seq_fcno.nextval, #{dateStart},
+		#{dateSnd}, #{content}, 0, 0, #{lat}, #{lng}, #{city})
 	</insert>
 	<delete id="cancelWrite" parameterType="int">
 		DELETE FROM friends WHERE
@@ -34,8 +36,12 @@
 	</delete>
 
 	<select id="getView" parameterType="int" resultType="friend">
-		SELECT *
-		FROM friends WHERE fno = #{fno}
+		SELECT fno,
+		seq, id, title, is_domestic, to_char(dateStart, 'YYYY-MM-DD') as
+		dateStart, to_char(dateEnd, 'YYYY-MM-DD') as dateEnd, is_finish,
+		kakao_chat, to_char(date_of_issue, 'YYYY-MM-DD') as date_of_issue
+		FROM
+		friends WHERE fno = #{fno}
 	</select>
 
 	<select id="getFriendRequestDTO" parameterType="int"
@@ -52,14 +58,24 @@
 		resultType="friend">
 		SELECT * FROM friends where fno=#{fno}
 	</select>
-	<select id="getRouteView" parameterType="int" resultType="friendRoute">
-		SELECT * FROM friends_route WHERE fno = #{fno}
+	<select id="getRouteView" parameterType="int"
+		resultType="friendRoute">
+		SELECT fno, fcno, to_char(dateStart, 'YYYY-MM-DD') as
+		dateStart, to_char(dateEnd, 'YYYY-MM-DD') as dateEnd, content, fcnt,
+		is_finish, lat, lng, city FROM friends_route WHERE fno = #{fno}
 	</select>
-	<select id="getRequestView" parameterType="int" resultType="friendRequest">
-		SELECT * FROM friend_request WHERE fcno = #{fcno}
+	<select id="getRequestView" parameterType="int"
+		resultType="friendRequest">
+		SELECT fcno, fccno, seq, content, is_permit,
+		to_char(dateStart, 'YYYY-MM-DD') as
+		dateStart, to_char(dateEnd,
+		'YYYY-MM-DD') as dateEnd, is_read FROM friend_request WHERE fcno =
+		#{fcno}
 	</select>
-	
+
 	<insert id="setRequestWrite" parameterType="friendRequest">
-		INSERT INTO friend_request values(#{fcno}, seq_fccno.nextval, #{seq}, #{content}, 0, #{date_start}, #{date_end}, 0)
+		INSERT INTO
+		friend_request values(#{fcno}, seq_fccno.nextval, #{seq}, #{content},
+		0, #{dateStart}, #{dateEnd}, 0)
 	</insert>
 </mapper>

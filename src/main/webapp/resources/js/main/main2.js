@@ -7,7 +7,28 @@ $(function () {
     const v = new travelmaker.validation();
     const t = new travelmaker.template();
     const myRegex = new travelmaker.regex();
-
+    
+    //알람 [ 용주형 여기 정리좀해주세요 ] 
+    const alarmOnBtn = document.querySelector('#alarmOn');
+    const alarmOffBtn = document.querySelector('#alarmOff');
+    
+    var seq = $('#alarmOff').data('seq');
+    console.log(seq);
+    
+    if(seq>0){ // 로그인 되어있으면 알람 로드
+		alarmDataload(seq);
+	}
+    if(alarmOnBtn!=null){
+  	  alarmOnBtn.addEventListener('click',alarmBtnHandler);
+    }
+    if(alarmOffBtn!=null){
+  	  alarmOffBtn.addEventListener('click',alarmBtnHandler);
+    }
+    function alarmBtnHandler(){
+		$('#alarmDisplay').show();
+    	//$('#alarmDisplay').style('display', 'block');
+  }
+    
     //배열형
     const btnLoginList = getElList('.btn-login');
     addAllSameEvent(btnLoginList, 'click', loginModalHandler);
@@ -350,5 +371,9 @@ function logoutSubmit() {
     auth2.signOut().then(function () {
     });
     auth2.disconnect();
+}
+
+function alarm() {
+	
 }
 

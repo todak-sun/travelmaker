@@ -13,7 +13,7 @@ public class FriendRequestDTO {
 	private int seq;
 	private String content;
 	private int is_permit;
-	private Date date_start;
-	private Date date_end;
+	private String dateStart;
+	private String dateEnd;
 	private int is_read;
 }

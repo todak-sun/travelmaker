@@ -15,8 +15,8 @@ import lombok.Setter;
 public class FriendRouteDTO {
 	private int fno;
 	private int fcno;
-	private String date_start;
-	private String date_end;
+	private String dateStart;
+	private String dateEnd;
 	private String content;
 	private int fcnt;
 	private int is_finish;

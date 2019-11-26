@@ -18,8 +18,8 @@ public class FriendDTO {
 	private String id;
 	private String title;
 	private String is_domestic;
-	private String date_start;
-	private String date_end;
+	private String dateStart;
+	private String dateEnd;
 	private int is_finish;
 	private String kakao_chat;
 	private String date_of_issue;

@@ -40,9 +40,6 @@ public class FriendApiController {
 		map.put("endNum", endNum);
 		
 		List<FriendDTO> list = friendService.getList(map);
-		for(FriendDTO friendDTO : list) {
-			System.out.println(friendDTO.getDate_start());
-		}
 		
 		int totalA = friendService.getTotalA();
 		
@@ -80,6 +77,13 @@ public class FriendApiController {
 	public ModelAndView getRouteView(@RequestParam String fno) {
 		ModelAndView modelAndView = new ModelAndView();
 		List<FriendRouteDTO> list = friendService.getRouteView(fno);
+		
+		for(FriendRouteDTO friendRouteDTO : list) {
+			for(int i = 0; i < friendRouteDTO.getFriendRequestDTOs().size(); i++) {
+				System.out.println(friendRouteDTO.getFriendRequestDTOs().get(i).toString());
+			}
+		}
+		System.out.println(list.size());
 		
 		modelAndView.addObject("list", list);
 		modelAndView.setViewName("jsonView");

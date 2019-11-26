@@ -13,6 +13,8 @@ function onMessage(msg) {
 	if (jsondata.header == 'friend') {
 		$('#alarmOff').hide();
 		$('#alarmOn').show();
+		$('#alarmBtnDisplay').empty();
+		alarmDataload($('#alarmOn').data('seq'));
 	}
 
 }
@@ -40,7 +42,7 @@ function alarmDataload(seq) {
 
 	$.ajax({
 		type : 'get',
-		url : './alarm/load',
+		url : '/alarm/load',
 		data : 'seq=' + seq,
 		dataType : 'json',
 		beforeSend : function(xhr) {
@@ -50,13 +52,13 @@ function alarmDataload(seq) {
 		success : function(data) {
 			$.each(data, function(index, items) {
 				$('#alarmDisplay').append(
-						'<button type="button" id="alarmBtn" data-ano ="'
+						'<button type="button" class="alarmBtn" data-ano ="'
 								+ items.ano + '" data-header="' + items.header
 								+ '">' + items.content + '</button><br>');
 				$('#alarmDisplay').append('<input type="hidden" ');
 			});
 			console.log(data.length);
-			if(data.length < 1) {
+			if (data.length < 1) {
 				$('#alarmOff').show();
 				$('#alarmOn').hide();
 				$('#alarmDisplay').hide();
@@ -65,25 +67,25 @@ function alarmDataload(seq) {
 				$('#alarmOn').show();
 				$('#alarmDisplay').hide();
 			}
+
+			/*
+			 * $('#alarmOn').click(function(){ $('#alarmDisplay').show(); });
+			 */
 			
-			/*$('#alarmOn').click(function(){
-				$('#alarmDisplay').show();
-			});*/
-			
-			$('#alarmBtn').click(function() {
+			$('.alarmBtn').click(function() {
 				console.log('음..아주 좆같구먼');
 				var ano = $(this).data('ano');
 				var header = $(this).data('header');
 
-				$.ajax({ 
-					type: 'get',
-					url: '/alarm/' + header + '/' + ano,
-					dataType: 'json',
-					success: function(data){
+				$.ajax({
+					type : 'get',
+					url : '/alarm/' + header + '/' + ano,
+					dataType : 'json',
+					success : function(data) {
 						console.log(data.fno);
-						location.href='/' + header + '/view/' + data.fno;
+						location.href = '/' + header + '/view/' + data.fno;
 					},
-					error: function(error){
+					error : function(error) {
 						console.log(error);
 					}
 				});

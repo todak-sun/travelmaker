@@ -1,138 +1,110 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 <html>
 <head>
-    <%@include file="../common/head-meta.jsp" %>
-    <%@include file="../common/head-css.jsp" %>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/friend/view2.css">
-    <title>동행 게시글</title>
+<%@include file="../common/head-meta.jsp"%>
+<%@include file="../common/head-css.jsp"%>
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/friend/view2.css">
+<title>동행 게시글</title>
 </head>
 <body>
-<%@include file="../common/navbar2.jsp" %>
+	<%@include file="../common/navbar2.jsp"%>
 
-<!-- 메인 컨텐츠 영역 -->
-<div class="container-wrap">
-    <sec:authentication var="userDetail" property="principal"/>
-    <div class="hidden">
-        <input type="hidden" id="friendFno" value="${friendDTO.fno}">
-        <input type="hidden" id="friendSeq" value="${friendDTO.seq}">
-        <input type="hidden" id="friendId" value="${friendDTO.id}">
-        <input type="hidden" id="friendIs_domestic" value="${friendDTO.is_domestic}">
-        <input type="hidden" id="friendDate_start" value="${friendDTO.date_start}">
-        <input type="hidden" id="friendDate_end" value="${friendDTO.date_end}">
-        <input type="hidden" id="friendDate_of_issue" value="${friendDTO.date_of_issue}">
-        <input type="hidden" id="username" value="${userDetail.username}">
-    </div>
-    <div class="map-wrap">
-        <img src="${pageContext.request.contextPath}/resources/img/front-map.png" alt=""/>
-    </div>
-    <div class="content-wrap">
-        <ul class="content-group">
-            <!-- 상세계획 한개 -->
-            <li>
-                <div class="content-item">
-                    <p class="place">서울특별시 강남대로</p>
-                    <p class="date">
-                        <span class="from">2018.01.01</span>
-                        <span class="to">2018.01.02</span>
-                    </p>
-                    <div class="content-detail">
-                        <p>저는 이번여행에서 정말 대단한 발견을 하고 올것임.</p>
-                        <div class="button-wrap">
-                            <!-- 자신의 글과 비교하여 한 개만 렌더링 -->
-                            <button class="btn-test">신청</button>
-                            <!-- <button>신청확인</button> -->
-                            <!-- 자신의 글과 비교하여 한 개만 렌더링 -->
-                        </div>
-                    </div>
-                    <ul class="request-group"></ul>
-                </div>
-            </li>
-            <!-- 상세계획 한개 -->
-            <!-- 상세계획 한개 -->
-            <li>
-                <div class="content-item">
-                    <p class="place">서울특별시 강남대로</p>
-                    <p class="date">
-                        <span class="from">2018.01.01</span>
-                        <span class="to">2018.01.02</span>
-                    </p>
-                    <div class="content-detail">
-                        <p>저는 이번여행에서 정말 대단한 발견을 하고 올것임.</p>
-                        <div class="button-wrap">
-                            <!-- 자신의 글과 비교하여 한 개만 렌더링 -->
-                            <button>신청확인</button>
-                            <!-- 자신의 글과 비교하여 한 개만 렌더링 -->
-                        </div>
-                    </div>
-                    <ul class="request-group">
-                        <!-- 신청그룹 한 개 -->
-                        <li>
-                            <div class="request-item">
-                                <div class="user-area">
-                                    <div class="image-wrap">
-                                        <img
-                                                src="https://source.unsplash.com/collection/190727/80x80"
-                                                alt=""
-                                        />
-                                    </div>
-                                    <p class="author">닉네임</p>
-                                </div>
-                                <div class="content-area">
-                                    <p class="date">
-                                        <span class="from">2018.01.01</span>
-                                        <span class="to">2018.01.02</span>
-                                    </p>
-                                    <div class="content-detail">
-                                        <p>저도 그 발견을 함께하고 싶네요.</p>
-                                        <div class="button-wrap">
-                                            <button class="btn btn-tsave">수락</button>
-                                            <button class="btn btn-tdanger">거절</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <!-- 신청그룹 한 개 -->
-                        <!-- 신청그룹 한 개 -->
-                        <li>
-                            <div class="request-item">
-                                <div class="user-area">
-                                    <div class="image-wrap">
-                                        <img
-                                                src="https://source.unsplash.com/collection/190727/80x80"
-                                                alt=""
-                                        />
-                                    </div>
-                                    <p class="author">닉네임</p>
-                                </div>
-                                <div class="content-area">
-                                    <p class="date">
-                                        <span class="from">2018.01.01</span>
-                                        <span class="to">2018.01.02</span>
-                                    </p>
-                                    <div class="content-detail">
-                                        <p>저도 그 발견을 함께하고 싶네요.</p>
-                                        <div class="button-wrap">
-                                            <button class="btn btn-tsave">수락</button>
-                                            <button class="btn btn-tdanger">거절</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <!-- 신청그룹 한 개 -->
-                    </ul>
-                </div>
-            </li>
-            <!-- 상세계획 한개 -->
-        </ul>
-    </div>
-</div>
-<!-- 메인 컨텐츠 영역 -->
+	<!-- 메인 컨텐츠 영역 -->
+	<div class="container-wrap">
+		<sec:authentication var="userDetail" property="principal" />
+		<div class="hidden">
+			<input type="hidden" id="friendFno" value="${friendDTO.fno}">
+			<input type="hidden" id="friendSeq" value="${friendDTO.seq}">
+			<input type="hidden" id="friendId" value="${friendDTO.id}"> <input
+				type="hidden" id="friendIs_domestic"
+				value="${friendDTO.is_domestic}"> <input type="hidden"
+				id="friendDate_start" value="${friendDTO.dateStart}"> <input
+				type="hidden" id="friendDate_end" value="${friendDTO.dateEnd}">
+			<input type="hidden" id="friendDate_of_issue"
+				value="${friendDTO.date_of_issue}"> <input type="hidden"
+				id="username" value="${userDetail.username}">
+		</div>
 
-<%@include file="../common/foot-js.jsp" %>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=58d9a72c9db8da0b849a32734093767e"></script>
-<script src="${pageContext.request.contextPath}/resources/js/friend/view2.js"></script>
+		<!-- 용주형 이거 큰틀 없어서 예시로 박아놨어요 ㅎㅎ -->
+		<div id="routeTitle" style="display: inline-block;">
+			<h1 style="margin: 0;">${friendDTO.title }</h1>
+			<br /> <strong>${friendDTO.id }</strong> <br /> <span>${friendDTO.dateStart }
+				~ ${friendDTO.dateEnd }</span>
+		</div>
+
+		<div class="map-wrap">
+			<div id="map"></div>
+		</div>
+
+		<div class="content-wrap">
+			<ul class="content-group">
+
+			</ul>
+		</div>
+	</div>
+	<!-- 메인 컨텐츠 영역 -->
+
+	<sec:authorize access="hasRole('ROLE_USER') and isAuthenticated()">
+		<!-- 동행 신청서 Modal -->
+		<div id="requestWriteModal" style="display: none;">
+			<!-- 형 여기 모달 해석 불가능해서 일단 디스플레이 논 때려놨어용 -->
+			<!-- <div class="tmodal-back"> -->
+			<div class="tmodal">
+				<div class="tmodal-bar">
+					<h4 class="modal-title">신청 글쓰기</h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+
+				<div class="tmodal-body">
+					<form id="requestForm" action="">
+						<input type="hidden" name="fcno" id="fcno"> <input
+							type="hidden" name="seq" id="seq" value="${userDetail.seq }">
+						<%-- <input type="hidden" name="id" id="id" value="${userDetail.id }"> --%>
+						<table class="table">
+							<tr>
+								<td>동행 시작일</td>
+								<td><input type="date" name="dateStart"></td>
+							</tr>
+							<tr>
+								<td>동행 종료일</td>
+								<td><input type="date" name="dateEnd"></td>
+							</tr>
+							<tr>
+								<td>신청 내용</td>
+								<td><textarea rows="10" cols="70" name="content"></textarea></td>
+							</tr>
+							<tr>
+								<td colspan="2" align="center">
+									<button type="button" class="btn btn-success"
+										id="requestSaveBtn">신청하기</button>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+
+				<!-- <div class="modal-footer">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+					</div> -->
+			</div>
+			<!-- </div> -->
+
+		</div>
+	</sec:authorize>
+
+	<%@include file="../common/foot-js.jsp"%>
+	<!-- Google Map -->
+	<script
+		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCeKdfxBMTEBPFzc4QjjrIJJv25EuWL4gY"
+		async defer></script>
+	<!-- &callback=initMap -->
+	<!-- Kakao Map -->
+	<script type="text/javascript"
+		src="//dapi.kakao.com/v2/maps/sdk.js?appkey=58d9a72c9db8da0b849a32734093767e"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/js/friend/view2.js"></script>
 </body>
 </html>
