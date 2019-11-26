@@ -6,10 +6,6 @@
     file="../common/head-css.jsp"%>
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/reset-css@5.0.1/reset.min.css"
-    />
-    <link
-      rel="stylesheet"
       href="${pageContext.request.contextPath}/resources/css/route/write.css"
     />
     <title>여행경로 추천글 쓰기</title>
@@ -259,7 +255,6 @@
 
     <%@include file="../common/editor-js.jsp" %>
 
-    <!-- <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script> -->
     <script
       type="text/javascript"
       src="${pageContext.request.contextPath}/resources/js/route/route.js"
