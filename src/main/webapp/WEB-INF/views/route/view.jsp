@@ -51,37 +51,39 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
             <!-- 작은 route게시물 한 개 -->
             <li>
               <div class="route-item">
-                <div class="route-info"
-                  >``
+                <div class="route-info">
                   <h4 class="route-title">
                     <span class="number">
-                      <c:out value="${course.rno }" /> </span
-                    >폴란드 바르샤바
+                      <c:out value="${course.rno }" />
+                    </span>
+                    <c:out value="${course.location }" />
                   </h4>
                   <span class="date">
-                    <span class="from">${course.dateStart}</span>
-                    <span class="to">${course.dateEnd }</span>
+                    <span class="from"
+                      ><c:out value="${course.dateStart }"
+                    /></span>
+                    <span class="to"><c:out value="${course.dateEnd }"/></span>
                   </span>
                 </div>
                 <div class="content-wrap">
                   <div class="content-left">
                     <div class="image-wrap">
                       <c:forEach var="imgs" items="${course.imgs }">
-                     	 <c:forEach var="img" items="${imgs }">                      	
-	                        <img
-	                          src="/resources/storage/route/<c:out value="${img}"/>"
-	                          alt="${img}"
-	                        />
-                     	 </c:forEach>   
+                        <c:forEach var="img" items="${imgs }">
+                          <img src="/resources/storage/route/<c:out
+                            value="${img}"
+                          />" alt="${img}" />
+                        </c:forEach>
                       </c:forEach>
                     </div>
                     <div class="score-wrap">
                       <ul class="score-group">
-                        <li><span href="" class="score on"></span></li>
-                        <li><span href="" class="score on"></span></li>
-                        <li><span href="" class="score on"></span></li>
-                        <li><span href="" class="score on"></span></li>
-                        <li><span href="" class="score on"></span></li>
+                        <c:forEach begin="1" end="${course.score }">
+                          <li><span href="" class="score on"></span></li>
+                        </c:forEach>
+                        <c:forEach begin="1" end="${5 - course.score }">
+                          <li><span href="" class="score"></span></li>
+                        </c:forEach>
                       </ul>
                     </div>
                   </div>
@@ -100,14 +102,13 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
         <div class="epli-logo"></div>
         <div class="content-area">
           <p class="content">
-            ${routeDTO.content }
-            <!--             Lorem ipsum dolor, sit amet consectetur adipisicing elit. Suscipit
-            vitae impedit dolorem animi non quis cumque labore, harum quos iure
-            sit, praesentium consectetur fugit unde nostrum a, eveniet aliquam
-            dolore! Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic
-            tenetur maiores accusantium nisi? Ipsam excepturi quidem sed,
-            exercitationem harum eligendi adipisci omnis alias tempore, ea
-            dolores, doloremque placeat sunt aperiam! -->
+            ${routeDTO.content } Lorem ipsum dolor, sit amet consectetur
+            adipisicing elit. Suscipit vitae impedit dolorem animi non quis
+            cumque labore, harum quos iure sit, praesentium consectetur fugit
+            unde nostrum a, eveniet aliquam dolore! Lorem ipsum dolor sit amet
+            consectetur adipisicing elit. Hic tenetur maiores accusantium nisi?
+            Ipsam excepturi quidem sed, exercitationem harum eligendi adipisci
+            omnis alias tempore, ea dolores, doloremque placeat sunt aperiam!
           </p>
           <div class="operation">
             <button>12</button>

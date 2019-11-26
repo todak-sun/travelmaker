@@ -2,8 +2,8 @@
 <!DOCTYPE html>
 <html lang="ko">
   <head>
-    <%@include file="../common/head-meta.jsp"%> <%@include
-    file="../common/head-css.jsp"%>
+    <%@include file="../common/head-meta.jsp"%>
+    <%@include file="../common/head-css.jsp"%>
     <link
       rel="stylesheet"
       href="${pageContext.request.contextPath}/resources/css/route/write.css"
@@ -11,7 +11,7 @@
     <title>여행경로 추천글 쓰기</title>
   </head>
   <body>
-    <%@include file="../common/navbar.jsp" %>
+    <%@include file="../common/navbar2.jsp" %>
     <!-- 메인 컨텐츠 영역 -->
     <div class="container-wrap">
       <div class="editor-wrap">
@@ -97,7 +97,7 @@
             </div>
 
             <div class="image-wrap">
-              <button id="addImage">+ 이미지 추가</button>
+              <button id="image-add">+ 이미지 추가</button>
               <ul class="image-group empty">
               </ul>
             </div>
@@ -117,12 +117,10 @@
 
             <div class="hash-area">
               <div class="input-wrap">
-                <input type="text" />
-                <button>추가</button>
+                <input type="text" id="hash-input"/>
+                <button id="hash-add">추가</button>
               </div>
-              <div class="hash-view" id="hashtag" name="hashtag">
-                <span class="hash">독일</span>
-                <span class="hash">뤼셀베르크</span>
+              <div class="hash-view" id="hash-view"></div>
               </div>
             </div>
           </div>

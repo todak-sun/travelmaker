@@ -55,11 +55,11 @@ $(function() {
   const btnPreview = getEl("#btn-preview"); // 미리보기(3(오))
   const btnCourseSave = getEl("#btn-course-save"); // 코스저장(2(오))
 
-  const btnAddImage = getEl("#addImage");
+  const btnAddImage = getEl("#image-add"); // 이미지 추가 버튼
+  const btnAddHash = getEl("#hash-add"); // 해쉬태그 추가 버튼
 
   // 사용자 입력값 변수 선언
   const title = getEl("#route-title");
-  const hashtag = getEl("#hashtag");
   const epilogue = getEl("#route-epilogue");
   const nation = getEl("input[name=nation]");
   const city = getEl("input[name=city]");
@@ -69,7 +69,9 @@ $(function() {
   const dateStart = getEl("input[name=dateStart]");
   const dateEnd = getEl("input[name=dateEnd]");
   const score = getEl("input[name=score]");
+  const hashInput = getEl("#hash-input");
 
+  const $hashView = $("#hash-view");
   const $images = $("#images");
 
   // ************** 함수들 선언
@@ -92,11 +94,14 @@ $(function() {
     const $this = $(this);
     $this
       .parent()
-      .children("a")
+      .parent()
+      .find("a")
       .removeClass("on");
     $this
       .addClass("on")
-      .prevAll("a")
+      .parent()
+      .prevAll("li")
+      .children()
       .addClass("on");
     const score = $(".score-group a.on").length;
     setRouteContent({ score: score });
@@ -131,7 +136,39 @@ $(function() {
     e.preventDefault();
     $images.click();
   });
-  addSameEvent("change", routeDataBindHandler, title, epilogue, hashtag);
+  btnAddHash.addEventListener("click", function(e) {
+    if ($hashView.children("span").length >= 5)
+      return alert("해쉬태그는 5개까지만 등록 가능합니다");
+    let hashtag = "";
+    const $span = $(
+      `<span class="hash">${hashInput.value.replace(/\s/gi, "")}</span>`
+    );
+    hashInput.value = "";
+    $hashView.append($span);
+    $hashView.children("span").each(function(index, span) {
+      span.addEventListener("click", deleteHash);
+      hashtag += span.innerText;
+      hashtag += " ";
+    });
+
+    setRoute({ hashtag: hashtag });
+    // hashView.appendChild;
+    // hashInput.value;
+  });
+
+  function deleteHash(e) {
+    let hashtag = "";
+    // hashList = e.target.parentElement;
+    let index = getElementIndex(e.target);
+    $hashView[0].removeChild($hashView[0].children[index]);
+    $hashView.children("span").each(function(index, span) {
+      hashtag += span.innerText;
+      hashtag += " ";
+    });
+    setRoute({ hashtag: hashtag });
+  }
+
+  addSameEvent("change", routeDataBindHandler, title, epilogue);
   addSameEvent(
     "click",
     selectCommand,
@@ -868,24 +905,22 @@ $(function() {
       };
       reader.readAsDataURL(image);
     });
-
-    function deleteImage(e) {
-      // 리스트 index 값 찾아서 이미지 삭제
-      // e.stopPropagation();
-      let li = e.target.parentElement;
-      let parent = li.parentElement;
-      let index = getElementIndex(li);
-      parent.removeChild(parent.children[index]);
-      fileList.splice(index, 1);
+  }
+  function deleteImage(e) {
+    // 리스트 index 값 찾아서 이미지 삭제
+    // e.stopPropagation();
+    let li = e.target.parentElement;
+    let parent = li.parentElement;
+    let index = getElementIndex(li);
+    parent.removeChild(parent.children[index]);
+    fileList.splice(index, 1);
+  }
+  function getElementIndex(element) {
+    let _i = 0;
+    while ((element = element.previousElementSibling) != null) {
+      _i++;
     }
-
-    function getElementIndex(element) {
-      let _i = 0;
-      while ((element = element.previousElementSibling) != null) {
-        _i++;
-      }
-      return _i;
-    }
+    return _i;
   }
 
   ////////////////////////////////////////// 카카오맵 ////////////////////////////////////////
