@@ -1,9 +1,9 @@
 package com.travelmaker.story.service;
 
-import com.travelmaker.route.domain.RouteContentDTO;
-import com.travelmaker.route.domain.RouteDTO;
 import com.travelmaker.story.dao.StoryDAO;
 import com.travelmaker.story.domain.StoryDTO;
+import com.travelmaker.story.domain.StorySearchFilter;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,23 +17,18 @@ public class StoryServiceImpl implements StoryService {
     StoryDAO storyDAO;
 
     @Override
-    public List<StoryDTO> getStory(Map<String, String> map) {
-        return storyDAO.getStory(map);
+    public List<StoryDTO> getStory(StorySearchFilter storySearchFilter) {
+        return storyDAO.getStory(storySearchFilter);
     }
-
+    
+    @Override
+    public List<StoryDTO> getKeywordStory(StorySearchFilter storySearchFilter) {
+    	return storyDAO.getKeywordStory(storySearchFilter);
+    }
+  
     @Override
     public String selectBoard(int bno) {
         return storyDAO.selectBoard(bno);
     }
 
-    @Override
-    public RouteDTO getRoute(String bno) {
-        return storyDAO.getRoute(bno);
-    }
-
-    @Override
-    public List<RouteContentDTO> getRouteContentStory(int rno) {
-        System.out.println("서비스 들어옴");
-        return storyDAO.getRouteContentStory(rno);
-    }
 }

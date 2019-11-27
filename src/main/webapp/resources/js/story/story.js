@@ -1,213 +1,121 @@
 $(function() {
-  // window.onpopstate = loadStateContent;
-
-  // function loadStateContent(event) {
-  //   console.log(event);
-  // }
-
   window.onpopstate = function(event) {
-    console.log(event.state);
+    console.log("뒤로가기 버튼 누를시 나오는 내용");
   };
 
-  document.querySelector('#loadList').addEventListener('click', moreShowList);
+  // 전역변수 설정 & 클릭 이벤트 부여
+  const btnList = document.querySelector("#btn-list");
+  // const divList = document.querySelector("#div-list");
+  const inputSearch = document.querySelector("#input-search");
+  const $list = $(".list");
+  let timer;
+  btnList.addEventListener("click", showList);
+  inputSearch.addEventListener("change", showKeywordList);
 
-  document.querySelector('#pushgo').addEventListener('click', pushfunction);
-  function pushfunction() {
-    history.pushState(
-      {
-        total: document.querySelector('.list').childElementCount,
-        test: 'test',
-      },
-      'title입니다',
-      '/story/list'
-    );
+  // 처음 열기 & 뒤로가기 페이지 로딩 완료 후 게시물 출력
+  $(document).ready(showList);
+  // 스크롤 맨 아래일 시 게시물 추가
+  $(window).scroll(scrollList);
+
+  function showKeywordList() {
+    btnList.value = +12;
+    $list.empty();
+    showList();
   }
 
-  // 들어오자마자 리스트 12개 출력
-  showList();
+  // 리스트 더 보기 눌렀을 때 게시물 추가 함수
   function showList() {
-    $('.list').empty();
-    getList()
-      .then(addList)
+    const keyword = inputSearch.value;
+    const currListNum = +$list[0].childElementCount;
+    let loadListNum = +btnList.value;
+    if (currListNum == loadListNum) loadListNum += 8; // 나중에 화면 사이즈별로 추가 갯수 변경 가능
+
+    // ajax 요청해서 게시물 가져오기
+    getList(currListNum, loadListNum, keyword)
+      .then(function(result) {
+        addList(result);
+      })
       .catch(function(error) {
         console.log(error);
       });
   }
 
-  function getList() {
+  // 현재, 로딩할 리스트 숫자, 키워드 입력해서 추가 게시물 가져오기
+  function getList(currListNum, loadListNum, keyword) {
     return $.ajax({
-      type: 'post',
-      url: '/api/story/list',
-      dataType: 'json',
+      type: "get",
+      url: `/api/story/${currListNum}/${loadListNum}/${keyword}`,
+      dataType: "json"
     });
   }
 
-  // 리스트 더 보기 눌렀을 때 리스트 9개 출력
-  function moreShowList() {
-    getMoreList(document.querySelector('.list').childElementCount)
-      .then(addList)
-      .catch(function(error) {
-        console.log(error);
-      });
-  }
-
-  function getMoreList(start) {
-    return $.ajax({
-      type: 'get',
-      url: `../api/story/list/${start}/${start + 8}`,
-      dataType: 'json',
-    });
-  }
-
-  // json 내용을 화면에 html로 추가해주는 함수
+  // 가져온 게시물 내용을 화면에 뿌려주고 게시물 숫자 저장
   function addList(result) {
-    let $frag = $(document.createDocumentFragment());
+    let currListNum = $list[0].childElementCount; // 추가하기 전 현재 게시물 숫자 저장
+    const $frag = $(document.createDocumentFragment());
+
     for (let i = 0; i < result.length; i++) {
-      let $div = $(`
-      <div class="item" id=${result[i].bno}>
-      <a href="/story/list/${result[i].bno}">
-      <div class="card">
-      <h3>${result[i].title}</h3>
-      <div class="thumb"></div>
-      <div class="user">${result[i].seq}</div>
-      <div class="info"></div>
-      </div>
+      const {
+        bno,
+        rno,
+        title,
+        nickname,
+        fileName,
+        imageName,
+        likes,
+        views,
+        cmt,
+        dateUpdate
+      } = result[i];
+      const storyType = fileName ? "essay" : "route";
+      const $div = $(`
+      <div class="item" id=${bno}>
+      <a href="/${storyType}/view/${rno}">
+        <div class="card">
+          <h3>${title}</h3>
+          <div class="thumb"> 추후 이미지 경로 : ${imageName}</div>
+          <div class="user">작성자 : ${nickname}</div>
+          <div class="info">
+            <span>좋아요 : ${likes}</span>
+            <span>조회수 : ${views}</span>
+            <span>댓글수 : ${cmt}</span>
+            <span>업뎃날짜 : ${dateUpdate}</span>
+          </div>
+        </div>
       </a>
       </div>
       `);
       $frag.append($div);
     }
-    $('.list').append($frag);
+    $list.append($frag);
+
+    if (!currListNum) {
+      // 현재 게시물이 0개(페이지가 처음 로딩)라면 스크롤 아래로 이동
+      document.documentElement.scrollTop = $list[0].scrollHeight - 1400;
+    }
+    currListNum = $list[0].childElementCount; // 게시물 추가 후 현재 게시물 숫자 저장
+    btnList.value = currListNum; // 현재 게시물 숫자 버튼벨류로 저장
+    history.pushState(
+      {
+        currListNum: currListNum
+      },
+      "story : " + currListNum,
+      `/story/${currListNum}/${inputSearch.value}` // 뒤로가기를 위한 현재 게시물 숫자 주소창에 저장
+    );
+  }
+
+  // 스크롤 시 맨아래일 때 게시글 더 가져오기
+  function scrollList() {
+    if (
+      parseInt($(window).scrollTop()) + $(window).height() >
+      $(document).height() - 5
+    ) {
+      if (!timer) {
+        timer = setTimeout(function() {
+          timer = null;
+          showList();
+        }, 200);
+      }
+    }
   }
 });
-
-// 카카오맵
-function kakaoMap(flightPlanCoordinates) {
-  var container = document.getElementById('map');
-  var options = {
-    center: new kakao.maps.LatLng(
-      flightPlanCoordinates[0]['lat'],
-      flightPlanCoordinates[0]['lng']
-    ),
-    level: 3,
-  };
-  var map = new kakao.maps.Map(container, options);
-  var linePath = [];
-
-  // 선을 구성하는 좌표 배열입니다. 이 좌표들을 이어서 선을 표시
-  for (var i = 0; i < flightPlanCoordinates.length; i++) {
-    linePath.push(
-      new kakao.maps.LatLng(
-        flightPlanCoordinates[i]['lat'],
-        flightPlanCoordinates[i]['lng']
-      )
-    );
-  }
-
-  /*
-   * // 선을 구성하는 좌표 배열입니다. 이 좌표들을 이어서 선을 표시 var linePath = [ new
-   * kakao.maps.LatLng(33.452344169439975, 126.56878163224233), new
-   * kakao.maps.LatLng(33.452739313807456, 126.5709308145358), new
-   * kakao.maps.LatLng(33.45178067090639, 126.5726886938753) ];
-   */
-
-  // 지도에 표시할 선을 생성
-  var polyline = new kakao.maps.Polyline({
-    path: linePath, // 선을 구성하는 좌표배열
-    strokeWeight: 10, // 선의 두께
-    strokeColor: '#00FA9A', // 선의 색깔
-    strokeOpacity: 0.5, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명
-    strokeStyle: 'solid', // 선의 스타일
-  });
-
-  var positions = [];
-
-  // 마커를 표시할 위치와 title 배열
-  for (var i = 0; i < linePath.length; i++) {
-    positions.push({ latlng: linePath[i] });
-  }
-
-  // 마커를 표시할 위치와 title 배열
-  /*
-   * var positions = [ { title: '카카오', latlng: new
-   * kakao.maps.LatLng(33.452344169439975, 126.56878163224233) }, { title:
-   * '생태연못', latlng: new kakao.maps.LatLng(33.452739313807456,
-   * 126.5709308145358) }, { title: '텃밭', latlng: new
-   * kakao.maps.LatLng(33.45178067090639, 126.5726886938753) } ];
-   */
-
-  for (var i = 0; i < positions.length; i++) {
-    /*
-     * // 마커 이미지의 이미지 크기 var imageSize = new kakao.maps.Size(24, 35);
-     *  // 마커 이미지를 생성 var markerImage = new kakao.maps.MarkerImage(imageSrc,
-     * imageSize);
-     */
-
-    // 마커를 생성
-    var marker = new kakao.maps.Marker({
-      map: map, // 마커를 표시할 지도
-      position: positions[i].latlng, // 마커를 표시할 위치
-      // title : positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시
-      /* image : markerImage // 마커 이미지 */
-    });
-  }
-
-  // 지도에 선을 표시합니다
-  polyline.setMap(map);
-}
-
-// RouteView GoogleMap 마커 경로 표시
-// callback 함수
-function googleMap(flightPlanCoordinates) {
-  console.log(flightPlanCoordinates[0]['lat']);
-  // 구글 지도 생성
-  var map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 12,
-    center: {
-      lat: flightPlanCoordinates[0]['lat'],
-      lng: flightPlanCoordinates[0]['lng'],
-    },
-    mapTypeId: 'satellite', // 'roadmap'
-  });
-
-  // 장소 위치들 저장
-  /*
-   * var flightPlanCoordinates = [ {lat: 37.772, lng: -122.214}, {lat: 21.291,
-   * lng: -157.821}, {lat: -18.142, lng: 178.431}, {lat: -27.467, lng:
-   * 153.027} ];
-   */
-  var markers = [];
-
-  // 마커 생성
-  for (var i = 0; i < flightPlanCoordinates.length; i++) {
-    markers.push(
-      new google.maps.Marker({
-        position: flightPlanCoordinates[i],
-        map: map,
-      })
-    );
-  }
-  // 마커 이미지 커스텀
-  /*
-   * markers.push(new google.maps.Marker({ map : map, /* icon: icon,
-   */
-  /*
-   * title : place.name, position : place.geometry.location }));
-   */
-
-  // 마커들을 선을 경로 표시
-  var flightPath = new google.maps.Polyline({
-    path: flightPlanCoordinates,
-    geodesic: true,
-    strokeColor: '#00FA9A',
-    strokeOpacity: 0.5,
-    strokeWeight: 10,
-  });
-
-  // 맵에 마커 뿌림
-  markers.forEach(function(marker) {
-    marker.setMap(map);
-  });
-  // 마커들 경로 표시
-  flightPath.setMap(map);
-}
