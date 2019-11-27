@@ -84,5 +84,10 @@ public class RouteDAOMybatis implements RouteDAO {
 	public void saveOrder(Map<String, Integer> map) {
 		sqlSession.update("routeSQL.saveOrder",map);		
 	}
+
+	@Override
+	public void updateViews(int rno) {
+		sqlSession.update("routeSQL.updateViews",rno);		
+	}
 	
 }

@@ -1,10 +1,29 @@
 $().ready(function() {
   console.log("rno = " + $("#rno").val());
+  console.log("seq = " + $("#seq").val());
   const { useState, setRequestHeader } = new travelmaker.utils();
+  const rno = document.querySelector("#rno").value;
+  const seq = document.querySelector("#seq").value;
+
+  document.querySelector("#likes").addEventListener("click", UpdateLikes);
+  function UpdateLikes() {
+    $.ajax({
+      type: "post",
+      url: "/route/updateRouteLikes",
+      data: { rno: rno, seq: seq },
+      dataType: "json",
+      beforeSend: setRequestHeader,
+      success: function(data) {
+        alert("좋아요 성공");
+      },
+      error: console.error
+    });
+  }
+
   $.ajax({
     type: "post",
     url: "/route/getRouteView",
-    data: { rno: $("#rno").val() },
+    data: { rno: rno, seq: seq },
     dataType: "json",
     beforeSend: setRequestHeader,
     success: function(data) {
@@ -226,7 +245,7 @@ $().ready(function() {
       //   })
       //     .append(
       //       $("<span>", {
-      //         id: "routeEpilogue",
+      //         id: "rout eEpilogue",
       //         text: "Epilogue : " + $("#epilogue").val()
       //       })
       //     )

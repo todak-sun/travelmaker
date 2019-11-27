@@ -32,6 +32,10 @@
         SELECT rno.CURRVAL
         FROM DUAL
     </select>
+    
+    <update id="updateViews" parameterType="Integer">
+    	UPDATE route SET views = views+1 WHERE rno = #{rno}
+    </update>
 
     <insert id="saveCourse" parameterType="routeContent">
         INSERT INTO route_content (crno, rno, content, lat, lng, location, date_start, date_end, score, fixed)

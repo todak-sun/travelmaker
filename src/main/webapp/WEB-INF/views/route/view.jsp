@@ -10,9 +10,9 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
   </head>
   <body>
     <%@include file="../common/navbar2.jsp"%>
+    <input type="hidden" value="${userDetail.seq}" id="seq" />
     <input type="hidden" value="${routeDTO.rno }" id="rno" />
     <input type="hidden" value="${routeDTO.isDomestic }" id="isdomestic" />
-    <input type="hidden" value="${routeDTO.hashtag }" id="hashtag" />
     <input type="hidden" value="${routeDTO.hashtag }" id="hashtag" />
     <input type="hidden" value="${routeDTO.hashtag }" id="hashtag" />
     <input type="hidden" value="${routeDTO.hashtag }" id="hashtag" />
@@ -111,7 +111,7 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
             omnis alias tempore, ea dolores, doloremque placeat sunt aperiam!
           </p>
           <div class="operation">
-            <button>12</button>
+            <button id="likes">${routeDTO.likes }</button>
           </div>
         </div>
       </div>

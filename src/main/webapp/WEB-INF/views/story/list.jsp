@@ -15,7 +15,7 @@
     <%@include file="../common/navbar2.jsp"%>
     <div class="btn-wrap">
       <button id="btn-write">+ 글 작성하러 가기</button>
-      <input type="hidden" class="currPage" value />
+	  <input type="hidden" class="currPage" value />
     </div>
     <div class="container-wrap">
       <section class="sec-story">

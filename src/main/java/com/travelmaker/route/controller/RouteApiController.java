@@ -166,16 +166,26 @@ public class RouteApiController {
         return routeDTO;
     }
     
-    @RequestMapping(value = "/getRouteView/{rno}", method = RequestMethod.GET)
-    public List<RouteContentDTO> getRoutePreview(@PathVariable int rno) {
-    	System.out.println("getRouteView rno 값 : "+rno);
+//    @RequestMapping(value = "/getRouteView/{rno}", method = RequestMethod.GET)
+//    public List<RouteContentDTO> getRoutePreview(@PathVariable int rno) {
+//    	System.out.println("getRouteView rno 값 : "+rno);
+//    	
+//    	List<RouteContentDTO> list = routeService.getRouteContentStory(rno);
+//    	
+//    	System.out.println("리스트 = " + list.size());
+//    	System.out.println("image 총사이즈 : " + list.get(0).getImgs().size());
+//    	
+//    	return list;
+//    }
+    
+    @RequestMapping(value = "/updateRouteLikes", method = RequestMethod.GET)
+    public void updateRouteLikes(@RequestParam int rno, @RequestParam int seq) {
+    	System.out.println("추가예정");
+//    	routeService.updateRoutesLikes(rno, seq);
     	
-    	List<RouteContentDTO> list = routeService.getRouteContentStory(rno);
+//    	System.out.println("리스트 = " + list.size());
+//    	System.out.println("image 총사이즈 : " + list.get(0).getImgs().size());
     	
-    	System.out.println("리스트 = " + list.size());
-    	System.out.println("image 총사이즈 : " + list.get(0).getImgs().size());
-    	
-    	return list;
+//    	return list;
     }
-
 }

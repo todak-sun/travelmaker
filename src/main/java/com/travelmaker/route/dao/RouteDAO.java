@@ -29,5 +29,7 @@ public interface RouteDAO {
 
 	public void saveOrder(Map<String, Integer> map);
 
+	public void updateViews(int rno);
+
 
 }

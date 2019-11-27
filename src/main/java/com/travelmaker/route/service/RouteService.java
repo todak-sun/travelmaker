@@ -28,4 +28,6 @@ public interface RouteService {
 
 	public void saveOrder(int[] order);
 
+	public void updateViews(int rno);
+
 }
