@@ -20,17 +20,19 @@ public class StoryDAOMybatis implements StoryDAO {
     @Override
     public List<StoryDTO> getStory(StorySearchFilter storySearchFilter) {
     	List<StoryDTO> list = sqlSession.selectList("storySQL.getList", storySearchFilter);
+    	StringBuffer rnos = new StringBuffer("[불러오는 게시글 rno들] ");
     	for(StoryDTO dto : list) {
-    		System.out.println(dto.getRno() +" : " + dto.getCmt());
+    		rnos.append(dto.getRno()+"번 / ");
     	}
+    	System.out.println(rnos);
         return list;
     }
     
-    @Override
-    public List<StoryDTO> getKeywordStory(StorySearchFilter storySearchFilter) {
-    	System.out.println("필터 키워드 : "+storySearchFilter.getKeyword());
-    	return sqlSession.selectList("storySQL.getList", storySearchFilter);
-    }
+//    @Override
+//    public List<StoryDTO> getKeywordStory(StorySearchFilter storySearchFilter) {
+//    	System.out.println("필터 키워드 : "+storySearchFilter.getKeyword());
+//    	return sqlSession.selectList("storySQL.getList", storySearchFilter);
+//    }
 
     @Override
     public String selectBoard(int bno) {

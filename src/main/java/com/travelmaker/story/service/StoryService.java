@@ -11,7 +11,7 @@ public interface StoryService {
 
     public List<StoryDTO> getStory(StorySearchFilter storySearchFilter);
     
-    public List<StoryDTO> getKeywordStory(StorySearchFilter storySearchFilter);
+//    public List<StoryDTO> getKeywordStory(StorySearchFilter storySearchFilter);
 
     public String selectBoard(int bno);
 

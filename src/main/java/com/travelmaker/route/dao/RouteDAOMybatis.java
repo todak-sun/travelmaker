@@ -2,6 +2,7 @@ package com.travelmaker.route.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,5 +64,30 @@ public class RouteDAOMybatis implements RouteDAO {
         }
         return list;
     }
+
+	@Override
+	public RouteContentDTO getCourse(int crno) {
+		return sqlSession.selectOne("routeSQL.getCourse",crno);
+	}
+
+	@Override
+	public void patchCourse(RouteContentDTO routeContentDTO) {
+		sqlSession.update("routeSQL.patchCourse",routeContentDTO);
+	}
+
+	@Override
+	public void deleteCourse(int crno) {
+		sqlSession.delete("routeSQL.deleteCourse",crno);
+	}
+
+	@Override
+	public void saveOrder(Map<String, Integer> map) {
+		sqlSession.update("routeSQL.saveOrder",map);		
+	}
+
+	@Override
+	public void updateViews(int rno) {
+		sqlSession.update("routeSQL.updateViews",rno);		
+	}
 	
 }

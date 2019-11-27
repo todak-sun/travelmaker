@@ -4,12 +4,12 @@ $(function() {
   };
 
   // 전역변수 설정 & 클릭 이벤트 부여
-  const btnList = document.querySelector("#btn-list");
+  const currPage = document.querySelector(".currPage");
   // const divList = document.querySelector("#div-list");
-  const inputSearch = document.querySelector("#input-search");
-  const $list = $(".list");
+  const inputSearch = document.querySelector(".input-search");
+  const $list = $(".sec-story");
   let timer;
-  btnList.addEventListener("click", showList);
+  // currPage.addEventListener("click", showList);
   inputSearch.addEventListener("change", showKeywordList);
 
   // 처음 열기 & 뒤로가기 페이지 로딩 완료 후 게시물 출력
@@ -18,7 +18,7 @@ $(function() {
   $(window).scroll(scrollList);
 
   function showKeywordList() {
-    btnList.value = +12;
+    currPage.value = +12;
     $list.empty();
     showList();
   }
@@ -27,11 +27,14 @@ $(function() {
   function showList() {
     const keyword = inputSearch.value;
     const currListNum = +$list[0].childElementCount;
-    let loadListNum = +btnList.value;
-    if (currListNum == loadListNum) loadListNum += 8; // 나중에 화면 사이즈별로 추가 갯수 변경 가능
+    let loadListNum = +currPage.value;
+    console.log("keyword : " + keyword);
+    console.log("현재 리스트 숫자 : " + currListNum);
+    console.log("불러올 리스트 숫자 : " + loadListNum);
+    if (currListNum == loadListNum) loadListNum += 8; // 추가하는 게시글 수
 
     // ajax 요청해서 게시물 가져오기
-    getList(currListNum, loadListNum, keyword)
+    getList(currListNum + 1, loadListNum, keyword)
       .then(function(result) {
         addList(result);
       })
@@ -41,10 +44,10 @@ $(function() {
   }
 
   // 현재, 로딩할 리스트 숫자, 키워드 입력해서 추가 게시물 가져오기
-  function getList(currListNum, loadListNum, keyword) {
+  function getList(start, end, keyword) {
     return $.ajax({
       type: "get",
-      url: `/api/story/${currListNum}/${loadListNum}/${keyword}`,
+      url: `/api/story/${start}/${end}/${keyword}`, // story컨트롤러와 변수명 통일
       dataType: "json"
     });
   }
@@ -68,24 +71,40 @@ $(function() {
         dateUpdate
       } = result[i];
       const storyType = fileName ? "essay" : "route";
-      const $div = $(`
-      <div class="item" id=${bno}>
-      <a href="/${storyType}/view/${rno}">
-        <div class="card">
-          <h3>${title}</h3>
-          <div class="thumb"> 추후 이미지 경로 : ${imageName}</div>
-          <div class="user">작성자 : ${nickname}</div>
-          <div class="info">
-            <span>좋아요 : ${likes}</span>
-            <span>조회수 : ${views}</span>
-            <span>댓글수 : ${cmt}</span>
-            <span>업뎃날짜 : ${dateUpdate}</span>
+
+      const $article = $(`
+      <article class="story">
+        <div class="story-img-wrap">
+          <img
+            src="https://picsum.photos/300/200?random=1"
+            alt=""
+            class="story-img"
+          />
+        </div>
+        <div class="story-content-wrap">
+          <h5 class="story-title">
+            <a href="/${storyType}/view/${rno}">${title}</a>
+          </h5>
+          <div class="story-info">
+            <span class="info-icon likes">${likes}</span>
+            <span class="info-icon views">${views}</span>
+            <span class="info-icon comments">${cmt}</span>
           </div>
         </div>
-      </a>
-      </div>
+        <div class="story-user-wrap">
+          <img
+            src="https://picsum.photos/300/200?random=2"
+            alt=""
+            class="profile-img"
+          />
+          <div class="user-info">
+            <h6>${nickname}</h6>
+            <p>${dateUpdate}</p>
+          </div>
+        </div>
+      </article>
       `);
-      $frag.append($div);
+      $frag.append($article);
     }
     $list.append($frag);
 
@@ -94,7 +113,7 @@ $(function() {
       document.documentElement.scrollTop = $list[0].scrollHeight - 1400;
     }
     currListNum = $list[0].childElementCount; // 게시물 추가 후 현재 게시물 숫자 저장
-    btnList.value = currListNum; // 현재 게시물 숫자 버튼벨류로 저장
+    currPage.value = currListNum; // 현재 게시물 숫자 버튼벨류로 저장
     history.pushState(
       {
         currListNum: currListNum
