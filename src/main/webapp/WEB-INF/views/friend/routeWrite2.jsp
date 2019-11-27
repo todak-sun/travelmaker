@@ -58,7 +58,7 @@
         </form>
     </div>
 </div>
-<!-- 메인 컨텐츠 영역 -->
+<%@include file="../common/footer.jsp"%>
 <%@include file="../common/editor-js.jsp" %>
 <script src="${pageContext.request.contextPath}/resources/js/friend/routeWrite2.js"></script>
 </body>

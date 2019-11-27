@@ -39,8 +39,8 @@ public class EssayApiController implements EssayApiInterface<EssayApiRequest, Es
     }
 
     @Override
-    @PostMapping(path = "", produces = "application/json; charset=UTF-8")
-    public Header<EssayApiResponse> create(@RequestBody Header<EssayApiRequest> request) {
+    @PostMapping(path = "")
+    public Header<EssayApiResponse> create(@ModelAttribute EssayApiRequest request) {
         return essayApiService.create(request);
     }
 
@@ -51,9 +51,9 @@ public class EssayApiController implements EssayApiInterface<EssayApiRequest, Es
     }
 
     @Override
-    @PutMapping(path = "", produces = "application/json; charset=UTF-8")
-    public Header<EssayApiResponse> update(@RequestBody Header<EssayApiRequest> request) {
-        return essayApiService.update(request);
+    @PostMapping(path = "/{rno}", produces = "application/json; charset=UTF-8")
+    public Header<EssayApiResponse> update(@PathVariable int rno, @ModelAttribute EssayApiRequest request) {
+        return essayApiService.update(rno, request);
     }
 
     @Override

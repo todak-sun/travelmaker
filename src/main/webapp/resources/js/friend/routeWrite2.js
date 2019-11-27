@@ -17,6 +17,7 @@ $(function () {
     const btnNext = getEl('#btn-next');
     const btnCheck = getEl('#btn-check');
     const btnCancel = getEl('#btn-cancle');
+    const isDomestic = +getEl('#is_domestic').value;
 
     //다음 지도의 정보를 가지고 있는 함수.
     //지도에서 특정 위치를 선택하면 값이 할당 됨.
@@ -49,10 +50,17 @@ $(function () {
     addEvent(inputSearchPlace, 'focus', () => btnSearchPlace.click());
 
     addEvent(btnSearchPlace, 'click', () => {
-        modal.createCustom(t.kmap(), () => {
-            const kmap = new travelmaker.kakaoMap(getEl('#map'));
-            getMapData = kmap.create(modal);
-        })
+        if(isDomestic){
+            modal.createCustom(t.kmap(), () => {
+                const kmap = new travelmaker.kakaoMap(getEl('#map'));
+                getMapData = kmap.create(modal, setValueAtHiddenElement);
+            });
+        } else {
+            modal.createCustom(t.gmap(), () => {
+                const gmap = new travelmaker.googleMap(getEl('#map'));
+                getMapData = gmap.create(modal, setValueAtHiddenElement);
+            });
+        }
     });
 
     addEvent(btnCheck, 'click', () => {
@@ -64,11 +72,11 @@ $(function () {
     });
 
     //히든태그에 필요한 지도정보를 다 담아버림.
-    function setValueAtHiddenElement() {
+    function setValueAtHiddenElement(){
         const {lat, lng, address, placeName} = getMapData();
+        inputSearchPlace.value = address + ' ' + placeName;
         inputLat.value = lat;
         inputLng.value = lng;
         inputCity.value = placeName;
-        inputSearchPlace.value = address + ' ' + placeName;
     }
 });

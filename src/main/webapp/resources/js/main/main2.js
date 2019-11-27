@@ -8,6 +8,9 @@ $(function () {
     const t = new travelmaker.template();
     const myRegex = new travelmaker.regex();
 
+    //seq의 존재여부로 로그인/비로그인 여부를 가림.
+    const seq = getEl('#seq');
+
     //배열형
     const btnLoginList = getElList('.btn-login');
     addAllSameEvent(btnLoginList, 'click', loginModalHandler);
@@ -17,6 +20,7 @@ $(function () {
         modal.create('login', initLoginModal);
     }
 
+    //로그인
     function initLoginModal() {
         const id = getEl('#id');
         const mid = getEl('#mid');
@@ -310,6 +314,35 @@ $(function () {
     }
 
     function initRequestModal() {
+    }
+
+    //리모컨
+    if (seq) {
+        const remocon = getEl('.remote-controller');
+        const scrollUp = getEl('.scroll-up');
+        const scrollDown = getEl('.scroll-down');
+        const myPage = getEl('.my-page');
+        const message = getEl('.message');
+
+        const $html = $('html');
+
+        addEvent(remocon, 'click', (e) => {
+            const target = e.target;
+            target.classList.remove('on');
+            if (target.classList.contains('onfocus')) {
+                return target.classList.remove('onfocus');
+            } else {
+                return target.classList.add('onfocus');
+            }
+        });
+        addEvent(scrollUp, 'click', (e) => {
+            e.preventDefault();
+            $html.stop().animate({scrollTop: 0}, 800);
+        });
+        addEvent(scrollDown, 'click', (e) => {
+            e.preventDefault();
+            $html.stop().animate({scrollTop: document.body.scrollHeight}, 800);
+        });
     }
 });
 

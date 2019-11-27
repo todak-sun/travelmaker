@@ -130,7 +130,7 @@
     </div>
 </div>
 <!-- 메인 컨텐츠 영역 -->
-
+<%@include file="../common/footer.jsp"%>
 <%@include file="../common/foot-js.jsp" %>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=58d9a72c9db8da0b849a32734093767e"></script>
 <script src="${pageContext.request.contextPath}/resources/js/friend/view2.js"></script>
