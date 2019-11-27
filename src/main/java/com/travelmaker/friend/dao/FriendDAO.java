@@ -30,5 +30,9 @@ public interface FriendDAO {
 
 	public FriendDTO getFriendDTO(int fno);
 
+	public void requestAccept(String fccno);
+
+	public void requestReject(String fccno);
+
 
 }

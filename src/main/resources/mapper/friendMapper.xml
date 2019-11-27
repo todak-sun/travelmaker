@@ -87,4 +87,11 @@
 		friend_request values(#{fcno}, seq_fccno.nextval, #{seq}, #{content},
 		0, #{dateStart}, #{dateEnd}, 0)
 	</insert>
+	
+	<update id="requestAccept" parameterType="int">
+		UPDATE friend_request SET is_permit = 1 WHERE fccno = #{fccno}
+	</update>
+	<update id="requestReject" parameterType="int">
+		UPDATE friend_request SET is_permit = 2 WHERE fccno = #{fccno}
+	</update>
 </mapper>
