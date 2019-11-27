@@ -16,7 +16,7 @@
 		            WHERE fixed = 1
 		            ORDER BY rno DESC
 		        ) A JOIN users B on A.seq = B.seq WHERE (nickname like '%${keyword}%' or title like '%${keyword}%' or hashtag like '%${keyword}%')
-		    ) WHERE RN &gt; #{start} AND RN &lt; #{end}
+		    ) WHERE RN &gt; (#{start}-1) AND RN &lt; (#{end}+1)
 		) C LEFT OUTER JOIN (SELECT COUNT(*) CMT, BNO FROM CMT GROUP BY BNO) D on C.bno = D.bno ORDER BY RNO DESC
 	</select>
 	
