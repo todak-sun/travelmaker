@@ -49,4 +49,11 @@
         VALUES (ino.nextVal, #{crno}, #{img}, #{imgOrder})
     </insert>
 
+	<select id="getRouteContentStory" parameterType="int" resultType="routeContent">
+		SELECT * FROM route_content WHERE RNO = #{rno}
+	</select>
+	<select id="getRouteImageStory" parameterType="int" resultType="routeImage">
+		SELECT img FROM route_image WHERE CRNO = #{CRNO}
+	</select>
+
 </mapper>

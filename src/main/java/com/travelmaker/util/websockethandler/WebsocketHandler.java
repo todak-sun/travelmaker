@@ -122,7 +122,7 @@ public class WebsocketHandler extends TextWebSocketHandler {
 		ResponsePacket responsePacket = new ResponsePacket();
 		responsePacket.setHeader(header);
 		responsePacket.setData(responseMessage);
-		responsePacket.setNo(dataseq); //대행 : fno
+		responsePacket.setNo(dataseq); //대행 : fno //댓글 : bno
 		
 		while (mapIter.hasNext()) {
 			WebSocketSession key = mapIter.next();

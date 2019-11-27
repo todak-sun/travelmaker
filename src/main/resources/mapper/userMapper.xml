@@ -9,8 +9,8 @@
 
 	<insert id="UserInsert" parameterType="user">
 		insert into
-		users(seq,id,realname,password,email1,email2,gender,phone1,phone2,phone3,birthdate,agreeNeed,registerMethod,dateRegist)
-		values(seq_users.nextval,#{id},#{realname},#{password},#{email1},#{email2},#{gender},#{phone1},#{phone2},#{phone3},#{birthdate},#{agreeNeed},#{registerMethod},sysdate)
+		users(seq,id,realname,nickname,password,email1,email2,gender,phone1,phone2,phone3,birthdate,agreeNeed,registerMethod,dateRegist)
+		values(seq_users.nextval,#{id},#{realname},#{nickname},#{password},#{email1},#{email2},#{gender},#{phone1},#{phone2},#{phone3},#{birthdate},#{agreeNeed},#{registerMethod},sysdate)
 	</insert>
 
 	<select id="checkMethod" parameterType="user" resultType="user">
@@ -30,8 +30,7 @@
 	</select>
 
 
-	<select id="getUserDTO" parameterType="int"
-		resultType="user">
+	<select id="getUserDTO" parameterType="int" resultType="user">
 		select
 		*
 		from users where seq = #{seq}
@@ -64,10 +63,16 @@
 	</update>
 
 	<update id="userWithdrawal" parameterType="user">
-
 		delete users where
 		id=#{id} and registerMethod =#{registerMethod}
-
 	</update>
+
+	<select id="getUserNickname" parameterType="String"
+		resultType="user">
+		select
+		*
+		from users where nickname = #{nickname}
+	</select>
+
 
 </mapper>

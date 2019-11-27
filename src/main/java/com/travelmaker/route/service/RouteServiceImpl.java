@@ -1,5 +1,7 @@
 package com.travelmaker.route.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,5 +39,16 @@ public class RouteServiceImpl implements RouteService {
 		
 		routeDAO.saveRouteImage(routeImageDTO);
 	}
+
+    @Override
+    public RouteDTO getRoute(int rno) {
+        return routeDAO.getRoute(rno);
+    }
+
+    @Override
+    public List<RouteContentDTO> getRouteContentStory(int rno) {
+        System.out.println("서비스 들어옴");
+        return routeDAO.getRouteContentStory(rno);
+    }
 	
 }
