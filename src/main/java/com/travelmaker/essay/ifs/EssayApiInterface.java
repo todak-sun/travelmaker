@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface EssayApiInterface<Request, Response> {
 
-    Header<Response> create(Header<Request> request);
+    Header<Response> create(Request request);
 
     String upload(int rno, Request request);
 
@@ -17,7 +17,7 @@ public interface EssayApiInterface<Request, Response> {
 
     Header<Response> readOne(int rno);
 
-    Header<Response> update(Header<Request> request);
+    Header<Response> update(int rno, Request request);
 
     Header delete(int rno);
 

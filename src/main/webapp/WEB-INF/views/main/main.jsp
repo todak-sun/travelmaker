@@ -28,7 +28,7 @@
 </div>
 
 <!-- 푸터 영역 -->
-<footer></footer>
+<%@include file="../common/footer.jsp"%>
 <!-- 푸터 영역 -->
 <%@include file="../common/foot-js.jsp" %>
 </body>

@@ -4,10 +4,10 @@ import com.travelmaker.comment.dao.CommentDAO;
 import com.travelmaker.essay.dao.EssayDAO;
 import com.travelmaker.essay.domain.EssayDTO;
 import com.travelmaker.essay.domain.EssaySearchFilter;
-import com.travelmaker.essay.ifs.EssayApiInterface;
-import com.travelmaker.model.network.Header;
 import com.travelmaker.essay.domain.network.request.EssayApiRequest;
 import com.travelmaker.essay.domain.network.response.EssayApiResponse;
+import com.travelmaker.essay.ifs.EssayApiInterface;
+import com.travelmaker.model.network.Header;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -61,20 +61,20 @@ public class EssayApiService implements EssayApiInterface<EssayApiRequest, Essay
     }
 
     @Override
-    public Header<EssayApiResponse> create(Header<EssayApiRequest> request) {
-        EssayApiRequest data = request.getData();
-        String imageName = Optional.ofNullable(data.getImageFile()).map(this::saveImage).orElse(null);
+    public Header<EssayApiResponse> create(EssayApiRequest request) {
+        System.out.println(request);
+        String imageName = Optional.ofNullable(request.getImageFile()).map(this::saveImage).orElse(null);
         String fileName = UUID.randomUUID().toString() + LocalDateTime.now().toString() + ".txt";
-        saveFile(data.getContent(), fileName);
+        saveFile(request.getContent(), fileName);
 
         EssayDTO essayDTO = EssayDTO.builder()
-                .seq(data.getSeq())
-                .title(data.getTitle())
+                .seq(request.getSeq())
+                .title(request.getTitle())
                 .fileName(fileName)
                 .imageName(imageName)
-                .hashtag(data.getHashtag())
-                .fixed(data.getFixed())
-                .isDomestic(data.getIsDomestic())
+                .hashtag(request.getHashtag())
+                .fixed(request.getFixed())
+                .isDomestic(request.getIsDomestic())
                 .build();
         EssayDTO newEssayDTO = essayDAO.create(essayDTO);
 
@@ -96,20 +96,35 @@ public class EssayApiService implements EssayApiInterface<EssayApiRequest, Essay
     }
 
     @Override
-    public Header<EssayApiResponse> update(Header<EssayApiRequest> request) {
-        EssayApiRequest data = request.getData();
-        Optional<EssayDTO> optional = Optional.ofNullable(essayDAO.readOne(data.getRno()));
+    public Header<EssayApiResponse> update(int rno, EssayApiRequest request) {
+        Optional<EssayDTO> optional = Optional.ofNullable(essayDAO.readOne(rno));
         return optional.map(essayDTO -> {
-            saveFile(data.getContent(), essayDTO.getFileName());
-            Optional.ofNullable(essayDTO.getImageName()).ifPresent(this::deleteImage);
-            String imageName = Optional.ofNullable(data.getImageFile()).map(this::saveImage).orElse(null);
-            essayDTO.setTitle(data.getTitle())
-                    .setLikes(data.getLikes())
-                    .setViews(data.getViews())
-                    .setHashtag(data.getHashtag())
-                    .setFixed(data.getFixed())
+            //바뀐 내용을 기존에 있던 내용에 저장
+            saveFile(request.getContent(), essayDTO.getFileName());
+
+            //DB에 저장된 image의 이름을 조회
+            String imageName = Optional.ofNullable(essayDTO.getImageName())
+                    //DB에 저장된 이미지가 있다면
+                    .map(savedImageName -> {
+                        //임시 수정중인 이미지의 이름과 같은지 비교해서 같다면 그대로 저장
+                        if (request.getImageName().equals(savedImageName)) {
+                            return savedImageName;
+                        //임시 수정중인 이미지의 이름과 같지 않다면 기존의 파일을 삭제하고, 새로 들어온 이미지 파일을 저장하거나 null로 처리
+                        } else {
+                            deleteImage(savedImageName);
+                            return Optional.ofNullable(request.getImageFile()).map(this::saveImage).orElse(null);
+                        }
+                    })
+                    //DB에 이미지가 없다면, 새로 들어온 배경이미지가 있는지 조사하고, 새로 들어온 이미지 파일을 저장하거나 null로 처리.
+                    .orElse(Optional.ofNullable(request.getImageFile()).map(this::saveImage).orElse(null));
+
+            essayDTO.setTitle(request.getTitle())
+                    .setLikes(request.getLikes())
+                    .setViews(request.getViews())
+                    .setHashtag(request.getHashtag())
+                    .setFixed(request.getFixed())
                     .setImageName(imageName)
-                    .setIsDomestic(data.getIsDomestic());
+                    .setIsDomestic(request.getIsDomestic());
             return essayDAO.update(essayDTO);
         })
                 .map(this::response)

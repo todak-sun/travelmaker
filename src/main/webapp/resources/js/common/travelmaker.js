@@ -92,13 +92,10 @@ let travelmaker = (function (window) {
             return Array.from(document.querySelectorAll(selectors));
         }
 
-        function getFormData(imageFile) {
-            const essay = getEssay();
-            const keys = Object.keys(essay);
-            const values = Object.values(essay);
-
+        function getFormData(data) {
+            const keys = Object.keys(data);
+            const values = Object.values(data);
             const formData = new FormData();
-            formData.append('imageFile', imageFile);
             for (let i = 0; i < keys.length; i++) {
                 formData.append(keys[i], values[i]);
             }
@@ -174,6 +171,15 @@ let travelmaker = (function (window) {
             `;
         };
 
+        Template.prototype.gmap = function () {
+            return `
+             <div class="map-wrap-g">
+                <input type="text" class="search-location" placeholder="검색어를 입력하세요..."/>
+                <div id="map"></div>
+            </div>
+            `;
+        };
+
         Template.prototype.pageItem = function (index, pagination) {
             let li = document.createElement('li');
             let a = document.createElement('a');
@@ -200,45 +206,6 @@ let travelmaker = (function (window) {
             `;
             li.classList.add('result-item');
             return li;
-        };
-
-        Template.prototype.map = function () {
-            return `
-            <div class="row">
-              <div class="">
-                  <div class="input-group">
-                      <input type="text" id="keyword" class="form-control"/>
-                      <button id="btn-keyword-search">검색</button>
-                  </div>
-                  <ul id="placesList" class="list-group list-group-flush" style="height:350px;overflow-y:auto;padding:0;">
-                  </ul>
-                  <ul id="pagination" class="pagination"></ul>
-              </div>
-              <div id="map" class="col col-sm-9"></div>
-            </div>
-            `;
-        };
-
-        Template.prototype.modal = function (title, body) {
-            return `<div class="modal-dialog modal-lg" role="document">
-                  <div class="modal-content">
-                      <div class="modal-header">
-                      <h5 class="modal-title">${title}</h5>
-                      <button
-                          type="button"
-                          class="close"
-                          data-dismiss="modal"
-                          aria-label="Close"
-                      >
-                          <span aria-hidden="true">&times;</span>
-                      </button>
-                      </div>
-                      <div class="modal-body">
-                      ${body}
-                      </div>
-                  </div>
-              </div>
-              `;
         };
 
         Template.prototype.story = function () {
@@ -288,7 +255,7 @@ let travelmaker = (function (window) {
                         <span class="delete">&times;</span>
                         <span class="get">불러오기</span>
                         <div class="image-wrap">
-                            <img src="${imageName}" alt="${imageName}"/>
+                            <img src="/resources/storage/essay/${imageName}" alt="${imageName}"/>
                         </div>
                         <div class="temp-info">
                             <span class="mini-badge">${isDomestic ? '국내' : '해외'}</span>
@@ -303,69 +270,8 @@ let travelmaker = (function (window) {
         Template.prototype.comment = function (comment) {
             const {cno, bno, content, likes, unlikes, seq, dateWrite, pcno} = comment;
             if (cno !== pcno) {
-                return `
-            <li>
-                <div class="media text-muted pt-3">
-                  <svg
-                          class="bd-placeholder-img mr-2 rounded"
-                          width="32"
-                          height="32"
-                          xmlns="http://www.w3.org/2000/svg"
-                          preserveAspectRatio="xMidYMid slice"
-                          focusable="false"
-                          role="img"
-                          aria-label="Placeholder: 32x32"
-                  >
-                    <rect width="100%" height="100%" fill="#f783ac" />
-                    <text x="50%" y="50%" fill="#6f42c1" dy=".3em">32x32</text>
-                  </svg>
-                  <p
-                          class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray"
-                  >
-                    <strong class="d-block text-gray-dark">@${seq}</strong>
-                    <span class="comment-content">${content}</span>
-                  </p>
-                  <div class="btn-group btn-group-sm">
-                    <button data-cno="${cno}" data-likes="${likes}" class="btn-primary btn-like-comment">좋아요${likes}</button>
-                    <button data-cno="${cno}" data-unlikes="${unlikes}" class="btn-danger btn-unlike-comment">싫어요${unlikes}</button>
-                    <button data-cno="${pcno}" data-on="false" class="btn btn-outline-secondary btn-recomment">답글</button>
-                    <button data-cno="${cno}" class="btn btn-outline-secondary btn-recomment-remove">삭제</button>
-                  </div>
-                </div>
-            </li>
-            `;
+                return ``;
             }
-            return `
-            <li>
-                <div class="media text-muted pt-3">
-                  <svg
-                          class="bd-placeholder-img mr-2 rounded"
-                          width="32"
-                          height="32"
-                          xmlns="http://www.w3.org/2000/svg"
-                          preserveAspectRatio="xMidYMid slice"
-                          focusable="false"
-                          role="img"
-                          aria-label="Placeholder: 32x32"
-                  >
-                    <rect width="100%" height="100%" fill="#6f42c1" />
-                    <text x="50%" y="50%" fill="#6f42c1" dy=".3em">32x32</text>
-                  </svg>
-                  <p
-                          class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray"
-                  >
-                    <strong class="d-block text-gray-dark">@${seq}</strong>
-                    <span class="comment-content">${content}</span>
-                  </p>
-                  <div class="btn-group btn-group-sm">
-                    <button data-cno="${cno}" data-likes="${likes}" class="btn-primary btn-like-comment">좋아요${likes}</button>
-                    <button data-cno="${cno}" data-unlikes="${unlikes}" class="btn-danger btn-unlike-comment">싫어요${unlikes}</button>
-                    <button data-cno="${cno}" data-on="false" class="btn btn-outline-secondary btn-recomment">답글</button>
-                    <button data-cno="${cno}" class="btn btn-outline-secondary btn-recomment-remove">삭제</button>
-                  </div>
-                </div>
-            </li>
-            `;
         };
 
         Template.prototype.reComment = function (cno) {
@@ -375,7 +281,7 @@ let travelmaker = (function (window) {
                     <button data-cno="${cno}" id="btn-add-recomment" class="input-group-append">작성</button>
                 </div>
             `
-        }
+        };
 
         Template.prototype.login2 = function (csrfTokenValue) {
             return `
@@ -652,9 +558,9 @@ let travelmaker = (function (window) {
         const Ajax = function () {
             this.getEssay = getEssay;
             this.getEssayTempList = getEssayTempList;
-            this.createEssay = createEssay;
+            this.createEssay = createEssay2;
             this.essayImageUpload = essayImageUpload;
-            this.essayUpdate = essayUpdate;
+            this.updateEssay = updateEssay;
             this.essayDelete = essayDelete;
             this.getCommentList = getCommentList;
             this.createComment = createComment;
@@ -744,13 +650,26 @@ let travelmaker = (function (window) {
             });
         }
 
-        function createEssay(data) {
+        function createEssay2(data) {
             return $.ajax({
                 type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({data}),
+                contentType: false,
+                processData: false,
                 dataType: 'json',
+                data: data,
                 url: url + '/api/essay',
+                beforeSend: setRequestHeader
+            })
+        }
+
+        function updateEssay(rno, data) {
+            return $.ajax({
+                type: 'POST',
+                contentType: false,
+                processData: false,
+                data: data,
+                dataType: 'json',
+                url: url + '/api/essay/' + rno,
                 beforeSend: setRequestHeader
             });
         }
@@ -767,16 +686,7 @@ let travelmaker = (function (window) {
             });
         }
 
-        function essayUpdate(data) {
-            return $.ajax({
-                type: 'PUT',
-                contentType: 'application/json',
-                data: JSON.stringify({data}),
-                dataType: 'json',
-                url: url + '/api/essay',
-                beforeSend: setRequestHeader
-            });
-        }
+
 
         function essayDelete(rno) {
             return $.ajax({
@@ -802,15 +712,14 @@ let travelmaker = (function (window) {
         };
 
         const {getEl, addEvent, useState, getEls} = new Utils();
-        const template = new Template();
-        const $editor = $('#editor');
+        const t = new Template();
 
         let markers = [];
         let map, ps, infoWindow;
         let setMapData;
-        let _modal, _resultGroup, _pageGroup;
+        let _modal, _resultGroup, _pageGroup, _mapEventFunc;
 
-        KakaoMap.prototype.create = function (modal) {
+        KakaoMap.prototype.create = function (modal, mapEventFunc) {
             const [btnSearch, inputSearch, resultGroup, pageGroup] = getEls(modal.m, '#btn-search-location', '.search-location', '.result-group', '.page-group');
             map = new kakao.maps.Map(this.kmap, this.mapOption);
             ps = new kakao.maps.services.Places(); //장소검색
@@ -824,10 +733,29 @@ let travelmaker = (function (window) {
             let [setState, getState] = useState({lat: null, lng: null, address: null, placeName: null});
             setMapData = setState;
             _modal = modal;
+            _mapEventFunc = mapEventFunc;
             _resultGroup = resultGroup;
             _pageGroup = pageGroup;
 
             return getState;
+        };
+
+        KakaoMap.prototype.getStaticMap = function (container, {lat, lng, address, placeName}) {
+            let markerPosition = new kakao.maps.LatLng(lat, lng);
+            let staticMarker = {position: markerPosition, text: placeName};
+            let staticMapOption = {
+                center: new kakao.maps.LatLng(lat, lng),
+                level: 3,
+                marker: staticMarker
+            };
+
+            new kakao.maps.StaticMap(container, staticMapOption);
+            let link = container.querySelector('a').href;
+            let image = container.querySelector('img').src;
+            let $frag = $(document.createDocumentFragment());
+            $frag.append(t.staticMap(link, image, address + placeName));
+
+            return $frag[0];
         };
 
         function searchPlaces(inputSearch) {
@@ -875,7 +803,7 @@ let travelmaker = (function (window) {
                         ? places[i].road_address_name
                         : places[i].address_name
                 );
-                let itemEl = template.kmapResult(i, places[i]); // 검색 결과 항목 Element를 생성합니다
+                let itemEl = t.kmapResult(i, places[i]); // 검색 결과 항목 Element를 생성합니다
 
                 // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
                 // LatLngBounds 객체에 좌표를 추가합니다
@@ -922,35 +850,8 @@ let travelmaker = (function (window) {
                 placeName: title,
                 address: marker.getTitle()
             });
+            if (_mapEventFunc) _mapEventFunc();
             _modal.clear();
-        }
-
-        function btnAddMapHandler(marker, title) {
-            let lat = marker.getPosition().getLat();
-            let lng = marker.getPosition().getLng();
-            let description = marker.getTitle() + title;
-
-            let staticMapContainer = document.querySelector('#map-container');
-
-            //정적마커의 옵션
-            let markerPosition = new kakao.maps.LatLng(lat, lng);
-            let staticMarker = {position: markerPosition, text: title};
-            let staticMapOption = {
-                center: new kakao.maps.LatLng(lat, lng),
-                level: 3,
-                marker: staticMarker
-            };
-            new kakao.maps.StaticMap(staticMapContainer, staticMapOption);
-
-            let link = staticMapContainer.querySelector('a').href;
-            let imgUrl = staticMapContainer.querySelector('img').src;
-            let $sMap = $(document.createDocumentFragment());
-            $sMap.append(template.staticMap(link, imgUrl, description));
-
-            $modal.modal('hide');
-            $editor.summernote('restoreRange');
-            $editor.summernote('insertNode', $sMap[0]);
-            staticMapContainer.innerHTML = '';
         }
 
         // 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
@@ -980,7 +881,7 @@ let travelmaker = (function (window) {
                 _pageGroup.removeChild(_pageGroup.lastChild);
             }
             for (i = 1; i <= pagination.last; i++) {
-                fragment.appendChild(template.pageItem(i, pagination));
+                fragment.appendChild(t.pageItem(i, pagination));
             }
             _pageGroup.appendChild(fragment);
         }
@@ -1004,69 +905,80 @@ let travelmaker = (function (window) {
     })(_w);
 
     const GoogleMap = (function (w) {
-        const GoogleMap = function (modal, $editor) {
-            this.G_MAP = {
+        const GoogleMap = function (gmap) {
+            this.gmap = gmap;
+            this.mapOption = {
                 center: {lat: -33.8688, lng: 151.2195},
                 zoom: 13,
                 mapTypeId: 'roadmap',
                 fullscreenControl: false,
                 mapTypeControl: false
             };
-            this.modal = modal;
-            this.$editor = $editor;
         };
 
-        const template = new Template();
+        const t = new Template();
+        const {getEl, useState} = new Utils();
 
-        GoogleMap.prototype.init = function () {
-            //마커를 보관하는 변수
-            let markers = [];
-            let infowindows = [];
-            let infowindow, searchBox;
+        let markers = []; //마커 보관
+        let infoWindows = [];
+        let infoWindow;
+        let G_KEY = 'AIzaSyCeKdfxBMTEBPFzc4QjjrIJJv25EuWL4gY';
 
-            let map = new google.maps.Map(
-                document.getElementById('map'),
-                this.G_MAP
-            );
+        let _modal, _map, _searchBox, _mapEventFunc, _setMapData;
 
-            let modal = modal;
-            let $editor = this.$editor;
-            let G_KEY = 'AIzaSyCeKdfxBMTEBPFzc4QjjrIJJv25EuWL4gY';
+        GoogleMap.prototype.create = function (modal, mapEventFunc) {
+            const inputSearch = getEl('.search-location');
+            const [setMapData, getMapData] = useState({});
 
-            // input태그를 잡아와서 search box로 만드는 부분.
-            let input = document.getElementById('keyword');
-            searchBox = new google.maps.places.SearchBox(input);
+            _modal = modal;
+            _map = new google.maps.Map(this.gmap, this.mapOption);
+            _searchBox = new google.maps.places.SearchBox(inputSearch);
+            _setMapData = setMapData;
+            _mapEventFunc = mapEventFunc;
 
-            // map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+            setEventToMap();
+            setEventToSearchBox();
+            return getMapData;
+        };
 
-            // Bias the SearchBox results towards current map's viewport.
-            map.addListener('bounds_changed', function () {
-                searchBox.setBounds(map.getBounds());
+        GoogleMap.prototype.getStaticMap = function (container, {lat, lng, address, placeName}) {
+            let width = 750, height = 350;
+            let link = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+            let image = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=12&size=${width}x${height}&markers=color:red%7C${lat},${lng}&key=${G_KEY}`;
+            let $frag = $(document.createDocumentFragment());
+            $frag.append(t.staticMap(link, image, placeName + address));
+
+            return $frag[0];
+        };
+
+        function setEventToMap() {
+            //searchBox의 위치를 지도의 내부로 고정.
+            _map.addListener('bounds_changed', function () {
+                _searchBox.setBounds(_map.getBounds());
             });
+        }
 
-            //검색결과 중 하나 또는 그 이상을 선택 할 경우 아래의 이벤트를 실행.
-            searchBox.addListener('places_changed', function () {
-                let places = searchBox.getPlaces();
+        function setEventToSearchBox() {
+            _searchBox.addListener('places_changed', function () {
+                let places = _searchBox.getPlaces();
                 if (places.length === 0) {
                     return;
                 }
-
                 //기존 마커를 모두 날림.
                 markers.forEach(function (marker) {
                     marker.setMap(null);
                 });
                 markers = [];
 
-                var bounds = new google.maps.LatLngBounds();
+                let bounds = new google.maps.LatLngBounds();
 
                 places.forEach(function (place) {
                     if (!place.geometry) {
                         return;
                     }
-
                     //마커 생성
                     let marker = new google.maps.Marker({
-                        map: map,
+                        map: _map,
                         title: place.name,
                         position: place.geometry.location
                     });
@@ -1074,51 +986,48 @@ let travelmaker = (function (window) {
                     //마커 이벤트
                     marker.addListener('click', function () {
                         //기존 infowindow를 모두 닫음
-                        infowindows.forEach((info) => {
+                        infoWindows.forEach((info) => {
                             info.close();
                         });
                         //infowindow를 빈 배열로 초기화.
-                        infowindows = [];
+                        infoWindows = [];
 
-                        infowindow = new google.maps.InfoWindow({
-                            content: template.infoWindow(place.name, place.formatted_address)
+                        infoWindow = new google.maps.InfoWindow({
+                            content: t.infoWindow(place.name, place.formatted_address)
                         });
 
-                        google.maps.event.addListener(infowindow, 'domready', function () {
+                        google.maps.event.addListener(infoWindow, 'domready', function () {
                             const btnAddMap = document.querySelector('#btn-add-map');
-                            btnAddMap.addEventListener('click', btnAddMapHandler.bind(null, place, modal, $editor, G_KEY));
+                            btnAddMap.addEventListener('click', btnAddMapHandler.bind(null, place, _modal));
                         });
-                        infowindow.open(map, marker);
-                        infowindows.push(infowindow);
+
+                        infoWindow.open(_map, marker);
+                        infoWindows.push(infoWindow);
                     });
 
                     markers.push(marker);
 
+                    // Only geocodes have viewport.
                     if (place.geometry.viewport) {
-                        // Only geocodes have viewport.
                         bounds.union(place.geometry.viewport);
                     } else {
                         bounds.extend(place.geometry.location);
                     }
                 });
-                map.fitBounds(bounds);
+                _map.fitBounds(bounds);
             });
-        };
+        }
 
-
-        function btnAddMapHandler(place, modal, $editor, G_KEY) {
+        function btnAddMapHandler(place, modal) {
             let lat = place.geometry.location.lat();
             let lng = place.geometry.location.lng();
-            let width = 750;
-            let height = 350;
-            let link = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
-            let imgUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=12&size=${width}x${height}&markers=color:red%7C${lat},${lng}&key=${G_KEY}`;
-            let $map = $(document.createDocumentFragment());
-            $map.append(template.staticMap(link, imgUrl, place.formatted_address));
+            let placeName = place.name;
+            let address = place.formatted_address;
+            let etc = place.plus_code ? place.plus_code.compound_code.split(' ') : null;
+            _setMapData({lat, lng, placeName, address, etc});
 
+            if (_mapEventFunc) _mapEventFunc();
             modal.clear();
-            $editor.summernote('restoreRange');
-            $editor.summernote('insertNode', $map[0]);
         }
 
         return GoogleMap;

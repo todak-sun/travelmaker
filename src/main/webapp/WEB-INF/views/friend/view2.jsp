@@ -94,11 +94,10 @@
 
 		</div>
 	</sec:authorize>
-
+    <%@include file="../common/footer.jsp"%>
 	<%@include file="../common/foot-js.jsp"%>
 	<!-- Google Map -->
-	<script
-		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCeKdfxBMTEBPFzc4QjjrIJJv25EuWL4gY"
+	<script		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCeKdfxBMTEBPFzc4QjjrIJJv25EuWL4gY"
 		async defer></script>
 	<!-- &callback=initMap -->
 	<!-- Kakao Map -->
