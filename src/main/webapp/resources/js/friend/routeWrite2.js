@@ -55,13 +55,17 @@ $(function () {
             getMapData = kmap.create(modal);
         })
     });
+    const resultItem = getEl('#result-item');
+    addEvent(resultItem, 'click', () => {
+    	setValueAtHiddenElement();
+    });
 
     addEvent(btnCheck, 'click', () => {
         setValueAtHiddenElement();
     });
 
     addEvent(btnNext, 'click', () => {
-        setValueAtHiddenElement();
+        //setValueAtHiddenElement();
         
         console.log('씨발집가고싶다');
         
