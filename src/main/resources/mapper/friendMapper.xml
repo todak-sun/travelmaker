@@ -4,7 +4,13 @@
 <mapper namespace="friendSQL">
 	<select id="getList" parameterType="java.util.Map"
 		resultType="friend">
-		<![CDATA[select * from (select rownum rn, tt.* from (select fno, seq, id, title, is_domestic, to_char(dateStart, 'YYYY-MM-DD') as dateStart, to_char(dateEnd, 'YYYY-MM-DD') as dateEnd, is_finish, kakao_chat, to_char(date_of_issue, 'YYYY-MM-DD') as date_of_issue from friends order by fno desc) tt) where rn between #{startNum} and #{endNum}]]>
+		<![CDATA[SELECT * FROM (SELECT rownum rn, tt.* FROM (SELECT fno, seq, id, title, is_domestic, to_char(dateStart, 'YYYY-MM-DD') AS dateStart, to_char(dateEnd, 'YYYY-MM-DD') AS dateEnd, is_finish, kakao_chat, to_char(date_of_issue, 'YYYY-MM-DD') AS date_of_issue from friends order by fno desc) tt) WHERE rn BETWEEN #{startNum} AND #{endNum}]]>
+	</select>
+	<select id="getNickName" parameterType="int" resultType="String">
+		SELECT nickname FROM users WHERE seq = #{seq}
+	</select>
+	<select id="getCitys" parameterType="int" resultType="String">
+		SELECT city FROM friends_route WHERE fno = #{fno}
 	</select>
 	<select id="getTotalA" resultType="int">
 		SELECT count(rownum) FROM
@@ -24,7 +30,7 @@
 	<insert id="setRouteWrite" parameterType="friendRoute">
 		INSERT INTO
 		friends_route values(#{fno}, seq_fcno.nextval, #{dateStart},
-		#{dateSnd}, #{content}, 0, 0, #{lat}, #{lng}, #{city})
+		#{dateEnd}, #{content}, 0, 0, #{lat}, #{lng}, #{city})
 	</insert>
 	<delete id="cancelWrite" parameterType="int">
 		DELETE FROM friends WHERE

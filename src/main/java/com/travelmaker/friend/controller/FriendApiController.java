@@ -31,8 +31,8 @@ public class FriendApiController {
 	public ModelAndView getList(@RequestParam(required = false, defaultValue = "1") String pg) {
 		ModelAndView modelAndView = new ModelAndView();
 		
-		int endNum = Integer.parseInt(pg) * 10;
-		int startNum = endNum - 9;
+		int endNum = Integer.parseInt(pg) * 5;
+		int startNum = endNum - 4;
 		
 		Map<String, Integer> map = new HashMap<String, Integer>();
 		
