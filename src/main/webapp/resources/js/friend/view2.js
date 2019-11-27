@@ -193,7 +193,7 @@ function requestFriendsTemplate(item) {
 												src="https://source.unsplash.com/collection/190727/80x80"
 												alt="" />
 										</div>
-										<p class="author">아이디</p>
+										<p class="author">${item.nickname}</p>
 									</div>
 									<div class="content-area">
 										<p class="date">
