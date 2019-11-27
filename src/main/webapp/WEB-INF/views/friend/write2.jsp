@@ -28,13 +28,13 @@
             </div>
             <div class="input-wrap">
                 <label for="date-start">여행 시작일</label>
-                <input type="date" id="date-start" name="date_start" class="v"/>
+                <input type="date" id="date-start" name="dateStart" class="v"/>
                 <div class="v-feed"></div>
                 <div class="iv-feed"></div>
             </div>
             <div class="input-wrap">
                 <label for="date-end">여행 종료일</label>
-                <input type="date" id="date-end" name="date_end" class="v"/>
+                <input type="date" id="date-end" name="dateEnd" class="v"/>
                 <div class="v-feed"></div>
                 <div class="iv-feed"></div>
             </div>

@@ -1,14 +1,14 @@
 $(function () {
     Kakao.init('551e0a44c2899be91bf29306234db441');
 
-    //클래스 활용
+    // 클래스 활용
     const {getEl, getElList, addAllSameEvent, addEvent, getRegisterMethod} = new travelmaker.utils();
     const modal = new travelmaker.modal('#modal');
     const v = new travelmaker.validation();
     const t = new travelmaker.template();
     const myRegex = new travelmaker.regex();
     
-    //알람 [ 용주형 여기 정리좀해주세요 ] 
+    // 알람 [ 용주형 여기 정리좀해주세요 ]
     const alarmOnBtn = document.querySelector('#alarmOn');
     const alarmOffBtn = document.querySelector('#alarmOff');
     
@@ -26,14 +26,13 @@ $(function () {
     }
     function alarmBtnHandler(){
 		$('#alarmDisplay').show();
-    	//$('#alarmDisplay').style('display', 'block');
   }
     
-    //배열형
+    // 배열형
     const btnLoginList = getElList('.btn-login');
     addAllSameEvent(btnLoginList, 'click', loginModalHandler);
 
-    //핸들러
+    // 핸들러
     function loginModalHandler(e) {
         modal.create('login', initLoginModal);
     }
@@ -100,7 +99,7 @@ $(function () {
     };
 
     function initRegisterModal() {
-        //미니모달
+        // 미니모달
         const miniModal = new travelmaker.modal('#mini-modal');
 
         const checkAll = getEl('#check-all');
@@ -141,7 +140,7 @@ $(function () {
         addEvent(email2, 'change', emailChangeHandler);
         addEvent(btnEmailCheck, 'click', emailCheckHandler);
 
-        ////여기부터
+        // //여기부터
         function emailCheckHandler() {
             if (!v.isValid(email1)) return email1.focus();
             if (!v.isValid(email2)) return email2.focus();
@@ -149,15 +148,18 @@ $(function () {
             sendEmailCode()
                 .then((emailCode) => {
                     miniModal.createMini(t.emailConfirm(), (e) => {
-                        const emailConfirm = getEl('#input-email-confirm'); //인증번호 입력받는 칸
-                        const btnConfirm = getEl('#btn-email-confirm'); //버튼
+                        const emailConfirm = getEl('#input-email-confirm'); // 인증번호
+																			// 입력받는
+																			// 칸
+                        const btnConfirm = getEl('#btn-email-confirm'); // 버튼
 
                         const timer = getEl('.timer');
                         const close = miniModal.m.querySelector('.close');
 
                         timerStart(10, timer, () => close.click());
 
-                        addEvent(emailConfirm, 'keyup', (e) => { //엔터키 치면 확인함.
+                        addEvent(emailConfirm, 'keyup', (e) => { // 엔터키 치면
+																	// 확인함.
                             if (e.keyCode === 13) btnConfirm.click()
                         });
 
@@ -179,27 +181,28 @@ $(function () {
 
         function sendEmailCode() {
             return new Promise((resolve, reject) => {
-                //사용자에게 이메일 코드를 발급하고, 발급된 이메일 코드를 resolve의 파라미터로 전달할 것.
-                //대충 아래 주석형태로 구현하면 될듯.
+                // 사용자에게 이메일 코드를 발급하고, 발급된 이메일 코드를 resolve의 파라미터로 전달할 것.
+                // 대충 아래 주석형태로 구현하면 될듯.
 
-                //$.ajax({
-                //     url:'어쩌구저쩌꾸',
-                //     ~~~
-                //     success:function(result){ <= 이 result 또는 result의 내부 값이 이메일 코드여야 함.
-                //        resolve(result);
-                //     },
-                //     error:function(error){
-                //        reject(error)
-                //     }
-                //});
+                // $.ajax({
+                // url:'어쩌구저쩌꾸',
+                // ~~~
+                // success:function(result){ <= 이 result 또는 result의 내부 값이 이메일
+				// 코드여야 함.
+                // resolve(result);
+                // },
+                // error:function(error){
+                // reject(error)
+                // }
+                // });
 
-                //이건 돌아가는 형태 보여주려고 하드코딩한 이메일코드 값.
+                // 이건 돌아가는 형태 보여주려고 하드코딩한 이메일코드 값.
                 let emailCode = '12345';
                 resolve(emailCode);
             })
         }
 
-        ////여기까지 이메일 코드
+        // //여기까지 이메일 코드
 
         function timerStart(sec, timer, callbackFunc) {
             alert(`딱 ${sec}초 준다.`);

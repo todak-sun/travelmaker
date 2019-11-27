@@ -12,7 +12,7 @@
 <!-- 메인 컨텐츠 영역 -->
 <div class="container-wrap">
     <div class="editor-zone">
-        <form action="" class="editor-second">
+        <form action="" class="editor-second" id="routeWriteForm">
             <div class="hidden">
                 <input type="hidden" name="is_domestic" id="is_domestic" value="${is_domestic}">
                 <input type="hidden" name="fno" value="${fno}">
@@ -23,14 +23,14 @@
 
             <div class="input-wrap">
                 <label for="date-start">방문 시작일</label>
-                <input type="date" id="date-start" name="date_start" class="v"/>
+                <input type="date" id="date-start" name="dateStart" class="v"/>
                 <div class="v-feed"></div>
                 <div class="iv-feed"></div>
             </div>
 
             <div class="input-wrap">
                 <label for="date-end">방문 종료일</label>
-                <input type="date" id="date-end" name="date_end" class="v"/>
+                <input type="date" id="date-end" name="dateEnd" class="v"/>
                 <div class="v-feed"></div>
                 <div class="iv-feed"></div>
             </div>
@@ -56,6 +56,9 @@
                 <button type="button" id="btn-cancel" class="btn btn-tdanger">취소</button>
             </div>
         </form>
+        <br/>
+        <br/>
+        <div id="resultDiv"></div>
     </div>
 </div>
 <!-- 메인 컨텐츠 영역 -->

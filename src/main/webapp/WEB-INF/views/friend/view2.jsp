@@ -66,20 +66,20 @@
 						<table class="table">
 							<tr>
 								<td>동행 시작일</td>
-								<td><input type="date" name="dateStart"></td>
+								<td><input type="date" name="dateStart" id="req-start-date"></td>
 							</tr>
 							<tr>
 								<td>동행 종료일</td>
-								<td><input type="date" name="dateEnd"></td>
+								<td><input type="date" name="dateEnd" id="req-end-date"></td>
 							</tr>
 							<tr>
 								<td>신청 내용</td>
-								<td><textarea rows="10" cols="70" name="content"></textarea></td>
+								<td><textarea rows="10" cols="70" name="content" id="req-content"></textarea></td>
 							</tr>
 							<tr>
 								<td colspan="2" align="center">
 									<button type="button" class="btn btn-success"
-										id="requestSaveBtn">신청하기</button>
+										id="req-btn-try">신청하기</button>
 								</td>
 							</tr>
 						</table>

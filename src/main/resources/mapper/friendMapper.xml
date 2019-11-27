@@ -14,7 +14,7 @@
 	<insert id="setWrite" parameterType="friend">
 		INSERT INTO friends
 		values(seq_fno.nextval, #{seq}, #{id}, #{title}, #{is_domestic},
-		#{date_start}, #{date_end}, 0, 'sdfsdf', sysdate)
+		#{dateStart}, #{dateEnd}, 0, 'sdfsdf', sysdate)
 	</insert>
 	<select id="getSelectFno" parameterType="int" resultType="int">
 		SELECT

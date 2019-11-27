@@ -28,10 +28,41 @@ $(function () {
                 // Validation 클래스 넣어놨으니 그걸로 시도해봐~~~
                 // frined/write2.js 에 예시로 해둔 것 있으니 보면 금방 이해할 듯!
 
-                addEvent(btnTry, 'click', (e) => {
-                    console.log(e.target, '버튼을 눌렀다!');
-                    modal.clear();
-                })
+//                addEvent(startDate, 'blur', (e) => {
+//                    const value = e.target.value;
+//                    const [vFeed, ivFeed] = v.getFeedBox(e.target);
+//                    if (!value) return v.setInvalid(e.target, ivFeed, '시작일을 입력해주세요.');
+//                    return v.changeValid(e.target);
+//                });
+//                addEvent(endDate, 'blur', (e) => {
+//                    const value = e.target.value;
+//                    const [vFeed, ivFeed] = v.getFeedBox(e.target);
+//                    if (!value) return v.setInvalid(e.target, ivFeed, '종료일을 입력해주세요.');
+//                    return v.changeValid(e.target);
+//                });
+//                addEvent(content, 'blur', (e) => {
+//                    const value = e.target.value;
+//                    const [vFeed, ivFeed] = v.getFeedBox(e.target);
+//                    if (!value) return v.setInvalid(e.target, ivFeed, '내용을 입력해주세요.');
+//                    return v.changeValid(e.target);
+//                });
+//                
+//                addEvent(btnTry, 'click', (e) => {
+//                	alert('극 클릭!');
+//                	if (!v.isValid(startDate)) {
+//                        v.setInvalid(startDate, v.getFeedBox(startDate)[1], '시작일을 입력해주세요');
+//                        return startDate.focus();
+//                    }
+//                    if (!v.isValid(endDate)) {
+//                        v.setInvalid(endDate, v.getFeedBox(endDate)[1], '종료일을 입력해주세요.');
+//                        return endDate.focus();
+//                    }
+//                    if (!v.isValid(content)) {
+//                        v.setInvalid(content, v.getFeedBox(content)[1], '내용을 입력해주세요');
+//                        return content.focus();
+//                    }
+//                    getEl('#requestForm').submit();
+//                });
             })
         });
     })
@@ -68,7 +99,7 @@ $(function () {
     
 			// 해외
 			if($('#friendIs_domestic').val() == 0) {
-			googleMap(flightPlanCoordinates);
+				googleMap(flightPlanCoordinates);
 			} else { // 국내
 				kakaoMap(flightPlanCoordinates);
 			}
@@ -83,7 +114,7 @@ $(function () {
     });
     
 	// 동행신청 폼 저장
-	    $('#requestSaveBtn').click(function(){
+	    $('#req-btn-try').click(function(){
 	    	$.ajax({
 	    		type: 'post',
 	    		url: '/friend/setRequestWrite',
