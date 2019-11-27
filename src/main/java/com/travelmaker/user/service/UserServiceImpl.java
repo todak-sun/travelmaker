@@ -135,4 +135,9 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		return userDAOImpl.getUserDTO(seq);
 	}
 
+	@Override
+	public UserDTO checkNickname(String nickname) {
+		return userDAOImpl.getUserNickname(nickname);
+	}
+
 }

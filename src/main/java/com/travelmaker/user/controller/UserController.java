@@ -64,6 +64,21 @@ public class UserController {
 			return "exist";
 		}
 	}
+	
+	/* 닉네임 체크 */
+	@RequestMapping(value = "user/checkNickname", method = RequestMethod.GET)
+	@ResponseBody
+	public String checkNickname(@RequestParam String nickname) {
+	
+		UserDTO userDTO = userServiceImpl.checkNickname(nickname);
+		if (userDTO == null) {
+			return "not_exist";
+		} else {
+			// System.out.println(userDTO.toString());
+			return "exist";
+		}
+	}
+	
 
 	/* 현재 비밀번호 체크 */
 	@RequestMapping(value = "user/checkPassword", method = RequestMethod.POST)

@@ -10,4 +10,5 @@ public interface UserService {
 	public void userModify(UserDTO userDTO);
 	public void userWithdrawal(String id, String registerMethod);
 	public UserDTO getUserDTO(int seq);
+	public UserDTO checkNickname(String nickname);
 }

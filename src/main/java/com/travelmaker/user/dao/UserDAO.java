@@ -10,4 +10,5 @@ public interface UserDAO {
 	public void userModify(UserDTO userDTO);
 	public void userWithdrawal(UserDTO userDTO);
 	public UserDTO getUserDTO(int seq);
+	public UserDTO getUserNickname(String nickname);
 }

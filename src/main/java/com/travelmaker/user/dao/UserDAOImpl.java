@@ -48,4 +48,11 @@ public class UserDAOImpl implements UserDAO {
 	public UserDTO getUserDTO(int seq) {
 		return sqlSession.selectOne("userSQL.getUserDTO", seq);
 	}
+
+	@Override
+	public UserDTO getUserNickname(String nickname) {
+		return sqlSession.selectOne("userSQL.getUserNickname",nickname);
+	}
+	
+	
 }
