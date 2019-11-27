@@ -20,7 +20,13 @@ public class FriendDAOMybatis implements FriendDAO {
 	
 	@Override
 	public List<FriendDTO> getList(Map<String, Integer> map) {
-		return sqlSession.selectList("friendSQL.getList", map);
+		List<FriendDTO> list = sqlSession.selectList("friendSQL.getList", map);
+		
+		for(FriendDTO friendDTO : list) {
+			friendDTO.setNickname(sqlSession.selectOne("friendSQL.getNickName", friendDTO.getSeq()));
+			friendDTO.setCitys(sqlSession.selectList("friendSQL.getCitys", friendDTO.getFno()));
+		}
+		return list;
 	}
 
 	@Override

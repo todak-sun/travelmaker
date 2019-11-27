@@ -1,12 +1,8 @@
 package com.travelmaker.friend.domain;
 
-import java.sql.Date;
+import java.util.List;
 
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 
 import lombok.Data;
 
@@ -23,4 +19,6 @@ public class FriendDTO {
 	private int is_finish;
 	private String kakao_chat;
 	private String date_of_issue;
+	private String nickname; // nickName 추가 (DB X)
+	private List<String> citys;
 }

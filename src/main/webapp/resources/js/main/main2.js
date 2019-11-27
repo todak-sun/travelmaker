@@ -57,7 +57,8 @@ $(function () {
         addEvent(btnGo, 'click', loginGoHandler);
         addEvent(btnLogin, 'click', btnLoginHandler);
         addEvent(btnRegister, 'click', btnRegisterHandler);
-
+        
+        
         function midBlurHandler(e) {
             const [vFeed, ivFeed] = v.getFeedBox(this);
             if (!this.value) return v.setInvalid(this, ivFeed, '아이디를 입력하세요.');

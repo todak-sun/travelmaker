@@ -17,6 +17,7 @@ $(function () {
     const btnNext = getEl('#btn-next');
     const btnCheck = getEl('#btn-check');
     const btnCancel = getEl('#btn-cancle');
+    const btnSearchLocation = getEl('#btn-search-location');
 
     // 다음 지도의 정보를 가지고 있는 함수.
     // 지도에서 특정 위치를 선택하면 값이 할당 됨.
@@ -80,19 +81,19 @@ $(function () {
 				}).append($('<tr/>').append($('<th/>', {
 					text: '방문시작날짜'
 				})).append($('<td/>', {
-					text: dateStart.val()
+					text: dateStart.value
 				}))).append($('<tr/>').append($('<th/>', {
 					text: '방문종료날짜'
 				})).append($('<td/>', {
-					text: dateEnd.val()
+					text: dateEnd.value
 				}))).append($('<tr/>').append($('<th/>', {
 					text: '방문 도시'
 				})).append($('<td/>', {
-					text: inputCity.val()
+					text: inputCity.value
 				}))).append($('<tr/>').append($('<th/>', {
 					text: '내용'
 				})).append($('<td/>', {
-					text: content.val()
+					text: content.value
 				}))).appendTo($('#resultDiv'));
 				
 				$('<br/>').appendTo($('#resultDiv'));

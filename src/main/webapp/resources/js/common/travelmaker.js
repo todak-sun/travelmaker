@@ -815,6 +815,7 @@ let travelmaker = (function (window) {
             map = new kakao.maps.Map(this.kmap, this.mapOption);
             ps = new kakao.maps.services.Places(); //장소검색
             infoWindow = new kakao.maps.InfoWindow({zIndex: 1}); //인포윈도우
+            
             addEvent(btnSearch, 'click', searchPlaces.bind(null, inputSearch));
             addEvent(inputSearch, 'keyup', (e) => {
                 if (e.keyCode === 13) btnSearch.click();
