@@ -32,33 +32,12 @@
         SELECT rno.CURRVAL
         FROM DUAL
     </select>
-    
-    <update id="updateViews" parameterType="Integer">
-    	UPDATE route SET views = views+1 WHERE rno = #{rno}
-    </update>
 
     <insert id="saveCourse" parameterType="routeContent">
         INSERT INTO route_content (crno, rno, content, lat, lng, location, date_start, date_end, score, fixed)
         VALUES (crno.NEXTVAL, #{rno}, #{content}, #{lat}, #{lng}, #{location},
                 TO_DATE('${dateStart}', 'YYYY-MM-DD'), TO_DATE('${dateEnd}', 'YYYY-MM-DD'), #{score}, 0)
     </insert>
-    
-    <update id="saveOrder" parameterType="Map">
-    	UPDATE route_content SET cnt_order=#{cntOrder} WHERE crno = #{crno}
-    </update>
-    
-    <update id="patchCourse" parameterType="routeContent">
-    	UPDATE route_content SET content=#{content}, lat=#{lat}, lng=#{lng}, location=#{location}, date_start=TO_DATE('${dateStart}','YYYY-MM-DD'), date_end=TO_DATE('${dateEnd}','YYYY-MM-DD'), score=#{score}
-    	WHERE rno=#{rno} and crno=#{crno}
-    </update>
-    
-    <delete id="deleteCourse" parameterType="Integer">
-    	DELETE route_content WHERE crno=#{crno}
-    </delete>
-    
-    <select id="getCourse" parameterType="Integer" resultType="routeContent">
-    	SELECT crno, rno, content, lat, lng, location, TO_CHAR(date_start,'YYYY-MM-DD') AS date_start, TO_CHAR(date_end,'YYYY-MM-DD') AS date_end, score, fixed, cnt_order FROM route_content WHERE crno=#{crno}
-    </select>
 
     <select id="getCurrCrnoSeq" resultType="Integer">
         SELECT crno.CURRVAL
@@ -71,7 +50,7 @@
     </insert>
 
 	<select id="getRouteContentStory" parameterType="int" resultType="routeContent">
-		SELECT * FROM route_content WHERE RNO = #{rno} ORDER BY cnt_order DESC
+		SELECT * FROM route_content WHERE RNO = #{rno}
 	</select>
 	<select id="getRouteImageStory" parameterType="int" resultType="routeImage">
 		SELECT img FROM route_image WHERE CRNO = #{CRNO}

@@ -1,192 +1,174 @@
 $().ready(function() {
   console.log("rno = " + $("#rno").val());
-  console.log("seq = " + $("#seq").val());
   const { useState, setRequestHeader } = new travelmaker.utils();
-  const rno = document.querySelector("#rno").value;
-  const seq = document.querySelector("#seq").value;
-
-  document.querySelector("#likes").addEventListener("click", UpdateLikes);
-  function UpdateLikes() {
-    $.ajax({
-      type: "post",
-      url: "/route/updateRouteLikes",
-      data: { rno: rno, seq: seq },
-      dataType: "json",
-      beforeSend: setRequestHeader,
-      success: function(data) {
-        alert("좋아요 성공");
-      },
-      error: console.error
-    });
-  }
-
   $.ajax({
     type: "post",
     url: "/route/getRouteView",
-    data: { rno: rno, seq: seq },
+    data: { rno: $("#rno").val() },
     dataType: "json",
     beforeSend: setRequestHeader,
     success: function(data) {
       // 맵쪽에 뿌려줄 좌표를 담을 배열
+      var flightPlanCoordinates = [];
 
       // 작은 Route Content를 동적으로 뿌려줌
       $.each(data.list, function(index, items) {
-        // $("<div/>", {
-        //   class: "conts_story",
-        //   style: "border: 1px solid red;"
-        // })
-        //   .append(
-        //     $("<div/>", {
-        //       class: "story_para"
-        //     })
-        //       .append(
-        //         $("<div/>", {
-        //           class: "day_info"
-        //         })
-        //       )
-        //       .append(
-        //         $("<span/>", {
-        //           class: "day",
-        //           text: "Day " + (index + 1)
-        //         })
-        //       )
-        //       .append($("<br/>"))
-        //       .append(
-        //         $("<span/>", {
-        //           class: "date",
-        //           text: items.dateStart + " / " + items.dateEnd
-        //         })
-        //       )
-        //   )
-        //   .append(
-        //     $("<div/>", {
-        //       class: "course"
-        //     })
-        //       .append(
-        //         $("<div/>", {
-        //           class: "carousel slide",
-        //           "data-ride": "carousel",
-        //           id: "routeImg" + index
-        //         })
-        //           .append(
-        //             $("<ul/>", {
-        //               class: "carousel-indicators"
-        //             })
-        //           )
-        //           .append(
-        //             $("<div/>", {
-        //               class: "carousel-inner"
-        //             })
-        //           )
-        //           .append(
-        //             $("<a/>", {
-        //               class: "carousel-control-prev",
-        //               href: "#routeImg" + index,
-        //               "data-slide": "prev"
-        //             }).append(
-        //               $("<span/>", {
-        //                 class: "carousel-control-prev-icon"
-        //               })
-        //             )
-        //           )
-        //           .append(
-        //             $("<a/>", {
-        //               class: "carousel-control-next",
-        //               href: "#routeImg" + index,
-        //               "data-slide": "next"
-        //             }).append(
-        //               $("<span/>", {
-        //                 class: "carousel-control-next-icon"
-        //               })
-        //             )
-        //           )
-        //       )
-        //       .append(
-        //         $("<div/>", {
-        //           class: "course_info"
-        //         }).append(
-        //           $("<div/>", {
-        //             class: "course_info_box"
-        //           })
-        //             .append(
-        //               $("<div/>", {
-        //                 class: "loc_info_ico",
-        //                 text: "아이콘 이미지"
-        //               })
-        //             )
-        //             .append(
-        //               $("<div/>", {
-        //                 class: "loc_info_txt"
-        //               }).append(
-        //                 $("<span/>", {
-        //                   class: "loc_txt",
-        //                   text: "위치 : " + items.location
-        //                 })
-        //                   .append($("<br/>"))
-        //                   .append(
-        //                     $("<span/>", {
-        //                       class: "loc_addr",
-        //                       text: "위치 : " + items.location
-        //                     })
-        //                   )
-        //               )
-        //             )
-        //         )
-        //       )
-        //       .append(
-        //         $("<div/>", {
-        //           class: "course_story",
-        //           text: "코스내용 : " + items.content
-        //         })
-        //       )
-        //       .append(
-        //         $("<div/>", {
-        //           class: "course_rate"
-        //         }).append(
-        //           $("<div/>", {
-        //             class: "star_rate"
-        //           })
-        //             .append(
-        //               $("<span/>", {
-        //                 class: "star",
-        //                 text: "별"
-        //               })
-        //             )
-        //             .append(
-        //               $("<span/>", {
-        //                 class: "star",
-        //                 text: "별"
-        //               })
-        //             )
-        //             .append(
-        //               $("<span/>", {
-        //                 class: "star",
-        //                 text: "별"
-        //               })
-        //             )
-        //             .append(
-        //               $("<span/>", {
-        //                 class: "star",
-        //                 text: "별"
-        //               })
-        //             )
-        //             .append(
-        //               $("<span/>", {
-        //                 class: "star",
-        //                 text: "별"
-        //               })
-        //             )
-        //             .append($("<br/>"))
-        //             .append(
-        //               $("<div/>", {
-        //                 class: "rate_txt",
-        //                 text: items.score + "점"
-        //               })
-        //             )
-        //         )
-        //       )
-        //   )
-        //   .appendTo($("#routeContent"));
+        $("<div/>", {
+          class: "conts_story",
+          style: "border: 1px solid red;"
+        })
+          .append(
+            $("<div/>", {
+              class: "story_para"
+            })
+              .append(
+                $("<div/>", {
+                  class: "day_info"
+                })
+              )
+              .append(
+                $("<span/>", {
+                  class: "day",
+                  text: "Day " + (index + 1)
+                })
+              )
+              .append($("<br/>"))
+              .append(
+                $("<span/>", {
+                  class: "date",
+                  text: items.dateStart + " / " + items.dateEnd
+                })
+              )
+          )
+          .append(
+            $("<div/>", {
+              class: "course"
+            })
+              .append(
+                $("<div/>", {
+                  class: "carousel slide",
+                  "data-ride": "carousel",
+                  id: "routeImg" + index
+                })
+                  .append(
+                    $("<ul/>", {
+                      class: "carousel-indicators"
+                    })
+                  )
+                  .append(
+                    $("<div/>", {
+                      class: "carousel-inner"
+                    })
+                  )
+                  .append(
+                    $("<a/>", {
+                      class: "carousel-control-prev",
+                      href: "#routeImg" + index,
+                      "data-slide": "prev"
+                    }).append(
+                      $("<span/>", {
+                        class: "carousel-control-prev-icon"
+                      })
+                    )
+                  )
+                  .append(
+                    $("<a/>", {
+                      class: "carousel-control-next",
+                      href: "#routeImg" + index,
+                      "data-slide": "next"
+                    }).append(
+                      $("<span/>", {
+                        class: "carousel-control-next-icon"
+                      })
+                    )
+                  )
+              )
+              .append(
+                $("<div/>", {
+                  class: "course_info"
+                }).append(
+                  $("<div/>", {
+                    class: "course_info_box"
+                  })
+                    .append(
+                      $("<div/>", {
+                        class: "loc_info_ico",
+                        text: "아이콘 이미지"
+                      })
+                    )
+                    .append(
+                      $("<div/>", {
+                        class: "loc_info_txt"
+                      }).append(
+                        $("<span/>", {
+                          class: "loc_txt",
+                          text: "위치 : " + items.location
+                        })
+                          .append($("<br/>"))
+                          .append(
+                            $("<span/>", {
+                              class: "loc_addr",
+                              text: "위치 : " + items.location
+                            })
+                          )
+                      )
+                    )
+                )
+              )
+              .append(
+                $("<div/>", {
+                  class: "course_story",
+                  text: "코스내용 : " + items.content
+                })
+              )
+              .append(
+                $("<div/>", {
+                  class: "course_rate"
+                }).append(
+                  $("<div/>", {
+                    class: "star_rate"
+                  })
+                    .append(
+                      $("<span/>", {
+                        class: "star",
+                        text: "별"
+                      })
+                    )
+                    .append(
+                      $("<span/>", {
+                        class: "star",
+                        text: "별"
+                      })
+                    )
+                    .append(
+                      $("<span/>", {
+                        class: "star",
+                        text: "별"
+                      })
+                    )
+                    .append(
+                      $("<span/>", {
+                        class: "star",
+                        text: "별"
+                      })
+                    )
+                    .append(
+                      $("<span/>", {
+                        class: "star",
+                        text: "별"
+                      })
+                    )
+                    .append($("<br/>"))
+                    .append(
+                      $("<div/>", {
+                        class: "rate_txt",
+                        text: items.score + "점"
+                      })
+                    )
+                )
+              )
+          )
+          .appendTo($("#routeContent"));
 
         var routeContentId = $("#routeContent")
           .children()
@@ -230,7 +212,7 @@ $().ready(function() {
           .attr("class", "carousel-item active");
       });
       console.log(flightPlanCoordinates);
-      //////////////////////////////////////////////////////////////////
+
       // 해외
       if ($("#isdomestic").val() == 0) {
         googleMap(flightPlanCoordinates);
@@ -239,23 +221,23 @@ $().ready(function() {
         kakaoMap(flightPlanCoordinates);
       }
 
-      //   // 에필로그랑 해시태그
-      //   $("<div/>", {
-      //     id: "routeFooter"
-      //   })
-      //     .append(
-      //       $("<span>", {
-      //         id: "rout eEpilogue",
-      //         text: "Epilogue : " + $("#epilogue").val()
-      //       })
-      //     )
-      //     .append(
-      //       $("<span/>", {
-      //         id: "routeHashtag",
-      //         text: "HashTag : " + $("#hashtag").val()
-      //       })
-      //     )
-      //     .appendTo($("#routeContent"));
+      // 에필로그랑 해시태그
+      $("<div/>", {
+        id: "routeFooter"
+      })
+        .append(
+          $("<span>", {
+            id: "routeEpilogue",
+            text: "Epilogue : " + $("#epilogue").val()
+          })
+        )
+        .append(
+          $("<span/>", {
+            id: "routeHashtag",
+            text: "HashTag : " + $("#hashtag").val()
+          })
+        )
+        .appendTo($("#routeContent"));
     },
     error: function(error) {
       console.log(error);
@@ -392,5 +374,3 @@ function googleMap(flightPlanCoordinates) {
   // 마커들 경로 표시
   flightPath.setMap(map);
 }
-
-let flightPlanCoordinates = [];

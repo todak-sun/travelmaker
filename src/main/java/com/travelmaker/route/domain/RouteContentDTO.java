@@ -19,7 +19,6 @@ public class RouteContentDTO {
 	private String dateEnd;
 	private String score;
 	private int fixed;
-	private int cntOrder;
 	private MultipartFile[] images;
 	private List<String> imgs;
 }

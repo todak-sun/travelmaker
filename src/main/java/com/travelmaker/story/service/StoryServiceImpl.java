@@ -21,10 +21,10 @@ public class StoryServiceImpl implements StoryService {
         return storyDAO.getStory(storySearchFilter);
     }
     
-//    @Override
-//    public List<StoryDTO> getKeywordStory(StorySearchFilter storySearchFilter) {
-//    	return storyDAO.getKeywordStory(storySearchFilter);
-//    }
+    @Override
+    public List<StoryDTO> getKeywordStory(StorySearchFilter storySearchFilter) {
+    	return storyDAO.getKeywordStory(storySearchFilter);
+    }
   
     @Override
     public String selectBoard(int bno) {
