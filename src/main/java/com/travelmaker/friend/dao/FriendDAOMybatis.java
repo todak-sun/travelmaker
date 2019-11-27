@@ -88,9 +88,14 @@ public class FriendDAOMybatis implements FriendDAO {
 	public FriendDTO getFriendDTO(int fno) {
 		return sqlSession.selectOne("friendSQL.getFriendDTO",fno);
 	}
-	
-	
-	
-	
 
+	@Override
+	public void requestAccept(String fccno) {
+		sqlSession.update("friendSQL.requestAccept", Integer.parseInt(fccno));
+	}
+
+	@Override
+	public void requestReject(String fccno) {
+		sqlSession.update("friendSQL.requestReject", Integer.parseInt(fccno));
+	}
 }

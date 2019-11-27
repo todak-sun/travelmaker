@@ -69,4 +69,14 @@ public class FriendServiceImpl implements FriendService {
 		return friendDAO.getFriendDTO(fno);
 	}
 
+	@Override
+	public void requestAccept(String fccno) {
+		friendDAO.requestAccept(fccno);
+	}
+
+	@Override
+	public void requestReject(String fccno) {
+		friendDAO.requestReject(fccno);
+	}
+
 }

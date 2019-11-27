@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -95,5 +96,15 @@ public class FriendApiController {
 	@PostMapping(value = "/setRequestWrite")
 	public void setRequestWrite(@ModelAttribute FriendRequestDTO friendRequestDTO) {
 		friendService.setRequestWrite(friendRequestDTO);
+	}
+	
+	// 신청글 수락, 거절
+	@GetMapping(value = "/requestAccept")
+	public void requestAccept(@RequestParam String fccno) {
+		friendService.requestAccept(fccno);
+	}
+	@GetMapping(value = "/requestReject")
+	public void requestReject(@RequestParam String fccno) {
+		friendService.requestReject(fccno);
 	}
 }
