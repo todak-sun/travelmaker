@@ -1,0 +1,7 @@
+@charset "UTF-8";
+
+#map {
+	height: 100%;
+	width: 800px;
+	display: inline-block;
+}

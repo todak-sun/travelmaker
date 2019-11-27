@@ -31,6 +31,10 @@ function loginBtnDraw() {
 }
 
 $(function() {
+	var seq = $('#alarmOff').data('seq');
+	console.log(seq);
+	
+	alarmDataload(seq);
   initJsFile(); // 처음화면 로드
   //클래스 임포트
   const template = new travelmaker.template(); //템플릿 모아둔 곳.

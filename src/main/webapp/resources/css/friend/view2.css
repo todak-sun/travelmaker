@@ -1,0 +1,287 @@
+.container-wrap {
+    margin: 80px auto 0;
+    width: 70%;
+    min-width: 780px;
+    max-width: 1024px;
+    box-shadow: 2px 2px 10px 0 rgba(0, 0, 0, 0.5);
+}
+
+.container-wrap .map-wrap {
+    box-sizing: border-box;
+    width: 100%;
+    height: 480px;
+    padding: 1rem;
+    /* border: 2px solid gray; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-wrap .map-wrap #map {
+    max-height: 100%;
+    width: 800px;
+    height: 100%;
+    display: inline-block;
+}
+
+.container-wrap .content-wrap {
+    /* border: 1px solid gray; */
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+    box-sizing: border-box;
+    margin: 0 auto;
+}
+
+.container-wrap .content-wrap .content-group {
+}
+
+.content-group li {
+    margin-bottom: 1rem;
+}
+
+.content-item {
+    display: grid;
+    grid-template-rows: 50px 50px 140px 1fr;
+    align-items: center;
+    font-size: 1.2rem;
+    padding: 1rem;
+}
+
+.content-item .place {
+    padding: 1rem;
+    background-color: #00c1da;
+    color: #ffffff;
+    border-top-right-radius: 2rem;
+}
+
+.content-item .place::before {
+    content: '장소: ';
+}
+
+.content-item .date {
+    padding: 0.5rem;
+    border-bottom: 1px solid gray;
+}
+
+.content-item .date::before {
+    content: '기간: ';
+}
+
+.date .from {
+}
+
+.date .from::after {
+    content: '부터';
+    margin-left: 0.25rem;
+    margin-right: 0.5rem;
+}
+
+.date .to::after {
+    content: '까지';
+    margin-left: 0.25rem;
+}
+
+.content-item .content-detail {
+    height: 100%;
+    display: flex;
+    box-sizing: border-box;
+    padding: 0.5rem;
+    border-bottom: 5px solid #00c1da;
+}
+
+.content-item .content-detail p {
+    width: 70%;
+    padding: 0.5rem;
+}
+
+.content-item .content-detail .button-wrap {
+    width: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    height: 100%;
+}
+
+.button-wrap button {
+    border: 2px solid #555555;
+    color: #555555;
+    background-color: #ffffff;
+    width: 100px;
+    height: 30px;
+    font-size: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.button-wrap button:hover {
+    color: #ffffff;
+    background-color: #555555;
+}
+
+.content-item .request-group {
+    width: 90%;
+    margin: 1rem auto 0;
+    /* border: 1px solid blue; */
+    padding: 0.5rem;
+    box-sizing: border-box;
+}
+
+.content-item .request-group li {
+    border: 2px solid #333333;
+    border-top-left-radius: 1rem;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.content-item .request-group li:last-child {
+    margin-bottom: 0;
+}
+
+.request-item {
+    display: flex;
+}
+
+.request-item .user-area {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem;
+    width: 100px;
+}
+
+.request-item .user-area .image-wrap {
+    width: 80px;
+    height: 80px;
+    overflow: hidden;
+    border-radius: 50%;
+    border: 2px solid gray;
+}
+
+.request-item .user-area .image-wrap img {
+    min-height: 100%;
+    width: auto;
+}
+
+.request-item .user-area .author {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.author::before {
+    content: '@';
+}
+
+.request-item .content-area {
+    box-sizing: border-box;
+    font-size: 1rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.content-area.date {
+}
+
+.content-area .content-detail {
+    border-bottom: none;
+}
+
+.content-area .content-detail p {
+}
+
+.content-area .content-detail .button-wrap {
+    box-sizing: border-box;
+    padding: 0.5rem;
+}
+
+.button-wrap .btn.btn-tdanger {
+    background-color: #ffffff;
+    border: 2px solid #ff5100;
+    color: #ff5100;
+}
+
+.button-wrap .btn.btn-tdanger:hover {
+    background-color: #ff5100;
+    color: #ffffff;
+}
+
+.btn.btn-tsave {
+    background-color: #ffffff;
+    border: 2px solid #2f8f03;
+    color: #2f8f03;
+}
+
+.btn.btn-tsave:hover {
+    color: #ffffff;
+    background-color: #2f8f03;
+}
+
+.form-request {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.form-request .input-box {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.form-request .input-box label {
+    width: 20%;
+    text-align: right;
+    padding-right: 1rem;
+}
+
+.form-request .input-box .input-wrap {
+    width: 80%;
+    background-color: darkgray;
+    border-radius: 1rem;
+    padding: 0.5rem 1rem;
+    box-sizing: border-box;
+}
+
+.form-request .input-box .input-wrap input {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 1rem;
+    box-sizing: border-box;
+    text-align: center;
+    color: #ffffff;
+    border: none;
+    outline: none;
+    background: none;
+}
+
+.form-request .input-box .input-wrap.textarea {
+    background-color: lightgray;
+}
+
+.form-request .input-box .input-wrap textarea {
+    width: 100%;
+    resize: none;
+    height: 250px;
+    border: none;
+    background: none;
+    box-sizing: border-box;
+    padding: 1rem;
+    font-size: 1rem;
+}
+
+.form-request .btn-travel {
+    margin: 0 auto;
+    width: 150px;
+    color: #00c1da;
+    background-color: #ffffff;
+    border: 2px solid #00c1da;
+}
+
+.form-request .btn-travel:hover {
+    background-color: #00c1da;
+    color: #ffffff;
+}

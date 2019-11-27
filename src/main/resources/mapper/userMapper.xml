@@ -9,8 +9,8 @@
 
 	<insert id="UserInsert" parameterType="user">
 		insert into
-		users(seq,id,realname,password,email1,email2,gender,phone1,phone2,phone3,birthdate,agreeNeed,registerMethod,dateRegist)
-		values(seq_users.nextval,#{id},#{realname},#{password},#{email1},#{email2},#{gender},#{phone1},#{phone2},#{phone3},#{birthdate},#{agreeNeed},#{registerMethod},sysdate)
+		users(seq,id,realname,nickname,password,email1,email2,gender,phone1,phone2,phone3,birthdate,agreeNeed,registerMethod,dateRegist)
+		values(seq_users.nextval,#{id},#{realname},#{nickname},#{password},#{email1},#{email2},#{gender},#{phone1},#{phone2},#{phone3},#{birthdate},#{agreeNeed},#{registerMethod},sysdate)
 	</insert>
 
 	<select id="checkMethod" parameterType="user" resultType="user">
@@ -29,30 +29,50 @@
 		#{registerMethod} and password = #{password}
 	</select>
 
+
+	<select id="getUserDTO" parameterType="int" resultType="user">
+		select
+		*
+		from users where seq = #{seq}
+	</select>
+
 	<update id="userModify" parameterType="user">
 
-		update users set realname = #{realname}
+		update users set realname
+		= #{realname}
 		, nickname = #{nickname}
 		, email1 = #{email1}
-		, email2 = #{email2}
+		, email2 =
+		#{email2}
 		, password = #{password}
 		, gender = #{gender}
-		, phone1 = #{phone1}
+		, phone1 =
+		#{phone1}
 		, phone2 = #{phone2}
 		, phone3 = #{phone3}
-		, postcode = #{postcode}
+		, postcode =
+		#{postcode}
 		, addr1 = #{addr1}
 		, addr2 = #{addr2}
-		, contentProfile = #{contentProfile}
+		, contentProfile =
+		#{contentProfile}
 		, account = #{account}
-		, dateRegist=sysdate where id=#{id} and registerMethod =#{registerMethod}
+		, dateRegist=sysdate where
+		id=#{id} and registerMethod =#{registerMethod}
 
 	</update>
 
 	<update id="userWithdrawal" parameterType="user">
-
-		delete users where id=#{id} and registerMethod =#{registerMethod}
-
+		delete users where
+		id=#{id} and registerMethod =#{registerMethod}
 	</update>
+
+	<select id="getUserNickname" parameterType="String"
+		resultType="user">
+		select
+		*
+		from users where nickname = #{nickname}
+	</select>
+
 
 </mapper>

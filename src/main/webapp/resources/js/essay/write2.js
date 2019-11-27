@@ -3,7 +3,8 @@ $(function () {
     const {getEl, addEvent, useState, getJSONfromQueryString} = new travelmaker.utils();
     const editor = new travelmaker.editor();
     const modal = new travelmaker.modal('#modal');
-    const ajax = new travelMaker.ajax();
+    const ajax = new travelmaker.ajax();
+    const t = new travelmaker.template();
 
     //변수
     const title = getEl('#title');
@@ -17,8 +18,10 @@ $(function () {
     const inputHash = getEl('#input-hash');
     const btnHash = getEl('#btn-hash');
     const hashView = getEl('.hash-view');
+
     let hashNodeList = [];  //해쉬태그 모음
     let backImage = null; //대표이미지가 설정되면 담을 변수
+    let getMapData; //지도 정보를 확인할 함수
 
     const [setEssay, getEssay] = useState({
         rno: '',
@@ -43,7 +46,10 @@ $(function () {
         const span = document.createElement('span');
         span.classList.add('hash');
         span.innerText = inputHash.value;
-        addEvent(span, 'click', (e) => hashNodeList = hashNodeList.filter(node => node !== e.target));
+        addEvent(span, 'click', (e) => {
+            hashNodeList = hashNodeList.filter(node => node !== e.target);
+            e.target.remove();
+        });
 
         inputHash.value = '';
         hashNodeList.push(span);
@@ -54,12 +60,12 @@ $(function () {
     });
 
     addEvent(btnMap, 'click', () => {
-        modal.create('map', () => {
-            const {isDomestic} = getEssay();
-            if (isDomestic) new travelmaker.kakaoMap().init();
-            else new travelmaker.googleMap(modal, $editor).init();
-        })
+        modal.createCustom(t.kmap(), () => {
+            const kmap = new travelmaker.kakaoMap(getEl('#map'));
+            getMapData = kmap.create(modal);
+        });
     });
+
     addEvent(inputFile, 'change', (e) => {
         if (!e.target.files.length) return;
         const image = e.target.files[0];

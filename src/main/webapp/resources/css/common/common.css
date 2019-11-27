@@ -188,6 +188,48 @@ header .header-group {
     box-sizing: border-box;
 }
 
+.tmodal-back.tmodal-mini-back {
+    width: 100%;
+    height: 100%;
+}
+
+.tmodal.tmodal-mini {
+    max-width: 500px;
+    min-width: 300px;
+    max-height: 500px;
+    min-height: 300px;
+    z-index: 1260;
+}
+
+.tmodal.tmodal-mini .tmodal-body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.tmodal.tmodal-mini .input-wrap {
+    position: relative;
+    display: flex;
+    padding: 0.5rem;
+}
+
+.tmodal.tmodal-mini .input-wrap input {
+    width: 65%;
+    font-size: 1rem;
+    padding: 0.5rem;
+}
+
+.tmodal.tmodal-mini .input-wrap button {
+    width: 35%;
+    font-size: 0.9rem;
+}
+
+.tmodal.tmodal-mini .timer::before {
+    content: '남은시간 : '
+}
+
 /* 모달 */
 
 /*로그인 폼*/
@@ -474,6 +516,17 @@ div[class$='feed'] {
     color: #00c1da;
     background-color: #ffffff;
 }
+
+.btn-travel-min.v-pass {
+    background-color: #00cda8;
+    border: 1px solid #00cda8;
+}
+
+.btn-travel-min.v-pass:hover {
+    background-color: #00cda8;
+    border: 1px solid #00cda8;
+}
+
 
 .btn-travel {
     display: block;

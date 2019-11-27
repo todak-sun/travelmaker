@@ -1,17 +1,38 @@
 $(function () {
     Kakao.init('551e0a44c2899be91bf29306234db441');
 
-    //클래스 활용
+    // 클래스 활용
     const {getEl, getElList, addAllSameEvent, addEvent, getRegisterMethod} = new travelmaker.utils();
     const modal = new travelmaker.modal('#modal');
     const v = new travelmaker.validation();
+    const t = new travelmaker.template();
     const myRegex = new travelmaker.regex();
-
-    //배열형
+    
+    // 알람 [ 용주형 여기 정리좀해주세요 ]
+    const alarmOnBtn = document.querySelector('#alarmOn');
+    const alarmOffBtn = document.querySelector('#alarmOff');
+    
+    var seq = $('#alarmOff').data('seq');
+    console.log(seq);
+    
+    if(seq>0){ // 로그인 되어있으면 알람 로드
+		alarmDataload(seq);
+	}
+    if(alarmOnBtn!=null){
+  	  alarmOnBtn.addEventListener('click',alarmBtnHandler);
+    }
+    if(alarmOffBtn!=null){
+  	  alarmOffBtn.addEventListener('click',alarmBtnHandler);
+    }
+    function alarmBtnHandler(){
+		$('#alarmDisplay').show();
+  }
+    
+    // 배열형
     const btnLoginList = getElList('.btn-login');
     addAllSameEvent(btnLoginList, 'click', loginModalHandler);
 
-    //핸들러
+    // 핸들러
     function loginModalHandler(e) {
         modal.create('login', initLoginModal);
     }
@@ -78,9 +99,13 @@ $(function () {
     };
 
     function initRegisterModal() {
+        // 미니모달
+        const miniModal = new travelmaker.modal('#mini-modal');
+
         const checkAll = getEl('#check-all');
         const checkBoxes = getElList('.checkbox');
         const customRadios = getElList('.radio-wrap label');
+
         addEvent(checkAll, 'click', checkAllHandler);
         addAllSameEvent(customRadios, 'click', customRadioHandler);
         addAllSameEvent(checkBoxes, 'click', checkBoxHandler);
@@ -95,6 +120,7 @@ $(function () {
         const phone1 = getEl('#phone1');
         const phone2 = getEl('#phone2');
         const phone3 = getEl('#phone3');
+        const btnEmailCheck = getEl('#btn-email-check');
 
         addEvent(realname, 'blur', realnameHandler);
         addEvent(realname, 'input', v.resetValidClass);
@@ -110,6 +136,99 @@ $(function () {
         addEvent(phone3, 'blur', phoneHandler);
         addEvent(email1, 'blur', emailHandler);
         addEvent(email2, 'blur', emailHandler);
+        addEvent(email1, 'change', emailChangeHandler);
+        addEvent(email2, 'change', emailChangeHandler);
+        addEvent(btnEmailCheck, 'click', emailCheckHandler);
+
+        // //여기부터
+        function emailCheckHandler() {
+            if (!v.isValid(email1)) return email1.focus();
+            if (!v.isValid(email2)) return email2.focus();
+
+            sendEmailCode()
+                .then((emailCode) => {
+                    miniModal.createMini(t.emailConfirm(), (e) => {
+                        const emailConfirm = getEl('#input-email-confirm'); // 인증번호
+																			// 입력받는
+																			// 칸
+                        const btnConfirm = getEl('#btn-email-confirm'); // 버튼
+
+                        const timer = getEl('.timer');
+                        const close = miniModal.m.querySelector('.close');
+
+                        timerStart(10, timer, () => close.click());
+
+                        addEvent(emailConfirm, 'keyup', (e) => { // 엔터키 치면
+																	// 확인함.
+                            if (e.keyCode === 13) btnConfirm.click()
+                        });
+
+                        addEvent(btnConfirm, 'click', () => {
+                            const [vFeed, ivFeed] = v.getFeedBox(emailConfirm);
+                            if (emailConfirm.value !== emailCode) {
+                                v.setInvalid(emailConfirm, ivFeed, '발송한 인증코드와 불일치 합니다. 다시 확인해주세요.');
+                                emailConfirm.value = '';
+                                emailConfirm.focus();
+                            } else {
+                                close.click();
+                                btnEmailCheck.innerText = '완료';
+                                v.changeValid(btnEmailCheck);
+                            }
+                        });
+                    });
+                }).catch((error) => console.log('에러가 났네 ~_~', error));
+        }
+
+        function sendEmailCode() {
+            return new Promise((resolve, reject) => {
+                // 사용자에게 이메일 코드를 발급하고, 발급된 이메일 코드를 resolve의 파라미터로 전달할 것.
+                // 대충 아래 주석형태로 구현하면 될듯.
+
+                // $.ajax({
+                // url:'어쩌구저쩌꾸',
+                // ~~~
+                // success:function(result){ <= 이 result 또는 result의 내부 값이 이메일
+				// 코드여야 함.
+                // resolve(result);
+                // },
+                // error:function(error){
+                // reject(error)
+                // }
+                // });
+
+                // 이건 돌아가는 형태 보여주려고 하드코딩한 이메일코드 값.
+                let emailCode = '12345';
+                resolve(emailCode);
+            })
+        }
+
+        // //여기까지 이메일 코드
+
+        function timerStart(sec, timer, callbackFunc) {
+            alert(`딱 ${sec}초 준다.`);
+            let restTime = sec;
+
+            const start = setInterval(function () {
+                restTime -= 1;
+                if (restTime < 0) return timerEnd();
+                let min = Math.floor(restTime / 60);
+                let sec = restTime % 60;
+                timer.innerText = `0${min}:${sec < 10 ? '0' + sec : sec}`;
+            }, 1000);
+
+            function timerEnd() {
+                clearInterval(start);
+                alert('시간이 초과되었습니다. 다시 시도해주세요.');
+                if (callbackFunc) callbackFunc();
+            }
+        }
+
+        function emailChangeHandler(e) {
+            if (v.isValid(btnEmailCheck)) {
+                v.changeInvalid(btnEmailCheck);
+                btnEmailCheck.innerText = '인증';
+            }
+        }
 
         function customRadioHandler(e) {
             customRadios.forEach((radio) => radio.classList.remove('clicked'));
@@ -128,7 +247,6 @@ $(function () {
                     if (ret === 'exist') {
                         return v.setInvalid(registerId, ivFeed, '이미 사용중인 아이디입니다. 다시 입력해주세요.');
                     }
-                    console.log(ret);
                     return v.setValid(registerId, vFeed, '사용 가능한 아이디 입니다.');
                 })
                 .catch(console.error);
@@ -210,6 +328,7 @@ $(function () {
             if (!v.isValid(phone1)) return phone1.focus();
             if (!v.isValid(phone2)) return phone2.focus();
             if (!v.isValid(phone3)) return phone3.focus();
+            if (!v.isValid(btnEmailCheck)) return btnEmailCheck.focus();
             getEl('#register-form').submit();
         }
     }
@@ -255,5 +374,9 @@ function logoutSubmit() {
     auth2.signOut().then(function () {
     });
     auth2.disconnect();
+}
+
+function alarm() {
+	
 }
 

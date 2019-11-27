@@ -9,4 +9,6 @@ public interface UserService {
 	public UserDTO checkPassword(String id, String pwd, String registerMethod);
 	public void userModify(UserDTO userDTO);
 	public void userWithdrawal(String id, String registerMethod);
+	public UserDTO getUserDTO(int seq);
+	public UserDTO checkNickname(String nickname);
 }

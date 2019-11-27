@@ -1,0 +1,278 @@
+.container-wrap {
+    margin: 0;
+    width: 100%;
+    height: 100vh;
+    position: relative;
+}
+
+.container-wrap .editor-zone {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40%;
+    min-width: 800px;
+    height: 600px;
+    box-shadow: 2px 2px 10px 0 rgba(0, 0, 0, 0.5);
+    padding: 1rem;
+}
+
+.input-wrap {
+    position: relative;
+}
+
+.input-wrap label {
+    position: absolute;
+    font-size: 1.1rem;
+    top: -1.2rem;
+    left: 1.25rem;
+}
+
+.input-wrap input {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 1.1rem;
+    border: none;
+    outline: none;
+    background: none;
+    border-bottom: 2px solid #ffffff;
+    color: #ffffff;
+}
+
+.input-wrap input[type='date'] {
+    text-align: center;
+}
+
+.input-wrap textarea {
+    resize: none;
+}
+
+.editor-first {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr 80px;
+    grid-template-columns: 1fr;
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
+}
+
+.editor-first .input-wrap {
+    box-sizing: border-box;
+    background-color: lightgray;
+    padding: 1em 3rem;
+    width: 70%;
+    border-radius: 2rem;
+}
+
+.editor-second {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(6, 1fr);
+    height: 100%;
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+}
+
+.editor-second .input-wrap {
+    background-color: lightgray;
+    padding: 0.5rem 2rem;
+    width: 50%;
+    border-radius: 1rem;
+}
+
+.editor-second .input-wrap.place {
+    display: flex;
+    justify-content: center;
+}
+
+.editor-second .input-wrap.place button {
+    width: 20%;
+    border: 2px solid #797979;
+    color: #797979;
+    background-color: #ffffff;
+    font-size: 1rem;
+}
+
+.editor-second .input-wrap.textarea {
+    margin-top: 2rem;
+    grid-row: 4/6;
+    background-color: #ffffff;
+    height: 90%;
+}
+
+.editor-second .input-wrap.textarea textarea {
+    box-sizing: border-box;
+    width: 100%;
+    height: 80%;
+    padding: 0.5rem;
+    font-size: 1rem;
+}
+
+.button-wrap {
+    display: flex;
+}
+
+.button-wrap .btn {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    margin: 0.5rem;
+    border-radius: 0.5rem;
+}
+
+.button-wrap .btn.btn-travel {
+    border: 2px solid #00c1da;
+    background-color: #ffffff;
+    color: #00c1da;
+}
+
+.btn.btn-travel:hover {
+    background-color: #00c1da;
+    color: #ffffff;
+}
+
+.button-wrap .btn.btn-tdanger {
+    background-color: #ffffff;
+    border: 2px solid #ff5100;
+    color: #ff5100;
+}
+
+.button-wrap .btn.btn-tdanger:hover {
+    background-color: #ff5100;
+    color: #ffffff;
+}
+
+.btn.btn-tsave {
+    background-color: #ffffff;
+    border: 2px solid #2f8f03;
+    color: #2f8f03;
+}
+
+.btn.btn-tsave:hover {
+    color: #ffffff;
+    background-color: #2f8f03;
+}
+
+/* 지도 모달 레이아웃 */
+
+.map-wrap {
+    display: flex;
+    height: 500px;
+}
+
+.map-wrap .search-area {
+    width: 30%;
+    box-sizing: border-box;
+    border: 2px solid gray;
+    padding: 0.2rem;
+    margin-right: 0.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.map-wrap .search-area .input-wrap {
+    display: flex;
+}
+
+.map-wrap .search-area .input-wrap input {
+    outline: none;
+    width: 80%;
+    padding: 0.2rem;
+    font-size: 1rem;
+    border:1px solid gray;
+    color:#000000;
+}
+
+.map-wrap .search-area .input-wrap button {
+    width: 20%;
+    background-color: #ffffff;
+    border: 2px solid #00c1da;
+    color: #00c1da;
+    padding: 0.3rem 0;
+    font-size: 0.8rem;
+}
+
+.map-wrap .search-area .input-wrap button:hover {
+    background-color: #00c1da;
+    color: #ffffff;
+}
+
+.map-wrap .search-area .result-wrap {
+    box-sizing: border-box;
+    height: 100%;
+    overflow: auto;
+}
+
+.result-wrap .result-item {
+    list-style: none;
+    box-sizing: border-box;
+    padding: 0.2rem;
+}
+
+.result {
+    position: relative;
+    border: 1px solid gray;
+    font-size: 0.9rem;
+    padding: 0.5rem;
+    line-height: 1rem;
+    cursor: pointer;
+}
+
+.result .place-addr {
+    font-size: 0.7rem;
+    color: #707070;
+}
+
+.result .btn-add-map {
+    position: absolute;
+    top: 0.15rem;
+    right: 0.15rem;
+    background-color: #ffffff;
+    border: 2px solid #333333;
+    border-radius: 0.5rem;
+    color: #333333;
+    font-size: 0.7rem;
+}
+
+.result:hover {
+    color: #00c1da;
+    font-weight: 500;
+}
+
+.page-group {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.page-group li {
+    padding: 0.1rem;
+    list-style: none;
+}
+
+.page-group li a {
+    color: #5a5a5a;
+    text-decoration: none;
+}
+
+.page-group li a:hover {
+    color: #00c1da;
+}
+
+.page-group li a.on {
+    color: #00c1da;
+}
+
+.map-wrap .map-area {
+    width: 80%;
+}
+
+.map-wrap .map-area > div {
+    width: 100%;
+    height: 100%;
+    border: 2px solid gray;
+}
+/* 지도 모달 레이아웃 */
