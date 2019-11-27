@@ -17,7 +17,8 @@ $(function () {
     const btnNext = getEl('#btn-next');
     const btnCheck = getEl('#btn-check');
     const btnCancel = getEl('#btn-cancle');
-    const btnSearchLocation = getEl('#btn-search-location');
+    const friendDateStart = getEl('#friendDateStart');
+    const friendDateEnd = getEl('#friendDateEnd');
 
     // 다음 지도의 정보를 가지고 있는 함수.
     // 지도에서 특정 위치를 선택하면 값이 할당 됨.
@@ -27,16 +28,38 @@ $(function () {
         const value = e.target.value;
         console.log(value);
         const [vFeed, ivFeed] = v.getFeedBox(e.target);
-        if (!value) return v.setInvalid(e.target, ivFeed, '시작일을 입력해주세요.');
-        return v.changeValid(e.target);
+        if (!value) {
+        	return v.setInvalid(e.target, ivFeed, '시작일을 입력해주세요.');
+        } else {
+        	var fsDate = new Date(friendDateStart.value).getTime();
+        	var feDate = new Date(friendDateEnd.value).getTime();
+        	var sDate = new Date(value).getTime();
+        	
+        	if(fsDate > sDate || feDate < sDate) {
+        		return v.setInvalid(e.target, ivFeed, '날짜를 다시 입력해주세요.');
+        	} else {
+        		return v.changeValid(e.target);
+        	}
+        }
     });
 
     addEvent(dateEnd, 'blur', (e) => {
         const value = e.target.value;
         console.log(value);
         const [vFeed, ivFeed] = v.getFeedBox(e.target);
-        if (!value) return v.setInvalid(e.target, ivFeed, '종료일을 입력해주세요.');
-        return v.changeValid(e.target);
+        if (!value) {
+        	return v.setInvalid(e.target, ivFeed, '종료일을 입력해주세요.');
+        } else  {
+        	var fsDate = new Date(friendDateStart.value).getTime();
+        	var feDate = new Date(friendDateEnd.value).getTime();
+        	var eDate = new Date(value).getTime();
+        	
+        	if(fsDate > eDate || feDate < eDate) {
+        		return v.setInvalid(e.target, ivFeed, '날짜를 다시 입력해주세요.');
+        	} else {
+        		return v.changeValid(e.target);
+        	}
+        }
     });
 
     addEvent(content, 'blur', (e) => {
@@ -55,9 +78,14 @@ $(function () {
             getMapData = kmap.create(modal);
         })
     });
-
+    
     addEvent(btnCheck, 'click', () => {
-        setValueAtHiddenElement();
+    	if(dateStart.value != '' || dateEnd.value != '' || content.value != '' || inputSearchPlace.value != '') {
+    		alert('다음을 눌른 후 저장버튼을 눌러주세요.');
+    	} else {
+    		alert('저장완료!');
+    		location.href='/friend/list/1';
+    	}
     });
 
     addEvent(btnNext, 'click', () => {
@@ -98,9 +126,9 @@ $(function () {
 				
 				$('<br/>').appendTo($('#resultDiv'));
 				
-				$('#dateStart').val(null);
-				$('#dateEnd').val(null);
-				$('#searchPlace').val(null);
+				$('#date-start').val(null);
+				$('#date-end').val(null);
+				$('#input-search-place').val(null);
 				$('#content').val(null);
 				$('#lat').val(null);
 				$('#lng').val(null);

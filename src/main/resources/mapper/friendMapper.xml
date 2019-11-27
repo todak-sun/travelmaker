@@ -78,6 +78,9 @@
 		'YYYY-MM-DD') as dateEnd, is_read FROM friend_request WHERE fcno =
 		#{fcno}
 	</select>
+	<select id="getRequestNickname" parameterType="int" resultType="String">
+		SELECT nickname FROM users WHERE seq = #{seq}
+	</select>
 
 	<insert id="setRequestWrite" parameterType="friendRequest">
 		INSERT INTO
