@@ -96,7 +96,7 @@
 <!-- 모달 영역 끝 -->
 <div
         id="map-container"
-        style="width:750px;height:350px;visibility: hidden;position:absolute;top:0;left:0;"
+        style="width:750px;height:350px;visibility: hidden;position:absolute;top:-9999px;left:-9999px;"
 ></div>
 <%@ include file="../common/editor-js.jsp" %>
 <script src="${pageContext.request.contextPath}/resources/summernote/summernote-bs4.js"></script>

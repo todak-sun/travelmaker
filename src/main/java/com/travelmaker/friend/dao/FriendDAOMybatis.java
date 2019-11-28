@@ -25,6 +25,7 @@ public class FriendDAOMybatis implements FriendDAO {
 		for(FriendDTO friendDTO : list) {
 			friendDTO.setNickname(sqlSession.selectOne("friendSQL.getNickName", friendDTO.getSeq()));
 			friendDTO.setCitys(sqlSession.selectList("friendSQL.getCitys", friendDTO.getFno()));
+			System.out.println("city = " + friendDTO.getCitys());
 		}
 		return list;
 	}
@@ -62,6 +63,10 @@ public class FriendDAOMybatis implements FriendDAO {
 		
 		for(FriendRouteDTO friendRouteDTO : list) {
 			friendRouteDTO.setFriendRequestDTOs(sqlSession.selectList("friendSQL.getRequestView", friendRouteDTO.getFcno()));
+			
+			for(FriendRequestDTO friendRequestDTO : friendRouteDTO.getFriendRequestDTOs()) {
+				friendRequestDTO.setNickname(sqlSession.selectOne("friendSQL.getRequestNickname", friendRequestDTO.getSeq()));
+			}
 		}
 		return list;
 	}
@@ -83,9 +88,14 @@ public class FriendDAOMybatis implements FriendDAO {
 	public FriendDTO getFriendDTO(int fno) {
 		return sqlSession.selectOne("friendSQL.getFriendDTO",fno);
 	}
-	
-	
-	
-	
 
+	@Override
+	public void requestAccept(String fccno) {
+		sqlSession.update("friendSQL.requestAccept", Integer.parseInt(fccno));
+	}
+
+	@Override
+	public void requestReject(String fccno) {
+		sqlSession.update("friendSQL.requestReject", Integer.parseInt(fccno));
+	}
 }

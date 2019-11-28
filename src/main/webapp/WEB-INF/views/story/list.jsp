@@ -1,14 +1,12 @@
-<%@ page language="java" contentType="text/html;charset=UTF-8"%>
+<%@ page language="java" contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <%@include file="../common/head-meta.jsp" %> <%@include
-    file="../common/head-css.jsp" %>
-    <link
-      rel="stylesheet"
-      href="${pageContext.request.contextPath}/resources/css/story/story.css"
-    />
+<head>
+    <%@include file="../common/head-meta.jsp" %>
+    <%@include
+            file="../common/head-css.jsp" %>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/story/story.css"/>
     <title>스토리페이지</title>
   </head>
   <body>
@@ -69,7 +67,7 @@
       </section>
     </div>
     <!-- 메인 컨텐츠 영역 -->
-
+	<%@include file="../common/footer.jsp" %>
     <%@include file="../common/foot-js.jsp" %>
     <script src="${pageContext.request.contextPath}/resources/js/story/story2.js"></script>
     <script src="${pageContext.request.contextPath}/resources/js/story/story.js"></script>

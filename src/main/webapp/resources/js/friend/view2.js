@@ -28,41 +28,41 @@ $(function () {
                 // Validation 클래스 넣어놨으니 그걸로 시도해봐~~~
                 // frined/write2.js 에 예시로 해둔 것 있으니 보면 금방 이해할 듯!
 
-//                addEvent(startDate, 'blur', (e) => {
-//                    const value = e.target.value;
-//                    const [vFeed, ivFeed] = v.getFeedBox(e.target);
-//                    if (!value) return v.setInvalid(e.target, ivFeed, '시작일을 입력해주세요.');
-//                    return v.changeValid(e.target);
-//                });
-//                addEvent(endDate, 'blur', (e) => {
-//                    const value = e.target.value;
-//                    const [vFeed, ivFeed] = v.getFeedBox(e.target);
-//                    if (!value) return v.setInvalid(e.target, ivFeed, '종료일을 입력해주세요.');
-//                    return v.changeValid(e.target);
-//                });
-//                addEvent(content, 'blur', (e) => {
-//                    const value = e.target.value;
-//                    const [vFeed, ivFeed] = v.getFeedBox(e.target);
-//                    if (!value) return v.setInvalid(e.target, ivFeed, '내용을 입력해주세요.');
-//                    return v.changeValid(e.target);
-//                });
+// addEvent(startDate, 'blur', (e) => {
+// const value = e.target.value;
+// const [vFeed, ivFeed] = v.getFeedBox(e.target);
+// if (!value) return v.setInvalid(e.target, ivFeed, '시작일을 입력해주세요.');
+// return v.changeValid(e.target);
+// });
+// addEvent(endDate, 'blur', (e) => {
+// const value = e.target.value;
+// const [vFeed, ivFeed] = v.getFeedBox(e.target);
+// if (!value) return v.setInvalid(e.target, ivFeed, '종료일을 입력해주세요.');
+// return v.changeValid(e.target);
+// });
+// addEvent(content, 'blur', (e) => {
+// const value = e.target.value;
+// const [vFeed, ivFeed] = v.getFeedBox(e.target);
+// if (!value) return v.setInvalid(e.target, ivFeed, '내용을 입력해주세요.');
+// return v.changeValid(e.target);
+// });
 //                
-//                addEvent(btnTry, 'click', (e) => {
-//                	alert('극 클릭!');
-//                	if (!v.isValid(startDate)) {
-//                        v.setInvalid(startDate, v.getFeedBox(startDate)[1], '시작일을 입력해주세요');
-//                        return startDate.focus();
-//                    }
-//                    if (!v.isValid(endDate)) {
-//                        v.setInvalid(endDate, v.getFeedBox(endDate)[1], '종료일을 입력해주세요.');
-//                        return endDate.focus();
-//                    }
-//                    if (!v.isValid(content)) {
-//                        v.setInvalid(content, v.getFeedBox(content)[1], '내용을 입력해주세요');
-//                        return content.focus();
-//                    }
-//                    getEl('#requestForm').submit();
-//                });
+// addEvent(btnTry, 'click', (e) => {
+// alert('극 클릭!');
+// if (!v.isValid(startDate)) {
+// v.setInvalid(startDate, v.getFeedBox(startDate)[1], '시작일을 입력해주세요');
+// return startDate.focus();
+// }
+// if (!v.isValid(endDate)) {
+// v.setInvalid(endDate, v.getFeedBox(endDate)[1], '종료일을 입력해주세요.');
+// return endDate.focus();
+// }
+// if (!v.isValid(content)) {
+// v.setInvalid(content, v.getFeedBox(content)[1], '내용을 입력해주세요');
+// return content.focus();
+// }
+// getEl('#requestForm').submit();
+// });
             })
         });
     })
@@ -88,9 +88,15 @@ $(function () {
 				if(items.friendRequestDTOs.length != 0 && ($('#friendSeq').val() == $('#seq').val())) {				
 					$.each(items.friendRequestDTOs, function(temp, item) {
 						$('.request-group').append(requestFriendsTemplate(item));
+						
+						if(item.isPermit == 1 || item.isPermit == 2) {
+							var btnSaveDom = $('.btn.btn-tsave:last');
+							var btnDangerDom = $('.btn.btn-tdanger:last');
+							btnSaveDom.remove();
+							btnDangerDom.remove();
+						}
 					});
 				}
-				/* console.log($('#seq').val()); */
 				
 				// 좌표 담기
 				flightPlanCoordinates.push({lat : items.lat, lng : items.lng});
@@ -107,6 +113,50 @@ $(function () {
 			if($('#friendSeq').val() == $('#seq').val()) {
 				$('.routeRequestBtn').remove();
 			}
+			
+			// 신청폼 수락, 거절
+		    $('.btn.btn-tsave').click(function(){
+		    	console.log('버튼 클릭!');
+		    	var result = confirm('수락하시겠습니까?');
+		    	
+		    	if(result) {
+			    	var fccno = $(this).data('fccno');
+			    	
+			    	$.ajax({
+			    		type: 'get',
+			    		url: '/friend/requestAccept',
+			    		data: 'fccno=' + fccno,
+			    		success: function(){
+			    			console.log('성공!');
+			    			alert('수락하셨습니다!');
+			    			location.reload();
+			    		},
+			    		error: function(error) {
+			    			console.log(error);
+			    		}
+			    	});
+		    	}
+		    });
+		    $('.btn.btn-tdanger').click(function(){
+		    	var result = confirm('정말로 거절하시겠습니까?');
+		    	
+		    	if(result) {
+		    		var fccno = $(this).data('fccno');
+		    		
+		    		$.ajax({
+		    			type: 'get',
+		    			url: '/friend/requestReject',
+		    			data: 'fccno=' + fccno,
+		    			success: function(){
+		    				alert('거절하셨습니다.');
+		    				location.reload();
+		    			},
+		    			error: function(error) {
+		    				console.log(error);
+		    			}
+		    		});
+		    	}
+		    });
 		},
 		error: function(error){
 			console.log(error);
@@ -139,12 +189,8 @@ $(function () {
 	    	let json = '{"header":"friend","data":{"fno":"' + fno
 	    			+ '","username":"'+username+'"}}'
 	    	sock.send(json);
-	    }
-
-
-	    
-	    
-});
+	    } 
+	});
 
 // 작은 게시물에 버튼 클릭하면 동행 신청 모달이동
 function writeClick(id) {
@@ -193,7 +239,7 @@ function requestFriendsTemplate(item) {
 												src="https://source.unsplash.com/collection/190727/80x80"
 												alt="" />
 										</div>
-										<p class="author">아이디</p>
+										<p class="author">${item.nickname}</p>
 									</div>
 									<div class="content-area">
 										<p class="date">
@@ -202,8 +248,8 @@ function requestFriendsTemplate(item) {
 										<div class="content-detail">
 											<p>${item.content}</p>
 											<div class="button-wrap">
-												<button class="btn btn-tsave">수락</button>
-												<button class="btn btn-tdanger">거절</button>
+												<button class="btn btn-tsave" data-fccno="${item.fccno}">수락</button>
+												<button class="btn btn-tdanger" data-fccno="${item.fccno}">거절</button>
 											</div>
 										</div>
 									</div>

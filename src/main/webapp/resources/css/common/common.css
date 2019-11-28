@@ -542,6 +542,129 @@ div[class$='feed'] {
 
 /* 회원가입 폼 */
 
+/* 리모컨 */
+.remote-controller {
+    position: fixed;
+    bottom: 5%;
+    right: 5%;
+    border-radius: 50%;
+    width: 4rem;
+    height: 4rem;
+    background: linear-gradient(119deg, #00c1da 38%, #0be685 96%);
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+.remote-controller:hover {
+    background: linear-gradient(130deg, #00c1da 94%, #0be685 40%);
+    opacity: 1;
+}
+
+.remote-controller::before {
+    content: '';
+    background-image: url('/resources/img/cross-white.svg');
+    width: 2rem;
+    height: 2rem;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.remote-controller.on {
+    animation-name: message;
+    animation-iteration-count: infinite;
+    animation-duration: 500ms;
+    opacity: 1;
+}
+
+.remote-controller.on::before {
+    content: '';
+    background-image: url('/resources/img/rc-bell.svg');
+}
+
+.remote-controller .remote-controller-group {
+    position: absolute;
+    top: -2.5rem;
+    right: 0;
+    display: none;
+}
+
+.remote-controller.onfocus .remote-controller-group {
+    display: flex;
+    animation-name: spread;
+    animation-iteration-count: 1;
+    animation-duration: 2s;
+    animation-play-state: running;
+}
+
+.remote-controller-group li {
+    background: linear-gradient(130deg, #00c1da 94%, #0be685 40%);
+    width: 2.2rem;
+    height: 2.2rem;
+    margin-left: 0.2rem;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.remote-controller-group a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.remote-controller-group a::before {
+    content: '';
+    width: 1.3rem;
+    height: 1.3rem;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.remote-controller-group .scroll-up::before {
+    background-image: url('/resources/img/arrow-up.svg');
+}
+
+.remote-controller-group .scroll-down::before {
+    background-image: url('/resources/img/arrow-down.svg');
+}
+
+.remote-controller-group .my-page::before {
+    background-image: url('/resources/img/rc-mypage.svg');
+}
+
+.remote-controller-group .message::before {
+    background-image: url('/resources/img/rc-message.svg');
+}
+
+@keyframes spread {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+        animation-play-state: paused;
+    }
+}
+
+@keyframes message {
+    0% {
+        right: 5.2%;
+        opacity: 0.8;
+    }
+    50% {
+        right: 4.8%;
+    }
+    100% {
+        right: 5%;
+    }
+}
+/* 리모컨 */
+
 div.hidden {
     display: none;
     position: absolute;

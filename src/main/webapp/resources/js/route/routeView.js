@@ -396,3 +396,12 @@ function googleMap(flightPlanCoordinates) {
 }
 
 let flightPlanCoordinates = [];
+
+$(function() {
+  const { getEl } = new travelmaker.utils();
+  const cmt = new travelmaker.comment();
+
+  const bno = +getEl("#bno").value;
+  const seq = getEl("#seq") ? +getEl("#seq").value : 0;
+  cmt.init(getEl(".comment-wrap"), bno, seq);
+});

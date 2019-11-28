@@ -1,17 +1,25 @@
-<%@ page language="java" contentType="text/html;charset=UTF-8"%> <%@ taglib
-prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page language="java" contentType="text/html;charset=UTF-8" %> <%@ taglib
+prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fn"
+uri="http://java.sun.com/jsp/jstl/functions" %> <%@ taglib prefix="sec"
+uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html lang="ko">
   <head>
     <%@include file="../common/head-meta.jsp" %> <%@include
     file="../common/head-css.jsp" %>
-    <link rel="stylesheet" href="/resources/css/route/route-view.css" />
+    <link
+      rel="stylesheet"
+      href="${pageContext.request.contextPath}/resources/css/route/route-view.css"
+    />
     <title>경로형 읽기</title>
   </head>
   <body>
-    <%@include file="../common/navbar2.jsp"%>
-    <input type="hidden" value="${routeDTO.rno }" id="rno" />
-    <input type="hidden" value="${routeDTO.isDomestic }" id="isdomestic" />
+    <%@include file="../common/navbar2.jsp" %>
+    <div class="hidden">
+      <input type="hidden" value="${routeDTO.bno}" id="bno" />
+      <input type="hidden" value="${routeDTO.rno }" id="rno" />
+      <input type="hidden" value="${routeDTO.isDomestic }" id="isdomestic" />
+    </div>
     <!-- 메인 컨텐츠 영역 -->
 
     <div class="container-wrap">
@@ -24,8 +32,14 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
                 <span class="author"> ${routeDTO.nickname }</span>님의 여행코스
               </p>
               <div class="hash-area">
+                <c:set
+                  var="hashes"
+                  value="${fn:split(routeDTO.hashtag, ' ')}"
+                />
                 <!-- 해시태그는 여기부터 반복 -->
-                <span class="hash">${routeDTO.hashtag }</span>
+                <c:forEach items="${hashes}" var="hash">
+                  <span class="hash">${hash}</span>
+                </c:forEach>
                 <!-- 해시태그는 여기부터 반복 -->
               </div>
             </div>
@@ -47,10 +61,8 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
               <div class="route-item">
                 <div class="route-info">
                   <h4 class="route-title">
-                    <span class="number">
-                      <c:out value="${course.rno }" />
-                    </span>
-                    <c:out value="${course.location }" />
+                    <span class="number"><c:out value="${course.rno }"/></span
+                    ><c:out value="${course.location }" />
                   </h4>
                   <span class="date">
                     <span class="from"
@@ -66,7 +78,7 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
                         <c:forEach var="img" items="${imgs }">
                           <img src="/resources/storage/route/<c:out
                             value="${img}"
-                          />" alt="${img}" />
+                          />" alt="${img}"/>
                         </c:forEach>
                       </c:forEach>
                     </div>
@@ -107,49 +119,30 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
       <div class="comment-wrap">
         <div class="comment-write-area">
           <span class="content-length"><span>000</span> / 500</span>
-          <textarea
-            name=""
-            id=""
-            placeholder="바르고 고운말은 여행자에게 큰 힘이됩니다."
-          ></textarea>
-          <button>작성</button>
+          <sec:authorize access="!isAuthenticated()">
+            <textarea
+              name=""
+              placeholder="댓글은 로그인 후 남기실 수 있습니다."
+              disabled
+            ></textarea>
+            <button disabled>작성</button>
+          </sec:authorize>
+          <sec:authorize access="isAuthenticated()">
+            <textarea
+              name=""
+              id="comment-content"
+              placeholder="바르고 고운말은 여행자에게 큰 힘이됩니다."
+            ></textarea>
+            <button id="btn-add-comment">작성</button>
+          </sec:authorize>
         </div>
         <div class="comment-view-area">
-          <ul class="comment-group">
-            <li>
-              <div class="comment-item">
-                <div class="comment-author">
-                  <div class="img-wrap">
-                    <img
-                      src="https://source.unsplash.com/collection/190727/80x80"
-                      alt=""
-                    />
-                  </div>
-                  <p class="author-nickname">밥만먹고여행</p>
-                </div>
-                <div class="content-area">
-                  <textarea class="comment-content" disabled>
-  와 정말 좋은 곳에 다녀오셨네요!!</textarea
-                  >
-                  <div class="comment-operation">
-                    <!-- 내가 쓴 글이 아닐 때 -->
-                    <button class="like likes">10</button>
-                    <button class="like unlikes">10</button>
-                    <!-- 내가 쓴 글이 아닐 때 -->
-                    <!-- 내가 쓴 글일 떄 -->
-                    <button class="oper update">수정</button>
-                    <button class="oper delete">삭제</button>
-                  </div>
-                </div>
-              </div>
-            </li>
-          </ul>
+          <ul class="comment-group"></ul>
         </div>
       </div>
     </div>
-    <!— 메인 컨텐츠 영역 —>
-
-    <%@include file="../common/foot-js.jsp" %>
+    <%@include file="../common/footer.jsp" %> <%@include
+    file="../common/foot-js.jsp" %>
     <script
       type="text/javascript"
       src="${pageContext.request.contextPath}/resources/js/route/routeView.js"

@@ -219,11 +219,11 @@
   content: "";
   width: 1.5rem;
   height: 1.5rem;
-  background-image: url("../images/score.svg");
+  background-image: url("/resources/img/score.svg");
 }
 
 .score.on::before {
-  background-image: url("../images/score-on.svg");
+  background-image: url("/resources/img/score.svg");
 }
 
 .hr {
@@ -243,12 +243,12 @@
   margin: 0 auto;
 }
 
-.epli-logo {
+.epil-logo {
   position: relative;
   border: 1px solid transparent;
 }
 
-.epli-logo::before {
+.epil-logo::before {
   content: "";
   position: absolute;
   top: -1rem;
@@ -258,7 +258,7 @@
   height: 5rem;
   background-repeat: no-repeat;
   background-size: contain;
-  background-image: url("../images/Epilogue.png");
+  background-image: url("/resources/img/Epilogue.png");
 }
 
 .epilogue-view .content-area {
@@ -267,11 +267,10 @@
 }
 
 .content-area .content {
-  margin: 0 auto;
   width: 80%;
   border: 1px solid gray;
   padding: 1.25rem;
-  margin-bottom: 1rem;
+  margin: 0 auto 1rem;
   line-height: 1.4rem;
   font-size: 1.2rem;
 }
@@ -300,7 +299,7 @@
 
 .content-area .operation button::before {
   content: "";
-  background-image: url("../images/like-solid.svg");
+  background-image: url("/resources/img/like-solid.svg");
   background-size: contain;
   background-repeat: no-repeat;
   margin-right: 0.5rem;
@@ -435,6 +434,7 @@
   width: 1.5rem;
   height: 1.5rem;
   background-size: contain;
+  background-repeat: no-repeat;
   margin-right: 0.25rem;
   content: "";
 }
@@ -475,9 +475,9 @@
 }
 
 .likes::before {
-  background-image: url("../images/thumb-up.svg");
+  background-image: url("/resources/img/thumb-up.svg");
 }
 
 .unlikes::before {
-  background-image: url("../images/thumb-down.svg");
+  background-image: url("/resources/img/thumb-down.svg");
 }

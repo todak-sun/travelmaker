@@ -37,6 +37,8 @@ public class FriendPageController {
 		int fno = friendService.setWrite(friendDTO);
 		model.addAttribute("is_domestic", friendDTO.getIs_domestic());
 		model.addAttribute("fno", fno);
+		model.addAttribute("friendDateStart", friendDTO.getDateStart());
+		model.addAttribute("friendDateEnd", friendDTO.getDateEnd());
 		// [용주] : 테스트를 위해 routeWrite2 변경함!!!
 		return "/friend/routeWrite2";
 	}

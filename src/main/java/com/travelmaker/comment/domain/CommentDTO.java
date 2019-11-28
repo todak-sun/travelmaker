@@ -1,16 +1,17 @@
 package com.travelmaker.comment.domain;
 
+import com.travelmaker.user.domain.UserDTO;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-@Setter
-@Getter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Accessors(chain = true)
-@ToString
 public class CommentDTO {
 	private int cno;
 	private int bno;
@@ -20,4 +21,6 @@ public class CommentDTO {
 	private int seq;
 	private String dateWrite;
 	private int pcno;
+
+	private UserDTO userDTO;
 }

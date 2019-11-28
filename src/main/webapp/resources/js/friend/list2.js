@@ -18,14 +18,14 @@ $(function () {
 			console.log(JSON.stringify(data));
 
 			$.each(data.list, function(index, items) {
-				console.log("date" + items.dateStart);
 				$('.content-group').append(listTemplate(items));
 				
 				$.each(items.citys, function(index, item) {
 					$('<span/>', {
 						class: 'city',
 						text: item
-					}).appendTo($('.city-wrap'));
+					}).appendTo($('.city-wrap:last'));
+					console.log(index + " : " + item);
 				});
 			});
 			$('.pagination').html(data.friendPaging.pagingHTML);
@@ -59,6 +59,12 @@ $(function () {
     }
     
     function listTemplate(items) {
+    	var sDate = new Date(items.dateStart).getTime();
+    	var now = new Date().getTime();
+    	
+    	console.log(Math.floor((sDate - now) / (1000 * 60 * 60 * 24)));
+    	var result = Math.floor((sDate - now) / (1000 * 60 * 60 * 24) * -1);
+    	
     	var listTemp = `
     		<li>
                 <div class="content-item">
@@ -69,7 +75,7 @@ $(function () {
                         <h5 class="author">${items.nickname}</h5>
                     </div>
                     <div class="title-wrap">
-                        <span class="tbadge tbadge-danger">D-7</span>
+                        <span class="tbadge tbadge-danger">D${result}</span>
                         <h4>${items.title}</h4>
                     </div>
                     <div class="info-wrap">
@@ -81,7 +87,7 @@ $(function () {
                             
                         </div>
                         <button onclick="location.href='/friend/view/${items.fno}'">
-                            상세보기예시
+                            상세보기
                         </button>
                     </div>
                 </div>

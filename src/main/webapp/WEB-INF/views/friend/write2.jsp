@@ -45,6 +45,7 @@
         </form>
     </div>
 </div>
+<%@include file="../common/footer.jsp"%>
 <%@include file="../common/foot-js.jsp" %>
 <script src="${pageContext.request.contextPath}/resources/js/friend/write2.js"></script>
 </body>

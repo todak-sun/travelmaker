@@ -275,4 +275,28 @@
     height: 100%;
     border: 2px solid gray;
 }
+
+/* 구글 지도 검색결과 표출 하는 부분 */
+.map-wrap-g {
+    display: flex;
+    height: 500px;
+    position: relative;
+}
+
+.map-wrap-g #map{
+    width:100%;
+}
+
+.map-wrap-g .search-location {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index:1400;
+    font-size: 1rem;
+}
+
+.pac-container {
+    z-index: 1500;
+}
+
 /* 지도 모달 레이아웃 */

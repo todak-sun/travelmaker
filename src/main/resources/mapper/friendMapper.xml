@@ -78,10 +78,20 @@
 		'YYYY-MM-DD') as dateEnd, is_read FROM friend_request WHERE fcno =
 		#{fcno}
 	</select>
+	<select id="getRequestNickname" parameterType="int" resultType="String">
+		SELECT nickname FROM users WHERE seq = #{seq}
+	</select>
 
 	<insert id="setRequestWrite" parameterType="friendRequest">
 		INSERT INTO
 		friend_request values(#{fcno}, seq_fccno.nextval, #{seq}, #{content},
 		0, #{dateStart}, #{dateEnd}, 0)
 	</insert>
+	
+	<update id="requestAccept" parameterType="int">
+		UPDATE friend_request SET is_permit = 1 WHERE fccno = #{fccno}
+	</update>
+	<update id="requestReject" parameterType="int">
+		UPDATE friend_request SET is_permit = 2 WHERE fccno = #{fccno}
+	</update>
 </mapper>
