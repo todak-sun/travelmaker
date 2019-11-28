@@ -7,7 +7,10 @@ $(function () {
         getElList,
         addAllSameEvent,
         addEvent,
-        getRegisterMethod
+        getRegisterMethod,
+        setRequestHeader,
+        showLoading,
+        closeLoading
     } = new travelmaker.utils();
     const modal = new travelmaker.modal('#modal');
     const ajax = new travelmaker.ajax();
@@ -62,6 +65,118 @@ $(function () {
         const btnGo = getEl('.btn-google');
         const btnLogin = getEl('#btn-login');
         const btnRegister = getEl('.btn-register');
+
+        const linkIdSearch = getEl('.link-id-search');
+        const linkPasswordSearch = getEl('.link-password-search');
+
+        addEvent(linkIdSearch, 'click', function (e) {
+            e.preventDefault();
+            modal.createCustom(t.idSearch(), function () {
+                const email1 = getEl('#email1');
+                const email2 = getEl('#email2');
+                const realname = getEl('#realname');
+                const btnSearch = getEl('#btn-search');
+
+                addEvent(email1, 'blur', function (e) {
+                    checkValueValidation(e, '입력하세요!')
+                });
+
+                addEvent(email2, 'blur', function (e) {
+                    checkValueValidation(e, '뒷자리도 입력하세요!');
+                });
+
+                addEvent(realname, 'blur', function (e) {
+                    checkValueValidation(e, '가입시 실명을 입력하세요!');
+                });
+
+                addEvent(btnSearch, 'click', function (e) {
+                    if (!v.isValid(email1)) return email1.focus();
+                    if (!v.isValid(email2)) return email2.focus();
+                    if (!v.isValid(realname)) return realname.focus();
+                    console.log('유효성 검사 모두 통과!');
+
+                    checkHasId({realname: realname.value, email1: email1.value, email2: email2.value})
+                        .then(ret => {
+
+                        })
+                        .catch(console.error);
+                });
+
+                function checkHasId(data) {
+                    return new Promise((resolve, reject) => {
+                        $.ajax({
+                            url: '',
+                            data: JSON.stringify(data),
+                            beforeSend: setRequestHeader,
+                            dataType: 'text',
+                            success: function (ret) {
+                                resolve()
+                            },
+                            error: function (err) {
+                                reject(err)
+                            }
+                        })
+                    });
+                }
+            })
+        });
+
+        function checkValueValidation(e, message) {
+            const [vFeed, ivFeed] = v.getFeedBox(e.target);
+            if (!e.target.value) return v.setInvalid(e.target, ivFeed, message);
+            v.changeValid(e.target)
+        }
+
+        addEvent(linkPasswordSearch, 'click', function (e) {
+            e.preventDefault();
+            modal.createCustom(t.passwordSearch(), function () {
+                const id = getEl('#id');
+                const email1 = getEl('#email1');
+                const email2 = getEl('#email2');
+                const btnSend = getEl('#btn-send');
+
+                addEvent(id, 'blur', function (e) {
+                    checkValueValidation(e, '아이디를 입력하세요!');
+                });
+
+                addEvent(email1, 'blur', function (e) {
+                    checkValueValidation(e, '입력하세요!');
+                });
+
+                addEvent(email2, 'blur', function (e) {
+                    checkValueValidation(e, '뒷자리도 입력하세요!');
+                });
+
+                addEvent(btnSend, 'click', function (e) {
+                    if (!v.isValid(id)) return id.focus();
+                    if (!v.isValid(email1)) return email1.focus();
+                    if (!v.isValid(email2)) return email2.focus();
+                    console.log('유효성 검사 모두 통과!!!');
+                    searchIdAndSendEmail({id: id.value, email1: email1.value, email2: email2.value})
+                        .then(ret => {
+
+                        })
+                        .catch(console.error);
+                });
+
+                function searchIdAndSendEmail(data) {
+                    return new Promise((resolve, reject) => {
+                        $.ajax({
+                            url: '',
+                            beforeSend: setRequestHeader,
+                            data: JSON.stringify(data),
+                            dataType: 'text',
+                            success: function (ret) {
+                                resolve(ret);
+                            },
+                            error: function (err) {
+                                reject(err);
+                            }
+                        })
+                    });
+                }
+            })
+        });
 
         initApiLogin();
         mid.focus();
@@ -166,29 +281,21 @@ $(function () {
                 .then((emailCode) => {
                     miniModal.createMini(t.emailConfirm(), (e) => {
                         const emailConfirm = getEl('#input-email-confirm'); // 인증번호
-                        // 입력받는
-                        // 칸
                         const btnConfirm = getEl('#btn-email-confirm'); // 버튼
 
                         const timer = getEl('.timer');
                         const close = miniModal.m.querySelector('.close');
 
-                        timerStart(10, timer, () => close.click());
+                        timerStart(180, timer, () => close.click());
 
                         addEvent(emailConfirm, 'keyup', (e) => {
-                            // 엔터키 치면
-                            // 확인함.
                             if (e.keyCode === 13) btnConfirm.click();
                         });
 
                         addEvent(btnConfirm, 'click', () => {
                             const [vFeed, ivFeed] = v.getFeedBox(emailConfirm);
                             if (emailConfirm.value !== emailCode) {
-                                v.setInvalid(
-                                    emailConfirm,
-                                    ivFeed,
-                                    '발송한 인증코드와 불일치 합니다. 다시 확인해주세요.'
-                                );
+                                v.setInvalid(emailConfirm, ivFeed, '발송한 인증코드와 불일치 합니다. 다시 확인해주세요.');
                                 emailConfirm.value = '';
                                 emailConfirm.focus();
                             } else {
@@ -204,33 +311,28 @@ $(function () {
 
         function sendEmailCode() {
             return new Promise((resolve, reject) => {
-                // 사용자에게 이메일 코드를 발급하고, 발급된 이메일 코드를 resolve의 파라미터로 전달할 것.
-                // 대충 아래 주석형태로 구현하면 될듯.
-
-                // $.ajax({
-                // url:'어쩌구저쩌꾸',
-                // ~~~
-                // success:function(result){ <= 이 result 또는 result의 내부 값이 이메일
-                // 코드여야 함.
-                // resolve(result);
-                // },
-                // error:function(error){
-                // reject(error)
-                // }
-                // });
-
-                // 이건 돌아가는 형태 보여주려고 하드코딩한 이메일코드 값.
-                let emailCode = '12345';
-                resolve(emailCode);
+                showLoading();
+                $.ajax({
+                    type: 'post',
+                    url: '/user/emailCode',
+                    data: 'email1=' + email1.value + '&email2=' + email2.value,
+                    dataType: 'JSON',
+                    beforeSend: setRequestHeader,
+                    success: function (result) {
+                        closeLoading();
+                        resolve(result.emailCode);
+                    },
+                    error: function (error) {
+                        closeLoading();
+                        reject(error)
+                    }
+                });
             });
         }
 
         // //여기까지 이메일 코드
-
         function timerStart(sec, timer, callbackFunc) {
-            alert(`딱 ${sec}초 준다.`);
             let restTime = sec;
-
             const start = setInterval(function () {
                 restTime -= 1;
                 if (restTime < 0) return timerEnd();
@@ -244,6 +346,8 @@ $(function () {
                 alert('시간이 초과되었습니다. 다시 시도해주세요.');
                 if (callbackFunc) callbackFunc();
             }
+
+            return timerEnd;
         }
 
         function emailChangeHandler(e) {

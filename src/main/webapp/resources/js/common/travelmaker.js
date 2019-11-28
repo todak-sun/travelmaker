@@ -43,7 +43,6 @@ let travelmaker = (function (window) {
             xhr.setRequestHeader(header, token);
         };
 
-
         Utils.prototype.getJSONfromQueryString = function () {
             let qs = location.search.slice(1);
             qs = qs.split('&');
@@ -76,6 +75,16 @@ let travelmaker = (function (window) {
             }
 
             return [setState, getState];
+        };
+
+        Utils.prototype.showLoading = function(){
+            const ldsBack = getEl('.lds-back');
+            ldsBack.classList.remove('hidden');
+        };
+
+        Utils.prototype.closeLoading = function(){
+            const ldsBack = getEl('.lds-back');
+            ldsBack.classList.add('hidden');
         };
 
         function getEl(selector) {
@@ -337,6 +346,10 @@ let travelmaker = (function (window) {
                        <div class="iv-feed"></div>
                     </div>
                     
+                    <div class="wrap-link">
+                        <a href="#" class="link-id-search">아이디 찾기</a>/<a href="#" class="link-password-search">비밀번호 찾기</a>
+                    </div>
+                    
                     <div class="wrap-buttons">
                       <button type="button" class="btn-register">회원가입</button>
                       <button type="button" id="btn-login">로그인</button>
@@ -357,6 +370,83 @@ let travelmaker = (function (window) {
                 </div>
                 `;
         };
+
+        Template.prototype.idSearch = function () {
+            return `
+            <form class="id-search">
+                <label for="" class="label-need">이메일</label>
+                <div class="input-wrap">
+                  <input type="text" class="v" id="email1"/>
+                  <div class="v-feed"></div>
+                  <div class="iv-feed"></div>
+                </div>
+                <div class="input-wrap input-email2-wrap">
+                  <input type="text" list="email" placeholder="직접입력...." class="v" id="email2"/>
+                  <datalist id="email">
+                    <option value="gmail.com">gmail.com</option>
+                    <option value="naver.com">naver.com</option>
+                    <option value="daum.net">daum.net</option>
+                    <option value="nate.com">nate.com</option>
+                  </datalist>
+                  <div class="v-feed"></div>
+                  <div class="iv-feed"></div>
+                </div>
+    
+                <label for="" class="label-need">이름</label>
+                <div class="input-wrap-4">
+                  <div class="input-wrap">
+                    <input type="text" class="v" id="realname"/>
+                    <div class="v-feed"></div>
+                    <div class="iv-feed">이름을 입력해주세요</div>
+                  </div>
+                  <button id="btn-search" type="button">찾기</button>
+                </div>
+                <div class="message-box">
+                  <p>아이디를 조회해보세요!</p>
+                </div>
+            </form>
+            `;
+        }
+
+        Template.prototype.passwordSearch = function(){
+            return `
+               <form class="pw-search">
+                <label for="" class="label-need">아이디</label>
+    
+                <div class="input-wrap id-wrap">
+                  <input type="text" class="v" id="id" />
+                  <div class="v-feed"></div>
+                  <div class="iv-feed"></div>
+                </div>
+    
+                <label for="" class="label-need">이메일</label>
+                <div class="input-wrap">
+                  <input type="text" class="v" id="email1"/>
+                  <div class="v-feed"></div>
+                  <div class="iv-feed"></div>
+                </div>
+                <div class="input-wrap input-email2-wrap">
+                  <input type="text" list="email" placeholder="직접입력...." class="v" id="email2"/>
+                  <datalist id="email">
+                    <option value="gmail.com">gmail.com</option>
+                    <option value="naver.com">naver.com</option>
+                    <option value="daum.net">daum.net</option>
+                    <option value="nate.com">nate.com</option>
+                  </datalist>
+                  <div class="v-feed"></div>
+                  <div class="iv-feed"></div>
+                </div>
+    
+                <div class="button-wrap">
+                  <button id="btn-send">전송</button>
+                </div>
+    
+                <div class="message-box">
+                  <p>아이디를 조회해보세요!</p>
+                </div>
+              </form>          
+            `;
+        }
 
         Template.prototype.tmodal = function () {
             return `
