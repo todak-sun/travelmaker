@@ -4,7 +4,7 @@
 <mapper namespace="essaySQL">
 
     <select id="readOne" parameterType="int" resultType="essay">
-        SELECT * FROM essay WHERE rno = #{rno}
+        SELECT BNO, RNO, SEQ, TITLE, LIKES, VIEWS, HASHTAG, to_char(DATE_WRITE, 'YYYY-MM-DD') as DATE_WRITE, to_char(DATE_UPDATE, 'YYYY-MM-DD') as DATE_UPDATE, FILE_NAME, IMAGE_NAME, FIXED, IS_DOMESTIC FROM essay WHERE rno = #{rno}
     </select>
 
     <insert id="create" parameterType="essay">

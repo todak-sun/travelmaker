@@ -267,19 +267,44 @@ let travelmaker = (function (window) {
             `
         };
 
-        Template.prototype.comment = function (comment) {
-            const {cno, bno, content, likes, unlikes, seq, dateWrite, pcno} = comment;
-            if (cno !== pcno) {
-                return ``;
+        Template.prototype.comment = function (mySeq, comment) {
+            const {cno, bno, content, likes, unlikes, seq, dateWrite, pcno, userDTO: {realname}} = comment;
+            let commentItem = `
+                <li class="${cno === pcno ? '' : 're'}">
+                    <div class="comment-item">
+                        <div class="comment-author">
+                            <div class="img-wrap">
+                                <img src="https://source.unsplash.com/collection/190727/80x80" alt="" />
+                            </div>
+                            <p class="author-nickname">${realname}</p>
+                        </div>
+                        <div class="content-area">
+                            <textarea class="comment-content" disabled>${content}</textarea>
+                            <div data-cno="${cno}" data-likes="${likes}" data-unlikes="${unlikes}" class="comment-operation">`;
+            if (mySeq !== 0) {
+                if (mySeq !== seq)
+                    commentItem += `<button class="like likes">${likes}</button><button class="like unlikes">${unlikes}</button>`;
+                else
+                    commentItem += `<button class="oper update">수정</button><button class="oper delete">삭제</button>`;
+                commentItem += `<button class="oper recomment" data-pcno="${cno === pcno ? cno : pcno}">답글</button>`;
             }
+            commentItem += `</div>
+                        </div>
+                    </div>
+                </li>`;
+            return commentItem;
         };
 
         Template.prototype.reComment = function (cno) {
             return `
-                <div class="input-group">
-                    <textarea id="recomment-content" class="form-control"></textarea>
-                    <button data-cno="${cno}" id="btn-add-recomment" class="input-group-append">작성</button>
+            <li>
+                <div class="comment-write-area">
+                    <span class="content-length"><span>000</span> / 500</span>
+                    <textarea class="comment-content" placeholder="바르고 고운말은 여행자에게 큰 힘이됩니다."></textarea>
+                    <button class="btn-add-comment" data-cno="${cno}">작성</button>
+                    <button class="btn-cancel-comment">취소</button>
                 </div>
+            </li>
             `
         };
 
@@ -568,10 +593,20 @@ let travelmaker = (function (window) {
             this.updateComment = updateComment;
             this.deleteComment = deleteComment;
             this.checkId = checkId;
+            this.alarmDataLoad = alarmDataLoad;
         };
 
-        const utils = new Utils();
-        const {setRequestHeader} = utils;
+        const {setRequestHeader} = new Utils();
+
+        function alarmDataLoad(seq) {
+            return $.ajax({
+                type: 'get',
+                url: '/alarm/load',
+                data: 'seq=' + seq,
+                dataType: 'json',
+                beforeSend: setRequestHeader
+            });
+        }
 
         function getCommentList(bno) {
             return $.ajax({
@@ -616,7 +651,7 @@ let travelmaker = (function (window) {
         function updateComment(bno, data) {
             return $.ajax({
                 type: 'PUT',
-                url: `${url}/api/board/${bno}/comment/`,
+                url: `${url}/api/board/${bno}/comment`,
                 contentType: 'application/json',
                 dataType: 'json',
                 data: JSON.stringify({data}),
@@ -687,7 +722,6 @@ let travelmaker = (function (window) {
         }
 
 
-
         function essayDelete(rno) {
             return $.ajax({
                 type: 'DELETE',
@@ -724,7 +758,7 @@ let travelmaker = (function (window) {
             map = new kakao.maps.Map(this.kmap, this.mapOption);
             ps = new kakao.maps.services.Places(); //장소검색
             infoWindow = new kakao.maps.InfoWindow({zIndex: 1}); //인포윈도우
-            
+
             addEvent(btnSearch, 'click', searchPlaces.bind(null, inputSearch));
             addEvent(inputSearch, 'keyup', (e) => {
                 if (e.keyCode === 13) btnSearch.click();
@@ -1166,6 +1200,175 @@ let travelmaker = (function (window) {
         return validation;
     })(_w);
 
+    const Comment = (function () {
+        const Comment = function () {
+        };
+
+        const {getEl, getEls, getElList, addAllSameEvent, addEvent, useState} = new Utils();
+        const ajax = new Ajax();
+        const t = new Template();
+
+        // let commentWrap;
+        let _bno, _seq;
+        let _setCmt, _getCmt;
+        let _commentGroup, _btnAddComment;
+
+        Comment.prototype.init = function (commentWrap, bno, seq) {
+            const [setCmt, getCmt] = useState({seq: 0, content: null});
+            const [commentGroup, commentContent, btnAddComment]
+                = getEls(commentWrap, '.comment-group', '#comment-content', '#btn-add-comment');
+            console.log(commentWrap);
+            console.log('bno', bno);
+            console.log('seq', seq);
+            _bno = bno;
+            _seq = seq;
+            _setCmt = setCmt;
+            _getCmt = getCmt;
+            _commentGroup = commentGroup;
+            _btnAddComment = btnAddComment;
+
+            if (commentContent && btnAddComment) {
+                addEvent(commentContent, 'change', (e) => setCmt({content: e.target.value, seq: seq}));
+                addEvent(commentContent, 'keyup', countContentLengthHandler);
+                addEvent(btnAddComment, 'click', (e) => {
+                    if (!commentContent.value) return;
+                    ajax.createComment(bno, getCmt())
+                        .then((ret) => {
+                            commentContent.value = '';
+                            printCommentList();
+                        })
+                        .catch(console.error);
+                });
+            }
+
+            initOnLoad();
+        };
+
+        function initOnLoad() {
+            printCommentList();
+        }
+
+        function printCommentList() {
+            _commentGroup.innerHTML = '';
+            ajax.getCommentList(_bno)
+                .then((ret) => {
+                    _commentGroup.appendChild(getCommentList(ret));
+                    initCommentGroup();
+                })
+                .catch(console.error);
+        }
+
+        function initCommentGroup() {
+            const commentLikeList = getElList('.comment-group .likes');
+            const commentUnlikeList = getElList('.comment-group .unlikes');
+            const commentUpdateList = getElList('.comment-group .update');
+            const commentDeleteList = getElList('.comment-group .delete');
+            const commentReList = getElList('.comment-group .recomment');
+
+            const [setCmtInner, getCmtInner] = useState();
+            addAllSameEvent(commentUpdateList, 'click', (e) => {
+                let btnUpdate = e.target;
+                let commentContent = e.target.parentElement.previousElementSibling;
+                let innerCno = +e.target.parentElement.dataset.cno;
+                setCmtInner({content: commentContent.value, seq: _seq, cno: innerCno});
+                commentContent.disabled = false;
+                commentContent.focus();
+
+                addEvent(commentContent, 'change', (e) => setCmtInner({
+                    content: e.target.value,
+                    seq: _seq,
+                    cno: innerCno
+                }));
+                addEvent(btnUpdate, 'click', (e) => {
+                    if (!commentContent.value) return;
+                    ajax.updateComment(_bno, getCmtInner())
+                        .then((ret) => printCommentList())
+                        .catch(console.error);
+                });
+            });
+
+            addAllSameEvent(commentDeleteList, 'click', (e) => {
+                if (!confirm('해당 댓글을 삭제하시겠습니까?')) return;
+                const innerCno = +e.target.parentElement.dataset.cno;
+                ajax.deleteComment(_bno, innerCno)
+                    .then((ret) => printCommentList())
+                    .catch(console.error);
+            });
+
+            addAllSameEvent(commentLikeList, 'click', (e) => {
+                const data = parseDatasetToNumber(e.target.parentElement.dataset);
+                const commentContent = e.target.parentElement.previousElementSibling;
+                setCmtInner({...data, likes: data.likes + 1, content: commentContent.value});
+                ajax.updateComment(_bno, getCmtInner())
+                    .then((ret) => printCommentList())
+                    .catch(console.error);
+            });
+
+            addAllSameEvent(commentUnlikeList, 'click', (e) => {
+                const data = parseDatasetToNumber(e.target.parentElement.dataset);
+                const commentContent = e.target.parentElement.previousElementSibling;
+                setCmtInner({...data, unlikes: data.unlikes + 1, content: commentContent.value});
+                ajax.updateComment(_bno, getCmtInner())
+                    .then((ret) => printCommentList())
+                    .catch(console.error);
+            });
+
+            addAllSameEvent(commentReList, 'click', (e) => {
+                const btnRe = e.target;
+                const pcno = +e.target.dataset.pcno;
+                const $parentLi = $(e.target).closest('li');
+                $parentLi.after(t.reComment(pcno));
+                const reCommentBox = $parentLi.next()[0];
+
+                const [btnAddComment, btnCancelComment, commentContent]
+                    = getEls(reCommentBox, '.btn-add-comment', '.btn-cancel-comment', '.comment-content');
+
+                addEvent(btnCancelComment, 'click', () => reCommentBox.remove());
+                addEvent(btnRe, 'click', () => reCommentBox.remove());
+                addEvent(commentContent, 'keyup', countContentLengthHandler);
+                addEvent(commentContent, 'change', (e) => setCmtInner({seq: _seq, content: e.target.value}));
+                addEvent(btnAddComment, 'click', (e) => {
+                    const cno = +e.target.dataset.cno;
+                    ajax.createReComment(_bno, cno, getCmtInner())
+                        .then(ret => {
+                            printCommentList()
+                        })
+                        .catch(console.error);
+
+                });
+
+
+            });
+        }
+
+        function countContentLengthHandler(e) {
+            const text = e.target.value;
+            const [contentLengthBox] = getEls(e.target.parentElement, '.content-length>span');
+            if (text.length > 500) e.target.value = text.substr(0, 500);
+            contentLengthBox.innerText = `${text.length < 10 ? '00' + text.length : text.length < 100 ? '0' + text.length : text.length}`;
+        }
+
+        function parseDatasetToNumber(dataset) {
+            let obj = {};
+            let keys = Object.keys(dataset);
+            let values = Object.values(dataset);
+            for (let i = 0; i < keys.length; i++) {
+                obj[keys[i]] = isNaN(+values[i]) ? values[i] : +values[i];
+            }
+            return obj;
+        }
+
+        function getCommentList(ret) { //가져온 데이터로 모든 댓글을 다시 그려준 후 반환
+            const commentList = ret.data;
+            const $frag = $(document.createDocumentFragment());
+            commentList.forEach(cmt => $frag.append($(t.comment(_seq, cmt))));
+            return $frag[0];
+        }
+
+
+        return Comment;
+    })(_w);
+
     travelmaker.googleMap = GoogleMap;
     travelmaker.kakaoMap = KakaoMap;
     travelmaker.url = url;
@@ -1176,6 +1379,7 @@ let travelmaker = (function (window) {
     travelmaker.ajax = Ajax;
     travelmaker.modal = Modal;
     travelmaker.validation = Validation;
+    travelmaker.comment = Comment;
 
     _w.travelmaker = travelmaker;
     return travelmaker;

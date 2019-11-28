@@ -1,5 +1,6 @@
 package com.travelmaker.comment.domain.network.response;
 
+import com.travelmaker.user.domain.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,4 +19,6 @@ public class CommentApiResponse {
     private int seq;
     private String dateWrite;
     private int pcno;
+
+    private UserDTO userDTO;
 }

@@ -35,8 +35,8 @@
       <br />
     </div>
     <!-- 메인 컨텐츠 영역 -->
-    <%@include file="../common/footer.jsp"%> <%@include
-    file="../common/foot-js.jsp"%>
+    <%@include file="../common/footer.jsp"%>
+    <%@include file="../common/foot-js.jsp"%>
     <script src="${pageContext.request.contextPath}/resources/js/friend/list2.js"></script>
   </body>
 </html>

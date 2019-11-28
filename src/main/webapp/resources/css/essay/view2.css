@@ -1,0 +1,318 @@
+.container-wrap {
+    margin-top: 80px;
+}
+
+.container-wrap .header-back {
+    position: relative;
+    width: 100%;
+    min-height: 320px;
+    height: 20%;
+    background-size: cover;
+    background-position: center;
+    background-image: url('https://source.unsplash.com/collection/190727/1600x900');
+}
+
+.container-wrap .header-back::before {
+    content: '';
+    width: 100%;
+    height: 100%;
+    background-color: #000000;
+    position: absolute;
+    opacity: 40%;
+}
+
+.container-wrap .header-title {
+    position: absolute;
+    z-index: 2;
+    width: 80%;
+    min-width: 1024px;
+    background: none;
+    height: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.header-title .title-area {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.title-area .title {
+    color: #ffffff;
+    font-size: 2.5rem;
+}
+
+.title-area .author {
+    margin-top: 1rem;
+    color: #ffffff;
+    font-size: 1.5rem;
+    opacity: 0.8;
+}
+
+.header-title .date-area {
+    position: absolute;
+    bottom: 3rem;
+    left: 3rem;
+}
+
+.header-title .date-area p {
+    font-size: 1.25rem;
+    color: #ffffff;
+    margin-top: 0.5rem;
+}
+
+.header-title .info-area {
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+    position: absolute;
+    bottom: 3rem;
+    right: 3rem;
+    color: #ffffff;
+    font-size: 1.25rem;
+}
+
+.info-area div {
+    position: relative;
+    width: 3rem;
+    text-align: center;
+    padding: 0.25rem 1rem;
+    font-size: 1.25rem;
+    background: none;
+    border: 2px solid #ffffff;
+    color: #ffffff;
+}
+
+.info-area div::before {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: -2.5rem;
+    content: '';
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 1.8rem;
+    height: 1.8rem;
+}
+
+.info-area .info-view {
+}
+
+.info-area .info-view::before {
+    background-image: url('/resources/img/view-solid.svg');
+}
+
+.info-area .info-likes {
+    margin-top: 0.5rem;
+    cursor: pointer;
+}
+
+.info-area .info-likes::before {
+    background-image: url('/resources/img/like-solid.svg');
+}
+
+.info-likes:hover {
+    color: #000000;
+    background-color: #ffffff;
+}
+
+.container-wrap .content {
+    box-sizing: border-box;
+    padding: 2rem;
+    min-height: 500px;
+    width: 70%;
+    min-width: 800px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    border-left: 2px solid gray;
+    border-right: 2px solid gray;
+    border-bottom: 2px solid gray;
+}
+
+.container-wrap .comment-wrap {
+    margin: 0 auto;
+    width: 80%;
+    padding: 2rem;
+    box-sizing: border-box;
+}
+
+.comment-wrap .comment-write-area {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.comment-wrap .comment-write-area .content-length {
+    position: absolute;
+    bottom: 0.5rem;
+    left: 0.5rem;
+    font-size: 0.9rem;
+    color: #888888;
+}
+
+.comment-wrap .comment-write-area textarea {
+    resize: none;
+    padding: 1rem;
+    width: 100%;
+    font-size: 1.1rem;
+    outline: none;
+}
+
+.comment-wrap .comment-write-area button {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    background-color: #555555;
+    color: #ffffff;
+    box-sizing: border-box;
+    border: 2px solid #555555;
+    outline: none;
+}
+
+.comment-wrap .comment-write-area button:hover {
+    background-color: #ffffff;
+    color: #555555;
+}
+
+.comment-wrap .comment-view-area {
+    /* border: 1px solid gray; */
+    margin-top: 1rem;
+}
+
+.comment-group li {
+    border-bottom: 1px solid lightgray;
+    padding: 0.5rem;
+}
+
+.comment-group li.re::before {
+    content: '대댓';
+}
+
+.comment-item {
+    display: flex;
+}
+
+.comment-item .comment-author {
+    width: 15%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.comment-item .comment-author .img-wrap {
+    overflow: hidden;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    border: 3px solid darkgray;
+}
+
+.comment-item .comment-author .img-wrap img {
+    width: 100%;
+    height: 100%;
+}
+
+.comment-item .comment-author .author-nickname {
+    padding: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.author-nickname::before {
+    content: '@';
+    margin-right: 0.25rem;
+}
+
+.comment-item .content-area {
+    display: flex;
+    width: 100%;
+}
+
+.comment-item .content-area .comment-content {
+    width: 80%;
+    resize: none;
+    background: none;
+    color: #000000;
+    font-size: 1.1rem;
+    border: 2px solid gray;
+    padding: 0.5rem;
+    box-sizing: border-box;
+}
+
+.comment-item .content-area .comment-content:disabled {
+    border: none;
+}
+
+.comment-item .content-area .comment-operation {
+    width: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.comment-item .content-area .comment-operation .like {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem;
+    margin: 0.25rem;
+    position: relative;
+    font-size: 1rem;
+    background-color: #ffffff;
+    outline: none;
+}
+
+.comment-item .content-area .comment-operation .like::before {
+    width: 1.5rem;
+    height: 1.5rem;
+    background-size: contain;
+    margin-right: 0.25rem;
+    content: '';
+}
+
+.comment-item .content-area .comment-operation .likes {
+    border: 2px solid blue;
+    color: blue;
+}
+
+.comment-item .content-area .comment-operation .likes:hover {
+    background-color: rgb(69, 69, 255);
+    color: #ffffff;
+}
+
+.comment-item .content-area .comment-operation .unlikes {
+    border: 2px solid red;
+    color: red;
+}
+
+.comment-item .content-area .comment-operation .unlikes:hover {
+    background-color: rgb(255, 92, 92);
+    color: #ffffff;
+}
+
+.comment-item .content-area .comment-operation .oper {
+    padding: 0.5rem;
+    margin: 0.25rem;
+    width: 50%;
+    font-size: 1rem;
+    background-color: #ffffff;
+    border: 2px solid #00c1da;
+    color: #00c1da;
+}
+
+.comment-item .content-area .comment-operation .oper:hover {
+    background-color: #00c1da;
+    color: #ffffff;
+}
+
+.likes::before {
+    background-image: url('/resources/img/thumb-up.svg');
+}
+
+.unlikes::before {
+    background-image: url('/resources/img/thumb-down.svg');
+}

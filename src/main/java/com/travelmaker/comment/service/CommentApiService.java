@@ -6,6 +6,7 @@ import com.travelmaker.comment.domain.network.request.CommentApiRequest;
 import com.travelmaker.comment.domain.network.response.CommentApiResponse;
 import com.travelmaker.comment.ifs.CommentApiInterface;
 import com.travelmaker.model.network.Header;
+import com.travelmaker.user.dao.UserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,9 @@ public class CommentApiService implements CommentApiInterface<CommentApiRequest,
 
     @Autowired
     CommentDAO commentDAO;
+
+    @Autowired
+    UserDAO userDAO;
 
     @Override
     public Header<List<CommentApiResponse>> readAll(int bno) {
@@ -85,22 +89,24 @@ public class CommentApiService implements CommentApiInterface<CommentApiRequest,
                 .unlikes(commentDTO.getUnlikes())
                 .dateWrite(commentDTO.getDateWrite())
                 .content(commentDTO.getContent())
+                .userDTO(userDAO.getUserDTO(commentDTO.getSeq()))
                 .build();
         return Header.OK(commentApiResponse, "데이터 조회 성공.");
     }
 
     private Header<List<CommentApiResponse>> response(List<CommentDTO> commentDTOList) {
         List<CommentApiResponse> commentApiResponseList = new ArrayList<>();
-        commentDTOList.forEach((essayDTO) -> {
+        commentDTOList.forEach((commentDTO) -> {
             CommentApiResponse essayApiResponse = CommentApiResponse.builder()
-                    .cno(essayDTO.getCno())
-                    .pcno(essayDTO.getPcno())
-                    .bno(essayDTO.getBno())
-                    .seq(essayDTO.getSeq())
-                    .likes(essayDTO.getLikes())
-                    .unlikes(essayDTO.getUnlikes())
-                    .dateWrite(essayDTO.getDateWrite())
-                    .content(essayDTO.getContent())
+                    .cno(commentDTO.getCno())
+                    .pcno(commentDTO.getPcno())
+                    .bno(commentDTO.getBno())
+                    .seq(commentDTO.getSeq())
+                    .likes(commentDTO.getLikes())
+                    .unlikes(commentDTO.getUnlikes())
+                    .dateWrite(commentDTO.getDateWrite())
+                    .content(commentDTO.getContent())
+                    .userDTO(userDAO.getUserDTO(commentDTO.getSeq()))
                     .build();
             commentApiResponseList.add(essayApiResponse);
         });

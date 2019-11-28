@@ -1,6 +1,7 @@
 package com.travelmaker.essay.domain;
 
 import com.travelmaker.comment.domain.CommentDTO;
+import com.travelmaker.user.domain.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,6 +34,6 @@ public class EssayDTO {
     private String dateWrite; //최초 생성일
 
     private MultipartFile imageFile;
-
     private List<CommentDTO> commentDTOList;
+    private UserDTO userDTO;
 }
