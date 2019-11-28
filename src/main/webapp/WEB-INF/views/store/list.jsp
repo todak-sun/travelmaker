@@ -1,23 +1,20 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="_csrf" content="${_csrf.token}"/>
-<meta name="_csrf_header" content="${_csrf.headerName}"/>
-<meta charset="UTF-8">
-<title>스토어 리스트</title>
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/store/list.css">
+    <%@include file="../common/head-meta.jsp" %>
+    <%@include file="../common/head-css.jsp" %>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/store/list.css">
+    <title>스토어 리스트</title>
 </head>
 <body>
-	<input type="hidden" id="pg" value="${pg }">
-	<div id="result"></div>
-	<div id="paging" style="text-align: center;"></div>
+<%@include file="../common/navbar2.jsp" %>
+<input type="hidden" id="pg" value="${pg }">
+<div id="result"></div>
+<div id="paging" style="text-align: center;"></div>
 
-	<script type="text/javascript"
-		src="${pageContext.request.contextPath}/resources/js/common/jquery-3.4.1.js"></script>
-	<script type="text/javascript"
-		src="${pageContext.request.contextPath}/resources/js/store/list.js"></script>
+<%@include file="../common/footer.jsp" %>
+<%@include file="../common/foot-js.jsp" %>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/store/list.js"></script>
 </body>
 </html>

@@ -5,6 +5,8 @@ import com.travelmaker.user.service.UserServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,8 +14,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.inject.Inject;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 @Controller
 public class UserController {
@@ -24,6 +31,10 @@ public class UserController {
 
 	@Autowired
 	UserServiceImpl userServiceImpl;
+
+	@Inject
+	JavaMailSender mailSender; // 메일 서비스를 사용하기 위해 의존성을 주입함.
+//	MembershipService memberservice; // 서비스를 호출하기 위해 의존성을 주입
 
 	/* 로그인 실패 */
 	@RequestMapping(value = "/loginFail", method = RequestMethod.GET)
@@ -168,6 +179,63 @@ public class UserController {
 		//System.out.println(id + " " + registerMethod);
 		userServiceImpl.userWithdrawal(id, registerMethod);
 		return "user/userWithdrawalOK";
+	}
+
+	//회원가입 이메일 인증
+	@RequestMapping(value = "/user/emailCode", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, String> emailCode(HttpServletRequest request, @RequestParam String email1, @RequestParam String email2, HttpServletResponse response_email){
+
+		System.out.println(email1+""+email2);
+
+		Random r = new Random();
+		int emailCode = r.nextInt(9000) + 1000 ; // 이메일로 받는 인증코드 부분 (난수)
+
+		String setfrom = "qoatn94@gmail.com";
+		String title = "비트맨 회원가입 인증 이메일 입니다."; // 제목
+		String content =
+				System.getProperty("line.separator") + // 한줄씩 줄간격을 두기위해 작성
+
+						System.getProperty("line.separator") +
+
+						"스페셜 게스트 디제이 오마이킹갓뱀수 ~ ~ "
+
+						+ "봄날에 찾아온 봄제이 ~ ~"
+
+						+ System.getProperty("line.separator") +
+
+						System.getProperty("line.separator") +
+
+						" 인증번호는 " + emailCode + " 입니다. "
+
+						+ System.getProperty("line.separator") +
+
+						System.getProperty("line.separator") +
+
+						"오마에와 모 신데이루 !!! 나니니니이이이이!!! 감사합니다"; // 내용
+
+		try {
+			MimeMessage message = mailSender.createMimeMessage();
+			MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
+
+			messageHelper.setFrom(setfrom); // 보내는사람 생략하면 정상작동을 안함
+			messageHelper.setTo(email1+"@"+email2); // 받는사람 이메일
+			messageHelper.setSubject(title); // 메일제목은 생략이 가능하다
+			messageHelper.setText(content); // 메일 내용
+
+			mailSender.send(message);
+
+		} catch (Exception e) {
+			System.out.println(e + "이 에러맞나?");
+			e.printStackTrace();
+		}
+
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("emailCode", emailCode+"");
+		System.out.println("map : " + map.get("emailCode"));
+
+
+		return map;
 	}
 
 }
