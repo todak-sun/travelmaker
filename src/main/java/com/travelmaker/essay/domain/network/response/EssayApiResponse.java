@@ -1,6 +1,7 @@
 package com.travelmaker.essay.domain.network.response;
 
 import com.travelmaker.comment.domain.CommentDTO;
+import com.travelmaker.user.domain.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,4 +28,5 @@ public class EssayApiResponse {
     private String dateWrite;
     private String dateUpdate;
     private List<CommentDTO> commentDTOList;
+    private UserDTO userDTO;
 }

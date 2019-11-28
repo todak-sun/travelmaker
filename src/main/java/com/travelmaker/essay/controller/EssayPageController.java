@@ -30,7 +30,7 @@ public class EssayPageController{
 	public ModelAndView view(@PathVariable int rno, ModelAndView mv){
 		EssayDTO essayDTO = essayPageService.readOne(rno);
 		mv.addObject("essayDTO", essayDTO);
-		mv.setViewName("/essay/view");
+		mv.setViewName("/essay/view2");
 		return mv;
 	}
 

@@ -87,7 +87,7 @@ $(function () {
                             
                         </div>
                         <button onclick="location.href='/friend/view/${items.fno}'">
-                            상세보기예시
+                            상세보기
                         </button>
                     </div>
                 </div>

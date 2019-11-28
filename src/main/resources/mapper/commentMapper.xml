@@ -7,7 +7,7 @@
     </select>
 
     <select id="readAll" parameterType="int" resultType="comment">
-        SELECT * FROM CMT WHERE BNO = #{bno} ORDER BY PCNO, CNO
+        SELECT CNO, BNO, CONTENT, LIKES, UNLIKES, SEQ, DATE_WRITE, PCNO FROM CMT WHERE BNO = #{bno} ORDER BY PCNO, CNO
     </select>
 
    <insert id="create" parameterType="comment">

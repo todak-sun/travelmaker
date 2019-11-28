@@ -3,7 +3,9 @@ $().ready(function() {
   console.log("seq = " + $("#seq").val());
   const { useState, setRequestHeader } = new travelmaker.utils();
   const rno = document.querySelector("#rno").value;
-  const seq = document.querySelector("#seq").value;
+  const seq = document.querySelector("#seq")
+      ? document.querySelector("#seq").value
+      : 0;
 
   document.querySelector("#likes").addEventListener("click", UpdateLikes);
   function UpdateLikes() {
@@ -189,8 +191,8 @@ $().ready(function() {
         //   .appendTo($("#routeContent"));
 
         var routeContentId = $("#routeContent")
-          .children()
-          .last();
+            .children()
+            .last();
         /* routeLat.push(items.lat);
                 routeLng.push(items.lng); */
 
@@ -208,26 +210,26 @@ $().ready(function() {
           $("<div/>", {
             class: "carousel-item"
           })
-            .append(
-              $("<img/>", {
-                src: "/resources/storage/route/" + img
-              })
-            )
-            .appendTo(routeContentId.find(".carousel-inner"));
+              .append(
+                  $("<img/>", {
+                    src: "/resources/storage/route/" + img
+                  })
+              )
+              .appendTo(routeContentId.find(".carousel-inner"));
         });
         console.log("-----------------------");
 
         // 부트스트랩 사진 전환에 쓸 class 생성
         routeContentId
-          .find(".carousel-indicators")
-          .children()
-          .first()
-          .attr("class", "active");
+            .find(".carousel-indicators")
+            .children()
+            .first()
+            .attr("class", "active");
         routeContentId
-          .find(".carousel-inner")
-          .children()
-          .first()
-          .attr("class", "carousel-item active");
+            .find(".carousel-inner")
+            .children()
+            .first()
+            .attr("class", "carousel-item active");
       });
       console.log(flightPlanCoordinates);
       //////////////////////////////////////////////////////////////////
@@ -267,8 +269,8 @@ function kakaoMap(flightPlanCoordinates) {
   var container = document.getElementById("map");
   var options = {
     center: new kakao.maps.LatLng(
-      flightPlanCoordinates[0]["lat"],
-      flightPlanCoordinates[0]["lng"]
+        flightPlanCoordinates[0]["lat"],
+        flightPlanCoordinates[0]["lng"]
     ),
     level: 3
   };
@@ -278,10 +280,10 @@ function kakaoMap(flightPlanCoordinates) {
   // 선을 구성하는 좌표 배열입니다. 이 좌표들을 이어서 선을 표시
   for (var i = 0; i < flightPlanCoordinates.length; i++) {
     linePath.push(
-      new kakao.maps.LatLng(
-        flightPlanCoordinates[i]["lat"],
-        flightPlanCoordinates[i]["lng"]
-      )
+        new kakao.maps.LatLng(
+            flightPlanCoordinates[i]["lat"],
+            flightPlanCoordinates[i]["lng"]
+        )
     );
   }
 
@@ -362,10 +364,10 @@ function googleMap(flightPlanCoordinates) {
   // 마커 생성
   for (var i = 0; i < flightPlanCoordinates.length; i++) {
     markers.push(
-      new google.maps.Marker({
-        position: flightPlanCoordinates[i],
-        map: map
-      })
+        new google.maps.Marker({
+          position: flightPlanCoordinates[i],
+          map: map
+        })
     );
   }
   // 마커 이미지 커스텀
@@ -394,3 +396,14 @@ function googleMap(flightPlanCoordinates) {
 }
 
 let flightPlanCoordinates = [];
+
+$(function(){
+  const {getEl} = new travelmaker.utils();
+  const cmt = new travelmaker.comment();
+
+  const bno = +getEl('#bno').value;
+  const seq = getEl('#seq') ? +getEl('#seq').value : 0;
+  cmt.init(getEl('.comment-wrap'), bno, seq);
+
+
+});

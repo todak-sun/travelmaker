@@ -8,6 +8,7 @@ import com.travelmaker.essay.domain.network.request.EssayApiRequest;
 import com.travelmaker.essay.domain.network.response.EssayApiResponse;
 import com.travelmaker.essay.ifs.EssayApiInterface;
 import com.travelmaker.model.network.Header;
+import com.travelmaker.user.dao.UserDAO;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,9 @@ public class EssayApiService implements EssayApiInterface<EssayApiRequest, Essay
 
     @Autowired
     CommentDAO commentDAO;
+
+    @Autowired
+    UserDAO userDAO;
 
     @Autowired
     ServletContext servletContext;
@@ -165,6 +169,7 @@ public class EssayApiService implements EssayApiInterface<EssayApiRequest, Essay
                 .content(essayDTO.getContent())
                 .fixed(essayDTO.getFixed())
                 .isDomestic(essayDTO.getIsDomestic())
+                .userDTO(userDAO.getUserDTO(essayDTO.getSeq()))
                 .build();
         return Header.OK(essayApiResponse, "데이터 조회 성공.");
     }
@@ -186,6 +191,7 @@ public class EssayApiService implements EssayApiInterface<EssayApiRequest, Essay
                     .content(essayDTO.getContent())
                     .fixed(essayDTO.getFixed())
                     .isDomestic(essayDTO.getIsDomestic())
+                    .userDTO(userDAO.getUserDTO(essayDTO.getSeq()))
                     .build();
             essayApiResponseList.add(essayApiResponse);
         });
