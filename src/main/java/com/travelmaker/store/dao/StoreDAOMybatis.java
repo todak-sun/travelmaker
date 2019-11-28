@@ -1,6 +1,7 @@
 package com.travelmaker.store.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,18 +19,23 @@ public class StoreDAOMybatis implements StoreDAO {
 	private SqlSession sqlSession;
 	
 	@Override
-	public List<StoreHotelDTO> getHotelList() {
-		return sqlSession.selectList("storeSQL.getHotelList");
+	public List<StoreHotelDTO> getHotelList(Map<String, Integer> map) {
+		return sqlSession.selectList("storeSQL.getHotelList", map);
 	}
 
 	@Override
+	public int getTotalA() {
+		return sqlSession.selectOne("storeSQL.getTotalA");
+	}
+	
+	@Override
 	public StoreHotelDTO getHotelView(String hnb) {
 		StoreHotelDTO storeHotelDTO = sqlSession.selectOne("storeSQL.getHotelView", Integer.parseInt(hnb));
-		List<StoreHotelImageDTO> img_list = sqlSession.selectList("storeSQL.getHotelImageView", Integer.parseInt(hnb));
-		List<StoreHotelRoomDTO> room_list = sqlSession.selectList("storeSQL.getHotelRoomView", Integer.parseInt(hnb));
+		List<StoreHotelImageDTO> imgList = sqlSession.selectList("storeSQL.getHotelImageView", Integer.parseInt(hnb));
+		List<StoreHotelRoomDTO> roomList = sqlSession.selectList("storeSQL.getHotelRoomView", Integer.parseInt(hnb));
 		
-		storeHotelDTO.setImg_list(img_list);
-		storeHotelDTO.setRoom_list(room_list);
+		storeHotelDTO.setImgList(imgList);
+		storeHotelDTO.setRoomList(roomList);
 		
 		return storeHotelDTO;
 	}
