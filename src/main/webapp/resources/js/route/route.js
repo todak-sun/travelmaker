@@ -132,7 +132,7 @@ $(function() {
 
   // ************** 이벤트 부여
   $starRatings.on("click", starRatingHandler);
-  $images.on("change", LoadImg);
+  $images.on("change", CourseImg);
   btnAddImage.addEventListener("click", function(e) {
     e.preventDefault();
     $images.click();
@@ -874,7 +874,7 @@ $(function() {
     });
   }
 
-  function LoadImg() {
+  function CourseImg() {
     const images = $images[0];
     listLength = fileList.length;
     if (images.files.length + fileList.length > 5)
@@ -885,6 +885,7 @@ $(function() {
       reader.onload = function(e) {
         fileList.push(image);
         // 임시저장코스 추가
+
         const $frag = $(document.createDocumentFragment());
         const $li = $(`
                       <li>
@@ -907,6 +908,18 @@ $(function() {
       reader.readAsDataURL(image);
     });
   }
+
+  function MainImg() {
+    const mainImage = document.querySelector("#main-image");
+    const imageFile = mainImage.files[0];
+
+    let reader = new FileReader();
+    reader.onload = function(e) {
+      mainImage.src = e.target.result;
+    };
+    reader.readAsDataURL(imageFile);
+  }
+
   function deleteImage(e) {
     // 리스트 index 값 찾아서 이미지 삭제
     // e.stopPropagation();

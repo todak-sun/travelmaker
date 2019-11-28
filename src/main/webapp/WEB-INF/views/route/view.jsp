@@ -10,14 +10,8 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
   </head>
   <body>
     <%@include file="../common/navbar2.jsp"%>
-    <input type="hidden" value="${userDetail.seq}" id="seq" />
     <input type="hidden" value="${routeDTO.rno }" id="rno" />
     <input type="hidden" value="${routeDTO.isDomestic }" id="isdomestic" />
-    <input type="hidden" value="${routeDTO.hashtag }" id="hashtag" />
-    <input type="hidden" value="${routeDTO.hashtag }" id="hashtag" />
-    <input type="hidden" value="${routeDTO.hashtag }" id="hashtag" />
-    <input type="hidden" value="${routeDTO.hashtag }" id="hashtag" />
-    <input type="hidden" value="${routeDTO.hashtag }" id="hashtag" />
     <!-- 메인 컨텐츠 영역 -->
 
     <div class="container-wrap">
@@ -102,13 +96,7 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
         <div class="epli-logo"></div>
         <div class="content-area">
           <p class="content">
-            ${routeDTO.content } Lorem ipsum dolor, sit amet consectetur
-            adipisicing elit. Suscipit vitae impedit dolorem animi non quis
-            cumque labore, harum quos iure sit, praesentium consectetur fugit
-            unde nostrum a, eveniet aliquam dolore! Lorem ipsum dolor sit amet
-            consectetur adipisicing elit. Hic tenetur maiores accusantium nisi?
-            Ipsam excepturi quidem sed, exercitationem harum eligendi adipisci
-            omnis alias tempore, ea dolores, doloremque placeat sunt aperiam!
+            ${routeDTO.content }
           </p>
           <div class="operation">
             <button id="likes">${routeDTO.likes }</button>

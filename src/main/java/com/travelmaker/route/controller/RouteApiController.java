@@ -139,6 +139,7 @@ public class RouteApiController {
 	public RouteContentDTO getCourse(@PathVariable int crno) {
 
 		RouteContentDTO routeContentDTO = routeService.getCourse(crno);
+		System.out.println("스타트날짜찍어보기 : "+routeContentDTO.getDateStart());
 		return routeContentDTO;
 	}
 	

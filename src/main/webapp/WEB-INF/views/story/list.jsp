@@ -19,24 +19,31 @@
     </div>
     <div class="container-wrap">
       <section class="sec-story">
+		<!-- 반복해서 게시글 뿌려줌 -->
         <c:forEach var="story" items="${storyList }"> 
+
+			<!-- 스토리 타입 설정(루트or에쎄이) -->
+			<c:if test="${story.fileName eq null}">
+				<c:set var="storyType" value="route" />
+			</c:if>
+
+			<c:if test="${story.fileName ne null}">
+				<c:set var="storyType" value="essay" />
+			</c:if>
+
+			
 	        <article class="story">
 	          <div class="story-img-wrap">
-	            <img
-	              src="https://picsum.photos/300/200?random=1"
-	              alt=""
-	              class="story-img"
-	            />
+				<img
+					src="<c:out value="/resources/storage/${storyType}/${story.imageName}"/>"
+					alt=""
+					class="story-img"
+				/>
 	          </div>
 	          <div class="story-content-wrap">
 	            <h5 class="story-title">
 	              <a href="
-		              <c:if test="${story.fileName eq null}">
-		              	<c:out value="/route/view/${story.rno}"/>
-		              </c:if>
-	    	          <c:if test="${story.fileName ne null}">
-		              	<c:out value="/essay/view/${story.rno}"/>
-		              </c:if>
+		              	<c:out value="/${storyType}/view/${story.rno}"/>
 	              ">
 	              <c:out value="${story.title}"/></a>
 	            </h5>

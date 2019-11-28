@@ -3,7 +3,9 @@ $().ready(function() {
   console.log("seq = " + $("#seq").val());
   const { useState, setRequestHeader } = new travelmaker.utils();
   const rno = document.querySelector("#rno").value;
-  const seq = document.querySelector("#seq").value;
+  const seq = document.querySelector("#seq")
+    ? document.querySelector("#seq").value
+    : 0;
 
   document.querySelector("#likes").addEventListener("click", UpdateLikes);
   function UpdateLikes() {

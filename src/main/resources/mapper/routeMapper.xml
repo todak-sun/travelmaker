@@ -70,11 +70,15 @@
         VALUES (ino.nextVal, #{crno}, #{img}, #{imgOrder})
     </insert>
 
-	<select id="getRouteContentStory" parameterType="int" resultType="routeContent">
-		SELECT * FROM route_content WHERE RNO = #{rno} ORDER BY cnt_order DESC
+	<select id="getRouteContentStory" parameterType="int" resultType="routeContent">	
+		SELECT crno, rno, content, lat, lng, location, TO_CHAR(date_start,'YYYY-MM-DD') AS date_start, TO_CHAR(date_end,'YYYY-MM-DD') AS date_end, score, fixed, cnt_order FROM route_content WHERE RNO = #{rno} ORDER BY cnt_order DESC
 	</select>
 	<select id="getRouteImageStory" parameterType="int" resultType="routeImage">
 		SELECT img FROM route_image WHERE CRNO = #{CRNO}
 	</select>
+	<select id="routeFromTo" parameterType="int" resultType="Map">
+		SELECT min(date_start) as route_from, max(date_end) as route_to from route_content WHERE rno=#{rno};
+	</select>
+	
 
 </mapper>

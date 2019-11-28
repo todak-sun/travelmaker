@@ -35,7 +35,7 @@ public class RoutePageController {
         return "route/write";
     }
 
-    //////
+    // 게시글 클릭시 들어오는 곳
     @RequestMapping(value = "/view/{rno}", method = RequestMethod.GET)
     public String routeView(@PathVariable int rno, Model model) {
         System.out.println("rno = " + rno);
@@ -48,6 +48,7 @@ public class RoutePageController {
         return "route/view";
     }
     
+    // 게시글 작성 중 미리보기
     @RequestMapping(value = "/preview/{rno}", method = RequestMethod.GET)
     public String routePreview(@PathVariable int rno, Model model) {
     	System.out.println("rno = " + rno);
@@ -61,6 +62,7 @@ public class RoutePageController {
     	return "route/preview";
     }
 
+    
     @RequestMapping(value = "getRouteView", method = RequestMethod.POST)
     @ResponseBody
     public ModelAndView getRouteView(@ModelAttribute RouteDTO routeDTO, HttpServletRequest req, HttpServletResponse res) {
@@ -70,7 +72,14 @@ public class RoutePageController {
         boolean view = false;
         List<RouteContentDTO> list = routeService.getRouteContentStory(rno);
         
-    	Map<String, String> map = new HashMap<String, String>();
+//        String
+//        for(RouteContentDTO routeContentDTO : list) {
+//        	routeContentDTO.getDateStart()
+//        	routeContentDTO.getDateStart()        	
+//        }
+        
+        
+
     	Cookie[] cookies = req.getCookies();
     	
     	// 쿠키로 조회한 적 있는지 확인
