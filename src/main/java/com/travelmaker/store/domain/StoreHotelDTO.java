@@ -2,21 +2,19 @@ package com.travelmaker.store.domain;
 
 import java.util.List;
 
-import org.springframework.stereotype.Component;
-
 import lombok.Data;
 
 @Data
-@Component
 public class StoreHotelDTO {
 	private int hnb;
-	private String kor_name;
-	private String eng_name;
+	private String korName;
+	private String engName;
 	private String star;
 	private String address;
 	private String price;
 	private String content;
-	private String main_image_url;
-	private List<StoreHotelImageDTO> img_list;
-	private List<StoreHotelRoomDTO> room_list;
+	private String mainImageUrl;
+	private String mainUrl;
+	private List<StoreHotelRoomDTO> roomList;
+	private List<StoreHotelImageDTO> imgList;
 }
