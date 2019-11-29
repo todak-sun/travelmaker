@@ -1,390 +1,752 @@
-
-.editor-zone {
-    position:absolute;
-    text-align: center;
-    top:50%;
-    left:50%;
-    padding:1.5rem;
-    transform: translate(-50%, -50%);
-    min-width: 700px;
-    min-height: 500px;
-    -webkit-box-shadow: 1px 1px 12px 0 rgba(0, 0, 0, 0.1);
-    -moz-box-shadow: 1px 1px 12px 0 rgba(0, 0, 0, 0.1);
-    box-shadow: 1px 1px 12px 0 rgba(0, 0, 0, 0.1);
-}
-/* 제목설정 부분 */
-.editor-zone .editor-title h4{
-    text-align: center;
-    font-size:1.75rem;
-    margin-top: 1.5rem;
+html {
+    position: relative;
+    min-height: 100vh;
+    height: 100%;
+    width: 100%;
+    background-image: url('/resources/img/back-map.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden;
 }
 
-.editor-zone .editor-title .title{
+html::before {
+    content: '';
+    background-color: #000000;
     position: absolute;
-    width: 90%;
-    top:50%;
-    left:50%;
-    transform: translate(-50%, -50%);
-    font-size:1.25rem;
-    padding:0.25rem;
-    text-align: center;
-}
-/* 제목설정 부분 */
-
-/* 경로 저장 부분 */
-.route-info-form .route-content textarea{
-    height: 400px;
-    resize: none;
-}
-/* 경로 저장 부분 */
-
-/* 에필로그 */
-.route-epilogue-form h4{
-    text-align: center;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    opacity: 0.5;
 }
 
-.route-epilogue-form textarea{
-    height: 500px;
-    resize: none;
-}
-/* 에필로그 */
-
-/* 커맨드 박스 */
-.route-write-command{
-    position:fixed;
-    top:0;
-    right: -17.5rem;
-    border: 1px solid blue;
+.container-wrap {
+    margin-top: 50px;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(10, 1fr);
 }
 
-.route-write-command .saved-courses{
-    list-style: none;
-    padding-inline-start: 0;
+.container-wrap .editor-wrap {
+    min-width: 980px;
+    height: 100%;
+    grid-column: 3/11;
+    grid-row: 2/8;
+
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
 }
 
-.saved-courses li{
-    border: 1px solid gray;
+.editor-wrap .editor-zone {
+    position: relative;
+    background-color: #ffffff;
+    box-shadow: 2px 2px 10px 0 rgba(0, 0, 0, 0.5);
+    grid-column: 1/6;
 }
 
-.saved-courses h4{
-    text-align: left;
+.editor-zone .level-bar {
+    position: absolute;
+    top: -2.2rem;
+    left: 0;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.editor-zone .level-bar .level {
+    box-sizing: border-box;
+    padding: 0.5rem 1.25rem;
+    background-color: #d8d8d8;
+    border: 2px solid #757575;
+    margin-right: 0.1rem;
+    color: #ffffff;
+}
+
+.level-bar .level.level-1 {
+    background-color: #ffb530;
+    border: 2px solid #ff9216;
+}
+
+.level-bar .level.level-2 {
+    background-color: #f3623a;
+    border: 2px solid #f05429;
+}
+
+.level-bar .level.level-3 {
+    background-color: #69ac68;
+    border: 2px solid #278a25;
+}
+
+/* 첫번째 에디터 */
+.editor-first .title-expression {
+    position: absolute;
+    top: 3rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #00c1da;
+    width: 50%;
+    padding: 1rem 4rem;
+    border-radius: 2rem;
+    color: #ffffff;
+}
+
+.editor-first .title-expression h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.editor-first .title-expression p {
     font-size: 1rem;
 }
 
-.star_rating {
-    font-size: 0;
-    letter-spacing: -4px;
+.editor-first .input-wrap {
+    position: absolute;
+    left: 50%;
+    top: 15rem;
+    transform: translateX(-50%);
+    background-color: #d8d8d8;
+    width: 80%;
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.star_rating a {
-    font-size: 22px;
-    letter-spacing: 0;
-    display: inline-block;
-    margin-left: 5px;
-    color: #ccc;
-    text-decoration: none;
+.editor-first .input-wrap input {
+    display: block;
+    width: 100%;
+    font-size: 1.3rem;
+    color: #5a5a5a;
+    padding: 1rem;
+    outline: none;
+    border: none;
+    text-align: center;
+    background: none;
+    border-bottom: 1px solid #5a5a5a;
+}
+/* 첫번째 에디터 */
+
+/* 두번째 에디터 */
+.editor-second {
+    min-width: 630px;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-rows: repeat(13, 1fr);
+    grid-template-columns: 30px 1fr 1fr 1fr 30px;
 }
 
-.star_rating a:first-child {
-    margin-left: 0;
+.editor-second .title {
+    grid-column: 2/5;
+    grid-row: 2/3;
+    background-color: #d8d8d8;
+    border-radius: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
 }
 
-.star_rating a.on {
-    color: #777;
+.title h4 {
+    font-size: 1.4rem;
 }
 
-/* kakao map */
-.map_wrap, .map_wrap * {
-    margin: 0;
-    padding: 0;
-    font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;
-    font-size: 12px;
+.editor-second .input-wrap {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    padding: 0.5rem;
 }
 
-.map_wrap a, .map_wrap a:hover, .map_wrap a:active {
-    color: #000;
-    text-decoration: none;
+.editor-second .input-wrap label {
+    width: 50px;
 }
 
-.map_wrap {
+.editor-second .input-wrap label::after {
+    content: ':';
+}
+
+.editor-second .input-wrap span {
+    display: flex;
+    justify-content: center;
+    background-color: #d8d8d8;
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    width: 60%;
+}
+
+.editor-second .input-wrap input {
+    border: none;
+    outline: none;
+    background-color: #d8d8d8;
+    padding: 0.5rem;
+    border-radius: 1rem;
+}
+
+.editor-second .input-wrap .place-finder {
+    width: 10%;
+    padding: 0.5rem;
+    border: 2px solid #555555;
+    color: #555555;
+    font-weight: 600;
+}
+
+.editor-second .input-wrap.country {
+    grid-column: 2/3;
+    grid-row: 3/4;
+}
+
+.editor-second .input-wrap.city {
+    grid-column: 3/4;
+    grid-row: 3/4;
+}
+
+.editor-second .input-wrap.place {
+    grid-column: 2/5;
+    grid-row: 4/5;
+}
+
+.editor-second .input-wrap.from {
+    grid-column: 4/5;
+    grid-row: 5/6;
+}
+
+.editor-second .input-wrap.to {
+    grid-column: 4/5;
+    grid-row: 6/7;
+}
+
+.editor-second .score-wrap {
+    grid-column: 2/4;
+    grid-row: 6/7;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+
+.editor-second .score-wrap .score-group {
+    width: 40%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.score {
+}
+
+.score::before {
+    display: flex;
+    content: '';
+    width: 1.5rem;
+    height: 1.5rem;
+    background-image: url('/resources/img/score.svg');
+}
+
+.score.on::before {
+    background-image: url('/resources/img/score-on.svg');
+}
+
+.editor-second .input-wrap.content {
+    grid-column: 2/5;
+    grid-row: 7/10;
+}
+
+.editor-second .input-wrap.content textarea {
+    resize: none;
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+.editor-second .image-wrap {
+    position: relative;
+    grid-column: 2/5;
+    grid-row: 11/13;
+    border: 1px solid gray;
+    border-radius: 1.5rem;
+    box-sizing: border-box;
+    width: 100%;
+    display: flex;
+    padding: 0.5rem;
+}
+
+.editor-second .input-wrap input{
+    width:100%;
+    font-size:1rem;
+}
+
+.editor-second .image-wrap button {
+    position: absolute;
+    top: -2.5rem;
+    right: 1rem;
+    padding: 0.5rem 1rem;
+    border: 2px solid #00c1da;
+    color: #00c1da;
+    background-color: #ffffff;
+    border-radius: 1rem;
+}
+
+.editor-second .image-wrap button:hover {
+    color: #ffffff;
+    background-color: #00c1da;
+}
+
+.editor-second .image-wrap .image-group {
+    margin: 0 auto;
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.image-group li {
+    position: relative;
+    border: 1px solid gray;
+    width: 20%;
+    height: 90px;
+    box-sizing: border-box;
+    overflow: hidden;
+    padding: 0.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-group li .delete {
+    position: absolute;
+    top: 0.1rem;
+    right: 0.1rem;
+    font-size: 1.25rem;
+}
+
+.image-group li img {
+    display: block;
+    width: auto;
+    height: 100%;
+}
+/* 두번째 에디터 */
+
+/* 세번째 에디터 */
+.editor-third {
     position: relative;
     width: 100%;
-    height: 500px;
+    height: 100%;
 }
 
-#menu_wrap {
+.editor-third .title-expression {
     position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: 250px;
-    margin: 10px 0 30px 10px;
-    padding: 5px;
-    overflow-y: auto;
-    background: rgba(255, 255, 255, 0.7);
-    z-index: 1;
-    font-size: 12px;
-    border-radius: 10px;
+    left: 50%;
+    top: 4rem;
+    transform: translateX(-50%);
+    background-color: #00c1da;
+    width: 70%;
+    color: #ffffff;
+    padding: 1rem;
+    text-align: center;
+    border-radius: 2rem;
 }
 
-.bg_white {
-    background: #fff;
+.editor-third .title-expression h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
 }
 
-#menu_wrap hr {
-    display: block;
-    height: 1px;
-    border: 0;
-    border-top: 2px solid #5f5f5f;
-    margin: 3px 0;
-}
-
-#menu_wrap .option {
+.editor-third .content {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    top: 11rem;
     text-align: center;
 }
 
-#menu_wrap .option p {
-    margin: 10px 0;
+.editor-third .content textarea {
+    width: 90%;
+    resize: none;
+    height: 200px;
+    padding: 1rem;
+    border: 2px solid gray;
 }
 
-#menu_wrap .option button {
-    margin-left: 5px;
+.editor-third .hash-area {
+    position: absolute;
+    bottom: 1rem;
+    width: 90%;
+    left: 50%;
+    transform: translate(-50%);
+    padding: 1rem;
 }
 
-#placesList li {
-    list-style: none;
+.editor-third .hash-area .input-wrap {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 0.5rem;
 }
 
-#placesList .item {
+.editor-third .hash-area .input-wrap input {
+    padding: 0.25rem;
+}
+
+.editor-third .hash-area .input-wrap button {
+    padding: 0.3rem 0.5rem;
+    border: 2px solid #808080;
+    color: #808080;
+    box-sizing: border-box;
+    background-color: #ffffff;
+}
+
+.editor-third .hash-area .hash-view {
     position: relative;
-    border-bottom: 1px solid #888;
-    overflow: hidden;
-    cursor: pointer;
-    min-height: 65px;
+    border: 1px solid gray;
+    height: 50px;
+    padding: 0.5rem;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-#placesList .item span {
-    display: block;
-    margin-top: 4px;
-}
-
-#placesList .item h5, #placesList .item .info {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-}
-
-#placesList .item .info {
-    padding: 10px 0 10px 55px;
-}
-
-#placesList .info .gray {
-    color: #8a8a8a;
-}
-
-#placesList .info .jibun {
-    padding-left: 26px;
-    background:
-            url(http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png)
-            no-repeat;
-}
-
-#placesList .info .tel {
-    color: #009900;
-}
-
-#placesList .item .markerbg {
-    float: left;
+.editor-third .hash-area .hash-view::before {
+    content: '#해시태그를 입력해보세요!';
     position: absolute;
-    width: 36px;
-    height: 37px;
-    margin: 10px 0 0 10px;
-    background:
-            url(http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png)
-            no-repeat;
+    top: -1.1rem;
+    left: 0;
+    color: #555555;
 }
 
-#placesList .item .marker_1 {
-    background-position: 0 -10px;
+.hash {
+    position: relative;
+    border: 2px solid gray;
+    padding: 0.4rem;
+    border-radius: 0.25rem;
+    font-size: 0.9rem;
+    margin: 0.3rem;
+    cursor: pointer;
 }
 
-#placesList .item .marker_2 {
-    background-position: 0 -56px;
+.hash::before {
+    content: '#';
 }
 
-#placesList .item .marker_3 {
-    background-position: 0 -102px;
+.hash:hover {
+    border: 2px solid #00c1da;
+    color: #00c1da;
 }
 
-#placesList .item .marker_4 {
-    background-position: 0 -148px;
+/* 세번째 에디터 */
+
+/* 네비게이션 존 */
+.container-wrap .nav-zone {
+    background-color: #ffffff;
+    grid-column: 7/9;
+    box-shadow: 2px 2px 10px 0 rgba(0, 0, 0, 0.5);
+    display: grid;
+    grid-template-rows: 60px 1fr 50px;
 }
 
-#placesList .item .marker_5 {
-    background-position: 0 -194px;
+.nav-zone .button-wrap {
+    padding: 0.5rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    column-gap: 0.5rem;
 }
 
-#placesList .item .marker_6 {
-    background-position: 0 -240px;
+.nav-zone .button-wrap button {
+    padding: 0.5rem;
+    border-radius: 1rem;
+    font-size: 1rem;
+    box-sizing: border-box;
+    border: #bbbbbb 2px solid;
+    background-color: #bbbbbb;
+    color: #ffffff;
 }
 
-#placesList .item .marker_7 {
-    background-position: 0 -286px;
+.button-wrap button:hover {
+    background-color: #ffffff;
+    color: #bbbbbb;
 }
 
-#placesList .item .marker_8 {
-    background-position: 0 -332px;
+.button-wrap button.btn-wide {
+    grid-column: 3/5;
 }
 
-#placesList .item .marker_9 {
-    background-position: 0 -378px;
+.button-wrap button.btn-wide {
+    background-color: #ffffff;
+    border: 2px solid #00c1da;
+    color: #00c1da;
 }
 
-#placesList .item .marker_10 {
-    background-position: 0 -423px;
+.button-wrap button.btn-wide-style {
+    background-color: #ffffff;
+    border: 2px solid #00c1da;
+    color: #00c1da;
 }
 
-#placesList .item .marker_11 {
-    background-position: 0 -470px;
+.button-wrap button.btn-wide:hover {
+    background-color: #00c1da;
+    color: #ffffff;
 }
 
-#placesList .item .marker_12 {
-    background-position: 0 -516px;
+.button-wrap button.btn-wide:disabled {
+    border: #bbbbbb 2px solid;
+    background-color: #ffffff;
+    color: #bbbbbb;
+    cursor: not-allowed;
 }
 
-#placesList .item .marker_13 {
-    background-position: 0 -562px;
+.route-wrap {
+    /* border: 1px solid red; */
 }
 
-#placesList .item .marker_14 {
-    background-position: 0 -608px;
+.route-wrap .route-group {
+    padding: 0.5rem;
 }
 
-#placesList .item .marker_15 {
-    background-position: 0 -654px;
+.route-group li {
+    padding: 0.3rem;
 }
 
-#pagination {
-    margin: 10px auto;
-    text-align: center;
+.route-item {
+    position: relative;
+    border: 2px solid gray;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem;
+    cursor: pointer;
 }
 
-#pagination a {
-    display: inline-block;
-    margin-right: 10px;
+.route-item:hover {
+    border: 2px solid #000000;
 }
 
-#pagination .on {
-    font-weight: bold;
-    cursor: default;
-    color: #777;
+.route-item:active {
+    border: 3px solid #000000;
 }
 
-.modal-dialog {
-    min-width: 800px;
-    padding: 0;
+.route-item .delete {
+    position: absolute;
+    top: 0.3rem;
+    right: 0.3rem;
+    color: #888888;
 }
 
-/* Google Map */
-#googleMapDiv {
-    height: 100%;
+.delete:hover {
+    cursor: pointer;
+    color: #000000;
 }
 
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
+.route-item h5 {
+    font-size: 1rem;
 }
 
-#description {
-    font-family: Roboto;
-    font-size: 15px;
-    font-weight: 300;
+.route-item .route-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
 }
 
-#infowindow-content .title {
-    font-weight: bold;
+.route-item .route-info p {
+    color: #787878;
+    font-size: 0.8rem;
 }
 
-#infowindow-content {
+.route-item .route-info button {
+    box-sizing: border-box;
+    border: 2px solid #333333;
+    background-color: #333333;
+    color: #ffffff;
+    border-radius: 0.2rem;
+    padding: 0.2rem 0.4rem;
+}
+
+.route-item .route-info button:hover {
+    color: #333333;
+    background-color: #ffffff;
+}
+
+.route-item .page-wrap {
+    align-self: center;
+}
+
+.page-wrap ul {
+    margin: 0 auto;
+    width: 80%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.page-number {
+    text-decoration: none;
+    box-sizing: border-box;
+    display: block;
+    font-size: 0.9rem;
+    border: 2px solid #008c9e;
+    color: #008c9e;
+    padding: 0.3rem 0.5rem;
+}
+
+.page-number:hover {
+    background-color: #008c9e;
+    color: #ffffff;
+}
+/* 네비게이션 존 */
+
+.hide {
     display: none;
 }
 
-#googleMapDiv #infowindow-content {
-    display: inline;
+/* 지도 모달 레이아웃 */
+
+.map-wrap {
+    display: flex;
+    height: 500px;
 }
 
-.pac-card {
-    margin: 10px 10px 0 0;
-    border-radius: 2px 0 0 2px;
+.map-wrap .search-area {
+    width: 30%;
     box-sizing: border-box;
-    -moz-box-sizing: border-box;
+    border: 2px solid gray;
+    padding: 0.2rem;
+    margin-right: 0.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.map-wrap .search-area .input-wrap {
+    display: flex;
+}
+
+.map-wrap .search-area .input-wrap input {
     outline: none;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-    background-color: #fff;
-    font-family: Roboto;
+    width: 80%;
+    padding: 0.2rem;
+    font-size: 1rem;
+    border:1px solid gray;
+    color:#000000;
 }
 
-#pac-container {
-    padding-bottom: 12px;
-    margin-right: 12px;
+.map-wrap .search-area .input-wrap button {
+    width: 20%;
+    background-color: #ffffff;
+    border: 2px solid #00c1da;
+    color: #00c1da;
+    padding: 0.3rem 0;
+    font-size: 0.8rem;
 }
 
-.pac-controls {
-    display: inline-block;
-    padding: 5px 11px;
+.map-wrap .search-area .input-wrap button:hover {
+    background-color: #00c1da;
+    color: #ffffff;
 }
 
-.pac-controls label {
-    font-family: Roboto;
-    font-size: 13px;
-    font-weight: 300;
+.map-wrap .search-area .result-wrap {
+    box-sizing: border-box;
+    height: 100%;
+    overflow: auto;
 }
 
-#pac-input {
-    background-color: #fff;
-    font-family: Roboto;
-    font-size: 15px;
-    font-weight: 300;
-    margin-left: 12px;
-    padding: 0 11px 0 13px;
-    text-overflow: ellipsis;
-    width: 400px;
+.result-wrap .result-item {
+    list-style: none;
+    box-sizing: border-box;
+    padding: 0.2rem;
 }
 
-#pac-input:focus {
-    border-color: #4d90fe;
+.result {
+    position: relative;
+    border: 1px solid gray;
+    font-size: 0.9rem;
+    padding: 0.5rem;
+    line-height: 1rem;
+    cursor: pointer;
 }
 
-#title {
-    color: #fff;
-    background-color: #4d90fe;
-    font-size: 25px;
+.result .place-addr {
+    font-size: 0.7rem;
+    color: #707070;
+}
+
+.result .btn-add-map {
+    position: absolute;
+    top: 0.15rem;
+    right: 0.15rem;
+    background-color: #ffffff;
+    border: 2px solid #333333;
+    border-radius: 0.5rem;
+    color: #333333;
+    font-size: 0.7rem;
+}
+
+.result:hover {
+    color: #00c1da;
     font-weight: 500;
-    padding: 6px 12px;
 }
 
-#target {
-    width: 345px;
+.page-group {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 }
 
-.modal, #pac-input {
-    z-index: 20;
+.page-group li {
+    padding: 0.1rem;
+    list-style: none;
 }
 
-.modal-backdrop {
-    z-index: 10;
+.page-group li a {
+    color: #5a5a5a;
+    text-decoration: none;
+}
+
+.page-group li a:hover {
+    color: #00c1da;
+}
+
+.page-group li a.on {
+    color: #00c1da;
+}
+
+.map-wrap .map-area {
+    width: 80%;
+}
+
+.map-wrap .map-area > div {
+    width: 100%;
+    height: 100%;
+    border: 2px solid gray;
+}
+
+/* 구글 지도 검색결과 표출 하는 부분 */
+.map-wrap-g {
+    display: flex;
+    height: 500px;
+    position: relative;
+}
+
+.map-wrap-g #map{
+    width:100%;
+}
+
+.map-wrap-g .search-location {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index:1400;
+    font-size: 1rem;
 }
 
 .pac-container {
-    background-color: #FFF;
-    z-index: 20;
-    position: fixed;
-    display: inline-block;
-    float: left;
+    z-index: 1500;
 }
 
-div#input:hover, div#output:hover {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0
-    rgba(0, 0, 0, 0.19);
-}
+/* 지도 모달 레이아웃 */

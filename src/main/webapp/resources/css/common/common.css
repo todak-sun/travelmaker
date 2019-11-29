@@ -746,6 +746,7 @@ div[class$='feed'] {
     animation-iteration-count: infinite;
     animation-duration: 500ms;
     opacity: 1;
+    background: linear-gradient(130deg, red, orange);
 }
 
 .remote-controller.on::before {
@@ -753,10 +754,69 @@ div[class$='feed'] {
     background-image: url('/resources/img/rc-bell.svg');
 }
 
+.remote-controller .message-box {
+    position: absolute;
+    width: 180px;
+    box-sizing: border-box;
+    padding: 0.25rem;
+    top: -3.5rem;
+    transform: translateX(50%);
+    right: 50%;
+    display: none;
+}
+
+.remote-controller.onfocus .message-box {
+    display: block;
+    animation-name: spread;
+    animation-iteration-count: 1;
+    animation-duration: 2s;
+}
+
+.remote-controller .message-box .message-group {
+    box-sizing: border-box;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+}
+
+.remote-controller .message-box .message-group li {
+    box-sizing: border-box;
+    padding: 0.1rem;
+    width: 100%;
+}
+
+.remote-controller .message-box .message-group .message-item {
+    position: relative;
+    width: 100%;
+    height: 4rem;
+    border: 2px solid gray;
+    background-color: #ffffff;
+    box-sizing: border-box;
+    border-radius: 1rem;
+    padding: 0.5rem;
+    cursor: initial;
+}
+
+.remote-controller .message-box .message-group .message-item:hover {
+    border: 2px solid #00c1da;
+}
+
+.remote-controller .message-box .message-group .message-item .close {
+    position: absolute;
+    right: 0.5rem;
+    top: 0.5rem;
+    cursor: pointer;
+}
+
+.remote-controller .message-box .message-group .message-item .close:hover {
+    color: #ff7504;
+}
+
 .remote-controller .remote-controller-group {
     position: absolute;
     top: -2.5rem;
-    right: 0;
+    transform: translateX(50%);
+    right: 50%;
     display: none;
 }
 
@@ -765,7 +825,6 @@ div[class$='feed'] {
     animation-name: spread;
     animation-iteration-count: 1;
     animation-duration: 2s;
-    animation-play-state: running;
 }
 
 .remote-controller-group li {
@@ -779,7 +838,14 @@ div[class$='feed'] {
     align-items: center;
 }
 
+.remote-controller-group li.onfocus {
+    box-sizing: border-box;
+    background: linear-gradient(130deg, red, orange);
+}
+
 .remote-controller-group a {
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;

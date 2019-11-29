@@ -4,15 +4,22 @@
 <head>
     <%@include file="../common/head-meta.jsp" %>
     <%@include file="../common/head-css.jsp" %>
-    <link
-            rel="stylesheet"
-            href="${pageContext.request.contextPath}/resources/css/route/write.css"
-    />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/route/write.css"/>
     <title>여행경로 추천글 쓰기</title>
 </head>
 <body>
 <%@include file="../common/navbar2.jsp" %>
 <!-- 메인 컨텐츠 영역 -->
+<div class="hide">
+    <input type="hidden" name="isDomestic" id="isDomestic"/>
+    <input type="hidden" name="location" id="location"/>
+    <input type="hidden" name="lat" id="lat" value="0"/>
+    <input type="hidden" name="lng" id="lng" value="0"/>
+    <input type="hidden" name="seq" id="seq" value=${userDetail.seq}/>
+    <input type="hidden" name="nickname" id="nickname" value=${userDetail.nickname}/>
+    <input type="file" name="images" id="images" multiple="multiple"/>
+</div>
+
 <div class="container-wrap">
     <div class="editor-wrap">
         <div class="editor-zone">
@@ -44,29 +51,19 @@
                 </div>
 
                 <div class="input-wrap country">
-                    <label for="">국가</label>
+                    <label for="nation">국가</label>
                     <input type="text" name="nation" id="nation" value="나라나라"/>
                 </div>
 
                 <div class="input-wrap city">
-                    <label for="">도시</label>
+                    <label for="city">도시</label>
                     <input type="text" name="city" id="city" value="도시도시"/>
                 </div>
 
                 <div class="input-wrap place">
-                    <label for="">장소</label>
+                    <label for="place">장소</label>
                     <input type="text" name="place" id="place" value="장소장소"/>
-                    <button class="place-finder" id="searchBtn" data-toggle="modal" data-target="#kakaoMapModal">찾기
-                    </button>
-                </div>
-                <div class="hide">
-                    <input type="hidden" name="isDomestic" id="isDomestic"/>
-                    <input type="hidden" name="location" id="location"/>
-                    <input type="hidden" name="lat" id="lat" value="0"/>
-                    <input type="hidden" name="lng" id="lng" value="0"/>
-                    <input type="hidden" name="seq" id="seq" value=${userDetail.seq}/>
-                    <input type="hidden" name="nickname" id="nickname" value=${userDetail.nickname}/>
-                    <input type="file" name="images" id="images" multiple="multiple"/>
+                    <button class="place-finder" id="searchBtn" data-toggle="modal" data-target="#kakaoMapModal">찾기</button>
                 </div>
 
                 <div class="input-wrap from">
@@ -125,37 +122,36 @@
                 </div>
             </div>
         </div>
+
+        <div class="nav-zone">
+            <div class="button-wrap">
+                <button id="btn-previous">이전</button>
+                <button id="btn-next">다음</button>
+                <button id="btn-route-save" class="btn-wide-style hide">저장</button>
+                <button id="btn-preview" class="btn-wide hide">미리보기</button>
+                <button id="btn-course-save" class="btn-wide">코스저장</button>
+            </div>
+
+            <div class="route-wrap">
+                <ul class="route-group saved-courses">
+                </ul>
+            </div>
+
+            <div class="page-wrap">
+                <ul>
+                    <li><a href="#" class="page-number on">1</a></li>
+                    <li><a href="#" class="page-number">2</a></li>
+                    <li><a href="#" class="page-number">3</a></li>
+                    <li><a href="#" class="page-number">4</a></li>
+                    <li><a href="#" class="page-number">5</a></li>
+                </ul>
+            </div>
+        </div>
     </div>
-
-    <div class="nav-zone">
-        <div class="button-wrap">
-            <button id="btn-previous">이전</button>
-            <button id="btn-next">다음</button>
-            <button id="btn-route-save" class="btn-wide-style hide">저장</button>
-            <button id="btn-preview" class="btn-wide hide">미리보기</button>
-            <button id="btn-course-save" class="btn-wide">코스저장</button>
-        </div>
-
-        <div class="route-wrap">
-            <ul class="route-group saved-courses">
-            </ul>
-        </div>
-
-        <div class="page-wrap">
-            <ul>
-                <li><a href="#" class="page-number on">1</a></li>
-                <li><a href="#" class="page-number">2</a></li>
-                <li><a href="#" class="page-number">3</a></li>
-                <li><a href="#" class="page-number">4</a></li>
-                <li><a href="#" class="page-number">5</a></li>
-            </ul>
-        </div>
-    </div>
-</div>
 </div>
 <!-- 메인 컨텐츠 영역 -->
 <%@include file="../common/footer.jsp" %>
 <%@include file="../common/editor-js.jsp" %>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/route/route.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/route/route.js"></script>
 </body>
 </html>

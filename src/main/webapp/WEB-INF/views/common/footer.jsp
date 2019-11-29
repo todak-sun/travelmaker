@@ -4,6 +4,9 @@
 <footer>
     <sec:authorize access="isAuthenticated()">
         <div class="remote-controller">
+            <div class="message-box">
+                <ul class="message-group"></ul>
+            </div>
             <ul class="remote-controller-group">
                 <li><a href="#" class="scroll-up"></a></li>
                 <li><a href="#" class="scroll-down"></a></li>
