@@ -6,6 +6,19 @@
     box-shadow: 2px 2px 10px 0 rgba(0, 0, 0, 0.5);
 }
 
+.container-wrap .info-wrap {
+    padding: 1rem;
+}
+
+.container-wrap .info-wrap h1 {
+    text-align: center;
+    font-size: 2rem;
+}
+
+.container-wrap .info-wrap .date {
+    text-align: right;
+}
+
 .container-wrap .map-wrap {
     box-sizing: border-box;
     width: 100%;
@@ -15,6 +28,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.container-wrap .map-wrap img {
+    max-height: 100%;
+    width: auto;
 }
 
 .container-wrap .map-wrap #map {

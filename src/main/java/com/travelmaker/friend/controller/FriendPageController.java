@@ -47,6 +47,6 @@ public class FriendPageController {
 		FriendDTO friendDTO = friendService.getView(fno);
 		model.addAttribute("friendDTO", friendDTO);
 		// [용주] : 테스트를 위해 view2로 변경함!!!
-		return "/friend/view2";
+		return "/friend/view";
 	}
 }

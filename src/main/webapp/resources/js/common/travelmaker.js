@@ -148,6 +148,15 @@ let travelmaker = (function (window) {
             `;
         };
 
+        Template.prototype.message = function (message){
+            return `
+                <div class="message-item">
+                    <span class="close">&times;</span>
+                    <p>${message}</p>
+                </div>
+            `;
+        }
+
         Template.prototype.hashBox = function () {
             return `
                 <div>
