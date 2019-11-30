@@ -47,8 +47,8 @@ public class FriendServiceImpl implements FriendService {
 	}
 
 	@Override
-	public List<FriendRouteDTO> getRouteView(String fno) {
-		return friendDAO.getRouteView(fno);
+	public List<FriendRequestDTO> getRequestView(String fcno) {
+		return friendDAO.getRequestView(fcno);
 	}
 
 	@Override
@@ -77,6 +77,31 @@ public class FriendServiceImpl implements FriendService {
 	@Override
 	public void requestReject(String fccno) {
 		friendDAO.requestReject(fccno);
+	}
+
+	@Override
+	public void delete(Map<String, String> map) {
+		friendDAO.delete(map);
+	}
+
+	@Override
+	public FriendDTO modify(String fno) {
+		return friendDAO.modify(fno);
+	}
+
+	@Override
+	public void setModify(FriendDTO friendDTO) {
+		friendDAO.setModify(friendDTO);
+	}
+
+	@Override
+	public List<FriendRouteDTO> getRouteModify(String fno) {
+		return friendDAO.getRouteModify(fno);
+	}
+
+	@Override
+	public void setRouteModify(FriendRouteDTO friendRouteDTO) {
+		friendDAO.setRouteModify(friendRouteDTO);
 	}
 
 }

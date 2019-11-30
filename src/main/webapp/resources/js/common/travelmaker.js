@@ -266,6 +266,19 @@ let travelmaker = (function (window) {
             `
         };
 
+        Template.prototype.purchase = function () {
+            return `
+              <div class="location-wrap">
+                <h2>사다주세요 or 사다줄께요</h2>
+                <div class="btn-wrap">
+                  <button id="btn-Request" data-purchase="1"></button>
+                  <button id="btn-Order" data-purchase="0"></button>
+                </div>
+              </div>
+            `
+        };
+        
+        
         Template.prototype.essayTemp = function (essay) {
             const {rno, title, imageName, isDomestic, dateWrite} = essay;
             return `
@@ -769,7 +782,7 @@ let travelmaker = (function (window) {
             <div class="input-box">
               <label for="req-start-date">동행 시작일</label>
               <div class="input-wrap">
-                <input type="date" id="req-start-date" class="v"/>
+                <input type="date" id="req-start-date" name="dateStart" class="v"/>
                 <div class="v-feed"></div>
                 <div class="iv-feed"></div>
               </div>
@@ -778,7 +791,7 @@ let travelmaker = (function (window) {
             <div class="input-box">
               <label for="req-end-date">동행 종료일</label>
               <div class="input-wrap">
-                <input type="date" id="req-end-date" class="v"/>
+                <input type="date" id="req-end-date" name="dateEnd" class="v"/>
                 <div class="v-feed"></div>
                 <div class="iv-feed"></div>
               </div>
@@ -787,7 +800,7 @@ let travelmaker = (function (window) {
             <div class="input-box">
               <label for="req-content">신청 내용</label>
               <div class="input-wrap textarea">
-                <textarea id="req-content" class="v"
+                <textarea id="req-content" class="v" name="content"
                   placeholder="신청 내용을 구체적으로 적어주세요."
                 ></textarea>
                 <div class="v-feed"></div>
@@ -1548,6 +1561,8 @@ let travelmaker = (function (window) {
                     return setModal(t.story(), initFunction);
                 case 'domestic' :
                     return setModal(t.domestic(), initFunction);
+                case 'purchase':
+                	return setModal(t.purchase(),initFunction );
                 default:
                     throw new Error('정의되지 않은 모달 형식입니다.');
             }

@@ -27,5 +27,10 @@ public class AlarmServiceImpl implements AlarmService {
 	public int alarmChange(int ano) {
 		return alarmDAO.alarmChange(ano);
 	}
+	@Override
+	public void alarmDelete(String dataseq) {
+		alarmDAO.alarmDelete(dataseq);
+	}
 
+	
 }

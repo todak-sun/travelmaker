@@ -7,8 +7,8 @@ sock.onclose = onClose;
 function onMessage(msg) {
 	var data = msg.data;
 	var jsondata = JSON.parse(data);
-
 	console.log(jsondata);
+	
 	/* 대행신청 */
 	if (jsondata.header == 'friend') {
 		$('#alarmOff').hide();
@@ -17,6 +17,13 @@ function onMessage(msg) {
 		alarmDataload($('#alarmOn').data('seq'));
 	}
 
+	if (jsondata.header == 'purA' || jsondata.header == 'purB') {
+		$('#alarmOff').hide();
+		$('#alarmOn').show();
+		$('#alarmBtnDisplay').empty();
+		alarmDataload($('#alarmOn').data('seq'));
+	}
+	
 }
 
 function onClose(evt) {
@@ -50,12 +57,12 @@ function alarmDataload(seq) {
 			xhr.setRequestHeader(header, token);
 		},
 		success : function(data) {
+			console.log(data);
 			$.each(data, function(index, items) {
 				$('#alarmDisplay').append(
 						'<button type="button" class="alarmBtn" data-ano ="'
 								+ items.ano + '" data-header="' + items.header
 								+ '">' + items.content + '</button><br>');
-				$('#alarmDisplay').append('<input type="hidden" ');
 			});
 			console.log(data.length);
 			if (data.length < 1) {
@@ -73,17 +80,22 @@ function alarmDataload(seq) {
 			 */
 			
 			$('.alarmBtn').click(function() {
-				console.log('음..아주 좆같구먼');
+				
 				var ano = $(this).data('ano');
 				var header = $(this).data('header');
-
+				console.log(header);
 				$.ajax({
 					type : 'get',
 					url : '/alarm/' + header + '/' + ano,
 					dataType : 'json',
 					success : function(data) {
-						console.log(data.fno);
-						location.href = '/' + header + '/view/' + data.fno;
+						if(header=='friend'){
+							location.href = '/' + header + '/view/' + data.fno;
+						}else if(header=='purA'){
+							location.href = '/pur/view/1/' + data.fno;
+						}else if(header=='purB'){
+							location.href = '/pur/view/2/' + data.fno;
+						}
 					},
 					error : function(error) {
 						console.log(error);
@@ -98,9 +110,3 @@ function alarmDataload(seq) {
 	});
 }
 
-// href="/alarm/'+items.header+'/'+items.ano+'">'+items.content+
-
-/*
- * document.getElementById('alarmBtn').onclick = function(){ console.log('음..아주
- * 좆같구먼1111'); }
- */

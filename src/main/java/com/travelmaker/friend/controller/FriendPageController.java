@@ -47,6 +47,26 @@ public class FriendPageController {
 		FriendDTO friendDTO = friendService.getView(fno);
 		model.addAttribute("friendDTO", friendDTO);
 		// [용주] : 테스트를 위해 view2로 변경함!!!
-		return "/friend/view";
+		return "/friend/view2";
+	}
+	
+	// 수정
+	@RequestMapping(value = "/modify/{fno}", method = RequestMethod.GET)
+	public String modify(@PathVariable String fno, Model model) {
+		FriendDTO friendDTO = friendService.modify(fno);
+		model.addAttribute("friendDTO", friendDTO);
+		
+		return "/friend/modify";
+	}
+	@RequestMapping(value = "/routeModify/{fno}", method = RequestMethod.GET)
+	public String routeModify(@PathVariable String fno, Model model) {
+		FriendDTO friendDTO = friendService.getView(fno);
+		
+		model.addAttribute("is_domestic", friendDTO.getIs_domestic());
+		model.addAttribute("fno", fno);
+		model.addAttribute("friendDateStart", friendDTO.getDateStart());
+		model.addAttribute("friendDateEnd", friendDTO.getDateEnd());
+		
+		return "/friend/routeModify";
 	}
 }

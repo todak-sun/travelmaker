@@ -1,11 +1,48 @@
+/**
+ * 
+ */
+
 $(function () {
-    //클래스
+	var token = $("meta[name='_csrf']").attr('content');
+    var header = $("meta[name='_csrf_header']").attr('content');
+    
+    let dataList = {};
+    let count = 0;
+	
+	$.ajax({
+    	type: 'post',
+    	url: '/friend/getRouteModify',
+    	data: {'fno' : $('#fno').val()},
+    	dataType: 'json',
+    	beforeSend: function (xhr) {
+            xhr.setRequestHeader(header, token);
+        },
+        success: function(data){
+        	console.log(data.responseText);
+
+        	dataList = routeDataList(data);
+        	
+        	$('#fcno').val(dataList.fcno[0]);
+        	$('#date-start').val(dataList.dateStart[0].substring(0, 10));
+        	$('#date-end').val(dataList.dateEnd[0].substring(0, 10));
+        	$('#input-search-place').val(dataList.city[0]);
+        	$('#content').val(dataList.content[0]);
+        	$('#lat').val(dataList.lat[0]);
+        	$('#lng').val(dataList.lng[0]);
+        	$('#city').val(dataList.city[0]);
+        },
+        error: function(error) {
+        	console.log(error);
+        }
+    });
+	
+    // 클래스
     const {getEl, addEvent} = new travelmaker.utils();
     const v = new travelmaker.validation();
     const modal = new travelmaker.modal('#modal');
     const t = new travelmaker.template();
 
-    //변수
+    // 변수
     const dateStart = getEl('#date-start');
     const dateEnd = getEl('#date-end');
     const btnSearchPlace = getEl('#btn-search-place');
@@ -21,8 +58,8 @@ $(function () {
     const friendDateEnd = getEl('#friendDateEnd');
     const isDomestic = +getEl('#is_domestic').value;
 
-    //다음 지도의 정보를 가지고 있는 함수.
-    //지도에서 특정 위치를 선택하면 값이 할당 됨.
+    // 다음 지도의 정보를 가지고 있는 함수.
+    // 지도에서 특정 위치를 선택하면 값이 할당 됨.
     let getMapData;
 
     addEvent(dateStart, 'blur', (e) => {
@@ -82,78 +119,39 @@ $(function () {
     });
 
     addEvent(btnCheck, 'click', () => {
-        if (
-            !dateStart.value ||
-            !dateEnd.value ||
-            !content.value ||
-            !inputSearchPlace.value
-        ) {
-            alert('내용을 입력 후 저장버튼을 눌러주세요.');
-        } else {
-        	var token = $("meta[name='_csrf']").attr('content');
-            var header = $("meta[name='_csrf_header']").attr('content');
-            
-        	$.ajax({
-	            type: 'post',
-	            url: '/friend/setRouteWrite',
-	            data: $('#routeWriteForm').serialize(),
-	            beforeSend: function (xhr) {
-	                xhr.setRequestHeader(header, token);
-	            },
-	            success: function () {
-		            alert('저장완료!');
-		            location.href = '/friend/list/1';
-	            },
-	            error: function (error) {
-	                console.log(error);
-	            }
-	        });
-        }
+    	alert('수정 완료!');
+        location.href = '/friend/view/' + $('#fno').val();
     });
 
     addEvent(btnCancel, 'click', () => {
         var result = confirm('정말로 취소하시겠습니까?');
-        var token = $("meta[name='_csrf']").attr('content');
-        var header = $("meta[name='_csrf_header']").attr('content');
 
-        if (!result) return;
         if (result) {
-            $.ajax({
-                type: 'post',
-                url: '/friend/cancelWrite',
-                data: {fno: $('#fno').val()},
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader(header, token);
-                },
-                success: function () {
-                    alert('취소하였습니다.');
-                    location.href = '/friend/list/1';
-                },
-                error: function (error) {
-                    console.log(error);
-                }
-            });
+        	alert('취소하였습니다.');
+            location.href = '/friend/view/' + $('#fno').val();
         }
     });
-
+    
     addEvent(btnNext, 'click', () => {
-        var token = $("meta[name='_csrf']").attr('content');
-        var header = $("meta[name='_csrf_header']").attr('content');
-
         if (!v.isValid(dateStart)) {
         	v.setInvalid(dateStart, v.getFeedBox(dateStart)[1], '시작일을 입력해주세요.');
         	return dateStart.focus();
-        } else if (!v.isValid(dateEnd)) {
+        } 
+        if (!v.isValid(dateEnd)) {
         	v.setInvalid(dateEnd, v.getFeedBox(dateEnd)[1], '종료일을 입력해주세요.');
         	return dateEnd.focus();
-        } else if(!v.isValid(content)) {
+        } 
+        if(!v.isValid(content)) {
         	v.setInvalid(content, v.getFeedBox(content)[1], '내용을 입력해주세요.');
         	return content.focus();
-        } else {
+        }
+
+        if(dataList.fcno.length >= count + 1) {
 	        $.ajax({
-	            type: 'post',
-	            url: '/friend/setRouteWrite',
-	            data: $('#routeWriteForm').serialize(),
+	            type: 'put',
+	            url: '/friend/setRouteModify',
+	            contentType: 'application/json',
+	            data: JSON.stringify(parseObjectFromForm(document.querySelector('#routeWriteForm'))),
 	            beforeSend: function (xhr) {
 	                xhr.setRequestHeader(header, token);
 	            },
@@ -215,19 +213,33 @@ $(function () {
 	                    )
 	                    .appendTo($('#resultDiv'));
 	                $('<br/>').appendTo($('#resultDiv'));
-	
-	                $('#date-start').val(null);
-	                $('#date-end').val(null);
-	                $('#input-search-place').val(null);
-	                $('#content').val(null);
-	                $('#lat').val(null);
-	                $('#lng').val(null);
-	                $('#city').val(null);
+	                
+	                count++;
+	                if(dataList.fcno.length >= count + 1) {
+			            $('#fcno').val(dataList.fcno[count]);
+			            $('#date-start').val(dataList.dateStart[count].substring(0, 10));
+			            $('#date-end').val(dataList.dateEnd[count].substring(0, 10));
+			            $('#input-search-place').val(dataList.city[count]);
+			            $('#content').val(dataList.content[count]);
+			            $('#lat').val(dataList.lat[count]);
+			            $('#lng').val(dataList.lng[count]);
+			            $('#city').val(dataList.city[count]);
+	                }
 	            },
 	            error: function (error) {
 	                console.log(error);
 	            }
 	        });
+        } else {
+        	alert('수정할 글이 없습니다.');
+        	
+            $('#date-start').val(null);
+            $('#date-end').val(null);
+            $('#input-search-place').val(null);
+            $('#content').val(null);
+            $('#lat').val(null);
+            $('#lng').val(null);
+            $('#city').val(null);
         }
     });
 
@@ -255,3 +267,33 @@ $(function () {
         inputSearchPlace.value = address + ' ' + placeName;
     }
 });
+
+function routeDataList(data) {
+	let dataList = {};
+	let keys = Object.keys(data[0]);
+	
+	keys.forEach((key) => {
+		dataList[key] = [];
+	});
+	data.forEach((d) => {
+		dataList.fno.push(d.fno);
+		dataList.fcno.push(d.fcno);
+		dataList.dateStart.push(d.dateStart);
+		dataList.dateEnd.push(d.dateEnd);
+		dataList.content.push(d.content);
+		dataList.city.push(d.city);
+		dataList.lat.push(d.lat);
+		dataList.lng.push(d.lng);
+		
+	});
+	return dataList;
+}
+
+function parseObjectFromForm(formEl){
+	let obj = {};
+	const valueList = formEl.querySelectorAll('[name]');
+	valueList.forEach(value =>{
+		obj[value.name] = value.value;
+	})
+	return obj;
+}
