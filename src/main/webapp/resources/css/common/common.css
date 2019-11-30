@@ -629,6 +629,7 @@ div[class$='feed'] {
     grid-row: 3/4;
     border: 2px solid gray;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }

@@ -17,6 +17,7 @@ $(function () {
     const myRegex = new travelmaker.regex();
     const v = new travelmaker.validation();
     const t = new travelmaker.template();
+    const h = new travelmaker.handler();
 
     // 알람 [ 용주형 여기 정리좀해주세요 ]
     // const alarmOnBtn = document.querySelector('#alarmOn');
@@ -76,6 +77,7 @@ $(function () {
                 const email2 = getEl('#email2');
                 const realname = getEl('#realname');
                 const btnSearch = getEl('#btn-search');
+                const messageBox = getEl('.message-box');
 
                 addEvent(email1, 'blur', function (e) {
                     checkValueValidation(e, '입력하세요!')
@@ -93,31 +95,21 @@ $(function () {
                     if (!v.isValid(email1)) return email1.focus();
                     if (!v.isValid(email2)) return email2.focus();
                     if (!v.isValid(realname)) return realname.focus();
-                    console.log('유효성 검사 모두 통과!');
 
-                    checkHasId({realname: realname.value, email1: email1.value, email2: email2.value})
+                    showLoading();
+                    ajax.checkHasId({realname: realname.value, email1: email1.value, email2: email2.value})
                         .then(ret => {
-
+                            messageBox.innerHTML = '';
+                            let $messageBox = $(messageBox);
+                            if (!ret.length) $messageBox.append(`<p>조회된 아이디가 없습니다.</p>`);
+                            else {
+                                $messageBox.append(`<p>총 ${ret.length}개의 아이디가 조회되었습니다.</p>`);
+                                ret.forEach(id => $messageBox.append(`<p>${id}</p>`));
+                            }
+                            closeLoading();
                         })
                         .catch(console.error);
                 });
-
-                function checkHasId(data) {
-                    return new Promise((resolve, reject) => {
-                        $.ajax({
-                            url: '',
-                            data: JSON.stringify(data),
-                            beforeSend: setRequestHeader,
-                            dataType: 'text',
-                            success: function (ret) {
-                                resolve()
-                            },
-                            error: function (err) {
-                                reject(err)
-                            }
-                        })
-                    });
-                }
             })
         });
 
@@ -134,6 +126,7 @@ $(function () {
                 const email1 = getEl('#email1');
                 const email2 = getEl('#email2');
                 const btnSend = getEl('#btn-send');
+                const messageBox = getEl('.message-box');
 
                 addEvent(id, 'blur', function (e) {
                     checkValueValidation(e, '아이디를 입력하세요!');
@@ -151,30 +144,17 @@ $(function () {
                     if (!v.isValid(id)) return id.focus();
                     if (!v.isValid(email1)) return email1.focus();
                     if (!v.isValid(email2)) return email2.focus();
-                    console.log('유효성 검사 모두 통과!!!');
-                    searchIdAndSendEmail({id: id.value, email1: email1.value, email2: email2.value})
+                    showLoading();
+                    ajax.searchIdAndSendEmail({id: id.value, email1: email1.value, email2: email2.value})
                         .then(ret => {
-
+                            messageBox.innerHTML = '';
+                            const $messageBox = $(messageBox);
+                            if (ret) $messageBox.append(`<p>가입하신 이메일로 임시 비밀번호를 전송했습니다.</p>`);
+                            else $messageBox.append(`<p>존재하지 않는 아이디 또는 가입시 입력한 이메일이 아닙니다.</p>`);
+                            closeLoading();
                         })
                         .catch(console.error);
                 });
-
-                function searchIdAndSendEmail(data) {
-                    return new Promise((resolve, reject) => {
-                        $.ajax({
-                            url: '',
-                            beforeSend: setRequestHeader,
-                            data: JSON.stringify(data),
-                            dataType: 'text',
-                            success: function (ret) {
-                                resolve(ret);
-                            },
-                            error: function (err) {
-                                reject(err);
-                            }
-                        })
-                    });
-                }
             })
         });
 
@@ -182,11 +162,11 @@ $(function () {
         mid.focus();
         addEvent(mid, 'blur', midBlurHandler);
         addEvent(pwd, 'blur', pwdBlurHandler);
-        addEvent(btnKa, 'click', loginKaHandler);
-        addEvent(btnNa, 'click', loginNaHandler);
-        addEvent(btnGo, 'click', loginGoHandler);
+        addEvent(btnKa, 'click', () => getEl('#kakao-login-btn').click());
+        addEvent(btnNa, 'click', () => getEl('#naverIdLogin_loginButton').click());
+        addEvent(btnGo, 'click', () => getEl('.abcRioButton').click());
         addEvent(btnLogin, 'click', btnLoginHandler);
-        addEvent(btnRegister, 'click', btnRegisterHandler);
+        addEvent(btnRegister, 'click', () => modal.create('register', initRegisterModal));
 
         function midBlurHandler(e) {
             const [vFeed, ivFeed] = v.getFeedBox(this);
@@ -203,30 +183,10 @@ $(function () {
         }
 
         function btnLoginHandler(e) {
-            if (!v.isValid(mid)) {
-                return mid.focus();
-            }
-            if (!v.isValid(pwd)) {
-                return pwd.focus();
-            }
+            if (!v.isValid(mid)) return mid.focus();
+            if (!v.isValid(pwd)) return pwd.focus();
             id.value = mid.value + '===travelMaker';
             document.loginForm.submit();
-        }
-
-        function btnRegisterHandler(e) {
-            modal.create('register', initRegisterModal);
-        }
-
-        function loginNaHandler(e) {
-            getEl('#naverIdLogin_loginButton').click();
-        }
-
-        function loginKaHandler(e) {
-            getEl('#kakao-login-btn').click();
-        }
-
-        function loginGoHandler(e) {
-            getEl('.abcRioButton').click();
         }
     }
 
@@ -239,10 +199,11 @@ $(function () {
         const customRadios = getElList('.radio-wrap label');
 
         addEvent(checkAll, 'click', checkAllHandler);
-        addAllSameEvent(customRadios, 'click', customRadioHandler);
+        addAllSameEvent(customRadios, 'click', h.customRadioHandler.bind(null, customRadios));
         addAllSameEvent(checkBoxes, 'click', checkBoxHandler);
 
         const realname = getEl('#realname');
+        const nickname = getEl('#nickname');
         const registerId = getEl('#register-id');
         const registerPassword = getEl('#register-password');
         const registerRepassword = getEl('#register-repassword');
@@ -258,79 +219,36 @@ $(function () {
         addEvent(realname, 'input', v.resetValidClass);
         addEvent(registerId, 'blur', registerIdHandler);
         addEvent(registerId, 'input', v.resetValidClass);
+        addEvent(nickname, 'blur', nicknameHandler);
+        addEvent(nickname, 'input', v.resetValidClass);
         addEvent(registerPassword, 'blur', registerPasswordHandler);
         addEvent(registerPassword, 'input', v.resetValidClass);
         addEvent(registerPassword, 'change', passwordChangeHandler);
         addEvent(registerRepassword, 'blur', registerRepasswordHandler);
         addEvent(btnUserRegister, 'click', btnUserHandler);
-        addEvent(phone1, 'blur', phoneHandler);
-        addEvent(phone2, 'blur', phoneHandler);
-        addEvent(phone3, 'blur', phoneHandler);
-        addEvent(email1, 'blur', emailHandler);
-        addEvent(email2, 'blur', emailHandler);
+        addEvent(phone1, 'blur', h.phoneHandler);
+        addEvent(phone2, 'blur', h.phoneHandler);
+        addEvent(phone3, 'blur', h.phoneHandler);
+        addEvent(email1, 'blur', h.emailHandler);
+        addEvent(email2, 'blur', h.emailHandler);
         addEvent(email1, 'change', emailChangeHandler);
         addEvent(email2, 'change', emailChangeHandler);
         addEvent(btnEmailCheck, 'click', emailCheckHandler);
 
-        // //여기부터
+
         function emailCheckHandler() {
             if (!v.isValid(email1)) return email1.focus();
             if (!v.isValid(email2)) return email2.focus();
 
-            sendEmailCode()
-                .then((emailCode) => {
-                    miniModal.createMini(t.emailConfirm(), (e) => {
-                        const emailConfirm = getEl('#input-email-confirm'); // 인증번호
-                        const btnConfirm = getEl('#btn-email-confirm'); // 버튼
-
-                        const timer = getEl('.timer');
-                        const close = miniModal.m.querySelector('.close');
-
-                        timerStart(180, timer, () => close.click());
-
-                        addEvent(emailConfirm, 'keyup', (e) => {
-                            if (e.keyCode === 13) btnConfirm.click();
-                        });
-
-                        addEvent(btnConfirm, 'click', () => {
-                            const [vFeed, ivFeed] = v.getFeedBox(emailConfirm);
-                            if (emailConfirm.value !== emailCode) {
-                                v.setInvalid(emailConfirm, ivFeed, '발송한 인증코드와 불일치 합니다. 다시 확인해주세요.');
-                                emailConfirm.value = '';
-                                emailConfirm.focus();
-                            } else {
-                                close.click();
-                                btnEmailCheck.innerText = '완료';
-                                v.changeValid(btnEmailCheck);
-                            }
-                        });
-                    });
+            showLoading();
+            ajax.sendEmailCode(email1.value, email2.value)
+                .then((ret) => {
+                    closeLoading();
+                    miniModal.createMini(t.emailConfirm(), h.initEmailConfirmModal.bind(null, btnEmailCheck, ret.emailCode, email1, email2));
                 })
                 .catch((error) => console.log('에러가 났네 ~_~', error));
         }
 
-        function sendEmailCode() {
-            return new Promise((resolve, reject) => {
-                showLoading();
-                $.ajax({
-                    type: 'post',
-                    url: '/user/emailCode',
-                    data: 'email1=' + email1.value + '&email2=' + email2.value,
-                    dataType: 'JSON',
-                    beforeSend: setRequestHeader,
-                    success: function (result) {
-                        closeLoading();
-                        resolve(result.emailCode);
-                    },
-                    error: function (error) {
-                        closeLoading();
-                        reject(error)
-                    }
-                });
-            });
-        }
-
-        // //여기까지 이메일 코드
         function timerStart(sec, timer, callbackFunc) {
             let restTime = sec;
             const start = setInterval(function () {
@@ -355,11 +273,6 @@ $(function () {
                 v.changeInvalid(btnEmailCheck);
                 btnEmailCheck.innerText = '인증';
             }
-        }
-
-        function customRadioHandler(e) {
-            customRadios.forEach((radio) => radio.classList.remove('clicked'));
-            this.classList.add('clicked');
         }
 
         function registerIdHandler(e) {
@@ -399,30 +312,17 @@ $(function () {
             checkAll.checked = getElList('.checkbox:checked').length === 2;
         }
 
-        function phoneHandler(e) {
-            const regex = myRegex.number;
+        function nicknameHandler(e) {
+            let regex = myRegex.nickname;
             const [vFeed, ivFeed] = v.getFeedBox(this);
-            if (!this.value)
-                return v.setInvalid(this, ivFeed, '휴대폰번호를 입력해주세요.');
-            if (!regex.test(this.value))
-                return v.setInvalid(
-                    this,
-                    ivFeed,
-                    '숫자가 아닌 값은 입력할 수 없습니다.'
-                );
-            v.changeValid(this);
-        }
-
-        function emailHandler(e) {
-            let regex;
-            if (e.target.name === 'email1') regex = myRegex.englishAndNumber;
-            if (e.target.name === 'email2') regex = myRegex.englishWithPoint;
-            const [vFeed, ivFeed] = v.getFeedBox(this);
-            const value = e.target.value;
-            if (!value) return v.setInvalid(this, ivFeed, '이메일을 입력해주세요.');
-            if (!regex.test(value))
-                return v.setInvalid(e, ivFeed, '정확한 이메일을 입력해주세요.');
-            v.changeValid(this);
+            if (!this.value) return v.setInvalid(this, ivFeed, '닉네임을 입력해주세요.');
+            if (!regex.test(this.value)) return v.setInvalid(this, ivFeed, '한글 최대 10자, 영문 20자로 한글, 영문, 숫자만 사용 가능합니다.');
+            ajax.checkNickname(this.value)
+                .then(ret => {
+                    if (ret === 'exist') return v.setInvalid(e.target, ivFeed, '이미 존재하는 닉네임입니다. 다시 입력해주세요.');
+                    if (ret === 'not_exist') return v.setValid(e.target, vFeed, '사용 가능한 닉네임입니다.');
+                })
+                .catch(console.error);
         }
 
         function realnameHandler(e) {
@@ -617,3 +517,4 @@ function logoutSubmit() {
 
 function alarm() {
 }
+

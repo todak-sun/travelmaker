@@ -1,16 +1,15 @@
 package com.travelmaker.route.service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.travelmaker.route.dao.RouteDAO;
 import com.travelmaker.route.domain.RouteContentDTO;
 import com.travelmaker.route.domain.RouteDTO;
 import com.travelmaker.route.domain.RouteImageDTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service(value = "routeService")
 public class RouteServiceImpl implements RouteService {
@@ -83,5 +82,10 @@ public class RouteServiceImpl implements RouteService {
 	public void updateViews(int rno) {
 		routeDAO.updateViews(rno);
 	}
-	
+
+	@Override
+	public List<RouteDTO> getRouteListByUserSeq(int seq) {
+		return routeDAO.getRouteListByUserSeq(seq);
+	}
+
 }

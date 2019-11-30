@@ -11,8 +11,6 @@ public interface EssayApiInterface<Request, Response> {
 
     String upload(int rno, Request request);
 
-    Header<List<Response>> readAll();
-
     Header<List<Response>> readAll(EssaySearchFilter essaySearchFilter);
 
     Header<Response> readOne(int rno);

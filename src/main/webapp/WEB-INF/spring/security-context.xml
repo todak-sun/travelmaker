@@ -11,8 +11,8 @@
 
 	<http auto-config='true' use-expressions="true">
 		<intercept-url pattern="user/login" access="permitAll" />
-		<intercept-url pattern="/resources/**"
-			access="permitAll" />
+		<intercept-url pattern="/resources/**"	access="permitAll" />
+		<intercept-url pattern="/mypage" access="isAuthenticated()"/>
 
 		<!-- <intercept-url pattern="/**" access="hasRole('ROLE_USER')" /> -->
 
