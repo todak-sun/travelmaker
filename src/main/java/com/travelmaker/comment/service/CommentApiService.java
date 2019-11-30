@@ -98,6 +98,7 @@ public class CommentApiService implements CommentApiInterface<CommentApiRequest,
         List<CommentApiResponse> commentApiResponseList = new ArrayList<>();
         commentDTOList.forEach((commentDTO) -> {
             CommentApiResponse essayApiResponse = CommentApiResponse.builder()
+<<<<<<< Updated upstream
                     .cno(commentDTO.getCno())
                     .pcno(commentDTO.getPcno())
                     .bno(commentDTO.getBno())
@@ -107,6 +108,16 @@ public class CommentApiService implements CommentApiInterface<CommentApiRequest,
                     .dateWrite(commentDTO.getDateWrite())
                     .content(commentDTO.getContent())
                     .userDTO(userDAO.getUserDTO(commentDTO.getSeq()))
+=======
+                    .cno(essayDTO.getCno())
+                    .pcno(essayDTO.getPcno())
+                    .bno(essayDTO.getBno())
+                    .seq(essayDTO.getSeq())
+                    .likes(essayDTO.getLikes())
+                    .unlikes(essayDTO.getUnlikes())
+                    .dateWrite(essayDTO.getDateWrite())
+                    .content(essayDTO.getContent())
+>>>>>>> Stashed changes
                     .build();
             commentApiResponseList.add(essayApiResponse);
         });

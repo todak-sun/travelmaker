@@ -10,8 +10,8 @@ $('#title').focusout(function(){
 		titleDiv.empty();
 	}
 });
-$('#date_start').focusout(function(){
-	var date_start = $('#date_start').val();
+$('#dateStart').focusout(function(){
+	var date_start = $('#dateStart').val();
 	var date_startDiv = $('#date_startDiv');
 	
 	if(date_start == '') {
@@ -21,8 +21,8 @@ $('#date_start').focusout(function(){
 		date_startDiv.empty();
 	}
 });
-$('#date_end').focusout(function(){
-	var date_end = $('#date_end').val();
+$('#dateEnd').focusout(function(){
+	var date_end = $('#dateEnd').val();
 	var date_endDiv = $('#date_endDiv');
 	
 	if(date_end == '') {
@@ -35,8 +35,8 @@ $('#date_end').focusout(function(){
 
 $('#nextBtn').click(function() {
 	var title = $('#title').val();
-	var date_start = $('#date_start').val();
-	var date_end = $('#date_end').val();
+	var date_start = $('#dateStart').val();
+	var date_end = $('#dateEnd').val();
 	
 	var titleDiv = $('#titleDiv');
 	var date_startDiv = $('#date_startDiv');

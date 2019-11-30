@@ -1,14 +1,19 @@
 package com.travelmaker.store.controller;
 
+<<<<<<< Updated upstream
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+=======
+import java.util.List;
+>>>>>>> Stashed changes
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+<<<<<<< Updated upstream
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,6 +22,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.travelmaker.store.domain.StoreHotelDTO;
 import com.travelmaker.store.domain.StoreHotelPaging;
+=======
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.travelmaker.store.domain.StoreHotelDTO;
+>>>>>>> Stashed changes
 import com.travelmaker.store.service.StoreService;
 
 @RestController
@@ -25,6 +36,7 @@ public class StoreApiController {
 	
 	@Autowired
 	StoreService storeService;
+<<<<<<< Updated upstream
 	@Autowired
 	StoreHotelPaging storeHotelPaging;
 	
@@ -65,6 +77,22 @@ public class StoreApiController {
 		hnb = arr[1];
 		System.out.println(hnb);
 		
+=======
+	
+	// Store 전체 리스트
+	@PostMapping(path = "/getHotelList", produces = "application/json")
+	public ResponseEntity<List<StoreHotelDTO>> getHotelList() {
+		List<StoreHotelDTO> list = storeService.getHotelList();
+		
+		if(list == null) {
+			return new ResponseEntity<List<StoreHotelDTO>>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<List<StoreHotelDTO>>(list, HttpStatus.OK);
+	}
+	// Store View
+	@PostMapping(value = "/getHotelView/{hnb}", produces = "application/json")
+	public ResponseEntity<StoreHotelDTO> getHotelView(@PathVariable String hnb){
+>>>>>>> Stashed changes
 		StoreHotelDTO storeHotelDTO = storeService.getHotelView(hnb);
 		
 		if(storeHotelDTO == null) {

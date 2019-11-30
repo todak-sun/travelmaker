@@ -32,9 +32,11 @@ function loginBtnDraw() {
 
 $(function() {
 	var seq = $('#alarmOff').data('seq');
-	console.log(seq);
 	
-	alarmDataload(seq);
+	if(seq>0){ // 로그인 되어있으면 알람 로드
+		alarmDataload(seq);
+	}
+  
   initJsFile(); // 처음화면 로드
   //클래스 임포트
   const template = new travelmaker.template(); //템플릿 모아둔 곳.
@@ -57,13 +59,50 @@ $(function() {
   const btnWrite = document.querySelector('#btn-write');
   const btnLogin = document.querySelector('#btn-login');
   const btnRegist = document.querySelector('#btn-regist');
+<<<<<<< Updated upstream
   const csrfTokenName = document.getElementById('csrfTokenName').value;
   const csrfTokenValue = document.getElementById('csrfTokenValue').value;
 
   if (btnLogin) btnLogin.addEventListener('click', createModalHandler);
   if (btnRegist) btnRegist.addEventListener('click', createModalHandler);
   if (btnWrite) btnWrite.addEventListener('click', createModalHandler);
+=======
+<<<<<<< HEAD
+  const idpwdSearch = document.querySelector('#idpwdSearch');
+  const alarmOnBtn = document.querySelector('#alarmOn');
+  const alarmOffBtn = document.querySelector('#alarmOff');
+  
+  var csrfTokenName = document.getElementById('csrfTokenName').value;
+  var csrfTokenValue = document.getElementById('csrfTokenValue').value;
 
+  btnWrite.addEventListener('click', createModalHandler);
+  
+  if(alarmOnBtn!=null){
+	  alarmOnBtn.addEventListener('click',alarmBtnHandler);
+  }
+  if(alarmOffBtn!=null){
+	  alarmOffBtn.addEventListener('click',alarmBtnHandler);
+  }
+  if (btnLogin != null) {
+    btnLogin.addEventListener('click', createModalHandler);
+  }
+  if (btnRegist != null) {
+    btnRegist.addEventListener('click', createModalHandler);
+  }
+=======
+  const csrfTokenName = document.getElementById('csrfTokenName').value;
+  const csrfTokenValue = document.getElementById('csrfTokenValue').value;
+>>>>>>> Stashed changes
+
+  if (btnLogin) btnLogin.addEventListener('click', createModalHandler);
+  if (btnRegist) btnRegist.addEventListener('click', createModalHandler);
+  if (btnWrite) btnWrite.addEventListener('click', createModalHandler);
+>>>>>>> 3fb8553d71ee68629160b3597a957197aa8473a1
+
+  function alarmBtnHandler(){
+		$('#alarmDisplay').show();
+  }
+  
   // 모달 생성 담당 핸들러
   function createModalHandler(e) {
     let [title, body, initFunction] = setTitleAndBody(e.target.id);

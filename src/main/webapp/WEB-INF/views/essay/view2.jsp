@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<<<<<<< Updated upstream
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -86,3 +87,13 @@
 <%--                        </div>--%>
 <%--                    </div>--%>
 <%--                </li>--%>
+=======
+<html>
+<head>
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html>
+>>>>>>> Stashed changes

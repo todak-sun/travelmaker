@@ -16,8 +16,11 @@
             <div class="hidden">
                 <input type="hidden" name="is_domestic" id="is_domestic" value="${is_domestic}">
                 <input type="hidden" name="fno" value="${fno}">
+<<<<<<< Updated upstream
                 <input type="hidden" name="friendDateStart" id="friendDateStart" value="${friendDateStart }">
                 <input type="hidden" name="friendDateEnd" id="friendDateEnd" value="${friendDateEnd }">
+=======
+>>>>>>> Stashed changes
                 <input type="hidden" name="lat" id="lat">
                 <input type="hidden" name="lng" id="lng">
                 <input type="hidden" name="city" id="city">
@@ -63,7 +66,11 @@
         <div id="resultDiv"></div>
     </div>
 </div>
+<<<<<<< Updated upstream
 <%@include file="../common/footer.jsp"%>
+=======
+<!-- 메인 컨텐츠 영역 -->
+>>>>>>> Stashed changes
 <%@include file="../common/editor-js.jsp" %>
 <script src="${pageContext.request.contextPath}/resources/js/friend/routeWrite2.js"></script>
 </body>

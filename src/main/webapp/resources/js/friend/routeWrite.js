@@ -18,8 +18,8 @@ $(function(){
 	}
 });
 
-$('#date_start').focusout(function(){
-	var date_start = $('#date_start').val();
+$('#dateStart').focusout(function(){
+	var date_start = $('#dateStart').val();
 	var date_startDiv = $('#date_startDiv');
 	
 	if(date_start == '') {
@@ -29,8 +29,8 @@ $('#date_start').focusout(function(){
 		date_startDiv.empty();
 	}
 });
-$('#date_end').focusout(function(){
-	var date_end = $('#date_end').val();
+$('#dateEnd').focusout(function(){
+	var date_end = $('#dateEnd').val();
 	var date_endDiv = $('#date_endDiv');
 	
 	if(date_end == '') {
@@ -53,8 +53,8 @@ $('#context').focusout(function(){
 });
 
 $('#nextBtn').click(function(){
-	var date_start = $('#date_start').val();
-	var date_end = $('#date_end').val();
+	var date_start = $('#dateStart').val();
+	var date_end = $('#dateEnd').val();
 	var content = $('#content').val();
 	var lat = $('#lat').val();
 	var lng = $('#lng').val();
@@ -65,9 +65,9 @@ $('#nextBtn').click(function(){
 	var contentDiv = $('#contentDiv');
 	var searchPlaceDiv = $('#searchPlaceDiv');
 	
-	if(date_start == '') {
+	if(dateStart == '') {
 		date_startDiv.css('font-size', '12px').css('font-style', 'bold').css('color', 'red').text('방문시작날짜를 입력해주세요.');
-	} else if(date_end == '') {
+	} else if(dateEnd == '') {
 		date_endDiv.css('font-size', '12px').css('font-style', 'bold').css('color', 'red').text('방문종료날짜를 입력해주세요.');
 	} else if(content == '') {
 		contentDiv.css('font-size', '12px').css('font-style', 'bold').css('color', 'red').text('내용을 입력해주세요.');
@@ -91,11 +91,11 @@ $('#nextBtn').click(function(){
 				}).append($('<tr/>').append($('<th/>', {
 					text: '방문시작날짜'
 				})).append($('<td/>', {
-					text: $('#date_start').val()
+					text: $('#dateStart').val()
 				}))).append($('<tr/>').append($('<th/>', {
 					text: '방문종료날짜'
 				})).append($('<td/>', {
-					text: $('#date_end').val()
+					text: $('#dateEnd').val()
 				}))).append($('<tr/>').append($('<th/>', {
 					text: '방문 도시'
 				})).append($('<td/>', {
@@ -108,8 +108,8 @@ $('#nextBtn').click(function(){
 				
 				$('<br/>').appendTo($('#resultDiv'));
 				
-				$('#date_start').val(null);
-				$('#date_end').val(null);
+				$('#dateStart').val(null);
+				$('#dateEnd').val(null);
 				$('#searchPlace').val(null);
 				$('#content').val(null);
 				$('#lat').val(null);
@@ -149,9 +149,9 @@ $('#cancelBtn').click(function(){
 });
 
 $('#checkBtn').click(function(){
-	if($('#date_start').val() != '' || $('#date_end').val() != '' || $('#content').val() != '' || $('#searchPlace').val() != '' || $('#lat').val() != '' || $('#lng').val() != '' || $('#city').val() != '') {
+	if($('#dateStart').val() != '' || $('#dateEnd').val() != '' || $('#content').val() != '' || $('#searchPlace').val() != '' || $('#lat').val() != '' || $('#lng').val() != '' || $('#city').val() != '') {
 		alert('다음 버튼을 누른 후 저장을 눌러주세요.');
-	} else if($('#date_start').val() == '' || $('#date_end').val() == '' || $('#content').val() == '' || $('#searchPlace').val() == '' || $('#lat').val() == '' || $('#lng').val() == '' || $('#city').val() == '') {
+	} else if($('#dateStart').val() == '' || $('#dateEnd').val() == '' || $('#content').val() == '' || $('#searchPlace').val() == '' || $('#lat').val() == '' || $('#lng').val() == '' || $('#city').val() == '') {
 		var result = confirm('정말로 저장하시겠습니까?');
 		
 		if(result) {

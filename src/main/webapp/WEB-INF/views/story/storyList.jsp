@@ -354,7 +354,11 @@
     </section>
 </div>
 <!-- 메인 컨텐츠 영역 -->
+<<<<<<< Updated upstream
 <%@include file="../common/footer.jsp"%>
+=======
+
+>>>>>>> Stashed changes
 <%@include file="../common/foot-js.jsp" %>
 <script src="${pageContext.request.contextPath}/resources/js/story/story2.js"></script>
 </body>

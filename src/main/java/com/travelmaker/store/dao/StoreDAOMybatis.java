@@ -1,7 +1,10 @@
 package com.travelmaker.store.dao;
 
 import java.util.List;
+<<<<<<< Updated upstream
 import java.util.Map;
+=======
+>>>>>>> Stashed changes
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +22,7 @@ public class StoreDAOMybatis implements StoreDAO {
 	private SqlSession sqlSession;
 	
 	@Override
+<<<<<<< Updated upstream
 	public List<StoreHotelDTO> getHotelList(Map<String, Integer> map) {
 		return sqlSession.selectList("storeSQL.getHotelList", map);
 	}
@@ -36,6 +40,20 @@ public class StoreDAOMybatis implements StoreDAO {
 		
 		storeHotelDTO.setImgList(imgList);
 		storeHotelDTO.setRoomList(roomList);
+=======
+	public List<StoreHotelDTO> getHotelList() {
+		return sqlSession.selectList("storeSQL.getHotelList");
+	}
+
+	@Override
+	public StoreHotelDTO getHotelView(String hnb) {
+		StoreHotelDTO storeHotelDTO = sqlSession.selectOne("storeSQL.getHotelView", Integer.parseInt(hnb));
+		List<StoreHotelImageDTO> img_list = sqlSession.selectList("storeSQL.getHotelImageView", Integer.parseInt(hnb));
+		List<StoreHotelRoomDTO> room_list = sqlSession.selectList("storeSQL.getHotelRoomView", Integer.parseInt(hnb));
+		
+		storeHotelDTO.setImg_list(img_list);
+		storeHotelDTO.setRoom_list(room_list);
+>>>>>>> Stashed changes
 		
 		return storeHotelDTO;
 	}

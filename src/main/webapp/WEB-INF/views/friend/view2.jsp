@@ -1,7 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
+<<<<<<< Updated upstream
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+=======
+>>>>>>> Stashed changes
 <html>
 <head>
 <%@include file="../common/head-meta.jsp"%>
@@ -39,6 +42,7 @@
 		<div class="map-wrap">
 			<div id="map"></div>
 		</div>
+<<<<<<< Updated upstream
 		
 		<c:if test="${userDetail.seq eq friendDTO.seq}">
 			<button type="button" id="btn-modify" onclick="goModify(${friendDTO.fno})">수정</button>
@@ -77,12 +81,22 @@
 						</div>
 					</li>
 				</c:forEach>
+=======
+
+		<div class="content-wrap">
+			<ul class="content-group">
+
+>>>>>>> Stashed changes
 			</ul>
 		</div>
 	</div>
 	<!-- 메인 컨텐츠 영역 -->
 
+<<<<<<< Updated upstream
 	<%-- <sec:authorize access="hasRole('ROLE_USER') and isAuthenticated()">
+=======
+	<sec:authorize access="hasRole('ROLE_USER') and isAuthenticated()">
+>>>>>>> Stashed changes
 		<!-- 동행 신청서 Modal -->
 		<div id="requestWriteModal" style="display: none;">
 			<!-- 형 여기 모달 해석 불가능해서 일단 디스플레이 논 때려놨어용 -->
@@ -97,7 +111,11 @@
 					<form id="requestForm" action="">
 						<input type="hidden" name="fcno" id="fcno"> <input
 							type="hidden" name="seq" id="seq" value="${userDetail.seq }">
+<<<<<<< Updated upstream
 						<input type="hidden" name="id" id="id" value="${userDetail.id }">
+=======
+						<%-- <input type="hidden" name="id" id="id" value="${userDetail.id }"> --%>
+>>>>>>> Stashed changes
 						<table class="table">
 							<tr>
 								<td>동행 시작일</td>
@@ -128,8 +146,13 @@
 			<!-- </div> -->
 
 		</div>
+<<<<<<< Updated upstream
 	</sec:authorize> --%>
 	<%@include file="../common/footer.jsp"%>
+=======
+	</sec:authorize>
+
+>>>>>>> Stashed changes
 	<%@include file="../common/foot-js.jsp"%>
 	<!-- Google Map -->
 	<script

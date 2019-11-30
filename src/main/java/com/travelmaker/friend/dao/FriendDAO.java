@@ -24,6 +24,7 @@ public interface FriendDAO {
 	public List<FriendRequestDTO> getRequestView(String fcno);
 
 	public void setRequestWrite(FriendRequestDTO friendRequestDTO);
+	
 	public FriendRequestDTO getFriendRequestDTO(int data);
 
 	public FriendRouteDTO getFriendRouteDTO(int fcno);

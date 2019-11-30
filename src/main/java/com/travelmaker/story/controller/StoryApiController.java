@@ -21,6 +21,7 @@ public class StoryApiController {
 	StoryService storyService;
 
 	@GetMapping(path = {"/{start}/{end}/{keyword}","/{start}/{end}"})
+<<<<<<< Updated upstream
 	public List<StoryDTO> getList(@PathVariable int start, @PathVariable int end, @PathVariable Optional<String> keyword) {
 		
 		StorySearchFilter storySearchFilter = new StorySearchFilter();
@@ -32,6 +33,15 @@ public class StoryApiController {
 		System.out.println("end : "+end);
 		System.out.println("keyword : "+keyword);
 
+=======
+	public List<StoryDTO> getKeywordList(@PathVariable int start, @PathVariable int end, @PathVariable Optional<String> keyword) {
+
+		StorySearchFilter storySearchFilter = new StorySearchFilter();
+		storySearchFilter.setStart(start);
+		storySearchFilter.setEnd(end+1);
+		storySearchFilter.setKeyword(keyword.isPresent() ? keyword.get() : "");
+		
+>>>>>>> Stashed changes
 		List<StoryDTO> list = storyService.getStory(storySearchFilter);
 		System.out.println("가져온게시글 수 : "+list.size());
 		return list;

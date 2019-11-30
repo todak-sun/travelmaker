@@ -2,6 +2,7 @@ $(function () {
     Kakao.init('551e0a44c2899be91bf29306234db441');
 
     // 클래스 활용
+<<<<<<< Updated upstream
     const {
         getEl,
         getElList,
@@ -46,6 +47,35 @@ $(function () {
     const seq = getEl('#seq');
 
     //배열형
+=======
+    const {getEl, getElList, addAllSameEvent, addEvent, getRegisterMethod} = new travelmaker.utils();
+    const modal = new travelmaker.modal('#modal');
+    const v = new travelmaker.validation();
+    const t = new travelmaker.template();
+    const myRegex = new travelmaker.regex();
+    
+    // 알람 [ 용주형 여기 정리좀해주세요 ]
+    const alarmOnBtn = document.querySelector('#alarmOn');
+    const alarmOffBtn = document.querySelector('#alarmOff');
+    
+    var seq = $('#alarmOff').data('seq');
+    console.log(seq);
+    
+    if(seq>0){ // 로그인 되어있으면 알람 로드
+		alarmDataload(seq);
+	}
+    if(alarmOnBtn!=null){
+  	  alarmOnBtn.addEventListener('click',alarmBtnHandler);
+    }
+    if(alarmOffBtn!=null){
+  	  alarmOffBtn.addEventListener('click',alarmBtnHandler);
+    }
+    function alarmBtnHandler(){
+		$('#alarmDisplay').show();
+  }
+    
+    // 배열형
+>>>>>>> Stashed changes
     const btnLoginList = getElList('.btn-login');
     addAllSameEvent(btnLoginList, 'click', loginModalHandler);
 
@@ -54,7 +84,10 @@ $(function () {
         modal.create('login', initLoginModal);
     }
 
+<<<<<<< Updated upstream
     //로그인
+=======
+>>>>>>> Stashed changes
     function initLoginModal() {
         const id = getEl('#id');
         const mid = getEl('#mid');
@@ -66,6 +99,7 @@ $(function () {
         const btnLogin = getEl('#btn-login');
         const btnRegister = getEl('.btn-register');
 
+<<<<<<< Updated upstream
         const linkIdSearch = getEl('.link-id-search');
         const linkPasswordSearch = getEl('.link-password-search');
 
@@ -178,6 +212,8 @@ $(function () {
             })
         });
 
+=======
+>>>>>>> Stashed changes
         initApiLogin();
         mid.focus();
         addEvent(mid, 'blur', midBlurHandler);
@@ -187,18 +223,30 @@ $(function () {
         addEvent(btnGo, 'click', loginGoHandler);
         addEvent(btnLogin, 'click', btnLoginHandler);
         addEvent(btnRegister, 'click', btnRegisterHandler);
+<<<<<<< Updated upstream
 
         function midBlurHandler(e) {
             const [vFeed, ivFeed] = v.getFeedBox(this);
             if (!this.value)
                 return v.setInvalid(this, ivFeed, '아이디를 입력하세요.');
+=======
+        
+        
+        function midBlurHandler(e) {
+            const [vFeed, ivFeed] = v.getFeedBox(this);
+            if (!this.value) return v.setInvalid(this, ivFeed, '아이디를 입력하세요.');
+>>>>>>> Stashed changes
             v.changeValid(this);
         }
 
         function pwdBlurHandler(e) {
             const [vFeed, ivFeed] = v.getFeedBox(this);
+<<<<<<< Updated upstream
             if (!this.value)
                 return v.setInvalid(this, ivFeed, '비밀번호를 입력해주세요.');
+=======
+            if (!this.value) return v.setInvalid(this, ivFeed, '비밀번호를 입력해주세요.');
+>>>>>>> Stashed changes
             v.changeValid(this);
         }
 
@@ -228,7 +276,11 @@ $(function () {
         function loginGoHandler(e) {
             getEl('.abcRioButton').click();
         }
+<<<<<<< Updated upstream
     }
+=======
+    };
+>>>>>>> Stashed changes
 
     function initRegisterModal() {
         // 미니모달
@@ -281,15 +333,28 @@ $(function () {
                 .then((emailCode) => {
                     miniModal.createMini(t.emailConfirm(), (e) => {
                         const emailConfirm = getEl('#input-email-confirm'); // 인증번호
+<<<<<<< Updated upstream
+=======
+																			// 입력받는
+																			// 칸
+>>>>>>> Stashed changes
                         const btnConfirm = getEl('#btn-email-confirm'); // 버튼
 
                         const timer = getEl('.timer');
                         const close = miniModal.m.querySelector('.close');
 
+<<<<<<< Updated upstream
                         timerStart(180, timer, () => close.click());
 
                         addEvent(emailConfirm, 'keyup', (e) => {
                             if (e.keyCode === 13) btnConfirm.click();
+=======
+                        timerStart(10, timer, () => close.click());
+
+                        addEvent(emailConfirm, 'keyup', (e) => { // 엔터키 치면
+																	// 확인함.
+                            if (e.keyCode === 13) btnConfirm.click()
+>>>>>>> Stashed changes
                         });
 
                         addEvent(btnConfirm, 'click', () => {
@@ -305,12 +370,17 @@ $(function () {
                             }
                         });
                     });
+<<<<<<< Updated upstream
                 })
                 .catch((error) => console.log('에러가 났네 ~_~', error));
+=======
+                }).catch((error) => console.log('에러가 났네 ~_~', error));
+>>>>>>> Stashed changes
         }
 
         function sendEmailCode() {
             return new Promise((resolve, reject) => {
+<<<<<<< Updated upstream
                 showLoading();
                 $.ajax({
                     type: 'post',
@@ -333,6 +403,35 @@ $(function () {
         // //여기까지 이메일 코드
         function timerStart(sec, timer, callbackFunc) {
             let restTime = sec;
+=======
+                // 사용자에게 이메일 코드를 발급하고, 발급된 이메일 코드를 resolve의 파라미터로 전달할 것.
+                // 대충 아래 주석형태로 구현하면 될듯.
+
+                // $.ajax({
+                // url:'어쩌구저쩌꾸',
+                // ~~~
+                // success:function(result){ <= 이 result 또는 result의 내부 값이 이메일
+				// 코드여야 함.
+                // resolve(result);
+                // },
+                // error:function(error){
+                // reject(error)
+                // }
+                // });
+
+                // 이건 돌아가는 형태 보여주려고 하드코딩한 이메일코드 값.
+                let emailCode = '12345';
+                resolve(emailCode);
+            })
+        }
+
+        // //여기까지 이메일 코드
+
+        function timerStart(sec, timer, callbackFunc) {
+            alert(`딱 ${sec}초 준다.`);
+            let restTime = sec;
+
+>>>>>>> Stashed changes
             const start = setInterval(function () {
                 restTime -= 1;
                 if (restTime < 0) return timerEnd();
@@ -346,8 +445,11 @@ $(function () {
                 alert('시간이 초과되었습니다. 다시 시도해주세요.');
                 if (callbackFunc) callbackFunc();
             }
+<<<<<<< Updated upstream
 
             return timerEnd;
+=======
+>>>>>>> Stashed changes
         }
 
         function emailChangeHandler(e) {
@@ -367,6 +469,7 @@ $(function () {
             const id = this.value;
             const [vFeed, ivFeed] = v.getFeedBox(this);
             if (!id) return v.setInvalid(this, ivFeed, '아이디를 입력해주세요.');
+<<<<<<< Updated upstream
             if (!regex.test(id))
                 return v.setInvalid(
                     this,
@@ -383,6 +486,14 @@ $(function () {
                             ivFeed,
                             '이미 사용중인 아이디입니다. 다시 입력해주세요.'
                         );
+=======
+            if (!regex.test(id)) return v.setInvalid(this, ivFeed, '아이디는 이메일 형식으로 입력해주세요.');
+
+            new travelmaker.ajax().checkId({id: id, registerMethod: getRegisterMethod()})
+                .then((ret) => {
+                    if (ret === 'exist') {
+                        return v.setInvalid(registerId, ivFeed, '이미 사용중인 아이디입니다. 다시 입력해주세요.');
+>>>>>>> Stashed changes
                     }
                     return v.setValid(registerId, vFeed, '사용 가능한 아이디 입니다.');
                 })
@@ -390,8 +501,12 @@ $(function () {
         }
 
         function checkAllHandler(e) {
+<<<<<<< Updated upstream
             if (this.checked)
                 checkBoxes.forEach((checkBox) => (checkBox.checked = true));
+=======
+            if (this.checked) checkBoxes.forEach((checkBox) => (checkBox.checked = true));
+>>>>>>> Stashed changes
             else checkBoxes.forEach((checkBox) => (checkBox.checked = false));
         }
 
@@ -402,6 +517,7 @@ $(function () {
         function phoneHandler(e) {
             const regex = myRegex.number;
             const [vFeed, ivFeed] = v.getFeedBox(this);
+<<<<<<< Updated upstream
             if (!this.value)
                 return v.setInvalid(this, ivFeed, '휴대폰번호를 입력해주세요.');
             if (!regex.test(this.value))
@@ -410,6 +526,11 @@ $(function () {
                     ivFeed,
                     '숫자가 아닌 값은 입력할 수 없습니다.'
                 );
+=======
+            if (!this.value) return v.setInvalid(this, ivFeed, '휴대폰번호를 입력해주세요.');
+            if (!regex.test(this.value))
+                return v.setInvalid(this, ivFeed, '숫자가 아닌 값은 입력할 수 없습니다.');
+>>>>>>> Stashed changes
             v.changeValid(this);
         }
 
@@ -431,11 +552,15 @@ $(function () {
             const realname = e.target.value;
             if (!realname) return v.setInvalid(this, ivFeed, '이름을 입력해주세요.');
             if (!regex.test(realname))
+<<<<<<< Updated upstream
                 return v.setInvalid(
                     this,
                     ivFeed,
                     '2 ~ 5글자의 정확한 이름을 입력해주세요.'
                 );
+=======
+                return v.setInvalid(this, ivFeed, '2 ~ 5글자의 정확한 이름을 입력해주세요.');
+>>>>>>> Stashed changes
             v.changeValid(this);
         }
 
@@ -449,11 +574,15 @@ $(function () {
             const [vFeed, ivFeed] = v.getFeedBox(this);
             const regex = myRegex.password;
             if (!regex.test(password))
+<<<<<<< Updated upstream
                 return v.setInvalid(
                     this,
                     ivFeed,
                     '특수문자 / 문자 / 숫자 포함 형태의 8~15자리 비밀번호로 설정해주세요'
                 );
+=======
+                return v.setInvalid(this, ivFeed, '특수문자 / 문자 / 숫자 포함 형태의 8~15자리 비밀번호로 설정해주세요');
+>>>>>>> Stashed changes
             return v.setValid(this, vFeed, '사용 가능한 비밀번호 입니다.');
         }
 
@@ -464,11 +593,15 @@ $(function () {
             if (pwd !== repwd)
                 return v.setInvalid(this, ivFeed, '동일한 비밀번호를 입력해주세요.');
             if (!v.isValid(registerPassword))
+<<<<<<< Updated upstream
                 return v.setInvalid(
                     this,
                     ivFeed,
                     '유효한 비밀번호 설정후 다시 시도해주세요'
                 );
+=======
+                return v.setInvalid(this, ivFeed, '유효한 비밀번호 설정후 다시 시도해주세요');
+>>>>>>> Stashed changes
             v.setValid(this, vFeed, '동일한 비밀번호를 입력하셨습니다.');
         }
 
@@ -488,6 +621,7 @@ $(function () {
         }
     }
 
+<<<<<<< Updated upstream
     //리모컨 & 소켓 처리
     if (seq) {
         const remocon = getEl('.remote-controller');
@@ -576,6 +710,12 @@ function success(data) {
     });
 };
 
+=======
+    function initRequestModal() {
+    }
+});
+
+>>>>>>> Stashed changes
 function includeJs(jsFilePath) {
     let js = document.createElement('script');
     js.type = 'text/javascript';
@@ -616,4 +756,10 @@ function logoutSubmit() {
 }
 
 function alarm() {
+<<<<<<< Updated upstream
 }
+=======
+	
+}
+
+>>>>>>> Stashed changes

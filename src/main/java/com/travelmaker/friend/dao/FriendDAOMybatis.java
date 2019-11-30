@@ -26,7 +26,10 @@ public class FriendDAOMybatis implements FriendDAO {
 		for(FriendDTO friendDTO : list) {
 			friendDTO.setNickname(sqlSession.selectOne("friendSQL.getNickName", friendDTO.getSeq()));
 			friendDTO.setCitys(sqlSession.selectList("friendSQL.getCitys", friendDTO.getFno()));
+<<<<<<< Updated upstream
 			System.out.println("city = " + friendDTO.getCitys());
+=======
+>>>>>>> Stashed changes
 		}
 		return list;
 	}

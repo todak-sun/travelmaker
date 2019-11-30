@@ -2,7 +2,10 @@ package com.travelmaker.route.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+<<<<<<< Updated upstream
 import java.util.Map;
+=======
+>>>>>>> Stashed changes
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +67,7 @@ public class RouteDAOMybatis implements RouteDAO {
         }
         return list;
     }
+<<<<<<< Updated upstream
 
 	@Override
 	public RouteContentDTO getCourse(int crno) {
@@ -89,5 +93,7 @@ public class RouteDAOMybatis implements RouteDAO {
 	public void updateViews(int rno) {
 		sqlSession.update("routeSQL.updateViews",rno);		
 	}
+=======
+>>>>>>> Stashed changes
 	
 }

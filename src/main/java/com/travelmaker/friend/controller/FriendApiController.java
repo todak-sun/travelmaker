@@ -48,6 +48,15 @@ public class FriendApiController {
 		map.put("endNum", endNum);
 		
 		List<FriendDTO> list = friendService.getList(map);
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+		for(FriendDTO friendDTO : list) {
+			System.out.println(friendDTO.getDateStart());
+		}
+=======
+>>>>>>> 3fb8553d71ee68629160b3597a957197aa8473a1
+>>>>>>> Stashed changes
 		
 		int totalA = friendService.getTotalA();
 		
@@ -67,6 +76,7 @@ public class FriendApiController {
 	// 동행 글쓰기 작은틀 저장
 	@PostMapping(value = "/setRouteWrite")
 	public void setRouteWrite(@ModelAttribute FriendRouteDTO friendRouteDTO) {
+		System.out.println(friendRouteDTO);
 		friendService.setRouteWrite(friendRouteDTO);
 	}
 	// 취소버튼 클릭 후 작성중인 데이터 삭제
@@ -81,6 +91,13 @@ public class FriendApiController {
 		ModelAndView modelAndView = new ModelAndView();
 		List<FriendRequestDTO> list = friendService.getRequestView(fcno);
 		
+		System.out.println(list.size());
+		
+		for(FriendRouteDTO friendRouteDTO : list) {
+			for(int i = 0; i < friendRouteDTO.getFriendRequestDTOs().size(); i++) {
+				System.out.println(friendRouteDTO.getFriendRequestDTOs().get(i).toString());
+			}
+		}
 		System.out.println(list.size());
 		
 		modelAndView.addObject("list", list);

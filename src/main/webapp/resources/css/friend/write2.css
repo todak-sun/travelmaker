@@ -275,6 +275,7 @@
     height: 100%;
     border: 2px solid gray;
 }
+<<<<<<< Updated upstream
 
 /* 구글 지도 검색결과 표출 하는 부분 */
 .map-wrap-g {
@@ -299,4 +300,6 @@
     z-index: 1500;
 }
 
+=======
+>>>>>>> Stashed changes
 /* 지도 모달 레이아웃 */

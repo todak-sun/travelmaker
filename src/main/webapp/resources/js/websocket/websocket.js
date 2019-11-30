@@ -7,8 +7,12 @@ sock.onclose = onClose;
 function onMessage(msg) {
 	var data = msg.data;
 	var jsondata = JSON.parse(data);
-
 	console.log(jsondata);
+<<<<<<< HEAD
+
+=======
+	
+>>>>>>> 3fb8553d71ee68629160b3597a957197aa8473a1
 	/* 대행신청 */
 	if (jsondata.header == 'friend') {
 		$('#alarmOff').hide();
@@ -17,17 +21,18 @@ function onMessage(msg) {
 		alarmDataload($('#alarmOn').data('seq'));
 	}
 
+	if (jsondata.header == 'purA' || jsondata.header == 'purB') {
+		$('#alarmOff').hide();
+		$('#alarmOn').show();
+		$('#alarmBtnDisplay').empty();
+		alarmDataload($('#alarmOn').data('seq'));
+	}
+	
 }
 
 function onClose(evt) {
 	// $("#data").append("연결 끊김");
 }
-
-/*
- * function friendAlarm(fno, username) { let json =
- * '{"header":"friend","data":{"fno":"' + fno + '","username":"'+username+'"}}'
- * sock.send(json); }
- */
 
 $('#closeAlarm').click(function() {
 	$('#alarmDisplay').hide();
@@ -35,6 +40,7 @@ $('#closeAlarm').click(function() {
 	$('#alarmOn').hide();
 });
 
+/*알람 데이터 로드*/
 function alarmDataload(seq) {
 
 	var token = $("meta[name='_csrf']").attr('content');
@@ -50,12 +56,26 @@ function alarmDataload(seq) {
 			xhr.setRequestHeader(header, token);
 		},
 		success : function(data) {
+			console.log(data);
 			$.each(data, function(index, items) {
+<<<<<<< Updated upstream
+				$('#alarmDisplay').append(
+						'<button type="button" class="alarmBtn" data-ano ="'
+=======
+<<<<<<< HEAD
+				$('#alarmBtnDisplay').append(
+						'<button type="button" id="alarmBtn" data-ano ="'
+>>>>>>> Stashed changes
+								+ items.ano + '" data-header="' + items.header
+								+ '">' + items.content + '</button><br>');
+			});
+			
+			if(data.length>0){
+=======
 				$('#alarmDisplay').append(
 						'<button type="button" class="alarmBtn" data-ano ="'
 								+ items.ano + '" data-header="' + items.header
 								+ '">' + items.content + '</button><br>');
-				$('#alarmDisplay').append('<input type="hidden" ');
 			});
 			console.log(data.length);
 			if (data.length < 1) {
@@ -63,27 +83,49 @@ function alarmDataload(seq) {
 				$('#alarmOn').hide();
 				$('#alarmDisplay').hide();
 			} else {
+>>>>>>> 3fb8553d71ee68629160b3597a957197aa8473a1
 				$('#alarmOff').hide();
 				$('#alarmOn').show();
-				$('#alarmDisplay').hide();
 			}
 
 			/*
 			 * $('#alarmOn').click(function(){ $('#alarmDisplay').show(); });
 			 */
 			
+<<<<<<< Updated upstream
 			$('.alarmBtn').click(function() {
 				console.log('음..아주 좆같구먼');
 				var ano = $(this).data('ano');
 				var header = $(this).data('header');
 
+=======
+<<<<<<< HEAD
+			$('#alarmBtn').click(function() {
+=======
+			$('.alarmBtn').click(function() {
+				
+>>>>>>> 3fb8553d71ee68629160b3597a957197aa8473a1
+				var ano = $(this).data('ano');
+				var header = $(this).data('header');
+				console.log(header);
+>>>>>>> Stashed changes
 				$.ajax({
 					type : 'get',
 					url : '/alarm/' + header + '/' + ano,
 					dataType : 'json',
 					success : function(data) {
+<<<<<<< Updated upstream
 						console.log(data.fno);
 						location.href = '/' + header + '/view/' + data.fno;
+=======
+						if(header=='friend'){
+							location.href = '/' + header + '/view/' + data.fno;
+						}else if(header=='purA'){
+							location.href = '/pur/view/1/' + data.fno;
+						}else if(header=='purB'){
+							location.href = '/pur/view/2/' + data.fno;
+						}
+>>>>>>> Stashed changes
 					},
 					error : function(error) {
 						console.log(error);
@@ -96,11 +138,9 @@ function alarmDataload(seq) {
 			alert('실패');
 		}
 	});
+<<<<<<< HEAD
+}
+=======
 }
 
-// href="/alarm/'+items.header+'/'+items.ano+'">'+items.content+
-
-/*
- * document.getElementById('alarmBtn').onclick = function(){ console.log('음..아주
- * 좆같구먼1111'); }
- */
+>>>>>>> 3fb8553d71ee68629160b3597a957197aa8473a1

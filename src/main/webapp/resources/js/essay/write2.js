@@ -1,14 +1,21 @@
 $(function () {
     //클래스
+<<<<<<< Updated upstream
     const {getEl, getElList, addEvent, addAllSameEvent, useState, getJSONfromQueryString, getFormData} = new travelmaker.utils();
+=======
+    const {getEl, addEvent, useState, getJSONfromQueryString} = new travelmaker.utils();
+>>>>>>> Stashed changes
     const editor = new travelmaker.editor();
     const modal = new travelmaker.modal('#modal');
     const ajax = new travelmaker.ajax();
     const t = new travelmaker.template();
 
     //변수
+<<<<<<< Updated upstream
     const hiddenRno = getEl('#rno');
     const hiddenSeq = getEl('#seq');
+=======
+>>>>>>> Stashed changes
     const title = getEl('#title');
     const btnMainImage = getEl('.btn-main-image');
     const inputFile = getEl('#input-file');
@@ -20,6 +27,7 @@ $(function () {
     const inputHash = getEl('#input-hash');
     const btnHash = getEl('#btn-hash');
     const hashView = getEl('.hash-view');
+<<<<<<< Updated upstream
     const staticMapContainer = getEl('#map-container');
     const btnSaveTemp = getEl('#btn-save-temp');
     const btnSave = getEl('#btn-save');
@@ -37,6 +45,19 @@ $(function () {
         title: null,
         content: null,
         hashtag: null,
+=======
+
+    let hashNodeList = [];  //해쉬태그 모음
+    let backImage = null; //대표이미지가 설정되면 담을 변수
+    let getMapData; //지도 정보를 확인할 함수
+
+    const [setEssay, getEssay] = useState({
+        rno: '',
+        seq: getEl('#seq') ? +getEl('#seq').value : 1,
+        title: '',
+        content: '',
+        hashtag: [],
+>>>>>>> Stashed changes
         fixed: 0,
         isDomestic: +getJSONfromQueryString().isDomestic
     });
@@ -48,14 +69,33 @@ $(function () {
     addEvent(btnVideo, 'click', () => $editor.summernote('videoDialog.show'));
     addEvent(btnPhoto, 'click', () => $editor.summernote('imageDialog.show'));
     addEvent(btnHash, 'click', () => {
+<<<<<<< Updated upstream
         if (inputHash.value) addHashSpan(inputHash.value);
     });
 
+=======
+        if (!inputHash.value) return;
+        hashView.innerHTML = '';
+
+        const span = document.createElement('span');
+        span.classList.add('hash');
+        span.innerText = inputHash.value;
+        addEvent(span, 'click', (e) => {
+            hashNodeList = hashNodeList.filter(node => node !== e.target);
+            e.target.remove();
+        });
+
+        inputHash.value = '';
+        hashNodeList.push(span);
+        hashNodeList.forEach(hashNode => hashView.appendChild(hashNode));
+    });
+>>>>>>> Stashed changes
     addEvent(inputHash, 'keyup', (e) => {
         if (e.keyCode === 13) btnHash.click();
     });
 
     addEvent(btnMap, 'click', () => {
+<<<<<<< Updated upstream
         $editor.summernote('saveRange');
         if (!getEssay().isDomestic) {
             modal.createCustom(t.gmap(), () => {
@@ -68,6 +108,12 @@ $(function () {
                 getMapData = map.create(modal, insertStaticMap);
             })
         }
+=======
+        modal.createCustom(t.kmap(), () => {
+            const kmap = new travelmaker.kakaoMap(getEl('#map'));
+            getMapData = kmap.create(modal);
+        });
+>>>>>>> Stashed changes
     });
 
     addEvent(inputFile, 'change', (e) => {
@@ -77,11 +123,16 @@ $(function () {
         fr.readAsDataURL(image);
         fr.onload = () => {
             editorTitle.style.backgroundImage = `url("${fr.result}")`;
+<<<<<<< Updated upstream
             setEssay({'imageFile': image});
+=======
+            backImage = image;
+>>>>>>> Stashed changes
         };
     });
 
     addEvent(btnMainImage, 'click', () => inputFile.click());
+<<<<<<< Updated upstream
     addEvent(btnSaveTemp, 'click', () => {
         beforeSaveSetEssay();
         setEssay({fixed: 0});
@@ -126,6 +177,8 @@ $(function () {
                 .catch(console.error);
         }
     });
+=======
+>>>>>>> Stashed changes
     //로드 끝나자 마자 호출할 함수
     initOnLoad();
 
@@ -139,6 +192,7 @@ $(function () {
             }
         });
 
+<<<<<<< Updated upstream
         ajax.getEssayTempList(hiddenSeq.value, 0, 'date_write')
             .then(ret => {
                 console.log(ret.data);
@@ -218,4 +272,10 @@ $(function () {
         editorTitle.style.backgroundImage = `url(/resources/storage/essay/${data.imageName})`;
         data.hashtag.split(',').forEach(addHashSpan);
     }
+=======
+        // 임시저장 목록을 다 가져옴
+        // ajax.getEssayTempList()
+    }
+
+>>>>>>> Stashed changes
 });

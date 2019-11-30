@@ -21,6 +21,7 @@ $(function () {
         const value = e.target.value;
         console.log(value);
         const [vFeed, ivFeed] = v.getFeedBox(e.target);
+<<<<<<< Updated upstream
         if (!value) {
         	return v.setInvalid(e.target, ivFeed, '시작일을 입력해주세요.');
         } else { // 날짜 유효성
@@ -33,12 +34,17 @@ $(function () {
         		return v.changeValid(e.target);
         	}
         }
+=======
+        if (!value) return v.setInvalid(e.target, ivFeed, '시작일을 입력해주세요.');
+        return v.changeValid(e.target);
+>>>>>>> Stashed changes
     });
 
     addEvent(dateEnd, 'blur', (e) => {
         const value = e.target.value;
         console.log(value);
         const [vFeed, ivFeed] = v.getFeedBox(e.target);
+<<<<<<< Updated upstream
         if (!value) {
         	return v.setInvalid(e.target, ivFeed, '종료일을 입력해주세요.');
         } else {
@@ -58,6 +64,13 @@ $(function () {
     	var eDate = new Date().getTime();
     	var now = new Date().getTime();
     	
+=======
+        if (!value) return v.setInvalid(e.target, ivFeed, '종료일을 입력해주세요.');
+        return v.changeValid(e.target);
+    });
+
+    addEvent(btnNext, 'click', () => {
+>>>>>>> Stashed changes
         if (!v.isValid(title)) {
             v.setInvalid(title, v.getFeedBox(title)[1], '제목을 입력해주세요');
             return title.focus();
@@ -68,7 +81,10 @@ $(function () {
         }
         if (!v.isValid(dateEnd)) {
             v.setInvalid(dateStart, v.getFeedBox(dateEnd)[1], '종료일을 입력해주세요.');
+<<<<<<< Updated upstream
             return dateEnd.focus();
+=======
+>>>>>>> Stashed changes
         }
         getEl('#writeForm').submit();
     });

@@ -48,12 +48,15 @@
 		kakao_chat, to_char(date_of_issue, 'YYYY-MM-DD') as date_of_issue
 		FROM
 		friends WHERE fno = #{fno}
+<<<<<<< Updated upstream
 	</select>
 	<select id="getRouteView" parameterType="int"
 		resultType="friendRoute">
 		SELECT fno, fcno, to_char(dateStart, 'YYYY-MM-DD') as
 		dateStart, to_char(dateEnd, 'YYYY-MM-DD') as dateEnd, content, fcnt,
 		is_finish, lat, lng, city FROM friends_route WHERE fno = #{fno}
+=======
+>>>>>>> Stashed changes
 	</select>
 
 	<select id="getFriendRequestDTO" parameterType="int"
@@ -70,6 +73,7 @@
 		resultType="friend">
 		SELECT * FROM friends where fno=#{fno}
 	</select>
+<<<<<<< Updated upstream
 	<select id="getRequestView" parameterType="int"
 		resultType="friendRequest">
 		SELECT fcno, fccno, seq, content, is_permit,
@@ -86,6 +90,31 @@
 		INSERT INTO
 		friend_request values(#{fcno}, seq_fccno.nextval, #{seq}, #{content},
 		0, #{dateStart}, #{dateEnd}, 0)
+=======
+	<select id="getRouteView" parameterType="int"
+		resultType="friendRoute">
+		SELECT fno, fcno, to_char(dateStart, 'YYYY-MM-DD') as
+		dateStart, to_char(dateEnd, 'YYYY-MM-DD') as dateEnd, content, fcnt,
+		is_finish, lat, lng, city FROM friends_route WHERE fno = #{fno}
+	</select>
+	<select id="getRequestView" parameterType="int"
+		resultType="friendRequest">
+		SELECT fcno, fccno, seq, content, is_permit,
+		to_char(dateStart, 'YYYY-MM-DD') as
+		dateStart, to_char(dateEnd,
+		'YYYY-MM-DD') as dateEnd, is_read FROM friend_request WHERE fcno =
+		#{fcno}
+	</select>
+
+	<insert id="setRequestWrite" parameterType="friendRequest">
+<<<<<<< HEAD
+		INSERT INTO friend_request values(#{fcno}, seq_fccno.nextval, #{seq}, #{content}, 0, #{dateStart}, #{dateEnd}, 0)
+=======
+		INSERT INTO
+		friend_request values(#{fcno}, seq_fccno.nextval, #{seq}, #{content},
+		0, #{dateStart}, #{dateEnd}, 0)
+>>>>>>> 3fb8553d71ee68629160b3597a957197aa8473a1
+>>>>>>> Stashed changes
 	</insert>
 	
 	<update id="requestAccept" parameterType="int">

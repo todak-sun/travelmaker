@@ -18,7 +18,12 @@
 		select dataSeq from alarm where ano = #{ano}
 	</select>
 	
+<<<<<<< Updated upstream
 	<delete id="delete" parameterType="java.util.Map">
 		DELETE FROM alarm WHERE header = #{header} AND dataseq = #{dataseq}
+=======
+	<delete id="alarmDelete">
+		delete alarm where dataseq=#{dataseq}
+>>>>>>> Stashed changes
 	</delete>
 </mapper>

@@ -6,6 +6,7 @@
 
 
 $(function () {
+<<<<<<< Updated upstream
 	// 웹소켓을 지정한 url로 연결한다.
 	let sock = new SockJS("/echo");
 	
@@ -222,10 +223,126 @@ $(function () {
 	    		type: 'delete',
 	    		url: '/friend/delete',
 	    		data: $('#friendFno').val(),
+=======
+	
+	// 웹소켓을 지정한 url로 연결한다.
+	let sock = new SockJS("/echo");
+	
+    const {getElList, addEvent, getEls} = new travelmaker.utils();
+    const modal = new travelmaker.modal('#modal');
+    const v = new travelmaker.validation();
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+
+    const btnTestList = getElList('.btn-test');
+    btnTestList.forEach(btnTest => {
+        addEvent(btnTest, 'click', () => {
+            modal.create('request', (e) => {
+                const [startDate, endDate, content, btnTry]
+                    = getEls(modal.m, '#req-start-date', '#req-end-date', '#req-content', '#req-btn-try');
+                // 차례대로 시작일, 종료일, 컨텐츠, 신청버튼
+                console.log(startDate, endDate, content, btnTry);
+                // 위의 노드의 값으로 Validation 검사를 하면 됨.
+                // Validation 클래스 넣어놨으니 그걸로 시도해봐~~~
+                // frined/write2.js 에 예시로 해둔 것 있으니 보면 금방 이해할 듯!
+
+//                addEvent(startDate, 'blur', (e) => {
+//                    const value = e.target.value;
+//                    const [vFeed, ivFeed] = v.getFeedBox(e.target);
+//                    if (!value) return v.setInvalid(e.target, ivFeed, '시작일을 입력해주세요.');
+//                    return v.changeValid(e.target);
+//                });
+//                addEvent(endDate, 'blur', (e) => {
+//                    const value = e.target.value;
+//                    const [vFeed, ivFeed] = v.getFeedBox(e.target);
+//                    if (!value) return v.setInvalid(e.target, ivFeed, '종료일을 입력해주세요.');
+//                    return v.changeValid(e.target);
+//                });
+//                addEvent(content, 'blur', (e) => {
+//                    const value = e.target.value;
+//                    const [vFeed, ivFeed] = v.getFeedBox(e.target);
+//                    if (!value) return v.setInvalid(e.target, ivFeed, '내용을 입력해주세요.');
+//                    return v.changeValid(e.target);
+//                });
+//                
+//                addEvent(btnTry, 'click', (e) => {
+//                	alert('극 클릭!');
+//                	if (!v.isValid(startDate)) {
+//                        v.setInvalid(startDate, v.getFeedBox(startDate)[1], '시작일을 입력해주세요');
+//                        return startDate.focus();
+//                    }
+//                    if (!v.isValid(endDate)) {
+//                        v.setInvalid(endDate, v.getFeedBox(endDate)[1], '종료일을 입력해주세요.');
+//                        return endDate.focus();
+//                    }
+//                    if (!v.isValid(content)) {
+//                        v.setInvalid(content, v.getFeedBox(content)[1], '내용을 입력해주세요');
+//                        return content.focus();
+//                    }
+//                    getEl('#requestForm').submit();
+//                });
+            })
+        });
+    })
+    
+    $.ajax({
+		type: 'post',
+		url: '/friend/getRouteView',
+		data: {'fno' : $('#friendFno').val()},
+		dataType: 'json',
+		beforeSend : function(xhr) {
+			xhr.setRequestHeader(header, token);
+		},
+		success: function(data){
+			// 맵쪽에 뿌려줄 좌표를 담을 배열
+			var flightPlanCoordinates = [];
+			var fcno = null;
+						
+			// 작은 Route Content를 동적으로 뿌려줌
+			$.each(data.list, function(index, items){
+				console.log(items.dateStart);
+				$('.content-group').append(viewTemplate(items));
+				
+				if(items.friendRequestDTOs.length != 0 && ($('#friendSeq').val() == $('#seq').val())) {				
+					$.each(items.friendRequestDTOs, function(temp, item) {
+						$('.request-group').append(requestFriendsTemplate(item));
+					});
+				}
+				/* console.log($('#seq').val()); */
+				
+				// 좌표 담기
+				flightPlanCoordinates.push({lat : items.lat, lng : items.lng});
+				console.log(items.lat);
+			});
+    
+			// 해외
+			if($('#friendIs_domestic').val() == 0) {
+				googleMap(flightPlanCoordinates);
+			} else { // 국내
+				kakaoMap(flightPlanCoordinates);
+			}
+			// 내 게시물이면 버튼 삭제
+			if($('#friendSeq').val() == $('#seq').val()) {
+				$('.routeRequestBtn').remove();
+			}
+		},
+		error: function(error){
+			console.log(error);
+		}
+    });
+    
+	// 동행신청 폼 저장
+	    $('#req-btn-try').click(function(){
+	    	$.ajax({
+	    		type: 'post',
+	    		url: '/friend/setRequestWrite',
+	    		data: $('#requestForm').serialize(),
+>>>>>>> Stashed changes
 	    		beforeSend : function(xhr) {
 	    			xhr.setRequestHeader(header, token);
 	    		},
 	    		success: function(){
+<<<<<<< Updated upstream
 	    			console.log('delete success!!!');
 	    			alert('삭제 완료!');
 	    			location.href='/friend/list/1';
@@ -248,6 +365,69 @@ function goModify(fno) {
 }
 
 function requestFriendsTemplate(items) {
+=======
+	    			console.log('success');
+	    			alert('신청 완료 하였습니다.');
+	    			friendAlarm($('#friendFno').val(), $('#username').val());
+	    			
+	    			location.href='/friend/list/1';
+	    		},
+	    		error: function(error){
+	    			console.log(error);
+	    		}
+	    	});
+	    });
+	    
+	    function friendAlarm(fno, username) {
+	    	let json = '{"header":"friend","data":{"fno":"' + fno
+	    			+ '","username":"'+username+'"}}'
+	    	sock.send(json);
+	    }
+
+
+	    
+	    
+});
+
+// 작은 게시물에 버튼 클릭하면 동행 신청 모달이동
+function writeClick(id) {
+	console.log($('#seq').val());
+	
+	
+	if($('#seq').val()==undefined){
+		alert('로그인 후 이용해주세요');
+	}
+	$('#fcno').val(id);
+}
+
+
+function viewTemplate(items) {
+	var viewTemp = `
+		<li>
+					<div class="content-item">
+						<p class="place">${items.city}</p>
+						<p class="date">
+							<span class="from">${items.dateStart}</span> <span class="to">${items.dateEnd}</span>
+						</p>
+						<div class="content-detail">
+							<p>${items.content}</p>
+							<div class="button-wrap">
+								<!-- 자신의 글과 비교하여 한 개만 렌더링 -->
+								<input type="button" class="routeRequestBtn btn-test" id="${items.fcno}" data-toggle="modal" data-target="#requestWriteModal" onClick="writeClick(this.id)" value="신청">
+								<!-- <button>신청확인</button> -->
+								<!-- 자신의 글과 비교하여 한 개만 렌더링 -->
+							</div>
+						</div>
+						<ul class="request-group"></ul>
+					</div>
+				</li>
+	`;
+	
+	return viewTemp;
+}
+
+function requestFriendsTemplate(item) {
+>>>>>>> Stashed changes
 	var requestTemp = `
 		<li>
 								<div class="request-item">
@@ -257,6 +437,7 @@ function requestFriendsTemplate(items) {
 												src="https://source.unsplash.com/collection/190727/80x80"
 												alt="" />
 										</div>
+<<<<<<< Updated upstream
 										<p class="author">${items.nickname}</p>
 									</div>
 									<div class="content-area">
@@ -268,6 +449,19 @@ function requestFriendsTemplate(items) {
 											<div class="button-wrap">
 												<button class="btn btn-tsave" data-fccno="${items.fccno}">수락</button>
 												<button class="btn btn-tdanger" data-fccno="${items.fccno}">거절</button>
+=======
+										<p class="author">아이디</p>
+									</div>
+									<div class="content-area">
+										<p class="date">
+											<span class="from">${item.dateStart}</span> <span class="to">${item.dateEnd}</span>
+										</p>
+										<div class="content-detail">
+											<p>${item.content}</p>
+											<div class="button-wrap">
+												<button class="btn btn-tsave">수락</button>
+												<button class="btn btn-tdanger">거절</button>
+>>>>>>> Stashed changes
 											</div>
 										</div>
 									</div>
@@ -400,6 +594,7 @@ function googleMap(flightPlanCoordinates) {
 	});
 	// 마커들 경로 표시
 	flightPath.setMap(map);
+<<<<<<< Updated upstream
 }
    /*
 	 * btnTestList.forEach(btnTest => { addEvent(btnTest, 'click', () => {
@@ -576,3 +771,6 @@ function googleMap(flightPlanCoordinates) {
 // sock.send(json);
 // }
 // });
+=======
+}
+>>>>>>> Stashed changes
