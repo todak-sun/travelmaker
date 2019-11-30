@@ -5,18 +5,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -71,6 +64,11 @@ public class FriendApiController {
 		modelAndView.setViewName("jsonView");
 		
 		return modelAndView;
+		
+		/*if(list == null) {
+			return new ResponseEntity<List<FriendDTO>>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<List<FriendDTO>>(list, HttpStatus.OK);*/
 	}
 	
 	// 동행 글쓰기 작은틀 저장
@@ -85,12 +83,17 @@ public class FriendApiController {
 		friendService.cancelWrite(fno);
 	}
 	
-	// 신청글 가져오기
-	@PostMapping(value = "/getRequestView")
-	public ModelAndView getRequestView(@RequestParam String fcno) {
+	// view에서 작은게시글 select
+	@PostMapping(value = "/getRouteView")
+	public ModelAndView getRouteView(@RequestParam String fno) {
 		ModelAndView modelAndView = new ModelAndView();
-		List<FriendRequestDTO> list = friendService.getRequestView(fcno);
+		List<FriendRouteDTO> list = friendService.getRouteView(fno);
 		
+		for(FriendRouteDTO friendRouteDTO : list) {
+			for(int i = 0; i < friendRouteDTO.getFriendRequestDTOs().size(); i++) {
+				System.out.println(friendRouteDTO.getFriendRequestDTOs().get(i).toString());
+			}
+		}
 		System.out.println(list.size());
 		
 		for(FriendRouteDTO friendRouteDTO : list) {
@@ -120,38 +123,5 @@ public class FriendApiController {
 	@GetMapping(value = "/requestReject")
 	public void requestReject(@RequestParam String fccno) {
 		friendService.requestReject(fccno);
-	}
-	
-	// 게시글 삭제
-	@DeleteMapping(value = "/delete")
-	public void delete(@RequestBody String fno) {
-		Map<String, String> map = new HashMap<String, String>();
-		
-		map.put("header", "friend");
-		map.put("dataseq", fno);
-		friendService.delete(map);
-	}
-	
-	// 큰틀 수정
-	@PostMapping(value = "/setModify")
-	public void setModify(@ModelAttribute FriendDTO friendDTO) {
-		System.out.println(friendDTO.toString());
-		friendService.setModify(friendDTO);
-	}
-	@PostMapping(value = "/getRouteModify")
-	public ResponseEntity<List<FriendRouteDTO>> getRouteModify(@RequestParam String fno) {
-		System.out.println(fno);
-		List<FriendRouteDTO> list = friendService.getRouteModify(fno);
-		
-		if(list == null) {
-			return new ResponseEntity<List<FriendRouteDTO>>(HttpStatus.NOT_FOUND);
-		}
-		return new ResponseEntity<List<FriendRouteDTO>>(list, HttpStatus.OK);
-	}
-	
-	@PutMapping(value = "/setRouteModify")
-	public void setRouteModify(@RequestBody FriendRouteDTO friendRouteDTO) throws Exception {
-		System.out.println(friendRouteDTO.toString());
-		friendService.setRouteModify(friendRouteDTO);
 	}
 }

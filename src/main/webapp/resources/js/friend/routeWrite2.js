@@ -119,26 +119,10 @@ $(function () {
             !content.value ||
             !inputSearchPlace.value
         ) {
-            alert('내용을 입력 후 저장버튼을 눌러주세요.');
+            alert('다음을 눌른 후 저장버튼을 눌러주세요.');
         } else {
-        	var token = $("meta[name='_csrf']").attr('content');
-            var header = $("meta[name='_csrf_header']").attr('content');
-            
-        	$.ajax({
-	            type: 'post',
-	            url: '/friend/setRouteWrite',
-	            data: $('#routeWriteForm').serialize(),
-	            beforeSend: function (xhr) {
-	                xhr.setRequestHeader(header, token);
-	            },
-	            success: function () {
-		            alert('저장완료!');
-		            location.href = '/friend/list/1';
-	            },
-	            error: function (error) {
-	                console.log(error);
-	            }
-	        });
+            alert('저장완료!');
+            location.href = '/friend/list/1';
         }
     });
 
@@ -168,98 +152,89 @@ $(function () {
     });
 
     addEvent(btnNext, 'click', () => {
+        console.log('씨발집가고싶다');
+
         var token = $("meta[name='_csrf']").attr('content');
         var header = $("meta[name='_csrf_header']").attr('content');
 
-        if (!v.isValid(dateStart)) {
-        	v.setInvalid(dateStart, v.getFeedBox(dateStart)[1], '시작일을 입력해주세요.');
-        	return dateStart.focus();
-        } else if (!v.isValid(dateEnd)) {
-        	v.setInvalid(dateEnd, v.getFeedBox(dateEnd)[1], '종료일을 입력해주세요.');
-        	return dateEnd.focus();
-        } else if(!v.isValid(content)) {
-        	v.setInvalid(content, v.getFeedBox(content)[1], '내용을 입력해주세요.');
-        	return content.focus();
-        } else {
-	        $.ajax({
-	            type: 'post',
-	            url: '/friend/setRouteWrite',
-	            data: $('#routeWriteForm').serialize(),
-	            beforeSend: function (xhr) {
-	                xhr.setRequestHeader(header, token);
-	            },
-	            success: function () {
-	                $('<table/>', {
-	                    class: 'table table-dark table-striped'
-	                })
-	                    .append(
-	                        $('<tr/>')
-	                            .append(
-	                                $('<th/>', {
-	                                    text: '방문시작날짜'
-	                                })
-	                            )
-	                            .append(
-	                                $('<td/>', {
-	                                    text: dateStart.value
-	                                })
-	                            )
-	                    )
-	                    .append(
-	                        $('<tr/>')
-	                            .append(
-	                                $('<th/>', {
-	                                    text: '방문종료날짜'
-	                                })
-	                            )
-	                            .append(
-	                                $('<td/>', {
-	                                    text: dateEnd.value
-	                                })
-	                            )
-	                    )
-	                    .append(
-	                        $('<tr/>')
-	                            .append(
-	                                $('<th/>', {
-	                                    text: '방문 도시'
-	                                })
-	                            )
-	                            .append(
-	                                $('<td/>', {
-	                                    text: inputCity.value
-	                                })
-	                            )
-	                    )
-	                    .append(
-	                        $('<tr/>')
-	                            .append(
-	                                $('<th/>', {
-	                                    text: '내용'
-	                                })
-	                            )
-	                            .append(
-	                                $('<td/>', {
-	                                    text: content.value
-	                                })
-	                            )
-	                    )
-	                    .appendTo($('#resultDiv'));
-	                $('<br/>').appendTo($('#resultDiv'));
-	
-	                $('#date-start').val(null);
-	                $('#date-end').val(null);
-	                $('#input-search-place').val(null);
-	                $('#content').val(null);
-	                $('#lat').val(null);
-	                $('#lng').val(null);
-	                $('#city').val(null);
-	            },
-	            error: function (error) {
-	                console.log(error);
-	            }
-	        });
-        }
+        $.ajax({
+            type: 'post',
+            url: '/friend/setRouteWrite',
+            data: $('#routeWriteForm').serialize(),
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            success: function () {
+                $('<table/>', {
+                    class: 'table table-dark table-striped'
+                })
+                    .append(
+                        $('<tr/>')
+                            .append(
+                                $('<th/>', {
+                                    text: '방문시작날짜'
+                                })
+                            )
+                            .append(
+                                $('<td/>', {
+                                    text: dateStart.value
+                                })
+                            )
+                    )
+                    .append(
+                        $('<tr/>')
+                            .append(
+                                $('<th/>', {
+                                    text: '방문종료날짜'
+                                })
+                            )
+                            .append(
+                                $('<td/>', {
+                                    text: dateEnd.value
+                                })
+                            )
+                    )
+                    .append(
+                        $('<tr/>')
+                            .append(
+                                $('<th/>', {
+                                    text: '방문 도시'
+                                })
+                            )
+                            .append(
+                                $('<td/>', {
+                                    text: inputCity.value
+                                })
+                            )
+                    )
+                    .append(
+                        $('<tr/>')
+                            .append(
+                                $('<th/>', {
+                                    text: '내용'
+                                })
+                            )
+                            .append(
+                                $('<td/>', {
+                                    text: content.value
+                                })
+                            )
+                    )
+                    .appendTo($('#resultDiv'));
+                $('<br/>').appendTo($('#resultDiv'));
+
+                $('#date-start').val(null);
+                $('#date-end').val(null);
+                $('#input-search-place').val(null);
+                $('#content').val(null);
+                $('#lat').val(null);
+                $('#lng').val(null);
+                $('#city').val(null);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
     });
 
 
