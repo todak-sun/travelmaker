@@ -1,16 +1,16 @@
 package com.travelmaker.purchase.domain;
 
-import org.springframework.stereotype.Component;
-
 import lombok.Data;
 
 @Data
-@Component
-public class PurchaseRequestDTO {
+public class PurchaseOrderDTO {
 	private int prno;
 	private int bno;
 	private String nickname;
-	private String requestUserSeq;
+	private int requestUserSeq;
+	private String productname;
+	private int price;
+	private int quantity;
 	private String content;
 	private int isPermit;
 }

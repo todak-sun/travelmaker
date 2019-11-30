@@ -17,4 +17,8 @@
 	<select id="getAlarmDataSeq" parameterType="int" resultType="int">
 		select dataSeq from alarm where ano = #{ano}
 	</select>
+	
+	<delete id="alarmDelete">
+		delete alarm where dataseq=#{dataseq}
+	</delete>
 </mapper>

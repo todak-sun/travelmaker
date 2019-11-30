@@ -20,8 +20,6 @@
 		<typeAlias type="com.travelmaker.friend.domain.FriendRouteDTO" alias="friendRoute" />
 		<typeAlias type="com.travelmaker.friend.domain.FriendRequestDTO" alias="friendRequest" />
 
-		<typeAlias type="com.travelmaker.purchase.domain.PurchaseAdDTO" alias="purchaseAd" />
-		<typeAlias type="com.travelmaker.purchase.domain.PurchaseRequestDTO" alias="purchaseRequest" />
 
 		<typeAlias type="com.travelmaker.route.domain.RouteDTO" alias="route" />
 		<typeAlias type="com.travelmaker.route.domain.RouteContentDTO" alias="routeContent" />
@@ -36,6 +34,15 @@
 		<typeAlias type="com.travelmaker.store.domain.StoreHotelImageDTO" alias="hotelImage" />
 		<typeAlias type="com.travelmaker.store.domain.StoreHotelRoomDTO" alias="hotelRoom" />
 		<typeAlias type="com.travelmaker.alarm.domain.AlarmDTO" alias="alarm" />
+		
+		<typeAlias
+         type="com.travelmaker.story.domain.StorySearchFilter"
+         alias="storySearchFilter" />
+         
+    	<typeAlias type="com.travelmaker.purchase.domain.PurchaseDTO" alias="pur" />
+ 	    <typeAlias type="com.travelmaker.purchase.domain.PurchaseRequestDTO" alias="purR" />
+		<typeAlias type="com.travelmaker.purchase.domain.PurchaseOrderDTO" alias="purO" />
+		
 	</typeAliases>
 
 	<typeHandlers>

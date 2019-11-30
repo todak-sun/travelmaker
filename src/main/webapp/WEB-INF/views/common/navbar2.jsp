@@ -26,7 +26,7 @@
 				<li class="gnb-item"><a href="/story/list">여행 이야기</a></li>
 				<li class="gnb-item"><a href="">스토어</a></li>
 				<li class="gnb-item"><a href="/friend/list/1">동행</a></li>
-				<li class="gnb-item"><a href="">대리구매</a></li>
+				<li class="gnb-item"><a href="/pur/list/1">대리구매</a></li>
 			</ul>
 		</nav>
 		<div class="header-group">
