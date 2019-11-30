@@ -24,8 +24,6 @@ $().ready(function() {
 			$.each(data.list, function(index, items) {
 				var is_finish = '';
 
-				console.log("date"+items.dateStart);
-				
 				if (items.is_finish == 0) {
 					is_finish = '가능';
 				} else {
@@ -42,7 +40,7 @@ $().ready(function() {
 				})).append($('<td/>', {
 					text : items.title
 				})).append($('<td/>', {
-					text : items.dateStart + '~' + items.dateEnd
+					text : items.date_start + '~' + items.date_end
 				})).append($('<td/>', {
 					text : is_finish
 				})).appendTo($('#dataTable'));

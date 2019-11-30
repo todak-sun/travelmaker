@@ -57,25 +57,12 @@ public class RoutePageController {
     	List<RouteContentDTO> list = routeService.getRouteContentStory(rno);
     	model.addAttribute("contentList", list);	
 
-<<<<<<< Updated upstream
-=======
-        return "route/view";
-    }
-    
-    @RequestMapping(value = "/preview/{rno}", method = RequestMethod.GET)
-    public String routePreview(@PathVariable int rno, Model model) {
-    	System.out.println("rno = " + rno);
-    	RouteDTO routeDTO = routeService.getRoute(rno);
-    	System.out.println(routeDTO.getBno());
-    	model.addAttribute("routeDTO", routeDTO);
->>>>>>> Stashed changes
     	
     	return "route/preview";
     }
 
     @RequestMapping(value = "getRouteView", method = RequestMethod.POST)
     @ResponseBody
-<<<<<<< Updated upstream
     public ModelAndView getRouteView(@ModelAttribute RouteDTO routeDTO, HttpServletRequest req, HttpServletResponse res) {
         ModelAndView modelAndView = new ModelAndView();
         int rno = routeDTO.getRno();
@@ -104,14 +91,6 @@ public class RoutePageController {
         	cookie.setMaxAge(60*60*24);
         	res.addCookie(cookie);
     	}
-=======
-    public ModelAndView getRouteView(@ModelAttribute RouteDTO routeDTO) {
-        ModelAndView modelAndView = new ModelAndView();
-        int rno = routeDTO.getRno();
-        System.out.println("getRouteView rno 값 : "+rno);
-
-        List<RouteContentDTO> list = routeService.getRouteContentStory(rno);
->>>>>>> Stashed changes
 
         System.out.println("리스트 = " + list.size());
         System.out.println("image 총사이즈 : " + list.get(0).getImgs().size());

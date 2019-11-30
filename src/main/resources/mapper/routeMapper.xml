@@ -71,11 +71,7 @@
     </insert>
 
 	<select id="getRouteContentStory" parameterType="int" resultType="routeContent">
-<<<<<<< Updated upstream
 		SELECT * FROM route_content WHERE RNO = #{rno} ORDER BY cnt_order DESC
-=======
-		SELECT * FROM route_content WHERE RNO = #{rno}
->>>>>>> Stashed changes
 	</select>
 	<select id="getRouteImageStory" parameterType="int" resultType="routeImage">
 		SELECT img FROM route_image WHERE CRNO = #{CRNO}

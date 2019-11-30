@@ -20,7 +20,6 @@ public interface RouteService {
 
     public List<RouteContentDTO> getRouteContentStory(int rno);
 
-<<<<<<< Updated upstream
 	public RouteContentDTO getCourse(int crno);
 
 	public void patchCourse(RouteContentDTO routeContentDTO);
@@ -31,6 +30,4 @@ public interface RouteService {
 
 	public void updateViews(int rno);
 
-=======
->>>>>>> Stashed changes
 }

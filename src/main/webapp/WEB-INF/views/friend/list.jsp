@@ -1,9 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="sec"
-	uri="http://www.springframework.org/security/tags"%>
-
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -41,10 +37,8 @@
 		<br />
 		<ul class="pagination justify-content-center"></ul>
 		<br />
-		<sec:authorize access="hasRole('ROLE_USER') and isAuthenticated()">
-			<button type="button" id="writeBtn" class="btn btn-dark"
-				data-toggle="modal" data-target="#friendModal">글 쓰기</button>
-		</sec:authorize>
+		<button type="button" id="writeBtn" class="btn btn-dark"
+			data-toggle="modal" data-target="#friendModal">글 쓰기</button>
 	</div>
 
 	<div class="modal" id="friendModal">

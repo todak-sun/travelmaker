@@ -34,15 +34,11 @@ public class FriendPageController {
 	// 큰 틀 저장 후 작은틀 글쓰기 이동
 	@RequestMapping(value = "/setWrite", method = RequestMethod.POST)
 	public String setWrite(@ModelAttribute FriendDTO friendDTO, Model model) {
-		System.out.println(friendDTO.toString());
 		int fno = friendService.setWrite(friendDTO);
 		model.addAttribute("is_domestic", friendDTO.getIs_domestic());
 		model.addAttribute("fno", fno);
-<<<<<<< Updated upstream
 		model.addAttribute("friendDateStart", friendDTO.getDateStart());
 		model.addAttribute("friendDateEnd", friendDTO.getDateEnd());
-=======
->>>>>>> Stashed changes
 		// [용주] : 테스트를 위해 routeWrite2 변경함!!!
 		return "/friend/routeWrite2";
 	}
@@ -51,10 +47,7 @@ public class FriendPageController {
 		FriendDTO friendDTO = friendService.getView(fno);
 		model.addAttribute("friendDTO", friendDTO);
 		// [용주] : 테스트를 위해 view2로 변경함!!!
-<<<<<<< HEAD
-<<<<<<< HEAD
 		return "/friend/view2";
-<<<<<<< Updated upstream
 	}
 	
 	// 수정
@@ -75,13 +68,5 @@ public class FriendPageController {
 		model.addAttribute("friendDateEnd", friendDTO.getDateEnd());
 		
 		return "/friend/routeModify";
-=======
->>>>>>> Stashed changes
-=======
-		return "/friend/view";
->>>>>>> parent of d38164a... 동행 수정
-=======
-		return "/friend/view";
->>>>>>> parent of d38164a... 동행 수정
 	}
 }

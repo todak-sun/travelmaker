@@ -1,6 +1,5 @@
 $().ready(function() {
   console.log("rno = " + $("#rno").val());
-<<<<<<< Updated upstream
   console.log("seq = " + $("#seq").val());
   const { useState, setRequestHeader } = new travelmaker.utils();
   const rno = document.querySelector("#rno").value;
@@ -27,18 +26,10 @@ $().ready(function() {
     type: "post",
     url: "/route/getRouteView",
     data: { rno: rno, seq: seq },
-=======
-  const { useState, setRequestHeader } = new travelmaker.utils();
-  $.ajax({
-    type: "post",
-    url: "/route/getRouteView",
-    data: { rno: $("#rno").val() },
->>>>>>> Stashed changes
     dataType: "json",
     beforeSend: setRequestHeader,
     success: function(data) {
       // 맵쪽에 뿌려줄 좌표를 담을 배열
-<<<<<<< Updated upstream
 
       // 작은 Route Content를 동적으로 뿌려줌
       $.each(data.list, function(index, items) {
@@ -202,172 +193,6 @@ $().ready(function() {
         var routeContentId = $("#routeContent")
             .children()
             .last();
-=======
-      var flightPlanCoordinates = [];
-
-      // 작은 Route Content를 동적으로 뿌려줌
-      $.each(data.list, function(index, items) {
-        $("<div/>", {
-          class: "conts_story",
-          style: "border: 1px solid red;"
-        })
-          .append(
-            $("<div/>", {
-              class: "story_para"
-            })
-              .append(
-                $("<div/>", {
-                  class: "day_info"
-                })
-              )
-              .append(
-                $("<span/>", {
-                  class: "day",
-                  text: "Day " + (index + 1)
-                })
-              )
-              .append($("<br/>"))
-              .append(
-                $("<span/>", {
-                  class: "date",
-                  text: items.dateStart + " / " + items.dateEnd
-                })
-              )
-          )
-          .append(
-            $("<div/>", {
-              class: "course"
-            })
-              .append(
-                $("<div/>", {
-                  class: "carousel slide",
-                  "data-ride": "carousel",
-                  id: "routeImg" + index
-                })
-                  .append(
-                    $("<ul/>", {
-                      class: "carousel-indicators"
-                    })
-                  )
-                  .append(
-                    $("<div/>", {
-                      class: "carousel-inner"
-                    })
-                  )
-                  .append(
-                    $("<a/>", {
-                      class: "carousel-control-prev",
-                      href: "#routeImg" + index,
-                      "data-slide": "prev"
-                    }).append(
-                      $("<span/>", {
-                        class: "carousel-control-prev-icon"
-                      })
-                    )
-                  )
-                  .append(
-                    $("<a/>", {
-                      class: "carousel-control-next",
-                      href: "#routeImg" + index,
-                      "data-slide": "next"
-                    }).append(
-                      $("<span/>", {
-                        class: "carousel-control-next-icon"
-                      })
-                    )
-                  )
-              )
-              .append(
-                $("<div/>", {
-                  class: "course_info"
-                }).append(
-                  $("<div/>", {
-                    class: "course_info_box"
-                  })
-                    .append(
-                      $("<div/>", {
-                        class: "loc_info_ico",
-                        text: "아이콘 이미지"
-                      })
-                    )
-                    .append(
-                      $("<div/>", {
-                        class: "loc_info_txt"
-                      }).append(
-                        $("<span/>", {
-                          class: "loc_txt",
-                          text: "위치 : " + items.location
-                        })
-                          .append($("<br/>"))
-                          .append(
-                            $("<span/>", {
-                              class: "loc_addr",
-                              text: "위치 : " + items.location
-                            })
-                          )
-                      )
-                    )
-                )
-              )
-              .append(
-                $("<div/>", {
-                  class: "course_story",
-                  text: "코스내용 : " + items.content
-                })
-              )
-              .append(
-                $("<div/>", {
-                  class: "course_rate"
-                }).append(
-                  $("<div/>", {
-                    class: "star_rate"
-                  })
-                    .append(
-                      $("<span/>", {
-                        class: "star",
-                        text: "별"
-                      })
-                    )
-                    .append(
-                      $("<span/>", {
-                        class: "star",
-                        text: "별"
-                      })
-                    )
-                    .append(
-                      $("<span/>", {
-                        class: "star",
-                        text: "별"
-                      })
-                    )
-                    .append(
-                      $("<span/>", {
-                        class: "star",
-                        text: "별"
-                      })
-                    )
-                    .append(
-                      $("<span/>", {
-                        class: "star",
-                        text: "별"
-                      })
-                    )
-                    .append($("<br/>"))
-                    .append(
-                      $("<div/>", {
-                        class: "rate_txt",
-                        text: items.score + "점"
-                      })
-                    )
-                )
-              )
-          )
-          .appendTo($("#routeContent"));
-
-        var routeContentId = $("#routeContent")
-          .children()
-          .last();
->>>>>>> Stashed changes
         /* routeLat.push(items.lat);
                 routeLng.push(items.lng); */
 
@@ -385,27 +210,17 @@ $().ready(function() {
           $("<div/>", {
             class: "carousel-item"
           })
-<<<<<<< Updated upstream
               .append(
                   $("<img/>", {
                     src: "/resources/storage/route/" + img
                   })
               )
               .appendTo(routeContentId.find(".carousel-inner"));
-=======
-            .append(
-              $("<img/>", {
-                src: "/resources/storage/route/" + img
-              })
-            )
-            .appendTo(routeContentId.find(".carousel-inner"));
->>>>>>> Stashed changes
         });
         console.log("-----------------------");
 
         // 부트스트랩 사진 전환에 쓸 class 생성
         routeContentId
-<<<<<<< Updated upstream
             .find(".carousel-indicators")
             .children()
             .first()
@@ -418,20 +233,6 @@ $().ready(function() {
       });
       console.log(flightPlanCoordinates);
       //////////////////////////////////////////////////////////////////
-=======
-          .find(".carousel-indicators")
-          .children()
-          .first()
-          .attr("class", "active");
-        routeContentId
-          .find(".carousel-inner")
-          .children()
-          .first()
-          .attr("class", "carousel-item active");
-      });
-      console.log(flightPlanCoordinates);
-
->>>>>>> Stashed changes
       // 해외
       if ($("#isdomestic").val() == 0) {
         googleMap(flightPlanCoordinates);
@@ -440,7 +241,6 @@ $().ready(function() {
         kakaoMap(flightPlanCoordinates);
       }
 
-<<<<<<< Updated upstream
       //   // 에필로그랑 해시태그
       //   $("<div/>", {
       //     id: "routeFooter"
@@ -458,25 +258,6 @@ $().ready(function() {
       //       })
       //     )
       //     .appendTo($("#routeContent"));
-=======
-      // 에필로그랑 해시태그
-      $("<div/>", {
-        id: "routeFooter"
-      })
-        .append(
-          $("<span>", {
-            id: "routeEpilogue",
-            text: "Epilogue : " + $("#epilogue").val()
-          })
-        )
-        .append(
-          $("<span/>", {
-            id: "routeHashtag",
-            text: "HashTag : " + $("#hashtag").val()
-          })
-        )
-        .appendTo($("#routeContent"));
->>>>>>> Stashed changes
     },
     error: function(error) {
       console.log(error);
@@ -488,13 +269,8 @@ function kakaoMap(flightPlanCoordinates) {
   var container = document.getElementById("map");
   var options = {
     center: new kakao.maps.LatLng(
-<<<<<<< Updated upstream
         flightPlanCoordinates[0]["lat"],
         flightPlanCoordinates[0]["lng"]
-=======
-      flightPlanCoordinates[0]["lat"],
-      flightPlanCoordinates[0]["lng"]
->>>>>>> Stashed changes
     ),
     level: 3
   };
@@ -504,17 +280,10 @@ function kakaoMap(flightPlanCoordinates) {
   // 선을 구성하는 좌표 배열입니다. 이 좌표들을 이어서 선을 표시
   for (var i = 0; i < flightPlanCoordinates.length; i++) {
     linePath.push(
-<<<<<<< Updated upstream
         new kakao.maps.LatLng(
             flightPlanCoordinates[i]["lat"],
             flightPlanCoordinates[i]["lng"]
         )
-=======
-      new kakao.maps.LatLng(
-        flightPlanCoordinates[i]["lat"],
-        flightPlanCoordinates[i]["lng"]
-      )
->>>>>>> Stashed changes
     );
   }
 
@@ -595,17 +364,10 @@ function googleMap(flightPlanCoordinates) {
   // 마커 생성
   for (var i = 0; i < flightPlanCoordinates.length; i++) {
     markers.push(
-<<<<<<< Updated upstream
         new google.maps.Marker({
           position: flightPlanCoordinates[i],
           map: map
         })
-=======
-      new google.maps.Marker({
-        position: flightPlanCoordinates[i],
-        map: map
-      })
->>>>>>> Stashed changes
     );
   }
   // 마커 이미지 커스텀
@@ -632,7 +394,6 @@ function googleMap(flightPlanCoordinates) {
   // 마커들 경로 표시
   flightPath.setMap(map);
 }
-<<<<<<< Updated upstream
 
 let flightPlanCoordinates = [];
 
@@ -646,5 +407,3 @@ $(function(){
 
 
 });
-=======
->>>>>>> Stashed changes

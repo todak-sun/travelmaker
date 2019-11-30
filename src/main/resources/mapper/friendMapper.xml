@@ -48,22 +48,13 @@
 		kakao_chat, to_char(date_of_issue, 'YYYY-MM-DD') as date_of_issue
 		FROM
 		friends WHERE fno = #{fno}
-<<<<<<< Updated upstream
 	</select>
-<<<<<<< HEAD
-<<<<<<< HEAD
 	<select id="getRouteView" parameterType="int"
 		resultType="friendRoute">
 		SELECT fno, fcno, to_char(dateStart, 'YYYY-MM-DD') as
 		dateStart, to_char(dateEnd, 'YYYY-MM-DD') as dateEnd, content, fcnt,
 		is_finish, lat, lng, city FROM friends_route WHERE fno = #{fno}
-=======
->>>>>>> Stashed changes
 	</select>
-=======
->>>>>>> parent of d38164a... 동행 수정
-=======
->>>>>>> parent of d38164a... 동행 수정
 
 	<select id="getFriendRequestDTO" parameterType="int"
 		resultType="friendRequest">
@@ -79,22 +70,6 @@
 		resultType="friend">
 		SELECT * FROM friends where fno=#{fno}
 	</select>
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-=======
-=======
->>>>>>> parent of d38164a... 동행 수정
-	<select id="getRouteView" parameterType="int"
-		resultType="friendRoute">
-		SELECT fno, fcno, to_char(dateStart, 'YYYY-MM-DD') as
-		dateStart, to_char(dateEnd, 'YYYY-MM-DD') as dateEnd, content, fcnt,
-		is_finish, lat, lng, city FROM friends_route WHERE fno = #{fno}
-	</select>
-<<<<<<< HEAD
->>>>>>> parent of d38164a... 동행 수정
-=======
->>>>>>> parent of d38164a... 동행 수정
 	<select id="getRequestView" parameterType="int"
 		resultType="friendRequest">
 		SELECT fcno, fccno, seq, content, is_permit,
@@ -111,31 +86,6 @@
 		INSERT INTO
 		friend_request values(#{fcno}, seq_fccno.nextval, #{seq}, #{content},
 		0, #{dateStart}, #{dateEnd}, 0)
-=======
-	<select id="getRouteView" parameterType="int"
-		resultType="friendRoute">
-		SELECT fno, fcno, to_char(dateStart, 'YYYY-MM-DD') as
-		dateStart, to_char(dateEnd, 'YYYY-MM-DD') as dateEnd, content, fcnt,
-		is_finish, lat, lng, city FROM friends_route WHERE fno = #{fno}
-	</select>
-	<select id="getRequestView" parameterType="int"
-		resultType="friendRequest">
-		SELECT fcno, fccno, seq, content, is_permit,
-		to_char(dateStart, 'YYYY-MM-DD') as
-		dateStart, to_char(dateEnd,
-		'YYYY-MM-DD') as dateEnd, is_read FROM friend_request WHERE fcno =
-		#{fcno}
-	</select>
-
-	<insert id="setRequestWrite" parameterType="friendRequest">
-<<<<<<< HEAD
-		INSERT INTO friend_request values(#{fcno}, seq_fccno.nextval, #{seq}, #{content}, 0, #{dateStart}, #{dateEnd}, 0)
-=======
-		INSERT INTO
-		friend_request values(#{fcno}, seq_fccno.nextval, #{seq}, #{content},
-		0, #{dateStart}, #{dateEnd}, 0)
->>>>>>> 3fb8553d71ee68629160b3597a957197aa8473a1
->>>>>>> Stashed changes
 	</insert>
 	
 	<update id="requestAccept" parameterType="int">
@@ -143,5 +93,30 @@
 	</update>
 	<update id="requestReject" parameterType="int">
 		UPDATE friend_request SET is_permit = 2 WHERE fccno = #{fccno}
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		DELETE FROM friends WHERE fno = #{fno}
+	</delete>
+	<select id="routeSelect" parameterType="int" resultType="friendRoute">
+		SELECT fcno FROM friends_route WHERE fno = #{fno}
+	</select>
+	<delete id="routeDelete" parameterType="int">
+		DELETE FROM friends_route WHERE fno = #{fno}
+	</delete>
+	<delete id="requestDelete" parameterType="int">
+		DELETE FROM friend_request WHERE fcno = #{fcno}
+	</delete>
+	
+	<update id="setModify" parameterType="friend">
+		UPDATE friends SET title = #{title}, datestart = #{dateStart}, dateend = #{dateEnd}, date_of_issue = sysdate WHERE fno = #{fno}
+	</update>
+	
+	<select id="getRouteModify" parameterType="int" resultType="friendRoute">
+		SELECT * FROM friends_route WHERE fno = #{fno}
+	</select>
+	
+	<update id="setRouteModify" parameterType="friendRoute">
+		UPDATE friends_route SET dateStart = #{dateStart}, dateEnd = #{dateEnd}, content = #{content}, lat = #{lat}, lng = #{lng}, city = #{city} WHERE fcno = #{fcno}
 	</update>
 </mapper>

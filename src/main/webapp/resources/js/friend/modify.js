@@ -1,14 +1,24 @@
-$(function () {
-    //클래스
+/**
+ * 
+ */
+
+$(function(){	
+    // 클래스
     const {getEl, addEvent} = new travelmaker.utils();
     const v = new travelmaker.validation();
 
-    //변수
+    // 변수
     const title = getEl('#title');
     const dateStart = getEl('#date-start');
     const dateEnd = getEl('#date-end');
     const btnNext = getEl('#next-btn');
     const cancel = getEl('#cancel');
+    
+    const $ds = $('#ds').val();
+    const $de = $('#de').val();
+    
+    dateStart.value = $ds.substring(0, 10);
+    dateEnd.value = $de.substring(0, 10);
 
     addEvent(title, 'blur', (e) => {
         const value = e.target.value;
@@ -52,8 +62,11 @@ $(function () {
         	}
         }
     });
-
+    
     addEvent(btnNext, 'click', () => {
+    	var token = $("meta[name='_csrf']").attr("content");
+    	var header = $("meta[name='_csrf_header']").attr("content");
+    	
     	var sDate = new Date(dateStart.value).getTime();
     	var eDate = new Date().getTime();
     	var now = new Date().getTime();
@@ -70,14 +83,27 @@ $(function () {
             v.setInvalid(dateStart, v.getFeedBox(dateEnd)[1], '종료일을 입력해주세요.');
             return dateEnd.focus();
         }
-        getEl('#writeForm').submit();
+        $.ajax({
+        	type: 'post',
+        	url: '/friend/setModify',
+        	data: $('#writeForm').serialize(),
+        	beforeSend : function(xhr) {
+    			xhr.setRequestHeader(header, token);
+    		},
+        	success: function(){
+        		console.log('success');
+        		location.href='/friend/routeModify/' + $('#fno').val();
+        	},
+        	error: function(error){
+        		console.log(error);
+        	}
+        });
     });
 
     addEvent(cancel, 'click', () => {
         if (confirm('정말로 취소하시겠습니까?')) {
             alert('취소 하였습니다.');
-            location.href = '/friend/list/1';
+            location.href = '/friend/view/' + fno;
         }
     });
-
 });

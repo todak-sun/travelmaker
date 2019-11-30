@@ -1,10 +1,7 @@
 package com.travelmaker.route.dao;
 
 import java.util.List;
-<<<<<<< Updated upstream
 import java.util.Map;
-=======
->>>>>>> Stashed changes
 
 import com.travelmaker.route.domain.RouteContentDTO;
 import com.travelmaker.route.domain.RouteDTO;
@@ -24,7 +21,6 @@ public interface RouteDAO {
 
     public List<RouteContentDTO> getRouteContentStory(int rno);
 
-<<<<<<< Updated upstream
 	public RouteContentDTO getCourse(int crno);
 
 	public void patchCourse(RouteContentDTO routeContentDTO);
@@ -35,7 +31,5 @@ public interface RouteDAO {
 
 	public void updateViews(int rno);
 
-=======
->>>>>>> Stashed changes
 
 }

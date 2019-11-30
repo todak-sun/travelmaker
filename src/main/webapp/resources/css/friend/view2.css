@@ -6,7 +6,6 @@
     box-shadow: 2px 2px 10px 0 rgba(0, 0, 0, 0.5);
 }
 
-<<<<<<< Updated upstream
 .container-wrap .info-wrap {
     padding: 1rem;
 }
@@ -20,8 +19,6 @@
     text-align: right;
 }
 
-=======
->>>>>>> Stashed changes
 .container-wrap .map-wrap {
     box-sizing: border-box;
     width: 100%;
@@ -33,14 +30,11 @@
     align-items: center;
 }
 
-<<<<<<< Updated upstream
 .container-wrap .map-wrap img {
     max-height: 100%;
     width: auto;
 }
 
-=======
->>>>>>> Stashed changes
 .container-wrap .map-wrap #map {
     max-height: 100%;
     width: 800px;

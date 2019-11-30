@@ -15,15 +15,11 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-<<<<<<< Updated upstream
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
-=======
-import org.springframework.web.bind.annotation.PathVariable;
->>>>>>> Stashed changes
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -50,17 +46,9 @@ public class RouteApiController {
 
 	@RequestMapping(value = "/showWriteForm")
 	public Map<String, Object> createWriteForm(Model model, @RequestBody RouteDTO routeDTO) {
-<<<<<<< Updated upstream
 
 		int rno = routeService.setRoute(routeDTO);
 		System.out.println("rno값 생성 : "+rno);
-=======
-		System.out.println(routeDTO.getTitle());
-		System.out.println(routeDTO.getSeq());
-		System.out.println(routeDTO.getNickname());
-		int rno = routeService.setRoute(routeDTO);
-		System.out.println(rno);
->>>>>>> Stashed changes
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("rno", rno);
 		return map;
@@ -72,7 +60,6 @@ public class RouteApiController {
 		RouteImageDTO routeImageDTO = new RouteImageDTO();
 		String filePath = servletContext.getRealPath("/resources/storage/route");
 		int crno = routeService.saveCourse(routeContentDTO); //저장한 코스의 crno 반환
-<<<<<<< Updated upstream
 		System.out.println("getImages : " + routeContentDTO.getImages());
 		if(routeContentDTO.getImages()!=null) { // 이미지가 있을 때
 			int i = 1; // 이미지 순서
@@ -113,9 +100,6 @@ public class RouteApiController {
 		System.out.println("getContent : "+routeContentDTO.getContent());
 		routeService.patchCourse(routeContentDTO); //저장한 코스의 crno 반환
 //		System.out.println(routeContentDTO.getImages());
-=======
-		System.out.println(routeContentDTO.getImages());
->>>>>>> Stashed changes
 		if(routeContentDTO.getImages()!=null) { // 이미지가 있을 때
 			int i = 1; // 이미지 순서
 			for(MultipartFile img : routeContentDTO.getImages()) {
@@ -146,7 +130,6 @@ public class RouteApiController {
 		return map;
 	}
 	
-<<<<<<< Updated upstream
 	@DeleteMapping(value = "/Course/{crno}")
 	public void deleteCourse(@PathVariable int crno) {
 		routeService.deleteCourse(crno);
@@ -165,9 +148,6 @@ public class RouteApiController {
 	}
 	
 	@PostMapping(value = "/saveRoute")
-=======
-	@RequestMapping(value = "/saveRoute", method = RequestMethod.POST)
->>>>>>> Stashed changes
 	public Map<String, Object> saveRoute(Model model, @RequestBody RouteDTO routeDTO){
 
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -182,24 +162,6 @@ public class RouteApiController {
         System.out.println("rno = " + rno);
         RouteDTO routeDTO = routeService.getRoute(rno);
         System.out.println(routeDTO.getBno());
-<<<<<<< Updated upstream
-=======
-
-        return routeDTO;
-    }
-    
-    @RequestMapping(value = "/getRouteView/{rno}", method = RequestMethod.GET)
-    public List<RouteContentDTO> getRoutePreview(@PathVariable int rno) {
-    	System.out.println("getRouteView rno 값 : "+rno);
-    	
-    	List<RouteContentDTO> list = routeService.getRouteContentStory(rno);
-    	
-    	System.out.println("리스트 = " + list.size());
-    	System.out.println("image 총사이즈 : " + list.get(0).getImgs().size());
-    	
-    	return list;
-    }
->>>>>>> Stashed changes
 
         return routeDTO;
     }

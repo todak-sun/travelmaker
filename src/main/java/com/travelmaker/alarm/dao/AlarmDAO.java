@@ -12,6 +12,4 @@ public interface AlarmDAO {
 
 	public int alarmChange(int ano);
 
-	public void alarmDelete(String dataseq);
-
 }

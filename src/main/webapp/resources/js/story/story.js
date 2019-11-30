@@ -4,21 +4,12 @@ $(function() {
   };
 
   // 전역변수 설정 & 클릭 이벤트 부여
-<<<<<<< Updated upstream
   const currPage = document.querySelector(".currPage");
   // const divList = document.querySelector("#div-list");
   const inputSearch = document.querySelector(".input-search");
   const $list = $(".sec-story");
   let timer;
   // currPage.addEventListener("click", showList);
-=======
-  const btnList = document.querySelector("#btn-list");
-  // const divList = document.querySelector("#div-list");
-  const inputSearch = document.querySelector("#input-search");
-  const $list = $(".list");
-  let timer;
-  btnList.addEventListener("click", showList);
->>>>>>> Stashed changes
   inputSearch.addEventListener("change", showKeywordList);
 
   // 처음 열기 & 뒤로가기 페이지 로딩 완료 후 게시물 출력
@@ -27,11 +18,7 @@ $(function() {
   $(window).scroll(scrollList);
 
   function showKeywordList() {
-<<<<<<< Updated upstream
     currPage.value = +12;
-=======
-    btnList.value = +12;
->>>>>>> Stashed changes
     $list.empty();
     showList();
   }
@@ -40,7 +27,6 @@ $(function() {
   function showList() {
     const keyword = inputSearch.value;
     const currListNum = +$list[0].childElementCount;
-<<<<<<< Updated upstream
     let loadListNum = +currPage.value;
     console.log("keyword : " + keyword);
     console.log("현재 리스트 숫자 : " + currListNum);
@@ -49,13 +35,6 @@ $(function() {
 
     // ajax 요청해서 게시물 가져오기
     getList(currListNum + 1, loadListNum, keyword)
-=======
-    let loadListNum = +btnList.value;
-    if (currListNum == loadListNum) loadListNum += 8; // 나중에 화면 사이즈별로 추가 갯수 변경 가능
-
-    // ajax 요청해서 게시물 가져오기
-    getList(currListNum, loadListNum, keyword)
->>>>>>> Stashed changes
       .then(function(result) {
         addList(result);
       })
@@ -65,17 +44,10 @@ $(function() {
   }
 
   // 현재, 로딩할 리스트 숫자, 키워드 입력해서 추가 게시물 가져오기
-<<<<<<< Updated upstream
   function getList(start, end, keyword) {
     return $.ajax({
       type: "get",
       url: `/api/story/${start}/${end}/${keyword}`, // story컨트롤러와 변수명 통일
-=======
-  function getList(currListNum, loadListNum, keyword) {
-    return $.ajax({
-      type: "get",
-      url: `/api/story/${currListNum}/${loadListNum}/${keyword}`,
->>>>>>> Stashed changes
       dataType: "json"
     });
   }
@@ -99,7 +71,6 @@ $(function() {
         dateUpdate
       } = result[i];
       const storyType = fileName ? "essay" : "route";
-<<<<<<< Updated upstream
 
       const $article = $(`
       <article class="story">
@@ -132,24 +103,6 @@ $(function() {
           </div>
         </div>
       </article>
-=======
-      const $div = $(`
-      <div class="item" id=${bno}>
-      <a href="/${storyType}/view/${rno}">
-        <div class="card">
-          <h3>${title}</h3>
-          <div class="thumb"> 추후 이미지 경로 : ${imageName}</div>
-          <div class="user">작성자 : ${nickname}</div>
-          <div class="info">
-            <span>좋아요 : ${likes}</span>
-            <span>조회수 : ${views}</span>
-            <span>댓글수 : ${cmt}</span>
-            <span>업뎃날짜 : ${dateUpdate}</span>
-          </div>
-        </div>
-      </a>
-      </div>
->>>>>>> Stashed changes
       `);
       $frag.append($article);
     }
@@ -160,11 +113,7 @@ $(function() {
       document.documentElement.scrollTop = $list[0].scrollHeight - 1400;
     }
     currListNum = $list[0].childElementCount; // 게시물 추가 후 현재 게시물 숫자 저장
-<<<<<<< Updated upstream
     currPage.value = currListNum; // 현재 게시물 숫자 버튼벨류로 저장
-=======
-    btnList.value = currListNum; // 현재 게시물 숫자 버튼벨류로 저장
->>>>>>> Stashed changes
     history.pushState(
       {
         currListNum: currListNum

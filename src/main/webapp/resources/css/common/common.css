@@ -139,7 +139,6 @@ header .header-group {
     background-color: #ffffff;
     color: #00c1da;
 }
-<<<<<<< Updated upstream
 /* 네비게이션 */
 
 div[class$='feed'] {
@@ -163,10 +162,6 @@ div[class$='feed'] {
     display: block;
     color: red;
 }
-=======
-
-/* 네비게이션 */
->>>>>>> Stashed changes
 
 /* 모달 */
 .tmodal-back {
@@ -282,7 +277,6 @@ div[class$='feed'] {
     color: #ffffff;
 }
 
-<<<<<<< Updated upstream
 .form-login .wrap-link {
     display: flex;
     justify-content: center;
@@ -300,8 +294,6 @@ div[class$='feed'] {
     color: #00c1da;
 }
 
-=======
->>>>>>> Stashed changes
 .form-login .wrap-buttons {
     margin: 2rem auto;
     width: 70%;
@@ -463,31 +455,6 @@ div[class$='feed'] {
     outline: none;
 }
 
-<<<<<<< Updated upstream
-=======
-div[class$='feed'] {
-    display: none;
-}
-
-.v ~ div[class$='feed'] {
-    position: absolute;
-    /*left: 50%;*/
-    bottom: -1.5rem;
-    /*transform: translateX(-50%);*/
-    font-size: 0.9rem;
-}
-
-.v-pass ~ .v-feed {
-    display: block;
-    color: #00c1da;
-}
-
-.v-fail ~ .iv-feed {
-    display: block;
-    color: red;
-}
-
->>>>>>> Stashed changes
 .input-email2-wrap::before {
     content: '@';
     color: #ffffff;
@@ -576,10 +543,6 @@ div[class$='feed'] {
     border: 1px solid #00cda8;
 }
 
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 .btn-travel {
     display: block;
     font-size: 1.25rem;
@@ -594,7 +557,6 @@ div[class$='feed'] {
 
 /* 회원가입 폼 */
 
-<<<<<<< Updated upstream
 /* 아이디 찾기 폼 */
 .tmodal-body .id-search {
     display: grid;
@@ -1043,16 +1005,11 @@ div[class$='feed'] {
 /* 로딩 */
 
 
-=======
->>>>>>> Stashed changes
 div.hidden {
     display: none;
     position: absolute;
     top: -9999px;
     left: -9999px;
 }
-<<<<<<< Updated upstream
 
 
-=======
->>>>>>> Stashed changes

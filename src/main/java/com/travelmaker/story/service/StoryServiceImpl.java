@@ -21,25 +21,14 @@ public class StoryServiceImpl implements StoryService {
         return storyDAO.getStory(storySearchFilter);
     }
     
-<<<<<<< Updated upstream
 //    @Override
 //    public List<StoryDTO> getKeywordStory(StorySearchFilter storySearchFilter) {
 //    	return storyDAO.getKeywordStory(storySearchFilter);
 //    }
   
-=======
->>>>>>> Stashed changes
-    @Override
-    public List<StoryDTO> getKeywordStory(StorySearchFilter storySearchFilter) {
-    	return storyDAO.getKeywordStory(storySearchFilter);
-    }
-<<<<<<< Updated upstream
-=======
-  
     @Override
     public String selectBoard(int bno) {
         return storyDAO.selectBoard(bno);
     }
->>>>>>> Stashed changes
 
 }

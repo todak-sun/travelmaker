@@ -21,10 +21,9 @@ public interface FriendDAO {
 
 	public FriendDTO getView(String fno);
 
-	public List<FriendRouteDTO> getRouteView(String fno);
+	public List<FriendRequestDTO> getRequestView(String fcno);
 
 	public void setRequestWrite(FriendRequestDTO friendRequestDTO);
-	
 	public FriendRequestDTO getFriendRequestDTO(int data);
 
 	public FriendRouteDTO getFriendRouteDTO(int fcno);
@@ -34,6 +33,16 @@ public interface FriendDAO {
 	public void requestAccept(String fccno);
 
 	public void requestReject(String fccno);
+
+	public void delete(Map<String, String> map);
+
+	public FriendDTO modify(String fno);
+
+	public void setModify(FriendDTO friendDTO);
+
+	public List<FriendRouteDTO> getRouteModify(String fno);
+
+	public void setRouteModify(FriendRouteDTO friendRouteDTO);
 
 
 }

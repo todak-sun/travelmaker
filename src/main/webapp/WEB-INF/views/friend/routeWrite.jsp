@@ -28,12 +28,12 @@
 			<thead>
 				<tr>
 					<th>방문시작날짜</th>
-					<td><input type="date" name="dateStart" id="dateStart">
+					<td><input type="date" name="date_start" id="date_start">
 						<div id="date_startDiv"></div></td>
 				</tr>
 				<tr>
 					<th>방문종료날짜</th>
-					<td><input type="date" name="dateEnd" id="dateEnd">
+					<td><input type="date" name="date_end" id="date_end">
 						<div id="date_endDiv"></div></td>
 				</tr>
 				<tr>

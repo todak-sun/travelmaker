@@ -18,22 +18,14 @@ $(function () {
 			console.log(JSON.stringify(data));
 
 			$.each(data.list, function(index, items) {
-<<<<<<< Updated upstream
-=======
-				console.log("date" + items.dateStart);
->>>>>>> Stashed changes
 				$('.content-group').append(listTemplate(items));
 				
 				$.each(items.citys, function(index, item) {
 					$('<span/>', {
 						class: 'city',
 						text: item
-<<<<<<< Updated upstream
 					}).appendTo($('.city-wrap:last'));
 					console.log(index + " : " + item);
-=======
-					}).appendTo($('.city-wrap'));
->>>>>>> Stashed changes
 				});
 			});
 			$('.pagination').html(data.friendPaging.pagingHTML);
@@ -67,15 +59,12 @@ $(function () {
     }
     
     function listTemplate(items) {
-<<<<<<< Updated upstream
     	var sDate = new Date(items.dateStart).getTime();
     	var now = new Date().getTime();
     	
     	console.log(Math.floor((sDate - now) / (1000 * 60 * 60 * 24)));
     	var result = Math.floor((sDate - now) / (1000 * 60 * 60 * 24) * -1);
     	
-=======
->>>>>>> Stashed changes
     	var listTemp = `
     		<li>
                 <div class="content-item">
@@ -86,11 +75,7 @@ $(function () {
                         <h5 class="author">${items.nickname}</h5>
                     </div>
                     <div class="title-wrap">
-<<<<<<< Updated upstream
                         <span class="tbadge tbadge-danger">D${result}</span>
-=======
-                        <span class="tbadge tbadge-danger">D-7</span>
->>>>>>> Stashed changes
                         <h4>${items.title}</h4>
                     </div>
                     <div class="info-wrap">
@@ -101,21 +86,8 @@ $(function () {
                         <div class="city-wrap">
                             
                         </div>
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< Updated upstream
                         <button type="button" onClick="loginCheck(${items.fno})">
-=======
-                        <button onclick="location.href='/friend/view/${items.fno}'">
->>>>>>> parent of d38164a... 동행 수정
-=======
-                        <button onclick="location.href='/friend/view/${items.fno}'">
->>>>>>> parent of d38164a... 동행 수정
                             상세보기
-=======
-                        <button onclick="location.href='/friend/view/${items.fno}'">
-                            상세보기예시
->>>>>>> Stashed changes
                         </button>
                     </div>
                 </div>
@@ -124,9 +96,6 @@ $(function () {
     	
     	return listTemp;
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< Updated upstream
 });
 
 function loginCheck(fno) {
@@ -137,12 +106,3 @@ function loginCheck(fno) {
 		location.href='/friend/view/' + fno;
 	}
 }
-=======
-});
->>>>>>> Stashed changes
-=======
-});
->>>>>>> parent of d38164a... 동행 수정
-=======
-});
->>>>>>> parent of d38164a... 동행 수정

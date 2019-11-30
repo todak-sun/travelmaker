@@ -12,13 +12,9 @@ public class FriendRequestDTO {
 	private int fccno;
 	private int seq;
 	private String content;
-<<<<<<< Updated upstream
 	private int isPermit;
-=======
-	private int is_permit;
->>>>>>> Stashed changes
 	private String dateStart;
 	private String dateEnd;
 	private int is_read;
-	private String nickname;
+	//private String nickname;
 }

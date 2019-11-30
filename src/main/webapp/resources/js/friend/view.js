@@ -1,3 +1,7 @@
+/**
+ * 
+ */
+
 var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
 
@@ -17,7 +21,6 @@ $().ready(function(){
 						
 			// 작은 Route Content를 동적으로 뿌려줌
 			$.each(data.list, function(index, items){
-				console.log(items.dateStart);
 				$('<table/>', {
 					class: 'table-dark'
 				}).append($('<tr/>').append($('<td/>', {
@@ -27,7 +30,7 @@ $().ready(function(){
 				}))).append($('<tr/>').append($('<td/>', {
 					text: '여행 기간'
 				})).append($('<td/>', {
-					text: items.dateStart + ' ~ ' + items.dateEnd
+					text: items.date_start + ' ~ ' + items.date_end
 				}))).append($('<tr/>').append($('<td/>', {
 					text: '내용'
 				})).append($('<td/>', {
@@ -46,9 +49,9 @@ $().ready(function(){
 					'data-target': '#requestWriteModal',
 					onClick: 'writeClick(this.id)',
 					value: '신청'
-				})))).appendTo($('#applyContent'));
+				})))).appendTo($('#routeContent'));
 				
-				if(items.friendRequestDTOs.length != 0 && ($('#friendSeq').val() == $('#seq').val())) {				
+				if(items.friendRequestDTOs.length != 0 && $('#friendSeq').val() == $('#seq').val()) {				
 					$.each(items.friendRequestDTOs, function(temp, item) {
 						$('<table/>', {
 							class: 'table-sm'
@@ -59,15 +62,14 @@ $().ready(function(){
 						}))).append($('<tr/>').append($('<td/>', {
 							text: '동행기간'
 						})).append($('<td/>', {
-							text: item.dateStart + ' ~ ' + item.dateEnd
+							text: item.date_start + ' ~ ' + item.date_end
 						}))).append($('<tr/>').append($('<td/>', {
 							text: '신청 내용'
 						})).append($('<td/>', {
 							text: item.content
-						}))).appendTo($('#applyContent'));
+						}))).appendTo($('#routeContent'));
 					});
 				}
-				console.log($('#seq').val());
 				
 				// 좌표 담기
 				flightPlanCoordinates.push({lat : items.lat, lng : items.lng});
@@ -94,15 +96,11 @@ $().ready(function(){
 
 // 작은 게시물에 버튼 클릭하면 동행 신청 모달이동
 function writeClick(id) {
-	console.log($('#seq').val());
-	
-	if($('#seq').val()==undefined){
-		alert('로그인 후 이용해주세요');
-	}
+	alert(id);
 	$('#fcno').val(id);
 }
 
-// 웹소켓을 지정한 url로 연결한다.
+//웹소켓을 지정한 url로 연결한다.
 let sock = new SockJS("/echo");
 
 // 동행신청 폼 저장

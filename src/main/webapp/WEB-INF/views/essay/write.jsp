@@ -96,11 +96,7 @@
 <!-- 모달 영역 끝 -->
 <div
         id="map-container"
-<<<<<<< Updated upstream
         style="width:750px;height:350px;visibility: hidden;position:absolute;top:-9999px;left:-9999px;"
-=======
-        style="width:750px;height:350px;visibility: hidden;position:absolute;top:0;left:0;"
->>>>>>> Stashed changes
 ></div>
 <%@ include file="../common/editor-js.jsp" %>
 <script src="${pageContext.request.contextPath}/resources/summernote/summernote-bs4.js"></script>

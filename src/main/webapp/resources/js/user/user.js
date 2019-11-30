@@ -9,11 +9,7 @@ const [setUserData, getUserData] = useState({
 });
 
 /* 카카오 로그인 관련 */
-<<<<<<< Updated upstream
 //카카오 로그인 시도시 아래의 함수를 콜백 호출
-=======
-// 카카오 로그인 시도시 아래의 함수를 콜백 호출
->>>>>>> Stashed changes
 function kakaoLogin() {
   Kakao.Auth.createLoginButton({
     container: '#kakao-login-btn',
@@ -22,11 +18,7 @@ function kakaoLogin() {
   });
 }
 
-<<<<<<< Updated upstream
 //카카오 API에 유저정보 요청
-=======
-// 카카오 API에 유저정보 요청
->>>>>>> Stashed changes
 function kakaoApiRequest(authObj) {
   // console.log(authObj);
   Kakao.API.request({
@@ -35,11 +27,7 @@ function kakaoApiRequest(authObj) {
   });
 }
 
-<<<<<<< Updated upstream
 //카카오 유저정보를 가지고 옴.
-=======
-// 카카오 유저정보를 가지고 옴.
->>>>>>> Stashed changes
 function getKakaoUserInfo(res) {
   setUserData({
     id: res.kaccount_email,
@@ -106,7 +94,6 @@ function setRegisterByNaver(ret) {
 }
 
 function setRegisterByGoogle(ret) {
-<<<<<<< Updated upstream
   const { id, name, registerMethod } = getUserData();
   if (ret === 'null') {
     emitRegisterEvent();
@@ -117,18 +104,6 @@ function setRegisterByGoogle(ret) {
 }
 
 //registerMethod에 요청
-=======
-	  const { id, name, registerMethod } = getUserData();
-	  if (ret === 'null') {
-	    emitRegisterEvent();
-	    setRegisterForm(id, name, 'google');
-	  } else if (ret !== 'null') {
-	    doLogin(id, ret, registerMethod);
-	  }
-}
-
-// registerMethod에 요청
->>>>>>> Stashed changes
 function ajaxRegisterMethod(data) {
   return $.ajax({
     type: 'post',
@@ -140,11 +115,7 @@ function ajaxRegisterMethod(data) {
 }
 
 function emitRegisterEvent() {
-<<<<<<< Updated upstream
   const Link = getEl('#btn-regist');
-=======
-  const Link = getEl('.btn-register');
->>>>>>> Stashed changes
   const event = document.createEvent('MouseEvents');
   event.initEvent('click', false, true);
   Link.dispatchEvent(event);
@@ -421,15 +392,9 @@ function checkFirst() {
 /*
  * function kakaoRegister(){ Kakao.Auth.login({ success : function(authObj) {
  * Kakao.API.request({ url : '/v1/user/me', success : function(res) {
-<<<<<<< Updated upstream
  *
  * let id = res.kaccount_email; let name = res.properties['nickname'];
  *
-=======
- * 
- * let id = res.kaccount_email; let name = res.properties['nickname'];
- * 
->>>>>>> Stashed changes
  * var token = $("meta[name='_csrf']").attr("content"); var header =
  * $("meta[name='_csrf_header']").attr("content"); $ .ajax({ type : 'post', url :
  * './user/registerMethod', data : 'name=' + name + '&id=' + id +
@@ -440,11 +405,7 @@ function checkFirst() {
  * $('.registerForm_email').css('display', 'block');
  * $('#registerMethod').val('kakao'); $('#realname').val( name);
  * $('#registerId').val(id);
-<<<<<<< Updated upstream
  *
-=======
- * 
->>>>>>> Stashed changes
  * $('#registerId').attr("readonly", true); //설정 $('#registerIdDiv').text('사용
  * 가능') $('#registerIdDiv').css('color', 'blue')
  * $('#registerIdDiv').css('font-size', '8pt')
@@ -452,10 +413,6 @@ function checkFirst() {
  * $('#login_id').val( id + '===kakao'); $('#login_pwd').val(data);
  * document.loginForm.submit(); } }, error : function(err) { console.log(err);
  * alert("카카오실패"); } }); } }) },
-<<<<<<< Updated upstream
  *
-=======
- * 
->>>>>>> Stashed changes
  * fail : function(err) { alert(JSON.stringify(err)); } }); }
  */

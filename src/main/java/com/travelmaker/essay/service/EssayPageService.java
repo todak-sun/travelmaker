@@ -17,22 +17,16 @@ public class EssayPageService implements EssayPageInterface {
     EssayDAO essayDAO;
 
     @Autowired
-<<<<<<< Updated upstream
     UserDAO userDAO;
 
     @Autowired
-=======
->>>>>>> Stashed changes
     ServletContext servletContext;
 
     @Override
     public EssayDTO readOne(int rno) {
         EssayDTO essayDTO = essayDAO.readOne(rno);
         essayDTO.setContent(readFile(essayDTO.getFileName()));
-<<<<<<< Updated upstream
         essayDTO.setUserDTO(userDAO.getUserDTO(essayDTO.getSeq()));
-=======
->>>>>>> Stashed changes
         return essayDTO;
     }
 

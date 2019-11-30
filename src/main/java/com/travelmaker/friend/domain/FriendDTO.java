@@ -20,15 +20,6 @@ public class FriendDTO {
 	private String kakao_chat;
 	private String date_of_issue;
 	private String nickname; // nickName 추가 (DB X)
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< Updated upstream
 	private List<FriendRouteDTO> friendRouteDTOs;
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> parent of d38164a... 동행 수정
-=======
->>>>>>> parent of d38164a... 동행 수정
 	private List<String> citys;
 }

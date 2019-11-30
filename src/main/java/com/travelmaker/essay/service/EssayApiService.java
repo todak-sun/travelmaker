@@ -65,15 +65,9 @@ public class EssayApiService implements EssayApiInterface<EssayApiRequest, Essay
     }
 
     @Override
-<<<<<<< Updated upstream
     public Header<EssayApiResponse> create(EssayApiRequest request) {
         System.out.println(request);
         String imageName = Optional.ofNullable(request.getImageFile()).map(this::saveImage).orElse(null);
-=======
-    public Header<EssayApiResponse> create(Header<EssayApiRequest> request) {
-        EssayApiRequest data = request.getData();
-        String imageName = Optional.ofNullable(data.getImageFile()).map(this::saveImage).orElse(null);
->>>>>>> Stashed changes
         String fileName = UUID.randomUUID().toString() + LocalDateTime.now().toString() + ".txt";
         saveFile(request.getContent(), fileName);
 
@@ -82,15 +76,9 @@ public class EssayApiService implements EssayApiInterface<EssayApiRequest, Essay
                 .title(request.getTitle())
                 .fileName(fileName)
                 .imageName(imageName)
-<<<<<<< Updated upstream
                 .hashtag(request.getHashtag())
                 .fixed(request.getFixed())
                 .isDomestic(request.getIsDomestic())
-=======
-                .hashtag(data.getHashtag())
-                .fixed(data.getFixed())
-                .isDomestic(data.getIsDomestic())
->>>>>>> Stashed changes
                 .build();
         EssayDTO newEssayDTO = essayDAO.create(essayDTO);
 
@@ -115,7 +103,6 @@ public class EssayApiService implements EssayApiInterface<EssayApiRequest, Essay
     public Header<EssayApiResponse> update(int rno, EssayApiRequest request) {
         Optional<EssayDTO> optional = Optional.ofNullable(essayDAO.readOne(rno));
         return optional.map(essayDTO -> {
-<<<<<<< Updated upstream
             //바뀐 내용을 기존에 있던 내용에 저장
             saveFile(request.getContent(), essayDTO.getFileName());
 
@@ -142,18 +129,6 @@ public class EssayApiService implements EssayApiInterface<EssayApiRequest, Essay
                     .setFixed(request.getFixed())
                     .setImageName(imageName)
                     .setIsDomestic(request.getIsDomestic());
-=======
-            saveFile(data.getContent(), essayDTO.getFileName());
-            Optional.ofNullable(essayDTO.getImageName()).ifPresent(this::deleteImage);
-            String imageName = Optional.ofNullable(data.getImageFile()).map(this::saveImage).orElse(null);
-            essayDTO.setTitle(data.getTitle())
-                    .setLikes(data.getLikes())
-                    .setViews(data.getViews())
-                    .setHashtag(data.getHashtag())
-                    .setFixed(data.getFixed())
-                    .setImageName(imageName)
-                    .setIsDomestic(data.getIsDomestic());
->>>>>>> Stashed changes
             return essayDAO.update(essayDTO);
         })
                 .map(this::response)

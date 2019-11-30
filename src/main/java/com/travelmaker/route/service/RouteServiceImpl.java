@@ -1,12 +1,8 @@
 package com.travelmaker.route.service;
 
-<<<<<<< Updated upstream
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-=======
-import java.util.List;
->>>>>>> Stashed changes
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,7 +52,6 @@ public class RouteServiceImpl implements RouteService {
         System.out.println("서비스 들어옴");
         return routeDAO.getRouteContentStory(rno);
     }
-<<<<<<< Updated upstream
 
 	@Override
 	public RouteContentDTO getCourse(int crno) {
@@ -88,7 +83,5 @@ public class RouteServiceImpl implements RouteService {
 	public void updateViews(int rno) {
 		routeDAO.updateViews(rno);
 	}
-=======
->>>>>>> Stashed changes
 	
 }

@@ -6,31 +6,54 @@
 	</settings>
 
 	<typeAliases>
-		<typeAlias type="com.travelmaker.comment.domain.CommentDTO" alias="comment" />
+		<typeAlias type="com.travelmaker.comment.domain.CommentDTO"
+			alias="comment" />
 
-		<typeAlias type="com.travelmaker.essay.domain.EssayDTO" alias="essay" />
+		<typeAlias type="com.travelmaker.essay.domain.EssayDTO"
+			alias="essay" />
 
-		<typeAlias type="com.travelmaker.essay.domain.EssaySearchFilter" alias="essaySearchFilter" />
+		<typeAlias
+			type="com.travelmaker.essay.domain.EssaySearchFilter"
+			alias="essaySearchFilter" />
 
-		<typeAlias type="com.travelmaker.etcboard.domain.InquiryDTO" alias="inquiry" />
+		<typeAlias type="com.travelmaker.etcboard.domain.InquiryDTO"
+			alias="inquiry" />
 
-		<typeAlias type="com.travelmaker.etcboard.domain.ReportDTO" alias="report" />
+		<typeAlias type="com.travelmaker.etcboard.domain.ReportDTO"
+			alias="report" />
 
-		<typeAlias type="com.travelmaker.friend.domain.FriendDTO" alias="friend" />
-		<typeAlias type="com.travelmaker.friend.domain.FriendRouteDTO" alias="friendRoute" />
-		<typeAlias type="com.travelmaker.friend.domain.FriendRequestDTO" alias="friendRequest" />
+		<typeAlias type="com.travelmaker.friend.domain.FriendDTO"
+			alias="friend" />
+		<typeAlias
+			type="com.travelmaker.friend.domain.FriendRouteDTO"
+			alias="friendRoute" />
+		<typeAlias
+			type="com.travelmaker.friend.domain.FriendRequestDTO"
+			alias="friendRequest" />
 
+		<typeAlias
+			type="com.travelmaker.purchase.domain.PurchaseAdDTO"
+			alias="purchaseAd" />
+		<typeAlias
+			type="com.travelmaker.purchase.domain.PurchaseRequestDTO"
+			alias="purchaseRequest" />
 
-		<typeAlias type="com.travelmaker.route.domain.RouteDTO" alias="route" />
-		<typeAlias type="com.travelmaker.route.domain.RouteContentDTO" alias="routeContent" />
-		<typeAlias type="com.travelmaker.route.domain.RouteImageDTO" alias="routeImage" />
+		<typeAlias type="com.travelmaker.route.domain.RouteDTO"
+			alias="route" />
+		<typeAlias
+			type="com.travelmaker.route.domain.RouteContentDTO"
+			alias="routeContent" />
+		<typeAlias type="com.travelmaker.route.domain.RouteImageDTO"
+			alias="routeImage" />
 
-		<typeAlias type="com.travelmaker.story.domain.StoryDTO" alias="story" />
+		<typeAlias type="com.travelmaker.story.domain.StoryDTO"
+			alias="story" />
 
-		<typeAlias type="com.travelmaker.user.domain.FollowDTO" alias="follow" />
-		<typeAlias type="com.travelmaker.user.domain.UserDTO" alias="user" />
+		<typeAlias type="com.travelmaker.user.domain.FollowDTO"
+			alias="follow" />
+		<typeAlias type="com.travelmaker.user.domain.UserDTO"
+			alias="user" />
 
-<<<<<<< Updated upstream
 		<typeAlias
 			type="com.travelmaker.story.domain.StorySearchFilter"
 			alias="storySearchFilter" />
@@ -45,25 +68,12 @@
 			alias="hotelRoom" />
 		<typeAlias type="com.travelmaker.alarm.domain.AlarmDTO"
 			alias="alarm" />
-=======
-		<typeAlias type="com.travelmaker.store.domain.StoreHotelDTO" alias="hotel" />
-		<typeAlias type="com.travelmaker.store.domain.StoreHotelImageDTO" alias="hotelImage" />
-		<typeAlias type="com.travelmaker.store.domain.StoreHotelRoomDTO" alias="hotelRoom" />
-		<typeAlias type="com.travelmaker.alarm.domain.AlarmDTO" alias="alarm" />
-		
-		<typeAlias
-         type="com.travelmaker.story.domain.StorySearchFilter"
-         alias="storySearchFilter" />
-         
-    	<typeAlias type="com.travelmaker.purchase.domain.PurchaseDTO" alias="pur" />
- 	    <typeAlias type="com.travelmaker.purchase.domain.PurchaseRequestDTO" alias="purR" />
-		<typeAlias type="com.travelmaker.purchase.domain.PurchaseOrderDTO" alias="purO" />
-		
->>>>>>> Stashed changes
 	</typeAliases>
 
 	<typeHandlers>
-		<typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="com.travelmaker.etcboard.domain.ReportCategory" />
+		<typeHandler
+			handler="org.apache.ibatis.type.EnumOrdinalTypeHandler"
+			javaType="com.travelmaker.etcboard.domain.ReportCategory" />
 	</typeHandlers>
 
 </configuration>
