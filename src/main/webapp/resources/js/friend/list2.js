@@ -86,7 +86,7 @@ $(function () {
                         <div class="city-wrap">
                             
                         </div>
-                        <button onclick="location.href='/friend/view/${items.fno}'">
+                        <button type="button" onClick="loginCheck(${items.fno})">
                             상세보기
                         </button>
                     </div>
@@ -97,3 +97,12 @@ $(function () {
     	return listTemp;
     }
 });
+
+function loginCheck(fno) {
+	if(!$('#loginId').val()) {
+		alert('ee');
+		// 로그인이 안돼어 있으면 로그인 모달 띄우기
+	} else {
+		location.href='/friend/view/' + fno;
+	}
+}
