@@ -265,6 +265,19 @@ let travelmaker = (function (window) {
             `
         };
 
+        Template.prototype.purchase = function () {
+            return `
+              <div class="location-wrap">
+                <h2>사다주세요 or 사다줄께요</h2>
+                <div class="btn-wrap">
+                  <button id="btn-Request" data-purchase="1"></button>
+                  <button id="btn-Order" data-purchase="0"></button>
+                </div>
+              </div>
+            `
+        };
+        
+        
         Template.prototype.essayTemp = function (essay) {
             const {rno, title, imageName, isDomestic, dateWrite} = essay;
             return `
@@ -1223,6 +1236,8 @@ let travelmaker = (function (window) {
                     return setModal(t.story(), initFunction);
                 case 'domestic' :
                     return setModal(t.domestic(), initFunction);
+                case 'purchase':
+                	return setModal(t.purchase(),initFunction );
                 default:
                     throw new Error('정의되지 않은 모달 형식입니다.');
             }

@@ -35,4 +35,11 @@ public class AlarmDAOImpl implements AlarmDAO {
 		return sqlSession.selectOne("alarmSQL.getAlarmDataSeq", ano);
 	}
 
+	@Override
+	public void alarmDelete(String dataseq) {
+		sqlSession.delete("alarmSQL.alarmDelete",Integer.parseInt(dataseq));
+	}
+	
+	
+
 }
