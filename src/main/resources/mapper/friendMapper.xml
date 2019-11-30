@@ -51,6 +51,7 @@
 <<<<<<< Updated upstream
 	</select>
 <<<<<<< HEAD
+<<<<<<< HEAD
 	<select id="getRouteView" parameterType="int"
 		resultType="friendRoute">
 		SELECT fno, fcno, to_char(dateStart, 'YYYY-MM-DD') as
@@ -59,6 +60,8 @@
 =======
 >>>>>>> Stashed changes
 	</select>
+=======
+>>>>>>> parent of d38164a... 동행 수정
 =======
 >>>>>>> parent of d38164a... 동행 수정
 
@@ -77,14 +80,20 @@
 		SELECT * FROM friends where fno=#{fno}
 	</select>
 <<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
+=======
+>>>>>>> parent of d38164a... 동행 수정
 	<select id="getRouteView" parameterType="int"
 		resultType="friendRoute">
 		SELECT fno, fcno, to_char(dateStart, 'YYYY-MM-DD') as
 		dateStart, to_char(dateEnd, 'YYYY-MM-DD') as dateEnd, content, fcnt,
 		is_finish, lat, lng, city FROM friends_route WHERE fno = #{fno}
 	</select>
+<<<<<<< HEAD
+>>>>>>> parent of d38164a... 동행 수정
+=======
 >>>>>>> parent of d38164a... 동행 수정
 	<select id="getRequestView" parameterType="int"
 		resultType="friendRequest">

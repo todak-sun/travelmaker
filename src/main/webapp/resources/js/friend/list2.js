@@ -102,8 +102,12 @@ $(function () {
                             
                         </div>
 <<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<< Updated upstream
                         <button type="button" onClick="loginCheck(${items.fno})">
+=======
+                        <button onclick="location.href='/friend/view/${items.fno}'">
+>>>>>>> parent of d38164a... 동행 수정
 =======
                         <button onclick="location.href='/friend/view/${items.fno}'">
 >>>>>>> parent of d38164a... 동행 수정
@@ -121,6 +125,7 @@ $(function () {
     	return listTemp;
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 });
 
@@ -135,6 +140,9 @@ function loginCheck(fno) {
 =======
 });
 >>>>>>> Stashed changes
+=======
+});
+>>>>>>> parent of d38164a... 동행 수정
 =======
 });
 >>>>>>> parent of d38164a... 동행 수정

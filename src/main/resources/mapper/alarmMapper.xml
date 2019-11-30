@@ -18,6 +18,7 @@
 		select dataSeq from alarm where ano = #{ano}
 	</select>
 <<<<<<< HEAD
+<<<<<<< HEAD
 	
 <<<<<<< Updated upstream
 	<delete id="delete" parameterType="java.util.Map">
@@ -27,6 +28,8 @@
 		delete alarm where dataseq=#{dataseq}
 >>>>>>> Stashed changes
 	</delete>
+=======
+>>>>>>> parent of d38164a... 동행 수정
 =======
 >>>>>>> parent of d38164a... 동행 수정
 </mapper>

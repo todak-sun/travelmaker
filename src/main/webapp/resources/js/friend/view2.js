@@ -7,7 +7,11 @@
 
 $(function () {
 <<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<< Updated upstream
+=======
+	
+>>>>>>> parent of d38164a... 동행 수정
 =======
 	
 >>>>>>> parent of d38164a... 동행 수정
@@ -70,6 +74,7 @@ $(function () {
             })
         });
     })
+<<<<<<< HEAD
     
     $.ajax({
 		type: 'post',
@@ -107,6 +112,45 @@ $(function () {
 				console.log(items.lat);
 			});
     
+=======
+    
+    $.ajax({
+		type: 'post',
+		url: '/friend/getRouteView',
+		data: {'fno' : $('#friendFno').val()},
+		dataType: 'json',
+		beforeSend : function(xhr) {
+			xhr.setRequestHeader(header, token);
+		},
+		success: function(data){
+			// 맵쪽에 뿌려줄 좌표를 담을 배열
+			var flightPlanCoordinates = [];
+			var fcno = null;
+						
+			// 작은 Route Content를 동적으로 뿌려줌
+			$.each(data.list, function(index, items){
+				console.log(items.dateStart);
+				$('.content-group').append(viewTemplate(items));
+				
+				if(items.friendRequestDTOs.length != 0 && ($('#friendSeq').val() == $('#seq').val())) {				
+					$.each(items.friendRequestDTOs, function(temp, item) {
+						$('.request-group').append(requestFriendsTemplate(item));
+						
+						if(item.isPermit == 1 || item.isPermit == 2) {
+							var btnSaveDom = $('.btn.btn-tsave:last');
+							var btnDangerDom = $('.btn.btn-tdanger:last');
+							btnSaveDom.remove();
+							btnDangerDom.remove();
+						}
+					});
+				}
+				
+				// 좌표 담기
+				flightPlanCoordinates.push({lat : items.lat, lng : items.lng});
+				console.log(items.lat);
+			});
+    
+>>>>>>> parent of d38164a... 동행 수정
 			// 해외
 			if($('#friendIs_domestic').val() == 0) {
 				googleMap(flightPlanCoordinates);
@@ -170,6 +214,7 @@ $(function () {
 	// 동행신청 폼 저장
 	    $('#req-btn-try').click(function(){
 	    	$.ajax({
+<<<<<<< HEAD
 <<<<<<< HEAD
 	    		type: 'delete',
 	    		url: '/friend/delete',
@@ -294,19 +339,30 @@ $(function () {
 	    		url: '/friend/setRequestWrite',
 	    		data: $('#requestForm').serialize(),
 >>>>>>> parent of d38164a... 동행 수정
+=======
+	    		type: 'post',
+	    		url: '/friend/setRequestWrite',
+	    		data: $('#requestForm').serialize(),
+>>>>>>> parent of d38164a... 동행 수정
 	    		beforeSend : function(xhr) {
 	    			xhr.setRequestHeader(header, token);
 	    		},
 	    		success: function(){
 <<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 	    			console.log('delete success!!!');
 	    			alert('삭제 완료!');
 =======
+=======
+>>>>>>> parent of d38164a... 동행 수정
 	    			console.log('success');
 	    			alert('신청 완료 하였습니다.');
 	    			friendAlarm($('#friendFno').val(), $('#username').val());
 	    			
+<<<<<<< HEAD
+>>>>>>> parent of d38164a... 동행 수정
+=======
 >>>>>>> parent of d38164a... 동행 수정
 	    			location.href='/friend/list/1';
 	    		},
@@ -326,14 +382,20 @@ $(function () {
 // 작은 게시물에 버튼 클릭하면 동행 신청 모달이동
 function writeClick(id) {
 	console.log($('#seq').val());
+<<<<<<< HEAD
 	
 	
+=======
+	
+	
+>>>>>>> parent of d38164a... 동행 수정
 	if($('#seq').val()==undefined){
 		alert('로그인 후 이용해주세요');
 	}
 	$('#fcno').val(id);
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 function requestFriendsTemplate(items) {
 =======
@@ -373,6 +435,8 @@ function writeClick(id) {
 
 =======
 >>>>>>> parent of d38164a... 동행 수정
+=======
+>>>>>>> parent of d38164a... 동행 수정
 
 function viewTemplate(items) {
 	var viewTemp = `
@@ -401,7 +465,10 @@ function viewTemplate(items) {
 
 function requestFriendsTemplate(item) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> Stashed changes
+=======
+>>>>>>> parent of d38164a... 동행 수정
 =======
 >>>>>>> parent of d38164a... 동행 수정
 	var requestTemp = `
@@ -414,8 +481,12 @@ function requestFriendsTemplate(item) {
 												alt="" />
 										</div>
 <<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 										<p class="author">${items.nickname}</p>
+=======
+										<p class="author">${item.nickname}</p>
+>>>>>>> parent of d38164a... 동행 수정
 =======
 										<p class="author">${item.nickname}</p>
 >>>>>>> parent of d38164a... 동행 수정
@@ -427,6 +498,7 @@ function requestFriendsTemplate(item) {
 										<div class="content-detail">
 											<p>${item.content}</p>
 											<div class="button-wrap">
+<<<<<<< HEAD
 <<<<<<< HEAD
 												<button class="btn btn-tsave" data-fccno="${items.fccno}">수락</button>
 												<button class="btn btn-tdanger" data-fccno="${items.fccno}">거절</button>
@@ -443,6 +515,10 @@ function requestFriendsTemplate(item) {
 												<button class="btn btn-tsave">수락</button>
 												<button class="btn btn-tdanger">거절</button>
 >>>>>>> Stashed changes
+=======
+												<button class="btn btn-tsave" data-fccno="${item.fccno}">수락</button>
+												<button class="btn btn-tdanger" data-fccno="${item.fccno}">거절</button>
+>>>>>>> parent of d38164a... 동행 수정
 =======
 												<button class="btn btn-tsave" data-fccno="${item.fccno}">수락</button>
 												<button class="btn btn-tdanger" data-fccno="${item.fccno}">거절</button>
@@ -579,6 +655,7 @@ function googleMap(flightPlanCoordinates) {
 	});
 	// 마커들 경로 표시
 	flightPath.setMap(map);
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< Updated upstream
 }
@@ -760,6 +837,9 @@ function googleMap(flightPlanCoordinates) {
 =======
 }
 >>>>>>> Stashed changes
+=======
+}
+>>>>>>> parent of d38164a... 동행 수정
 =======
 }
 >>>>>>> parent of d38164a... 동행 수정

@@ -52,6 +52,7 @@ public class FriendPageController {
 		model.addAttribute("friendDTO", friendDTO);
 		// [용주] : 테스트를 위해 view2로 변경함!!!
 <<<<<<< HEAD
+<<<<<<< HEAD
 		return "/friend/view2";
 <<<<<<< Updated upstream
 	}
@@ -76,6 +77,9 @@ public class FriendPageController {
 		return "/friend/routeModify";
 =======
 >>>>>>> Stashed changes
+=======
+		return "/friend/view";
+>>>>>>> parent of d38164a... 동행 수정
 =======
 		return "/friend/view";
 >>>>>>> parent of d38164a... 동행 수정

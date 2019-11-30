@@ -94,6 +94,7 @@ public class FriendApiController {
 				System.out.println(friendRouteDTO.getFriendRequestDTOs().get(i).toString());
 			}
 		}
+<<<<<<< HEAD
 		System.out.println(list.size());
 		
 		for(FriendRouteDTO friendRouteDTO : list) {
@@ -101,6 +102,8 @@ public class FriendApiController {
 				System.out.println(friendRouteDTO.getFriendRequestDTOs().get(i).toString());
 			}
 		}
+=======
+>>>>>>> parent of d38164a... 동행 수정
 		System.out.println(list.size());
 		
 		modelAndView.addObject("list", list);

@@ -1,11 +1,15 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <<<<<<< HEAD
+<<<<<<< HEAD
 <%@ taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
 <<<<<<< Updated upstream
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 =======
 >>>>>>> Stashed changes
+=======
+<%@ taglib prefix="sec"	uri="http://www.springframework.org/security/tags"%>
+>>>>>>> parent of d38164a... 동행 수정
 =======
 <%@ taglib prefix="sec"	uri="http://www.springframework.org/security/tags"%>
 >>>>>>> parent of d38164a... 동행 수정
@@ -46,6 +50,7 @@
 		<div class="map-wrap">
 			<div id="map"></div>
 		</div>
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< Updated upstream
 		
@@ -98,17 +103,27 @@
 			<ul class="content-group">
 
 >>>>>>> parent of d38164a... 동행 수정
+=======
+
+		<div class="content-wrap">
+			<ul class="content-group">
+
+>>>>>>> parent of d38164a... 동행 수정
 			</ul>
 		</div>
 	</div>
 	<!-- 메인 컨텐츠 영역 -->
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 	<%-- <sec:authorize access="hasRole('ROLE_USER') and isAuthenticated()">
 =======
 	<sec:authorize access="hasRole('ROLE_USER') and isAuthenticated()">
 >>>>>>> Stashed changes
+=======
+	<sec:authorize access="hasRole('ROLE_USER') and isAuthenticated()">
+>>>>>>> parent of d38164a... 동행 수정
 =======
 	<sec:authorize access="hasRole('ROLE_USER') and isAuthenticated()">
 >>>>>>> parent of d38164a... 동행 수정
@@ -127,11 +142,15 @@
 						<input type="hidden" name="fcno" id="fcno"> <input
 							type="hidden" name="seq" id="seq" value="${userDetail.seq }">
 <<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 						<input type="hidden" name="id" id="id" value="${userDetail.id }">
 =======
 						<%-- <input type="hidden" name="id" id="id" value="${userDetail.id }"> --%>
 >>>>>>> Stashed changes
+=======
+						<%-- <input type="hidden" name="id" id="id" value="${userDetail.id }"> --%>
+>>>>>>> parent of d38164a... 동행 수정
 =======
 						<%-- <input type="hidden" name="id" id="id" value="${userDetail.id }"> --%>
 >>>>>>> parent of d38164a... 동행 수정
@@ -166,6 +185,7 @@
 
 		</div>
 <<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 	</sec:authorize> --%>
 	<%@include file="../common/footer.jsp"%>
@@ -173,6 +193,10 @@
 	</sec:authorize>
 
 >>>>>>> Stashed changes
+=======
+	</sec:authorize>
+    <%@include file="../common/footer.jsp"%>
+>>>>>>> parent of d38164a... 동행 수정
 =======
 	</sec:authorize>
     <%@include file="../common/footer.jsp"%>
