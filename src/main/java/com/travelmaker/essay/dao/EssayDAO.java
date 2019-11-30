@@ -6,9 +6,12 @@ import com.travelmaker.essay.domain.EssaySearchFilter;
 import java.util.List;
 
 public interface EssayDAO {
+
+   public EssayDTO readOneByBno(int bno);
+
    public EssayDTO readOne(int rno);
 
-   public List<EssayDTO> readAll();
+   public List<EssayDTO> readAll(int seq);
 
    public List<EssayDTO> readAll(EssaySearchFilter essaySearchFilter);
 

@@ -1,10 +1,10 @@
 package com.travelmaker.route.service;
 
-import java.util.List;
-
 import com.travelmaker.route.domain.RouteContentDTO;
 import com.travelmaker.route.domain.RouteDTO;
 import com.travelmaker.route.domain.RouteImageDTO;
+
+import java.util.List;
 
 public interface RouteService {
 
@@ -29,5 +29,7 @@ public interface RouteService {
 	public void saveOrder(int[] order);
 
 	public void updateViews(int rno);
+
+	public List<RouteDTO> getRouteListByUserSeq(int seq);
 
 }

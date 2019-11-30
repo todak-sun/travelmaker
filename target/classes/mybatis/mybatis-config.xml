@@ -9,6 +9,8 @@
 		<typeAlias type="com.travelmaker.comment.domain.CommentDTO"
 			alias="comment" />
 
+		<typeAlias type="com.travelmaker.comment.domain.CommentSearchFilter" alias="commentSearchFilter"/>
+
 		<typeAlias type="com.travelmaker.essay.domain.EssayDTO"
 			alias="essay" />
 

@@ -1,10 +1,12 @@
 package com.travelmaker.user.domain;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.sql.Date;
 
 @Data
+@Accessors(chain = true)
 public class UserDTO {
 	private int seq;
 	private String nickname; //별명

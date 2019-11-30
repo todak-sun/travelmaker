@@ -9,15 +9,12 @@ import com.travelmaker.essay.domain.network.response.EssayApiResponse;
 import com.travelmaker.essay.ifs.EssayApiInterface;
 import com.travelmaker.model.network.Header;
 import com.travelmaker.user.dao.UserDAO;
+import com.travelmaker.util.fileIO.FileIO;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.ServletContext;
-import java.io.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,12 +35,7 @@ public class EssayApiService implements EssayApiInterface<EssayApiRequest, Essay
     UserDAO userDAO;
 
     @Autowired
-    ServletContext servletContext;
-
-    @Override
-    public Header<List<EssayApiResponse>> readAll() {
-        return null;
-    }
+    FileIO fileIO;
 
     @Override
     public Header<List<EssayApiResponse>> readAll(@ModelAttribute EssaySearchFilter essaySearchFilter) {
@@ -57,7 +49,7 @@ public class EssayApiService implements EssayApiInterface<EssayApiRequest, Essay
         Optional<EssayDTO> optional = Optional.ofNullable(essayDAO.readOne(rno));
         return optional.map(essayDTO -> {
             System.out.println(essayDTO.getImageName());
-            essayDTO.setContent(readFile(essayDTO.getFileName()));
+            essayDTO.setContent(fileIO.readFile(essayDTO.getFileName()));
             Optional.ofNullable(commentDAO.readAll(essayDTO.getBno()))
                     .ifPresent(essayDTO::setCommentDTOList);
             return response(essayDTO);
@@ -67,9 +59,11 @@ public class EssayApiService implements EssayApiInterface<EssayApiRequest, Essay
     @Override
     public Header<EssayApiResponse> create(EssayApiRequest request) {
         System.out.println(request);
-        String imageName = Optional.ofNullable(request.getImageFile()).map(this::saveImage).orElse(null);
+        String imageName = Optional.ofNullable(request.getImageFile())
+                .map(imageFile -> fileIO.saveImage(imageFile))
+                .orElse(null);
         String fileName = UUID.randomUUID().toString() + LocalDateTime.now().toString() + ".txt";
-        saveFile(request.getContent(), fileName);
+        fileIO.saveFile(request.getContent(), fileName);
 
         EssayDTO essayDTO = EssayDTO.builder()
                 .seq(request.getSeq())
@@ -89,9 +83,9 @@ public class EssayApiService implements EssayApiInterface<EssayApiRequest, Essay
     public String upload(int rno, EssayApiRequest request) {
         return Optional.ofNullable(essayDAO.readOne(rno))
                 .map((essayDTO) -> {
-                    Optional.ofNullable(essayDTO.getImageName()).ifPresent(this::deleteImage);
+                    Optional.ofNullable(essayDTO.getImageName()).ifPresent(imageName -> fileIO.deleteImage(imageName));
                     String imageName = Optional.ofNullable(request.getImageFile())
-                            .map(this::saveImage)
+                            .map((imageFile) -> fileIO.saveImage(imageFile))
                             .orElse(null);
                     essayDTO.setImageName(imageName);
                     return essayDAO.update(essayDTO).getImageName();
@@ -104,7 +98,7 @@ public class EssayApiService implements EssayApiInterface<EssayApiRequest, Essay
         Optional<EssayDTO> optional = Optional.ofNullable(essayDAO.readOne(rno));
         return optional.map(essayDTO -> {
             //바뀐 내용을 기존에 있던 내용에 저장
-            saveFile(request.getContent(), essayDTO.getFileName());
+            fileIO.saveFile(request.getContent(), essayDTO.getFileName());
 
             //DB에 저장된 image의 이름을 조회
             String imageName = Optional.ofNullable(essayDTO.getImageName())
@@ -113,14 +107,18 @@ public class EssayApiService implements EssayApiInterface<EssayApiRequest, Essay
                         //임시 수정중인 이미지의 이름과 같은지 비교해서 같다면 그대로 저장
                         if (request.getImageName().equals(savedImageName)) {
                             return savedImageName;
-                        //임시 수정중인 이미지의 이름과 같지 않다면 기존의 파일을 삭제하고, 새로 들어온 이미지 파일을 저장하거나 null로 처리
+                            //임시 수정중인 이미지의 이름과 같지 않다면 기존의 파일을 삭제하고, 새로 들어온 이미지 파일을 저장하거나 null로 처리
                         } else {
-                            deleteImage(savedImageName);
-                            return Optional.ofNullable(request.getImageFile()).map(this::saveImage).orElse(null);
+                            fileIO.deleteImage(savedImageName);
+                            return Optional.ofNullable(request.getImageFile())
+                                    .map(imageFile -> fileIO.saveImage(imageFile))
+                                    .orElse(null);
                         }
                     })
                     //DB에 이미지가 없다면, 새로 들어온 배경이미지가 있는지 조사하고, 새로 들어온 이미지 파일을 저장하거나 null로 처리.
-                    .orElse(Optional.ofNullable(request.getImageFile()).map(this::saveImage).orElse(null));
+                    .orElse(Optional.ofNullable(request.getImageFile())
+                            .map(imageFile -> fileIO.saveImage(imageFile))
+                            .orElse(null));
 
             essayDTO.setTitle(request.getTitle())
                     .setLikes(request.getLikes())
@@ -141,9 +139,9 @@ public class EssayApiService implements EssayApiInterface<EssayApiRequest, Essay
         Optional<EssayDTO> optional = Optional.ofNullable(essayDAO.readOne(rno));
         return optional.map(essayDTO -> {
             //파일 이름이 있다면, 해당 파일 삭제.
-            Optional.ofNullable(essayDTO.getFileName()).ifPresent(this::deleteFile);
+            Optional.ofNullable(essayDTO.getFileName()).ifPresent(fileName -> fileIO.deleteFile(fileName));
             //이미지 이름이 있다면, 해당 이미지 삭제
-            Optional.ofNullable(essayDTO.getImageName()).ifPresent(this::deleteImage);
+            Optional.ofNullable(essayDTO.getImageName()).ifPresent(imageName -> fileIO.deleteImage(imageName));
             //해당 게시물에 달린 댓글이 있다면, 댓글 모두 삭제
             Optional.of(commentDAO.readAll(essayDTO.getBno()))
                     .ifPresent((essayDTOList) -> commentDAO.deleteAll(essayDTO.getBno()));
@@ -197,88 +195,4 @@ public class EssayApiService implements EssayApiInterface<EssayApiRequest, Essay
         });
         return Header.OK(essayApiResponseList, "데이터 조회 성공");
     }
-
-    private String readFile(String fileName) {
-        String dirPath = servletContext.getRealPath("/resources/storage/essay");
-        BufferedReader br = null;
-        StringBuffer sb = new StringBuffer();
-        try {
-            String line = null;
-            br = new BufferedReader(new InputStreamReader(new FileInputStream(new File(dirPath, fileName))));
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return sb.toString();
-    }
-
-    private void saveFile(String content, String fileName) {
-        String dirPath = servletContext.getRealPath("/resources/storage/essay");
-        OutputStreamWriter osw = null;
-        try {
-            osw = new OutputStreamWriter(new FileOutputStream(dirPath + "/" + fileName));
-            osw.write(content);
-            osw.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (osw != null) {
-                    osw.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private String saveImage(MultipartFile imageFile) {
-        String dirPath = servletContext.getRealPath("/resources/storage/essay");
-        String imageName = LocalDateTime.now().toString() + imageFile.getOriginalFilename();
-
-        InputStream is = null;
-        FileOutputStream fos = null;
-        try {
-            is = imageFile.getInputStream();
-            fos = new FileOutputStream(new File(dirPath, imageName));
-            FileCopyUtils.copy(is, fos);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (is != null) {
-                    is.close();
-                }
-                if (fos != null) {
-                    fos.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return imageName;
-    }
-
-    private void deleteImage(String savedImageName) {
-        String dirPath = servletContext.getRealPath("/resources/storage/essay");
-        File file = new File(dirPath, savedImageName);
-        file.delete();
-    }
-
-    private void deleteFile(String savedFileName) {
-        String dirPath = servletContext.getRealPath("/resources/storage/essay");
-        File file = new File(dirPath, savedFileName);
-        file.delete();
-    }
-
 }

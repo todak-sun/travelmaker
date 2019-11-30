@@ -77,12 +77,12 @@ let travelmaker = (function (window) {
             return [setState, getState];
         };
 
-        Utils.prototype.showLoading = function(){
+        Utils.prototype.showLoading = function () {
             const ldsBack = getEl('.lds-back');
             ldsBack.classList.remove('hidden');
         };
 
-        Utils.prototype.closeLoading = function(){
+        Utils.prototype.closeLoading = function () {
             const ldsBack = getEl('.lds-back');
             ldsBack.classList.add('hidden');
         };
@@ -117,11 +117,12 @@ let travelmaker = (function (window) {
     const Regex = (function (w) {
         const Regex = function () {
             this.email = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-            this.password = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
+            this.password = /^.*(?=^.{7,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
             this.koreaName = /^[가-힣]{2,4}$/;
             this.englishAndNumber = /^[a-zA-Z0-9]+$/;
             this.englishWithPoint = /[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
             this.number = /^[0-9]+$/;
+            this.nickname = /^[0-9a-zA-Z가-힣]{4,20}$/;
         };
 
         return Regex;
@@ -148,7 +149,7 @@ let travelmaker = (function (window) {
             `;
         };
 
-        Template.prototype.message = function (message){
+        Template.prototype.message = function (message) {
             return `
                 <div class="message-item">
                     <span class="close">&times;</span>
@@ -417,7 +418,7 @@ let travelmaker = (function (window) {
             `;
         }
 
-        Template.prototype.passwordSearch = function(){
+        Template.prototype.passwordSearch = function () {
             return `
                <form class="pw-search">
                 <label for="" class="label-need">아이디</label>
@@ -447,7 +448,7 @@ let travelmaker = (function (window) {
                 </div>
     
                 <div class="button-wrap">
-                  <button id="btn-send">전송</button>
+                  <button id="btn-send" type="button">전송</button>
                 </div>
     
                 <div class="message-box">
@@ -495,6 +496,151 @@ let travelmaker = (function (window) {
             `
         };
 
+        Template.prototype.newPassword = function () {
+            return `
+                  <div class="input-box">
+                      <label for="npwd">새 비밀번호</label>
+                      <div class="input-wrap">
+                        <input type="password" class="v" id="npwd"/>
+                        <div class="v-feed"></div>
+                        <div class="iv-feed"></div>
+                      </div>
+                  </div>
+                  
+                  <div class="input-box">
+                      <label for="renpwd">새 비밀번호 확인</label>
+                      <div class="input-wrap">
+                        <input type="password" class="v" id="renpwd"/>
+                        <div class="v-feed"></div>
+                        <div class="iv-feed"></div>
+                      </div>
+                  </div>
+                  
+                  <div class="button-wrap">
+                    <button id="btn-change-npwd" type="button">변경하기</button>
+                  </div>
+           `
+        };
+
+        Template.prototype.register1 = function () {
+            return `
+              <div id="mini-modal"></div>
+              <form action="" class="form-register">
+              <div><input type="hidden" id="registerMethod"></div>
+              <label for="realname">이름</label>
+              <div class="input-wrap-4">
+                <input type="text" id="realname" class="v" disabled/>
+                <div class="v-feed"></div>
+                <div class="iv-feed"></div>
+              </div>
+
+              <label for="nickname">닉네임</label>
+              <div class="input-wrap-4">
+                <input type="text" id="nickname" class="v"/>
+                <div class="v-feed"></div>
+                <div class="iv-feed"></div>
+              </div>
+              
+              <label for="id">아이디</label>
+              <div class="input-wrap-4">
+                <input type="text" class="v" id="id" disabled/>
+                <div class="v-feed"></div>
+                <div class="iv-feed"></div>
+              </div>
+          
+              <label for="cpwd">현재 비밀번호</label>
+              <div class="input-wrap-4">
+                <input type="password" class="v" id="cpwd" />
+                <div class="v-feed"></div>
+                <div class="iv-feed"></div>
+              </div>
+              <button id="btn-change-pwd" class="btn-travel-min" type="button">변경</button>
+                
+              <label for="email1">이메일</label>
+              <div class="input-wrap">
+                <input type="text" class="v" id="email1" name="email1" disabled/>
+                <div class="v-feed"></div>
+                <div class="iv-feed"></div>
+              </div>
+              <div class="input-wrap-3 input-email2-wrap">
+                <input type="text" id="email2" name="email2" list="email" placeholder="직접입력...." class="v" disabled/>
+                <datalist id="email">
+                  <option value="gmail.com">gmail.com</option>
+                  <option value="naver.com">naver.com</option>
+                  <option value="daum.net">daum.net</option>
+                  <option value="nate.com">nate.com</option>
+                </datalist>
+                <div class="v-feed"></div>
+                <div class="iv-feed"></div>
+              </div>
+              <button id="btn-email-change" class="btn-travel-min off" type="button">변경</button>
+          
+              <label for="phone1">휴대폰</label>
+              <div class="input-wrap">
+                <select id="phone1" >
+                  <option value="010">010</option>
+                  <option value="011">011</option>
+                  <option value="016">016</option>
+                  <option value="017">017</option>
+                  <option value="018">018</option>
+                  <option value="019">019</option>
+                </select>
+              </div>
+              <div class="input-wrap">
+                <input type="text" class="v" id="phone2"/>
+                <div class="v-feed"></div>
+                <div class="iv-feed"></div>
+              </div>
+              <div class="input-wrap">
+                <input type="text" class="v" id="phone3"/>
+                <div class="v-feed"></div>
+                <div class="iv-feed"></div>
+              </div>
+          
+              <label for="birthdate">생년월일</label>
+              <div class="input-wrap-4">
+                <input type="date"  id="birthdate"/>
+              </div>
+
+              <label for="postcode">주소</label>
+              <div class="input-wrap">
+                <input type="text" id="postcode">
+              </div>
+              <div class="input-wrap-3">
+                <input type="text" id="addr1">
+              </div>
+
+              <label for="addr2">상세주소</label>
+              <div class="input-wrap-4">
+                <input type="text" id="addr2">
+              </div>
+              
+              <label for="gender">성별</label>
+              <div class="radio-wrap">
+                  <input id="mail" type="radio" value="0" name="gender" checked="true">
+                  <label for="mail" class="clicked">남</label>
+                  <input id="femail" type="radio" value="1" name="gender">
+                  <label for="femail">여</label>
+              </div>
+              
+              <label for="img-profile">프로필</label>
+              <div class="img-wrap">
+                <div class="img-area"></div>
+                <input type="file" id="img-profile" style="display:none;">
+              </div>
+              <div class="input-textarea">
+                <textarea id="content-profile"></textarea>
+              </div>
+              
+              <div class="button-wrap">
+                  <button class="btn-update" type="button">수정</button>
+                  <button class="btn-withdraw" type="button">탈퇴</button>
+              </div>
+            </div>
+          </form>  
+            `;
+        }
+
         Template.prototype.register2 = function (csrfTokenValue) {
             return `
             <div id="mini-modal"></div>
@@ -506,9 +652,17 @@ let travelmaker = (function (window) {
                 <div class='input-expression'>
                   <p>* 표시는 필수 입력 사항입니다</p>
                 </div>
+                
                 <label for="realname" class="label-need">이름</label>
                 <div class="input-wrap-4">
                   <input type="text" id="realname" name="realname" class="v"/>
+                  <div class="v-feed"></div>
+                  <div class="iv-feed"></div>
+                </div>
+                
+                <label for="nickname" class="label-need">닉네임</label>
+                <div class="input-wrap-4">
+                  <input type="text" id="nickname" name="nickname" class="v"/>
                   <div class="v-feed"></div>
                   <div class="iv-feed"></div>
                 </div>
@@ -645,6 +799,71 @@ let travelmaker = (function (window) {
             `;
         };
 
+        Template.prototype.myArticle = function () {
+            return `
+            <nav class="lnb-my-article">
+                <ul>
+                    <li><a href="#" class="on" data-page="my-essay">에세이</a></li>
+                    <li><a href="#" data-page="my-route">경로</a></li>
+                    <li><a href="#" data-page="my-friend">동행</a></li>
+                    <li><a href="#" data-page="my-purchase">대리구매</a></li>
+                    <li><a href="#" data-page="my-comment">내가 쓴 댓글</a></li>
+                </ul>
+            </nav>
+            <table class="table">
+                <thead class="table-head"></thead>
+                <tbody class="table-content"></tbody>
+            </table>
+            `
+        };
+
+        Template.prototype.storyTableHead = function () {
+            return `
+             <tr>
+                <th class="title">제목</th>
+                <th class="date">작성일</th>
+                <th class="like">좋아요</th>
+                <th class="view">조회수</th>
+            </tr>
+          `;
+        };
+
+        Template.prototype.storyTableBody = function (story) {
+            const {title, dateWrite, likes, views, rno} = story;
+            return `
+                <tr>
+                    <td data-rno="${rno}">${title}</td>
+                    <td>${dateWrite}</td>
+                    <td>${likes}</td>
+                    <td>${views}</td>
+                </tr>
+            `;
+        };
+
+        Template.prototype.commentTableHead = function () {
+            return `
+             <tr>
+                <th class="title">게시물제목</th>
+                <th class="content">댓글내용</th>
+                <th class="date">작성일</th>
+            </tr>
+          `;
+        };
+
+        Template.prototype.commentTableBody = function (comment) {
+            const {essayDTO, routeDTO, content, dateWrite} = comment;
+            let story = essayDTO ? essayDTO : routeDTO;
+            let category = essayDTO ? '에세이' : '경로';
+            return `
+              <tr>
+                <td data-rno="${story.rno}">[${category}]${story.title}</td>
+                <td>${content}</td>
+                <td>${dateWrite}</td>
+              </tr>
+            `
+        };
+
+
         return Template;
     })(_w);
 
@@ -681,21 +900,102 @@ let travelmaker = (function (window) {
     const Ajax = (function (w) {
         const Ajax = function () {
             this.getEssay = getEssay;
-            this.getEssayTempList = getEssayTempList;
+            this.getEssayList = getEssayList;
             this.createEssay = createEssay2;
             this.essayImageUpload = essayImageUpload;
             this.updateEssay = updateEssay;
             this.essayDelete = essayDelete;
             this.getCommentList = getCommentList;
+            this.getCommentListBySearchFilter = getCommentListBySearchFilter;
             this.createComment = createComment;
             this.createReComment = createReComment;
             this.updateComment = updateComment;
             this.deleteComment = deleteComment;
             this.checkId = checkId;
             this.alarmDataLoad = alarmDataLoad;
+            this.checkNickname = checkNickname;
+            this.getRouteList = getRouteList;
+            this.getUser = getUser;
+            this.checkPassword = checkPassword;
+            this.updateUser = updateUser;
+            this.checkHasId = checkHasId;
+            this.searchIdAndSendEmail = searchIdAndSendEmail;
+            this.changePassword = changePassword;
+            this.sendEmailCode = sendEmailCode;
         };
 
         const {setRequestHeader} = new Utils();
+
+        function sendEmailCode(email1, email2){
+            return $.ajax({
+                type: 'post',
+                url: '/user/emailCode',
+                data: 'email1=' + email1 + '&email2=' + email2,
+                dataType: 'JSON',
+                beforeSend: setRequestHeader
+            })
+        }
+
+        function changePassword(seq, npwd) {
+            return $.ajax({
+                type: 'POST',
+                url: '/api/user/' + seq + '/password',
+                data: {npwd: npwd},
+                dataType: 'text',
+                beforeSend: setRequestHeader
+            })
+        }
+
+        function checkHasId(data) {
+            return $.ajax({
+                type: 'POST',
+                url: '/user/userIdFind',
+                data: data,
+                beforeSend: setRequestHeader,
+                dataType: 'json'
+            });
+        }
+
+        function searchIdAndSendEmail(data) {
+            return $.ajax({
+                type: 'post',
+                url: '/user/userPwFind',
+                beforeSend: setRequestHeader,
+                data: data,
+                dataType: 'text'
+            })
+        }
+
+        function updateUser(data, seq) {
+            return $.ajax({
+                type: 'POST',
+                contentType: false,
+                processData: false,
+                url: url + '/api/user/' + seq + '/update',
+                dataType: 'text',
+                data: data,
+                beforeSend: setRequestHeader
+            })
+        }
+
+        function checkPassword(data) {
+            return $.ajax({
+                type: 'POST',
+                url: `/user/checkPassword`,
+                data: data,
+                dataType: 'text',
+                beforeSend: setRequestHeader
+            })
+        }
+
+        function getUser(seq) {
+            return $.ajax({
+                type: 'POST',
+                url: '/api/user/' + seq,
+                dataType: 'json',
+                beforeSend: setRequestHeader
+            })
+        }
 
         function alarmDataLoad(seq) {
             return $.ajax({
@@ -713,6 +1013,23 @@ let travelmaker = (function (window) {
                 url: `${url}/api/board/${bno}/comment`,
                 dataType: 'json'
             });
+        }
+
+        function getCommentListBySearchFilter(seq, order) {
+            return $.ajax({
+                type: 'GET',
+                url: `${url}/api/comment`,
+                dataType: 'json',
+                data: {seq, order}
+            });
+        }
+
+        function getRouteList(seq) {
+            return $.ajax({
+                type: 'GET',
+                url: `${url}/api/route/seq/${seq}`,
+                dataType: 'json'
+            })
         }
 
         function createComment(bno, data) {
@@ -734,6 +1051,14 @@ let travelmaker = (function (window) {
                 dataType: 'text',
                 beforeSend: setRequestHeader
             });
+        }
+
+        function checkNickname(nickname) {
+            return $.ajax({
+                type: 'GET',
+                url: `${url}/user/checkNickname?nickname=${nickname}`,
+                dataType: 'text'
+            })
         }
 
         function createReComment(bno, cno, data) {
@@ -775,7 +1100,7 @@ let travelmaker = (function (window) {
             });
         }
 
-        function getEssayTempList(seq, fixed, order) {
+        function getEssayList(seq, fixed, order) {
             return $.ajax({
                 type: 'GET',
                 contentType: 'application/json',
@@ -1260,43 +1585,145 @@ let travelmaker = (function (window) {
 
         };
         const {getEl} = new Utils();
-        validation.prototype.setInvalid = function (el, feedBox, message) {
+        const myRegex = new Regex();
+
+        validation.prototype.setInvalid = setInvalid;
+        validation.prototype.setValid = setValid;
+        validation.prototype.getFeedBox = getFeedBox;
+        validation.prototype.isValid = isValid;
+        validation.prototype.changeValid = changeValid;
+        validation.prototype.changeInvalid = changeInvalid;
+        validation.prototype.resetValidClass = resetValidClass;
+
+        function setInvalid(el, feedBox, message) {
             feedBox.innerText = message;
             el.classList.add('v-fail');
             el.classList.remove('v-pass');
-        };
+        }
 
-        validation.prototype.setValid = function (el, feedBox, message) {
+        function setValid(el, feedBox, message) {
             feedBox.innerText = message;
             el.classList.add('v-pass');
             el.classList.remove('v-fail');
-        };
+        }
 
-        validation.prototype.getFeedBox = function (el) {
+        function getFeedBox(el) {
             return [el.parentElement.querySelector('.v-feed'),
                 el.parentElement.querySelector('.iv-feed')];
-        };
+        }
 
-        validation.prototype.isValid = function (el) {
+        function isValid(el) {
             return el.classList.contains('v-pass');
-        };
+        }
 
-        validation.prototype.changeValid = function (el) {
+        function changeValid(el) {
             el.classList.add('v-pass');
             el.classList.remove('v-fail');
-        };
+        }
 
-        validation.prototype.changeInvalid = function (el) {
+        function changeInvalid(el) {
             el.classList.add('v-fail');
             el.classList.remove('v-pass');
-        };
+        }
 
-        validation.prototype.resetValidClass = function (e) {
+        function resetValidClass(e) {
             e.target.classList.remove('v-fail');
             e.target.classList.remove('v-pass');
-        };
+        }
 
         return validation;
+    })(_w);
+
+    const Handler = (function(w){
+        const Handler = function(){
+
+        }
+        const myRegex = new Regex();
+        const v = new Validation();
+        const {addEvent} = new Utils();
+
+        Handler.prototype.phoneHandler = phoneHandler;
+        Handler.prototype.emailHandler = emailHandler;
+        Handler.prototype.registerPasswordHandler = registerPasswordHandler;
+        Handler.prototype.registerRepasswordHandler = registerRepasswordHandler;
+        Handler.prototype.customRadioHandler = customRadioHandler;
+        Handler.prototype.initEmailConfirmModal = initEmailConfirmModal;
+
+        function initEmailConfirmModal(changedBtn, emailCode, email1, email2) {
+            const emailConfirm = getEl('#input-email-confirm'); // 인증번호
+            const btnConfirm = getEl('#btn-email-confirm'); // 버튼
+            const timer = getEl('.timer');
+            const close = getEl('.tmodal-mini .close');
+
+            // timerStart(180, timer, () => close.click());
+            addEvent(emailConfirm, 'keyup', (e) => {
+                if (e.keyCode === 13) btnConfirm.click();
+            });
+
+            addEvent(btnConfirm, 'click', () => {
+                const [vFeed, ivFeed] = v.getFeedBox(emailConfirm);
+                if (emailConfirm.value !== emailCode) {
+                    v.setInvalid(emailConfirm, ivFeed, '발송한 인증코드와 불일치 합니다. 다시 확인해주세요.');
+                    emailConfirm.value = '';
+                    emailConfirm.focus();
+                } else {
+                    close.click();
+                    changedBtn.innerText = '완료';
+                    changedBtn.classList.remove('ing');
+                    email1.disabled = true;
+                    email2.disabled = true;
+                    v.changeValid(changedBtn);
+                }
+            });
+        }
+
+
+        function phoneHandler(e) {
+            const regex = myRegex.number;
+            const [vFeed, ivFeed] = v.getFeedBox(e.target);
+            if (!e.target.value)
+                return v.setInvalid(e.target, ivFeed, '휴대폰번호를 입력해주세요.');
+            if (!regex.test(e.target.value))
+                return v.setInvalid(e.target, ivFeed, '숫자가 아닌 값은 입력할 수 없습니다.');
+            v.changeValid(this);
+        }
+
+        function emailHandler(e) {
+            let regex;
+            if (e.target.name === 'email1') regex = myRegex.englishAndNumber;
+            if (e.target.name === 'email2') regex = myRegex.englishWithPoint;
+            const [vFeed, ivFeed] = v.getFeedBox(this);
+            const value = e.target.value;
+            if (!value) return v.setInvalid(this, ivFeed, '이메일을 입력해주세요.');
+            if (!regex.test(value))
+                return v.setInvalid(e, ivFeed, '정확한 이메일을 입력해주세요.');
+            v.changeValid(this);
+        }
+
+        function registerPasswordHandler(e) {
+            const password = this.value;
+            const [vFeed, ivFeed] = v.getFeedBox(this);
+            const regex = myRegex.password;
+            if (!regex.test(password))
+                return v.setInvalid(this, ivFeed, '특수문자 / 문자 / 숫자 포함 형태의 8~15자리 비밀번호로 설정해주세요');
+            return v.setValid(this, vFeed, '사용 가능한 비밀번호 입니다.');
+        }
+
+        function registerRepasswordHandler(pwd, repwd) {
+            const [vFeed, ivFeed] = v.getFeedBox(repwd);
+            if (pwd.value !== repwd.value)
+                return v.setInvalid(repwd, ivFeed, '동일한 비밀번호를 입력해주세요.');
+            if (!v.isValid(pwd))
+                return v.setInvalid(repwd, ivFeed, '유효한 비밀번호 설정후 다시 시도해주세요');
+            v.setValid(repwd, vFeed, '동일한 비밀번호를 입력하셨습니다.');
+        }
+
+        function customRadioHandler(customRadios, e) {
+            customRadios.forEach((radio) => radio.classList.remove('clicked'));
+            e.target.classList.add('clicked');
+        }
+
+        return Handler;
     })(_w);
 
     const Comment = (function () {
@@ -1479,6 +1906,7 @@ let travelmaker = (function (window) {
     travelmaker.modal = Modal;
     travelmaker.validation = Validation;
     travelmaker.comment = Comment;
+    travelmaker.handler = Handler;
 
     _w.travelmaker = travelmaker;
     return travelmaker;

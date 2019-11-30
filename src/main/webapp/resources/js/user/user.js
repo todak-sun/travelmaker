@@ -99,7 +99,7 @@ function setRegisterByGoogle(ret) {
     emitRegisterEvent();
     setRegisterForm(id, name, 'google');
   } else if (ret !== 'null') {
-    doLogin(id, ret);
+    doLogin(id, ret, registerMethod);
   }
 }
 
@@ -115,7 +115,7 @@ function ajaxRegisterMethod(data) {
 }
 
 function emitRegisterEvent() {
-  const Link = getEl('#btn-regist');
+  const Link = getEl('.btn-register');
   const event = document.createEvent('MouseEvents');
   event.initEvent('click', false, true);
   Link.dispatchEvent(event);
