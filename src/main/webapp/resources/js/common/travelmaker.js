@@ -11,9 +11,11 @@ let travelmaker = (function (window) {
         Utils.prototype.getEls = getEls;
         Utils.prototype.getElList = getElList;
         Utils.prototype.getFormData = getFormData;
+
         Utils.prototype.getTokenCSRF = function () {
             return getEl('meta[name="_csrf"]').content;
         };
+
         Utils.prototype.addSameHandlerEvent = function (selector, handler, ...events) {
             let el = document.querySelector(selector);
             for (let i = 0; i < events.length; i++) {
@@ -149,14 +151,35 @@ let travelmaker = (function (window) {
             `;
         };
 
-        Template.prototype.message = function (message) {
+        Template.prototype.message = function (alarm) {
+            if (typeof alarm === 'string') {
+                return `
+                 <li>
+                    <div class="message-item">
+                        <span class="close">&times;</span>
+                        <p>${alarm}</p>
+                    </div>
+                 </li>
+                `;
+            }
+            const {alarmDate, ano, content, dataSeq, header, is_read, sendUserFid} = alarm;
+            let time = (new Date().getTime() - new Date(alarmDate + 43200000).getTime()) / (1000 * 60 * 60);
+            time = time < 1 ? Math.floor(time * 60) + '분 ' : Math.floor(time) + ' 시간 ';
+            let description;
             return `
+               <li>
                 <div class="message-item">
                     <span class="close">&times;</span>
-                    <p>${message}</p>
+                    <p>${alarm.content}</p>
+                    <div class="button-wrap" data-ano="${ano}" data-header="${header}">
+                        <span class="time">${time}</span>
+                        <a href="#" class="check">확인</a>
+                        <a href="#" class="delete">삭제</a>
+                    </div>
                 </div>
+               </li>
             `;
-        }
+        };
 
         Template.prototype.hashBox = function () {
             return `
@@ -265,6 +288,19 @@ let travelmaker = (function (window) {
               </div>
             `
         };
+
+        Template.prototype.purchase = function () {
+            return `
+              <div class="location-wrap">
+                <h2>사다주세요 or 사다줄께요</h2>
+                <div class="btn-wrap">
+                  <button id="btn-Request" data-purchase="1"></button>
+                  <button id="btn-Order" data-purchase="0"></button>
+                </div>
+              </div>
+            `
+        };
+
 
         Template.prototype.essayTemp = function (essay) {
             const {rno, title, imageName, isDomestic, dateWrite} = essay;
@@ -769,7 +805,7 @@ let travelmaker = (function (window) {
             <div class="input-box">
               <label for="req-start-date">동행 시작일</label>
               <div class="input-wrap">
-                <input type="date" id="req-start-date" class="v"/>
+                <input type="date" id="req-start-date" name="dateStart" class="v"/>
                 <div class="v-feed"></div>
                 <div class="iv-feed"></div>
               </div>
@@ -778,7 +814,7 @@ let travelmaker = (function (window) {
             <div class="input-box">
               <label for="req-end-date">동행 종료일</label>
               <div class="input-wrap">
-                <input type="date" id="req-end-date" class="v"/>
+                <input type="date" id="req-end-date" name="dateEnd" class="v"/>
                 <div class="v-feed"></div>
                 <div class="iv-feed"></div>
               </div>
@@ -787,9 +823,7 @@ let travelmaker = (function (window) {
             <div class="input-box">
               <label for="req-content">신청 내용</label>
               <div class="input-wrap textarea">
-                <textarea id="req-content" class="v"
-                  placeholder="신청 내용을 구체적으로 적어주세요."
-                ></textarea>
+                <textarea id="req-content" class="v" name="content" placeholder="신청 내용을 구체적으로 적어주세요."></textarea>
                 <div class="v-feed"></div>
                 <div class="iv-feed"></div>
               </div>
@@ -798,6 +832,36 @@ let travelmaker = (function (window) {
             </form>
             `;
         };
+
+        Template.prototype.friendRequest = function (request) {
+            let result = `
+                <li>
+                    <div class="request-item">
+                        <div class="user-area">
+                            <div class="image-wrap">
+                                <img src="https://source.unsplash.com/collection/190727/80x80" alt=""/>
+                            </div>
+                            <p class="author">${request.nickname}</p>
+                        </div>
+                        <div class="content-area">
+                            <p class="date">
+                                <span class="from">${request.dateStart}</span> <span class="to">${request.dateEnd}</span>
+                            </p>
+                            <div class="content-detail">
+                                <p>${request.content}</p>
+                                <div class="button-wrap">`;
+            if (!request.isPermit) {
+                result += `<button class="btn btn-tsave" data-fccno="${request.fccno}">수락</button>
+                           <button class="btn btn-tdanger" data-fccno="${request.fccno}">거절</button>`;
+            }
+            result += `</div>
+                            </div>
+                        </div>
+                    </div>
+               </li>`;
+            return result;
+        };
+
 
         Template.prototype.myArticle = function () {
             return `
@@ -922,11 +986,69 @@ let travelmaker = (function (window) {
             this.searchIdAndSendEmail = searchIdAndSendEmail;
             this.changePassword = changePassword;
             this.sendEmailCode = sendEmailCode;
+            this.createFriendRequest = createFriendRequest;
+            this.acceptFrinedRequest = acceptFriendRequest;
+            this.rejectFriendRequest = rejectFriendRequest;
+            this.getFriendRequestView = getFriendRequestView;
+            this.checkAlarm = checkAlarm;
+            this.deleteFriendRequest = deleteFriendRequest;
         };
 
         const {setRequestHeader} = new Utils();
 
-        function sendEmailCode(email1, email2){
+        function checkAlarm(header, ano) {
+            return $.ajax({
+                type: 'get',
+                url: '/alarm/' + header + '/' + ano,
+                dataType: 'json'
+            });
+        }
+
+        function deleteFriendRequest(fno){
+            return $.ajax({
+                type: 'delete',
+                url: '/friend/delete',
+                data: fno,
+                beforeSend: setRequestHeader
+            })
+        }
+
+        function getFriendRequestView(fcno) {
+            return $.ajax({
+                type: 'post',
+                url: '/friend/getRequestView',
+                data: {'fcno': fcno},
+                dataType: 'json',
+                beforeSend: setRequestHeader
+            });
+        }
+
+        function acceptFriendRequest(fccno) {
+            return $.ajax({
+                type: 'get',
+                url: '/friend/requestAccept',
+                data: 'fccno=' + fccno
+            })
+        }
+
+        function rejectFriendRequest(fccno) {
+            return $.ajax({
+                type: 'get',
+                url: '/friend/requestReject',
+                data: 'fccno=' + fccno,
+            })
+        }
+
+        function createFriendRequest(data) {
+            return $.ajax({
+                type: 'post',
+                url: '/friend/setRequestWrite',
+                data: data,
+                beforeSend: setRequestHeader
+            })
+        }
+
+        function sendEmailCode(email1, email2) {
             return $.ajax({
                 type: 'post',
                 url: '/user/emailCode',
@@ -1548,6 +1670,8 @@ let travelmaker = (function (window) {
                     return setModal(t.story(), initFunction);
                 case 'domestic' :
                     return setModal(t.domestic(), initFunction);
+                case 'purchase':
+                    return setModal(t.purchase(), initFunction);
                 default:
                     throw new Error('정의되지 않은 모달 형식입니다.');
             }
@@ -1634,8 +1758,8 @@ let travelmaker = (function (window) {
         return validation;
     })(_w);
 
-    const Handler = (function(w){
-        const Handler = function(){
+    const Handler = (function (w) {
+        const Handler = function () {
 
         }
         const myRegex = new Regex();
@@ -1891,8 +2015,20 @@ let travelmaker = (function (window) {
             return $frag[0];
         }
 
-
         return Comment;
+    })(_w);
+
+    const Alarm = (function (w) {
+        const Alarm = function (sock) {
+            this.sock = sock;
+        };
+
+        Alarm.prototype.send = function (header, data) {
+            let message = {header, data};
+            this.sock.send(JSON.stringify(message));
+        };
+
+        return Alarm;
     })(_w);
 
     travelmaker.googleMap = GoogleMap;
@@ -1907,6 +2043,7 @@ let travelmaker = (function (window) {
     travelmaker.validation = Validation;
     travelmaker.comment = Comment;
     travelmaker.handler = Handler;
+    travelmaker.alarm = Alarm;
 
     _w.travelmaker = travelmaker;
     return travelmaker;

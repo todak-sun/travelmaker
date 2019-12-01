@@ -20,5 +20,6 @@ public class FriendDTO {
 	private String kakao_chat;
 	private String date_of_issue;
 	private String nickname; // nickName 추가 (DB X)
+	private List<FriendRouteDTO> friendRouteDTOs;
 	private List<String> citys;
 }
