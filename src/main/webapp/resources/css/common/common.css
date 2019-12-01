@@ -139,6 +139,7 @@ header .header-group {
     background-color: #ffffff;
     color: #00c1da;
 }
+
 /* 네비게이션 */
 
 div[class$='feed'] {
@@ -633,6 +634,7 @@ div[class$='feed'] {
     justify-content: center;
     align-items: center;
 }
+
 /* 아이디 찾기 */
 
 /* 비밀번호 찾기 */
@@ -709,6 +711,7 @@ div[class$='feed'] {
     justify-content: center;
     align-items: center;
 }
+
 /* 비닐번호 찾기 */
 
 /* 리모컨 */
@@ -743,9 +746,9 @@ div[class$='feed'] {
 }
 
 .remote-controller.on {
-    animation-name: message;
-    animation-iteration-count: infinite;
-    animation-duration: 500ms;
+    /*animation-name: message;*/
+    /*animation-iteration-count: infinite;*/
+    /*animation-duration: 500ms;*/
     opacity: 1;
     background: linear-gradient(130deg, red, orange);
 }
@@ -789,7 +792,7 @@ div[class$='feed'] {
 .remote-controller .message-box .message-group .message-item {
     position: relative;
     width: 100%;
-    height: 4rem;
+    height: 4.5rem;
     border: 2px solid gray;
     background-color: #ffffff;
     box-sizing: border-box;
@@ -811,6 +814,46 @@ div[class$='feed'] {
 
 .remote-controller .message-box .message-group .message-item .close:hover {
     color: #ff7504;
+}
+
+.remote-controller .message-box .message-group .message-item p {
+    font-size: 0.9rem;
+    padding-right: 0.2rem;
+    box-sizing: border-box;
+    margin-bottom: 0.5rem;
+}
+
+.remote-controller .message-box .message-group .message-item .button-wrap {
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.remote-controller .message-box .message-group .message-item .button-wrap a {
+    box-sizing: border-box;
+    display: block;
+    padding: 0.2rem;
+    border-radius: 0.3rem;
+    font-size: 0.8rem;
+    text-decoration: none;
+    color: #ffffff;
+    background-color: #353535;
+    border: 1px solid #353535;
+}
+
+.remote-controller .message-box .message-group .message-item .button-wrap a:hover {
+    color: #353535;
+    background-color: #ffffff;
+}
+
+.remote-controller .message-box .message-group .message-item .button-wrap .time {
+    font-size: 0.7rem;
+}
+
+.remote-controller .message-box .message-group .message-item .button-wrap .time::after {
+    content: '전';
+    font-size: 0.7rem;
 }
 
 .remote-controller .remote-controller-group {
@@ -886,18 +929,18 @@ div[class$='feed'] {
     }
 }
 
-@keyframes message {
-    0% {
-        right: 5.2%;
-        opacity: 0.8;
-    }
-    50% {
-        right: 4.8%;
-    }
-    100% {
-        right: 5%;
-    }
-}
+/*@keyframes message {*/
+/*    0% {*/
+/*        right: 5.2%;*/
+/*        opacity: 0.8;*/
+/*    }*/
+/*    50% {*/
+/*        right: 4.8%;*/
+/*    }*/
+/*    100% {*/
+/*        right: 5%;*/
+/*    }*/
+/*}*/
 /* 리모컨 */
 
 /* 로딩 */
@@ -925,10 +968,12 @@ div[class$='feed'] {
     width: 80px;
     height: 80px;
 }
+
 .lds-roller div {
     animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
     transform-origin: 40px 40px;
 }
+
 .lds-roller div:after {
     content: ' ';
     display: block;
@@ -939,62 +984,79 @@ div[class$='feed'] {
     background: #fff;
     margin: -4px 0 0 -4px;
 }
+
 .lds-roller div:nth-child(1) {
     animation-delay: -0.036s;
 }
+
 .lds-roller div:nth-child(1):after {
     top: 63px;
     left: 63px;
 }
+
 .lds-roller div:nth-child(2) {
     animation-delay: -0.072s;
 }
+
 .lds-roller div:nth-child(2):after {
     top: 68px;
     left: 56px;
 }
+
 .lds-roller div:nth-child(3) {
     animation-delay: -0.108s;
 }
+
 .lds-roller div:nth-child(3):after {
     top: 71px;
     left: 48px;
 }
+
 .lds-roller div:nth-child(4) {
     animation-delay: -0.144s;
 }
+
 .lds-roller div:nth-child(4):after {
     top: 72px;
     left: 40px;
 }
+
 .lds-roller div:nth-child(5) {
     animation-delay: -0.18s;
 }
+
 .lds-roller div:nth-child(5):after {
     top: 71px;
     left: 32px;
 }
+
 .lds-roller div:nth-child(6) {
     animation-delay: -0.216s;
 }
+
 .lds-roller div:nth-child(6):after {
     top: 68px;
     left: 24px;
 }
+
 .lds-roller div:nth-child(7) {
     animation-delay: -0.252s;
 }
+
 .lds-roller div:nth-child(7):after {
     top: 63px;
     left: 17px;
 }
+
 .lds-roller div:nth-child(8) {
     animation-delay: -0.288s;
 }
+
 .lds-roller div:nth-child(8):after {
     top: 56px;
     left: 12px;
 }
+
 @keyframes lds-roller {
     0% {
         transform: rotate(0deg);
@@ -1003,6 +1065,7 @@ div[class$='feed'] {
         transform: rotate(360deg);
     }
 }
+
 /* 로딩 */
 
 

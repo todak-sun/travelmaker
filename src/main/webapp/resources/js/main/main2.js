@@ -8,7 +8,6 @@ $(function () {
         addAllSameEvent,
         addEvent,
         getRegisterMethod,
-        setRequestHeader,
         showLoading,
         closeLoading
     } = new travelmaker.utils();
@@ -19,30 +18,6 @@ $(function () {
     const t = new travelmaker.template();
     const h = new travelmaker.handler();
 
-    // 알람 [ 용주형 여기 정리좀해주세요 ]
-    // const alarmOnBtn = document.querySelector('#alarmOn');
-    // const alarmOffBtn = document.querySelector('#alarmOff');
-
-    // var seq = $('#alarmOff').data('seq');
-    // console.log(seq);
-    //
-    // if (seq > 0) {
-    //   // 로그인 되어있으면 알람 로드
-    //   alarmDataload(seq);
-    // }
-    // if (alarmOnBtn != null) {
-    //   alarmOnBtn.addEventListener('click', alarmBtnHandler);
-    // }
-    //
-    // if (alarmOffBtn != null) {
-    //   alarmOffBtn.addEventListener('click', alarmBtnHandler);
-    // }
-    //
-    // function alarmBtnHandler() {
-    //   $('#alarmDisplay').show();
-    // }
-
-    // 배열형
     //seq의 존재여부로 로그인/비로그인 여부를 가림.
     const seq = getEl('#seq');
 
@@ -390,33 +365,104 @@ $(function () {
 
     //리모컨 & 소켓 처리
     if (seq) {
+        const sock = new SockJS("/echo");
+
         const remocon = getEl('.remote-controller');
         const scrollUp = getEl('.scroll-up');
         const scrollDown = getEl('.scroll-down');
         const myPage = getEl('.my-page');
         const message = getEl('.message');
-
+        const messageGroup = getEl('.message-group');
         const $html = $('html');
 
+        //로그인을 하면, 자신의 알람 중 확인하지 않은 데이터를 불러옴
+        ajax.alarmDataLoad(seq.value)
+            .then(ret => {
+                //확인하지 않은 데이터가 있다면, 리모콘의 모양을 변화.
+                if (ret.length) {
+                    remocon.classList.add('on');
+                    message.parentElement.classList.add('onfocus');
+                }
+            });
+
         addEvent(remocon, 'click', (e) => {
+            e.stopPropagation();
             const target = e.target;
             target.classList.remove('on');
+
             if (target.classList.contains('onfocus')) {
                 return target.classList.remove('onfocus');
             } else {
                 return target.classList.add('onfocus');
             }
         });
+
         addEvent(scrollUp, 'click', (e) => {
             e.preventDefault();
             $html.stop().animate({scrollTop: 0}, 800);
         });
+
         addEvent(scrollDown, 'click', (e) => {
             e.preventDefault();
             $html.stop().animate({scrollTop: document.body.scrollHeight}, 800);
         });
 
-        let sock = new SockJS("/echo");
+        //메시지 버튼에 대한 핸들러 처리
+        addEvent(message, 'click', messageOpenHandler);
+
+        //해당 핸들러는 알람데이터를 조회한 후 화면에 뿌려주고 이벤트를 연결하는 것을 담당한다.
+        function messageOpenHandler(e) {
+            e.preventDefault();
+            this.parentElement.classList.remove('onfocus');
+            //안읽은 알람을 가지고 와서 출력 & 이벤트 연결.
+            ajax.alarmDataLoad(seq.value)
+                .then(printMessage)
+                .catch(console.error);
+            //이벤트를 제거한 후, 새로운 이벤트를 부여.
+            this.removeEventListener('click', messageOpenHandler);
+            addEvent(this, 'click', messageCloseHandler);
+        }
+
+        //해당 핸들러는 화면에 그려진 알람들을 전부 지워주는(프론트 상에서만) 역할을 한다.
+        function messageCloseHandler(e) {
+            e.preventDefault();
+            messageGroup.innerHTML = '';
+            this.removeEventListener('click', messageCloseHandler);
+            addEvent(this, 'click', messageOpenHandler);
+        }
+
+        function printMessage(alarmList) {
+            messageGroup.innerHTML = '';
+            //알람데이터가 없을 경우, 알람이 없다는 메시지만 출력해줌.
+            if (!alarmList.length) {
+                $(messageGroup).append(t.message('새로운 알람이 없습니다!'));
+            } else {
+                //읽지 않은 알람 데이터가 있다면, 화면에 뿌려준 후 이벤트 연결.
+                const $frag = $(document.createDocumentFragment());
+                alarmList.forEach(alarm => $frag.append(t.message(alarm)));
+                messageGroup.appendChild($frag[0]);
+
+                const checkList = getElList('.button-wrap .check');
+                const deleteList = getElList('.button-wrap .delete');
+                addAllSameEvent(checkList, 'click', function (e) {
+                    const {header, ano} = e.target.parentElement.dataset;
+                    ajax.checkAlarm(header, ano)
+                        .then(({fno}) => {
+                            if (header === 'friend') return location.href = `/${header}/view/${fno}`;
+                            if (header === 'purA') return location.href = `/pur/view/1/${fno}`;
+                            if (header === 'purB') return location.href = `/pur/view/2/${fno}`;
+                        })
+                        .catch(console.error)
+                });
+                addAllSameEvent(deleteList, 'click', function () {
+                    console.log('삭제 클릭');
+                    //삭제에 대한 컨트롤러는 따로 없어 보여서 아직 구현 안함.
+                });
+            }
+            const closeList = getElList('.message-item .close');
+            addAllSameEvent(closeList, 'click', (e) => $(e.target).closest('li')[0].remove());
+        }
+
 
         sock.onmessage = function (msg) {
             const data = JSON.parse(msg.data);
@@ -424,9 +470,7 @@ $(function () {
 
             if (data.header === 'friend') {
                 remocon.classList.add('on');
-                ajax.alarmDataLoad(seq.value)
-                    .then()
-                    .catch(console.error);
+                message.classList.add('onfocus');
             }
         };
 
@@ -435,46 +479,6 @@ $(function () {
         };
     }
 });
-
-
-function success(data) {
-    $.each(data, function (index, items) {
-        $('#alarmDisplay').append(
-            '<button type="button" class="alarmBtn" data-ano ="'
-            + items.ano + '" data-header="' + items.header
-            + '">' + items.content + '</button><br>');
-        $('#alarmDisplay').append('<input type="hidden" ');
-    });
-    console.log(data.length);
-    if (data.length < 1) {
-        $('#alarmOff').show();
-        $('#alarmOn').hide();
-        $('#alarmDisplay').hide();
-    } else {
-        $('#alarmOff').hide();
-        $('#alarmOn').show();
-        $('#alarmDisplay').hide();
-    }
-
-    $('.alarmBtn').click(function () {
-        console.log('음..아주 좆같구먼');
-        var ano = $(this).data('ano');
-        var header = $(this).data('header');
-
-        $.ajax({
-            type: 'get',
-            url: '/alarm/' + header + '/' + ano,
-            dataType: 'json',
-            success: function (data) {
-                console.log(data.fno);
-                location.href = '/' + header + '/view/' + data.fno;
-            },
-            error: function (error) {
-                console.log(error);
-            }
-        });
-    });
-};
 
 function includeJs(jsFilePath) {
     let js = document.createElement('script');

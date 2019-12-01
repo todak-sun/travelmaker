@@ -23,7 +23,7 @@
 		</a>
 		<nav class="gnb-wrap">
 			<ul class="gnb-group">
-				<li class="gnb-item"><a href="/story/list">여행 이야기</a></li>
+				<li class="gnb-item"><a href="/story">여행 이야기</a></li>
 				<li class="gnb-item"><a href="/store/list/1">스토어</a></li>
 				<li class="gnb-item"><a href="/friend/list/1">동행</a></li>
 				<li class="gnb-item"><a href="/pur/list/1">대리구매</a></li>
@@ -48,11 +48,11 @@
 			<sec:authorize access="hasRole('ROLE_USER') and isAuthenticated()">
 				<button type="button" class="btn btn-header"
 					onclick="logoutSubmit()">로그아웃</button>
-				<img src="../../../resources/img/alarm/alarmOff.png" id="alarmOff"
-					data-seq="${userDetail.seq}" height="30" width="30">
-				<img src="../../../resources/img/alarm/alarmON.jpg" id="alarmOn"
-					data-seq="${userDetail.seq}" height="30" width="30"
-					style="display: none;">
+<%--				<img src="../../../resources/img/alarm/alarmOff.png" id="alarmOff"--%>
+<%--					data-seq="${userDetail.seq}" height="30" width="30">--%>
+<%--				<img src="../../../resources/img/alarm/alarmON.jpg" id="alarmOn"--%>
+<%--					data-seq="${userDetail.seq}" height="30" width="30"--%>
+<%--					style="display: none;">--%>
 			</sec:authorize>
 		</div>
 

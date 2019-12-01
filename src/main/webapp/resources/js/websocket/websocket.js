@@ -14,6 +14,7 @@ function onMessage(msg) {
 		$('#alarmOff').hide();
 		$('#alarmOn').show();
 		$('#alarmBtnDisplay').empty();
+		//DB에서 안읽은 알람만 가지고 옴.
 		alarmDataload($('#alarmOn').data('seq'));
 	}
 
@@ -58,6 +59,7 @@ function alarmDataload(seq) {
 		},
 		success : function(data) {
 			console.log(data);
+			//알람을 그려주는 곳.
 			$.each(data, function(index, items) {
 				$('#alarmDisplay').append(
 						'<button type="button" class="alarmBtn" data-ano ="'
@@ -91,9 +93,9 @@ function alarmDataload(seq) {
 					success : function(data) {
 						if(header=='friend'){
 							location.href = '/' + header + '/view/' + data.fno;
-						}else if(header=='purA'){
+						}else if(header=='purA'){ //사달라
 							location.href = '/pur/view/1/' + data.fno;
-						}else if(header=='purB'){
+						}else if(header=='purB'){ //사다달라
 							location.href = '/pur/view/2/' + data.fno;
 						}
 					},

@@ -58,7 +58,7 @@
 	</delete>
 	
 	<update id="updatePurchase1" parameterType="pur">
-		update purchase set title=#{title}, productname=#{productname}, price=#{price}, quantity =#{quantity}, location=#{location}, dateStart=#{dateEnd},dateEnd=#{dateEnd},content=#{content} dateWrite=sysdate where bno =#{bno}
+		update purchase set title=#{title}, productname=#{productname}, price=#{price}, quantity =#{quantity}, location=#{location}, dateStart=#{dateEnd},dateEnd=#{dateEnd},content=#{content}, dateWrite=sysdate where bno =#{bno}
 	</update>
 	
 	<update id="updatePurchase2" parameterType="pur">
