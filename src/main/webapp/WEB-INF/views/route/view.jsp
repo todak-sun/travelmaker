@@ -29,7 +29,7 @@ uri="http://www.springframework.org/security/tags" %>
             <div class="title">
               <h1>${routeDTO.title }</h1>
               <p>
-                <span class="author"> ${routeDTO.nickname }</span>님의 여행코스
+                <span class="author">${routeDTO.nickname }</span>님의 여행코스
               </p>
               <div class="hash-area">
                 <c:set
@@ -44,8 +44,8 @@ uri="http://www.springframework.org/security/tags" %>
               </div>
             </div>
             <div class="date">
-              <span class="from"><c:out value="${course.dateWrite }"/></span>
-              <span class="to"><c:out value="${course.dateEnd }"/></span>
+              <span class="from"><c:out value="${routeDTO.dateFrom }"/></span>
+              <span class="to"><c:out value="${routeDTO.dateTo }"/></span>
             </div>
           </div>
           <div class="header-map">
@@ -61,7 +61,8 @@ uri="http://www.springframework.org/security/tags" %>
               <div class="route-item">
                 <div class="route-info">
                   <h4 class="route-title">
-                    <span class="number"><c:out value="${course.rno }"/></span
+                    <span class="number"
+                      ><c:out value="${course.cntOrder }"/></span
                     ><c:out value="${course.location }" />
                   </h4>
                   <span class="date">
@@ -73,14 +74,16 @@ uri="http://www.springframework.org/security/tags" %>
                 </div>
                 <div class="content-wrap">
                   <div class="content-left">
-                    <div class="image-wrap">
-                      <c:forEach var="imgs" items="${course.imgs }">
-                        <c:forEach var="img" items="${imgs }">
-                          <img src="/resources/storage/route/<c:out
-                            value="${img}"
-                          />" alt="${img}"/>
+                    <div class="image-wrap slide">
+                      <input type="button" value="왼쪽" class="slide-left" id="slide-left">
+                      <ul class="slide-box" id="slide-box">
+                        <c:forEach var="img" items="${course.imgs}">
+                          <li>
+                            <img src="/resources/storage/route/<c:out value="${img}"/>" alt="${img}"/>
+                          </li>
                         </c:forEach>
-                      </c:forEach>
+                      </ul>
+                      <input type="button" value="오른쪽" class="slide-right" id="slide-right">
                     </div>
                     <div class="score-wrap">
                       <ul class="score-group">

@@ -1,6 +1,15 @@
 $(function() {
   // 데이타세팅
-  const { useState, setRequestHeader } = new travelmaker.utils();
+  const {
+    useState,
+    setRequestHeader,
+    getJSONfromQueryString,
+    getEl,
+    addEvent
+  } = new travelmaker.utils();
+  const t = new travelmaker.template();
+  const modal = new travelmaker.modal("#modal");
+
   let routeData = {
     rno: null,
     seq: null,
@@ -44,6 +53,7 @@ $(function() {
   const $savedCourses = $(".saved-courses");
   const $starRatings = $(".score-group a");
   const $imageGroup = $(".image-group");
+  const $imageMainDisplay = $("#image-main-display");
   const leverBar = getEl(".level-bar");
   const editorFirst = getEl(".editor-first");
   const editorSecond = getEl(".editor-second");
@@ -74,6 +84,7 @@ $(function() {
 
   const $hashView = $("#hash-view");
   const $images = $("#images");
+  const $imageMainInput = $("#image-main");
 
   // ************** 함수들 선언
   // 데이터 바인드 관련 함수들
@@ -132,7 +143,14 @@ $(function() {
 
   // ************** 이벤트 부여
   $starRatings.on("click", starRatingHandler);
-  $images.on("change", CourseImg);
+  $images.on("change", courseImg);
+  $imageMainInput.on("change", mainImg);
+  $imageMainDisplay.on("click", function(e) {
+    e.preventDefault();
+    let imgDisplay = $imageMainDisplay[0].children[0];
+    if (imgDisplay) $imageMainDisplay[0].removeChild(imgDisplay);
+    $imageMainInput.click();
+  });
   btnAddImage.addEventListener("click", function(e) {
     e.preventDefault();
     $images.click();
@@ -153,13 +171,12 @@ $(function() {
     });
 
     setRoute({ hashtag: hashtag });
-    // hashView.appendChild;
-    // hashInput.value;
+
+    hashInput.focus();
   });
 
   function deleteHash(e) {
     let hashtag = "";
-    // hashList = e.target.parentElement;
     let index = getElementIndex(e.target);
     $hashView[0].removeChild($hashView[0].children[index]);
     $hashView.children("span").each(function(index, span) {
@@ -307,31 +324,31 @@ $(function() {
   function showLevel(level) {
     switch (level) {
       case 2:
-        let route = getRoute();
-        // 제목 작성 여부 체크
+        // let route = getRoute();
+        let mainForm = getMainFormData(getRoute());
+        // 제목 및 대표 이미지 여부 체크
         if (!title.value) alert("제목을 입력해주세요");
-        // 제목이 빈칸이 아니면 DB에 route 틀 저장 및 작성 폼 생성
+        // 다 생성되있으면 route 틀 저장 및 작성 폼 생성
+        else if (!$imageMainInput[0].value) alert("대표 이미지를 선택해주세요");
         else
-          return showLevel2Ajax(route)
+          return showLevel2Ajax(mainForm)
             .then(function(result) {
-              showWriteForm(route.isDomestic);
+              showWriteForm(getRoute().isDomestic);
               showCommand(level);
-              // $(".route-info-form").show();
               setRoute({ rno: result.rno });
               setRouteContent({ rno: result.rno, score: 3 });
               title.disabled = true;
+              document.querySelector(".title h4").innerText = title.value;
             })
             .catch(console.error);
         break;
 
       case 3:
         // 코스가 1개 이상 저장되어있는지 확인 후
-        // DB에 저장된 순서 반영 & 루트 인포 숨기기 & 에필로그 작성창 열기
         if ($savedCourses.length > 0)
+          // DB에 저장된 순서 반영 & 루트 인포 숨기기 & 에필로그 작성창 열기
           return saveOrderAjax(getOrder())
             .then(function() {
-              // $(".route-info-form").hide();
-              // $(".route-epilogue-form").show();
               showCommand(level);
             })
             .catch(console.error);
@@ -347,20 +364,18 @@ $(function() {
     switch (level) {
       case 1:
         showCommand(level);
-        $(".route-info-form").hide();
         setRoute({ rno: null });
         setRouteContent({ rno: null });
         title.disabled = false;
         break;
       case 2:
         showCommand(level);
-        // $(".route-info-form").show();
-        // $(".route-epilogue-form").hide();
         break;
       default:
         break;
     }
   }
+
   //
   //
   //
@@ -369,27 +384,45 @@ $(function() {
   //
   //
   //
-  //
-  //
-  //
-  //
-  //
+
+  let getMapData;
 
   function showWriteForm(isDomestic) {
-    // <-- 국내 해외 폼 보여주기
-    const $searchBtn = $("#searchBtn");
-    // 국내 (Kakao Map)
-    if (isDomestic === 1) {
-      // //국가, 도시 입력창을 숨김.
-      // $(".abroad-info").hide();
-      // 구글 지도 모달창 없애기
-      $("#googleMapModal").remove();
-      // 해외 (Google Map)
-    } else if (isDomestic === 0) {
-      // 카카오 지도 모달 연결 속성 없애기
-      $searchBtn.removeAttr("data-toggle");
-      $searchBtn.removeAttr("data-target");
-    }
+    // 지도 창 띄우기
+    const searchBtn = getEl("#searchBtn");
+    const place = getEl("#place");
+    addEvent(place, "click", () => searchBtn.click());
+    addEvent(searchBtn, "click", function() {
+      if (isDomestic) {
+        modal.createCustom(t.kmap(), () => {
+          const kmap = new travelmaker.kakaoMap(getEl("#map"));
+          getMapData = kmap.create(modal, function() {
+            lat.value = getMapData().lat;
+            lng.value = getMapData().lng;
+            place.value = getMapData().address + getMapData().placeName;
+            setRouteContent({
+              lat: lat.value,
+              lng: lng.value,
+              place: place.value
+            });
+          });
+        });
+      } else {
+        modal.createCustom(t.gmap(), () => {
+          const gmap = new travelmaker.googleMap(getEl("#map"));
+          getMapData = gmap.create(modal, function() {
+            lat.value = getMapData().lat;
+            lng.value = getMapData().lng;
+            place.value = getMapData().address + getMapData().placeName;
+            setRouteContent({
+              lat: lat.value,
+              lng: lng.value,
+              place: place.value
+            });
+          });
+        });
+      }
+    });
 
     //기본값으로 오늘 날짜 입력되게 하기
     let date = new Date();
@@ -457,11 +490,6 @@ $(function() {
       $savedCourses[0].removeChild(
         patchedCourse.parentElement.parentElement.parentElement
       );
-
-    // <h4>${place.value}</h4>
-    // <span>날짜 : ${dateStart.value} - ${dateEnd.value}</span>
-    // <button name="modify-course">수정</button><button name="delete-course">삭제</button>
-    // <input type="hidden" name="crno" value=${crno}>
 
     // 임시저장코스 추가
     const $frag = $(document.createDocumentFragment());
@@ -537,12 +565,6 @@ $(function() {
         score: result.score,
         fixed: 0
       });
-      // if (arrLocation.length == 1) {
-      //   setRouteContent({
-      //     nation: nation,
-      //     city: city
-      //   });
-      // }
     });
   }
 
@@ -595,51 +617,9 @@ $(function() {
     // 이동 완료 후 이동클래스 제거
     moving.classList.remove("moving");
   }
-  // function test() {
-  //   // let images = document.querySelector("input[name=images]").files;
-  //   // console.log(images.length);
-  //   // getImages(images);
-  //   testImage();
-  // }
-  // document.getElementById("files").addEventListener("change", testImage);
-  // function testImage() {
-  //   let reader = new FileReader();
-
-  //   reader.onload = function(e) {
-  //     document.getElementById("image").src = e.target.result;
-  //   };
-
-  //   reader.readAsDataURL(this.files[0]);
-  // }
-
-  // function getImages(images) {
-  //   if (!preloadImages.list) {
-  //     preloadImages.list = [];
-  //   }
-  //   let list = preloadImages.list;
-  //   for (let i = 0; i < images.length; i++) {
-  //     let img = new Image();
-  //     img.onload = function() {
-  //       let index = list.indexOf(this);
-  //       if (index !== -1) {
-  //         // remove image from the array once it's loaded
-  //         // for memory consumption reasons
-  //         list.splice(index, 1);
-  //       }
-  //     };
-  //     list.push(img);
-  //     img.src = images[i];
-  //     console.log("img.src : " + img.src);
-  //   }
-  //   console.log("list : " + list);
-  // }
 
   function getFormData(data) {
     const formData = new FormData();
-    // let imageFiles = images.files;
-    // if (imageFiles.length > 5)
-    //   return alert("이미지는 5개까지만 업로드 가능합니다");
-    // Array.from(imageFiles).forEach((image, idx) => {
 
     fileList.forEach((image, idx) => {
       // console.log(idx + " : " + image);
@@ -651,6 +631,15 @@ $(function() {
       console.log(keys[i] + " : " + values[i]);
       formData.append(keys[i], values[i]);
     }
+    return formData;
+  }
+
+  function getMainFormData(data) {
+    const formData = new FormData();
+    formData.append("image", $imageMainInput[0].files[0]);
+    formData.append("title", data.title);
+    formData.append("isDomestic", data.isDomestic);
+    formData.append("seq", data.seq);
     return formData;
   }
 
@@ -798,6 +787,19 @@ $(function() {
   //
   //
   //ajax 메소드 모음
+
+  //루트 컨텐츠 전체를 저장(최초)
+  function showLevel2Ajax(formData) {
+    return $.ajax({
+      type: "POST",
+      url: "/api/route/showWriteForm",
+      processData: false,
+      contentType: false,
+      data: formData,
+      beforeSend: setRequestHeader
+    });
+  }
+
   // 글 전체 저장
   function saveRouteAjax(data) {
     return $.ajax({
@@ -862,19 +864,8 @@ $(function() {
     });
   }
 
-  //루트 컨텐츠 전체를 저장(최초)
-  function showLevel2Ajax(data) {
-    return $.ajax({
-      type: "POST",
-      contentType: "application/json",
-      url: "/api/route/showWriteForm",
-      data: JSON.stringify(data),
-      dataType: "json",
-      beforeSend: setRequestHeader
-    });
-  }
-
-  function CourseImg() {
+  // 코스 이미지 추가
+  function courseImg() {
     const images = $images[0];
     listLength = fileList.length;
     if (images.files.length + fileList.length > 5)
@@ -909,13 +900,22 @@ $(function() {
     });
   }
 
-  function MainImg() {
-    const mainImage = document.querySelector("#main-image");
-    const imageFile = mainImage.files[0];
+  // 메인 이미지 추가
+  function mainImg() {
+    const $frag = $(document.createDocumentFragment());
+    const imageFile = $imageMainInput[0].files[0];
 
     let reader = new FileReader();
     reader.onload = function(e) {
-      mainImage.src = e.target.result;
+      const $img = $(`
+                    <img
+                      src="${e.target.result}"
+                      alt=""
+                      id="img-main"
+                    />
+                  `);
+      $frag.append($img);
+      $imageMainDisplay.append($frag);
     };
     reader.readAsDataURL(imageFile);
   }
@@ -937,27 +937,6 @@ $(function() {
     return _i;
   }
 });
-//
-//
-//
-//
-//
-//
-// 기능함수들 모음
-//
-//
-//
-
-// 주소에서 값따오는 함수
-function getJSONfromQueryString() {
-  let qs = location.search.slice(1).split("%");
-  const obj = {};
-  qs.forEach(q => {
-    q = q.split("=");
-    obj[q[0]] = decodeURIComponent(q[1] || "");
-  });
-  return JSON.parse(JSON.stringify(obj));
-}
 
 // 이벤트 거는 함수
 function addSameEvent(event, handler, ...targets) {

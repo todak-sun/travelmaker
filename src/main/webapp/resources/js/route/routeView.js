@@ -24,240 +24,12 @@ $().ready(function() {
 
   $.ajax({
     type: "post",
-    url: "/route/getRouteView",
+    url: "/api/route/updateViews",
     data: { rno: rno, seq: seq },
     dataType: "json",
     beforeSend: setRequestHeader,
     success: function(data) {
-      // 맵쪽에 뿌려줄 좌표를 담을 배열
-
-      // 작은 Route Content를 동적으로 뿌려줌
-      $.each(data.list, function(index, items) {
-        // $("<div/>", {
-        //   class: "conts_story",
-        //   style: "border: 1px solid red;"
-        // })
-        //   .append(
-        //     $("<div/>", {
-        //       class: "story_para"
-        //     })
-        //       .append(
-        //         $("<div/>", {
-        //           class: "day_info"
-        //         })
-        //       )
-        //       .append(
-        //         $("<span/>", {
-        //           class: "day",
-        //           text: "Day " + (index + 1)
-        //         })
-        //       )
-        //       .append($("<br/>"))
-        //       .append(
-        //         $("<span/>", {
-        //           class: "date",
-        //           text: items.dateStart + " / " + items.dateEnd
-        //         })
-        //       )
-        //   )
-        //   .append(
-        //     $("<div/>", {
-        //       class: "course"
-        //     })
-        //       .append(
-        //         $("<div/>", {
-        //           class: "carousel slide",
-        //           "data-ride": "carousel",
-        //           id: "routeImg" + index
-        //         })
-        //           .append(
-        //             $("<ul/>", {
-        //               class: "carousel-indicators"
-        //             })
-        //           )
-        //           .append(
-        //             $("<div/>", {
-        //               class: "carousel-inner"
-        //             })
-        //           )
-        //           .append(
-        //             $("<a/>", {
-        //               class: "carousel-control-prev",
-        //               href: "#routeImg" + index,
-        //               "data-slide": "prev"
-        //             }).append(
-        //               $("<span/>", {
-        //                 class: "carousel-control-prev-icon"
-        //               })
-        //             )
-        //           )
-        //           .append(
-        //             $("<a/>", {
-        //               class: "carousel-control-next",
-        //               href: "#routeImg" + index,
-        //               "data-slide": "next"
-        //             }).append(
-        //               $("<span/>", {
-        //                 class: "carousel-control-next-icon"
-        //               })
-        //             )
-        //           )
-        //       )
-        //       .append(
-        //         $("<div/>", {
-        //           class: "course_info"
-        //         }).append(
-        //           $("<div/>", {
-        //             class: "course_info_box"
-        //           })
-        //             .append(
-        //               $("<div/>", {
-        //                 class: "loc_info_ico",
-        //                 text: "아이콘 이미지"
-        //               })
-        //             )
-        //             .append(
-        //               $("<div/>", {
-        //                 class: "loc_info_txt"
-        //               }).append(
-        //                 $("<span/>", {
-        //                   class: "loc_txt",
-        //                   text: "위치 : " + items.location
-        //                 })
-        //                   .append($("<br/>"))
-        //                   .append(
-        //                     $("<span/>", {
-        //                       class: "loc_addr",
-        //                       text: "위치 : " + items.location
-        //                     })
-        //                   )
-        //               )
-        //             )
-        //         )
-        //       )
-        //       .append(
-        //         $("<div/>", {
-        //           class: "course_story",
-        //           text: "코스내용 : " + items.content
-        //         })
-        //       )
-        //       .append(
-        //         $("<div/>", {
-        //           class: "course_rate"
-        //         }).append(
-        //           $("<div/>", {
-        //             class: "star_rate"
-        //           })
-        //             .append(
-        //               $("<span/>", {
-        //                 class: "star",
-        //                 text: "별"
-        //               })
-        //             )
-        //             .append(
-        //               $("<span/>", {
-        //                 class: "star",
-        //                 text: "별"
-        //               })
-        //             )
-        //             .append(
-        //               $("<span/>", {
-        //                 class: "star",
-        //                 text: "별"
-        //               })
-        //             )
-        //             .append(
-        //               $("<span/>", {
-        //                 class: "star",
-        //                 text: "별"
-        //               })
-        //             )
-        //             .append(
-        //               $("<span/>", {
-        //                 class: "star",
-        //                 text: "별"
-        //               })
-        //             )
-        //             .append($("<br/>"))
-        //             .append(
-        //               $("<div/>", {
-        //                 class: "rate_txt",
-        //                 text: items.score + "점"
-        //               })
-        //             )
-        //         )
-        //       )
-        //   )
-        //   .appendTo($("#routeContent"));
-
-        var routeContentId = $("#routeContent")
-          .children()
-          .last();
-        /* routeLat.push(items.lat);
-                routeLng.push(items.lng); */
-
-        // 좌표 담기
-        flightPlanCoordinates.push({ lat: items.lat, lng: items.lng });
-
-        // 작은 Route Content 안에 있는 이미지 배열을 뿌림
-        $.each(items.imgs, function(indexImgs, img) {
-          console.log(img);
-          $("<li/>", {
-            "data-target": "#routeImg" + index,
-            "data-slide-to": indexImgs
-          }).appendTo(routeContentId.find(".carousel-indicators"));
-
-          $("<div/>", {
-            class: "carousel-item"
-          })
-            .append(
-              $("<img/>", {
-                src: "/resources/storage/route/" + img
-              })
-            )
-            .appendTo(routeContentId.find(".carousel-inner"));
-        });
-        console.log("-----------------------");
-
-        // 부트스트랩 사진 전환에 쓸 class 생성
-        routeContentId
-          .find(".carousel-indicators")
-          .children()
-          .first()
-          .attr("class", "active");
-        routeContentId
-          .find(".carousel-inner")
-          .children()
-          .first()
-          .attr("class", "carousel-item active");
-      });
-      console.log(flightPlanCoordinates);
-      //////////////////////////////////////////////////////////////////
-      // 해외
-      if ($("#isdomestic").val() == 0) {
-        googleMap(flightPlanCoordinates);
-      } else {
-        // 국내
-        kakaoMap(flightPlanCoordinates);
-      }
-
-      //   // 에필로그랑 해시태그
-      //   $("<div/>", {
-      //     id: "routeFooter"
-      //   })
-      //     .append(
-      //       $("<span>", {
-      //         id: "rout eEpilogue",
-      //         text: "Epilogue : " + $("#epilogue").val()
-      //       })
-      //     )
-      //     .append(
-      //       $("<span/>", {
-      //         id: "routeHashtag",
-      //         text: "HashTag : " + $("#hashtag").val()
-      //       })
-      //     )
-      //     .appendTo($("#routeContent"));
+      console.log("조회수 올리기");
     },
     error: function(error) {
       console.log(error);
@@ -405,3 +177,192 @@ $(function() {
   const seq = getEl("#seq") ? +getEl("#seq").value : 0;
   cmt.init(getEl(".comment-wrap"), bno, seq);
 });
+
+// $( window ).resize( function() {
+//   let slideBox = document.querySelectorAll(".slide-box");
+//   let img = document.querySelector(".slide-box li img");
+//   slideBox[i].style.width = img.width * imgNum[i];
+// ​});
+
+$().ready(function() {
+  // 슬라이드 필요 변수 선언
+  let slide = document.querySelector(".slide");
+  let slideBox = document.querySelectorAll(".slide-box");
+  let leftBtn = document.querySelectorAll(".slide-left");
+  let rightBtn = document.querySelectorAll(".slide-right");
+  let s_itv;
+  let s_count = [];
+  let s_posX = [];
+  let imgNum = [];
+  let img = document.querySelector(".slide-box li img");
+  // for(let i = 0; i < boxNum; i++){
+  //   s_count.push
+  // }
+
+  // 각각 슬라이드에 배열변수들 값 초기화 및 이벤트 생성
+  for (let i = 0; i < slideBox.length; i++) {
+    // imgNum[i] = slideBox[i].childElementCount;
+    // s_count[i] = 0;
+    // s_posX[i] = 0;
+
+    // 각 배열에 초기값 설정
+    imgNum.push(slideBox[i].childElementCount);
+    s_count.push(0);
+    s_posX.push(0);
+    slideBox[i].offsetWidth = slideBox[i].offsetWidth * imgNum[i];
+
+    // 왼, 오른쪽 버튼에 이벤트 생성
+    leftBtn[i].addEventListener("click", function() {
+      if (s_count[i] > 0) {
+        clearInterval(s_itv);
+        s_count[i]--;
+        slideToLeft(i);
+      }
+      if (s_count[i] == 0) {
+        leftBtn[i].style.display = "none";
+      } else {
+        rightBtn[i].style.display = "block";
+      }
+    });
+
+    // 왼쪽 이동 함수
+    function slideToLeft(i) {
+      s_itv = setInterval(frame, 1);
+      function frame() {
+        let slideX = -(s_count[i] * img.width + s_posX[i]);
+        if (0 == slideX) {
+          clearInterval(s_itv);
+        } else if (100 < slideX) {
+          s_posX[i] += 6;
+          slideBox[i].style.left = s_posX[i] + "px";
+        } else if (40 < slideX) {
+          s_posX[i] += 3;
+          slideBox[i].style.left = s_posX[i] + "px";
+        } else if (10 < slideX) {
+          s_posX[i] += 2;
+          slideBox[i].style.left = s_posX[i] + "px";
+        } else {
+          s_posX[i] += 1;
+          slideBox[i].style.left = s_posX[i] + "px";
+        }
+      }
+    }
+
+    rightBtn[i].addEventListener("click", function() {
+      if (s_count[i] < imgNum[i]) {
+        clearInterval(s_itv);
+        s_count[i]++;
+        slideToRight(i);
+      }
+      if (s_count[i] == imgNum[i] - 1) {
+        rightBtn[i].style.display = "none";
+      } else {
+        leftBtn[i].style.display = "block";
+      }
+    });
+
+    // 오른쪽 이동 함수
+    function slideToRight(i) {
+      s_itv = setInterval(frame, 1);
+      function frame() {
+        let slideX = s_count[i] * img.offsetWidth + s_posX[i];
+        if (0 == slideX) {
+          clearInterval(s_itv);
+        } else if (100 < slideX) {
+          s_posX[i] -= 6;
+          slideBox[i].style.left = s_posX[i] + "px";
+        } else if (40 < slideX) {
+          s_posX[i] -= 3;
+          slideBox[i].style.left = s_posX[i] + "px";
+        } else if (10 < slideX) {
+          s_posX[i] -= 2;
+          slideBox[i].style.left = s_posX[i] + "px";
+        } else {
+          s_posX[i] -= 1;
+          slideBox[i].style.left = s_posX[i] + "px";
+        }
+      }
+    }
+  }
+});
+
+// $(function() {
+//   let slide = document.getElementById("slide_box");
+//   let slide_bt_L = document.getElementById("left_bt");
+//   let slide_bt_R = document.getElementById("right_bt");
+//   let s_itv;
+//   let s_count = 0;
+//   let s_posX = 0;
+//   let $img = $("#slide_box li img");
+//   let img = document.querySelector("#slide_box li img");
+
+//   // slide.style.width =
+
+//   slide_bt_R.addEventListener("click", function() {
+//     if (s_count < 4) {
+//       clearInterval(s_itv);
+//       s_count++;
+//       S_ani_R();
+//     }
+//     if (s_count == 4) {
+//       slide_bt_R.style.display = "none";
+//     } else {
+//       slide_bt_L.style.display = "block";
+//     }
+//   });
+//   function S_ani_R() {
+//     s_itv = setInterval(frame, 1);
+//     function frame() {
+//       const slideX = s_count * img.width + s_posX;
+//       if (0 == slideX) {
+//         clearInterval(s_itv);
+//       } else if (100 < slideX) {
+//         s_posX -= 6;
+//         slide.style.left = s_posX + "px";
+//       } else if (40 < slideX) {
+//         s_posX -= 3;
+//         slide.style.left = s_posX + "px";
+//       } else if (10 < slideX) {
+//         s_posX -= 2;
+//         slide.style.left = s_posX + "px";
+//       } else {
+//         s_posX -= 1;
+//         slide.style.left = s_posX + "px";
+//       }
+//     }
+//   }
+
+//   slide_bt_L.addEventListener("click", function() {
+//     if (s_count > 0) {
+//       clearInterval(s_itv);
+//       s_count--;
+//       S_ani_L();
+//     }
+//     if (s_count == 0) {
+//       slide_bt_L.style.display = "none";
+//     } else {
+//       slide_bt_R.style.display = "block";
+//     }
+//   });
+//   function S_ani_L() {
+//     s_itv = setInterval(frame, 1);
+//     function frame() {
+//       const slideX = -(s_count * img.width + s_posX);
+//       if (0 == slideX) {
+//         clearInterval(s_itv);
+//       } else if (100 < slideX) {
+//         s_posX += 6;
+//         slide.style.left = s_posX + "px";
+//       } else if (40 < slideX) {
+//         s_posX += 3;
+//         slide.style.left = s_posX + "px";
+//       } else if (10 < slideX) {
+//         s_posX += 2;
+//         slide.style.left = s_posX + "px";
+//       } else {
+//         s_posX += 1;
+//         slide.style.left = s_posX + "px";
+//       }
+//     }
+//   }
+// });

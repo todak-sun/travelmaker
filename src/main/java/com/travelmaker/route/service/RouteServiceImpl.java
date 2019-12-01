@@ -49,7 +49,6 @@ public class RouteServiceImpl implements RouteService {
 
     @Override
     public List<RouteContentDTO> getRouteContentStory(int rno) {
-        System.out.println("서비스 들어옴");
         return routeDAO.getRouteContentStory(rno);
     }
 

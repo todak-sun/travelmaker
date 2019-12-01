@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -43,12 +46,27 @@ public class RouteApiController {
 	
 	@Autowired
 	RouteService routeService;
+	
+	@PostMapping(value = "/showWriteForm")
+	public Map<String, Object> showWriteForm(Model model, @ModelAttribute RouteDTO routeDTO) {
 
-	@RequestMapping(value = "/showWriteForm")
-	public Map<String, Object> createWriteForm(Model model, @RequestBody RouteDTO routeDTO) {
-
+		if(routeDTO.getImage()!=null) {
+			String filePath = servletContext.getRealPath("/resources/storage/route");
+			MultipartFile img = routeDTO.getImage();
+			String fileName = img.getOriginalFilename();
+			File file = new File(filePath, fileName);	
+			
+			try {
+				FileCopyUtils.copy(img.getInputStream(), new FileOutputStream(file));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			routeDTO.setImageName(fileName);
+		}
 		int rno = routeService.setRoute(routeDTO);
-		System.out.println("rno값 생성 : "+rno);
+		System.out.println("rno값 생성 : "+rno);	
+		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("rno", rno);
 		return map;
@@ -96,10 +114,8 @@ public class RouteApiController {
 		String filePath = servletContext.getRealPath("/resources/storage/route");
 		//여기서부터 다시
 		int crno = routeContentDTO.getCrno();
-//		System.out.println(crno);
 		System.out.println("getContent : "+routeContentDTO.getContent());
 		routeService.patchCourse(routeContentDTO); //저장한 코스의 crno 반환
-//		System.out.println(routeContentDTO.getImages());
 		if(routeContentDTO.getImages()!=null) { // 이미지가 있을 때
 			int i = 1; // 이미지 순서
 			for(MultipartFile img : routeContentDTO.getImages()) {
@@ -139,6 +155,7 @@ public class RouteApiController {
 	public RouteContentDTO getCourse(@PathVariable int crno) {
 
 		RouteContentDTO routeContentDTO = routeService.getCourse(crno);
+		
 		System.out.println("스타트날짜찍어보기 : "+routeContentDTO.getDateStart());
 		return routeContentDTO;
 	}
@@ -178,6 +195,40 @@ public class RouteApiController {
 //    	
 //    	return list;
 //    }
+    
+    // 조회수 올리기
+    @RequestMapping(value = "updateViews", method = RequestMethod.POST)
+    @ResponseBody
+    public void getRouteView(@RequestParam int rno, @RequestParam int seq, HttpServletRequest req, HttpServletResponse res) {
+
+//    	ModelAndView modelAndView = new ModelAndView();
+        boolean view = false;
+        
+    	Cookie[] cookies = req.getCookies();
+    	
+    	// 쿠키로 조회한 적 있는지 확인
+    	if(cookies != null) {
+    		for(Cookie cookie : cookies) {
+    			if(cookie.getValue().equals(rno+"")&&cookie.getName().equals(seq+"")) {
+    				System.out.println("이미 조회 했음 rno : "+rno+" seq : "+seq);
+    				view = true;
+    			}
+    		}
+    	}
+    	
+    	// 조회 안했으면 조회수 1 올림
+    	if(!view) {
+    		routeService.updateViews(rno);
+        	Cookie cookie = new Cookie(seq+"",rno+"");	
+        	// 조회 초기화 시간 24시간
+        	cookie.setMaxAge(60*60*24);
+        	res.addCookie(cookie);
+    	}
+
+//        modelAndView.setViewName("jsonView");
+//
+//        return modelAndView;
+    }
     
     @RequestMapping(value = "/updateRouteLikes", method = RequestMethod.GET)
     public void updateRouteLikes(@RequestParam int rno, @RequestParam int seq) {

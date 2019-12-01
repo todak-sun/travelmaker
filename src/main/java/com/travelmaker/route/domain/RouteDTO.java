@@ -1,5 +1,7 @@
 package com.travelmaker.route.domain;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,14 +12,18 @@ public class RouteDTO {
 	private int rno; //웹에서
 	private int seq;
 	private String nickname; //세션에서?
-	private String title; //웹&DB 비교
+	private String title; // 처음 저장할때
 	private String content; //웹에서
+	private String imageName; // 처음 저장할때
 	private int likes; //디폴트
 	private int views; //디폴트
 	private String hashtag; //웹에서
 	private String dateWrite; //디폴트
 	private String dateUpdate; //디폴트
+	private String dateFrom;
+	private String dateTo;
 	private int cmt; //디폴트
 	private int fixed; //웹에서
 	private int isDomestic; //웹&DB 비교
+	private MultipartFile image;
 }

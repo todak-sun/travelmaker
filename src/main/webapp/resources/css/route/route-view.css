@@ -186,6 +186,43 @@
   width: 100%;
 }
 
+.content-left .slide {
+  /* 		display: flex;	 */
+  /* 		float: left; */
+  /*         width: 500px; height: 250px;
+  top: 50px; left: 190px; */
+  overflow: hidden; /*영역 안에 들어오지 않는 자식태그는 모두 숨겨라*/ /* 
+  position: absolute; */
+}
+.content-left .slide ul {
+  width: 100%;
+  position: relative;
+  display: flex;
+}
+.content-left .slide ul li {
+  width: 100%;
+}
+/* #slide_box li img{
+  width: 500px; height: 250px;
+} */
+.content-left .slide-left {
+  width: 100px;
+  height: 100px;
+  /* position: absolute; */
+  top: 130px;
+  left: 90px;
+  /* display: none; */
+  /* cursor: pointer; */
+}
+.content-left .slide-right {
+  width: 100px;
+  height: 100px;
+  /* position: absolute; */
+  top: 130px;
+  left: 690px;
+  /* cursor: pointer; */
+}
+
 .content-left .score-wrap {
   box-sizing: border-box;
   margin-top: 1rem;

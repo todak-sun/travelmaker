@@ -46,6 +46,8 @@
 
 .story .story-img-wrap {
     width: 100%;
+    max-height: 8rem;
+    /* max-height 추가 해놓음!!!!!!!!!!!!!!!!! 수정 바람 */
     height: auto;
 }
 

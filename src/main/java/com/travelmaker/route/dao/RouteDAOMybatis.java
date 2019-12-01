@@ -67,7 +67,16 @@ public class RouteDAOMybatis implements RouteDAO {
 
 	@Override
 	public RouteContentDTO getCourse(int crno) {
-		return sqlSession.selectOne("routeSQL.getCourse",crno);
+		
+        List<String> imgs = new ArrayList<String>();
+        List<RouteImageDTO> imageList = sqlSession.selectList("routeSQL.getRouteImageStory", crno);
+        for (RouteImageDTO routeImageDTO : imageList) {
+            imgs.add(routeImageDTO.getImg());
+            System.out.println("img = " + imgs);
+        }
+        RouteContentDTO routeContentDTO = sqlSession.selectOne("routeSQL.getCourse",crno);
+        routeContentDTO.setImgs(imgs);
+        return routeContentDTO;
 	}
 
 	@Override
