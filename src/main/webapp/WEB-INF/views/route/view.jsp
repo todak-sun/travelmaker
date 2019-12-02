@@ -75,7 +75,7 @@ uri="http://www.springframework.org/security/tags" %>
                 <div class="content-wrap">
                   <div class="content-left">
                     <div class="image-wrap slide">
-                      <input type="button" value="왼쪽" class="slide-left" id="slide-left">
+                      <input type="button" value="왼쪽" class="slide-left" id="slide-left" style="display: none;">
                       <ul class="slide-box" id="slide-box">
                         <c:forEach var="img" items="${course.imgs}">
                           <li>

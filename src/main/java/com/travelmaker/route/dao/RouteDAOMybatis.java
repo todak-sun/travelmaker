@@ -42,7 +42,11 @@ public class RouteDAOMybatis implements RouteDAO {
 		sqlSession.insert("routeSQL.saveRouteImage",routeImageDTO);
 	}
 	
-
+	@Override
+	public RouteDTO getRouteByBno(int bno) {
+		return sqlSession.selectOne("routeSQL.getRouteByBno", bno);
+	}
+	
     @Override
     public RouteDTO getRoute(int rno) {
         return sqlSession.selectOne("routeSQL.getRoute", rno);
@@ -65,6 +69,11 @@ public class RouteDAOMybatis implements RouteDAO {
         return list;
     }
 
+	@Override
+	public List<RouteDTO> getRouteListByUserSeq(int seq) {
+		return sqlSession.selectList("routeSQL.getRouteListByUserSeq", seq);
+	}
+    
 	@Override
 	public RouteContentDTO getCourse(int crno) {
 		

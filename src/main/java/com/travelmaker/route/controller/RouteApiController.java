@@ -240,4 +240,9 @@ public class RouteApiController {
     	
 //    	return list;
     }
+    
+    @GetMapping(value="/seq/{seq}")
+	public List<RouteDTO> getRouteListByUserSeq(@PathVariable int seq){
+		return routeService.getRouteListByUserSeq(seq);
+	}
 }

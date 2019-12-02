@@ -83,4 +83,12 @@ public class RouteServiceImpl implements RouteService {
 		routeDAO.updateViews(rno);
 	}
 	
+	@Override
+	public List<RouteDTO> getRouteListByUserSeq(int seq) {
+		return routeDAO.getRouteListByUserSeq(seq);
+	}
+
+	
+	
 }
+

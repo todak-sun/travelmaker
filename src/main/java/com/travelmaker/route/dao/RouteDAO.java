@@ -18,8 +18,12 @@ public interface RouteDAO {
 	public void saveRouteImage(RouteImageDTO routeImageDTO);
 
     public RouteDTO getRoute(int rno);
+    
+    public RouteDTO getRouteByBno(int bno);
 
     public List<RouteContentDTO> getRouteContentStory(int rno);
+    
+    public List<RouteDTO> getRouteListByUserSeq(int seq);
 
 	public RouteContentDTO getCourse(int crno);
 

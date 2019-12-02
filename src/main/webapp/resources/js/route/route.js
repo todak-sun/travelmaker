@@ -538,6 +538,7 @@ $(function() {
       console.log(result);
       // 불러 온 후에 불러온 내용 루트컨텐트에 저장
       // 에이작스 석세스시 추가할 내용
+
       let arrLocation = result.location.split("_");
       location.value = result.location;
       if (arrLocation.length == 1) {

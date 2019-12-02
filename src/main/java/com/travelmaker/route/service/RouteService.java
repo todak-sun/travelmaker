@@ -29,5 +29,7 @@ public interface RouteService {
 	public void saveOrder(int[] order);
 
 	public void updateViews(int rno);
+	
+	public List<RouteDTO> getRouteListByUserSeq(int seq);
 
 }

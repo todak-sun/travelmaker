@@ -209,7 +209,8 @@ $().ready(function() {
     imgNum.push(slideBox[i].childElementCount);
     s_count.push(0);
     s_posX.push(0);
-    slideBox[i].offsetWidth = slideBox[i].offsetWidth * imgNum[i];
+    slideBox[i].style.width = slideBox[i].offsetWidth * imgNum[i] + "px";
+    if (imgNum[i] == 1) rightBtn[i].style.display = "none";
 
     // 왼, 오른쪽 버튼에 이벤트 생성
     leftBtn[i].addEventListener("click", function() {
