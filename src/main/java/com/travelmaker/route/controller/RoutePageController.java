@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RequestMapping(value = "/route")
@@ -18,14 +19,24 @@ public class RoutePageController {
     @Autowired
     RouteService routeService;
 
-    @RequestMapping(value = "/write")
-    public String routeWirteForm(Model model, @RequestParam int isDomestic) {
+    @GetMapping(value = {"write","/write/{rno}"})
+    public String routeWirteForm(Model model, @PathVariable Optional<Integer> rno) {
     	
     	// 해당 아이디로 작성중인 글이 있었다면 불러오겠냐고 한번 물어봐줌 , 예 하면 불러와주고 아니고 하면 DB에서 삭제함 ========= 나중에 추가할 기능
-    	
-        model.addAttribute("isDomestic", isDomestic);
+    	if(rno.isPresent()) {
+	    	RouteDTO routeDTO = routeService.getRoute(rno.get());
+	    	model.addAttribute("RouteDTO", routeDTO);
+    	}
         // dto를 서버DB에 저장
         return "route/write";
+    }
+    
+    @GetMapping(value = "/modify/{rno}")
+    public String routeModifyForm(Model model, @PathVariable int rno) {
+    	
+    	
+    	
+    	return "route/write";
     }
 
     // 게시글 클릭시 들어오는 곳, 불러오기!!!

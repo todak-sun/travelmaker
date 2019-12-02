@@ -75,7 +75,6 @@ uri="http://www.springframework.org/security/tags" %>
                 <div class="content-wrap">
                   <div class="content-left">
                     <div class="image-wrap slide">
-                      <input type="button" value="왼쪽" class="slide-left" id="slide-left" style="display: none;">
                       <ul class="slide-box" id="slide-box">
                         <c:forEach var="img" items="${course.imgs}">
                           <li>
@@ -83,7 +82,8 @@ uri="http://www.springframework.org/security/tags" %>
                           </li>
                         </c:forEach>
                       </ul>
-                      <input type="button" value="오른쪽" class="slide-right" id="slide-right">
+                      <div alt="left" value="왼쪽" class="slide-left" id="slide-left" style="display: none;"></div>
+                      <div alt="right" value="오른쪽" class="slide-right" id="slide-right"></div>
                     </div>
                     <div class="score-wrap">
                       <ul class="score-group">
@@ -115,6 +115,9 @@ uri="http://www.springframework.org/security/tags" %>
           </p>
           <div class="operation">
             <button id="likes">${routeDTO.likes }</button>
+            <sec:authorize access="isAuthenticated()">
+              <button id="btn-route-modify">수정</button>
+            </sec:authorize>
           </div>
         </div>
       </div>

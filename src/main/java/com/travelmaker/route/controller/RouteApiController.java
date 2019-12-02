@@ -3,6 +3,7 @@ package com.travelmaker.route.controller;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,7 +54,7 @@ public class RouteApiController {
 		if(routeDTO.getImage()!=null) {
 			String filePath = servletContext.getRealPath("/resources/storage/route");
 			MultipartFile img = routeDTO.getImage();
-			String fileName = img.getOriginalFilename();
+			String fileName = (LocalDateTime.now()+img.getOriginalFilename()).replace(":", "-");
 			File file = new File(filePath, fileName);	
 			
 			try {
@@ -82,7 +83,7 @@ public class RouteApiController {
 		if(routeContentDTO.getImages()!=null) { // 이미지가 있을 때
 			int i = 1; // 이미지 순서
 			for(MultipartFile img : routeContentDTO.getImages()) {
-				String fileName = img.getOriginalFilename();
+				String fileName = (LocalDateTime.now()+img.getOriginalFilename()).replace(":", "-");
 				File file = new File(filePath, fileName);
 				
 				System.out.println("파일 경로 : " + filePath);

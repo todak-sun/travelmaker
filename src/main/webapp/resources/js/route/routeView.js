@@ -2,12 +2,22 @@ $().ready(function() {
   console.log("rno = " + $("#rno").val());
   console.log("seq = " + $("#seq").val());
   const { useState, setRequestHeader } = new travelmaker.utils();
+  const btnModify = document.querySelector("#btn-route-modify");
   const rno = document.querySelector("#rno").value;
   const seq = document.querySelector("#seq")
     ? document.querySelector("#seq").value
     : 0;
 
   document.querySelector("#likes").addEventListener("click", UpdateLikes);
+
+  if (seq) {
+    btnModify.addEventListener("click", function() {
+      location.href = "/route/write/" + rno;
+    });
+  } else {
+    btnModify.parentElement.removeChild(btnModify);
+  }
+
   function UpdateLikes() {
     $.ajax({
       type: "post",
@@ -36,6 +46,7 @@ $().ready(function() {
     }
   });
 });
+
 // 카카오맵
 function kakaoMap(flightPlanCoordinates) {
   var container = document.getElementById("map");
@@ -178,35 +189,24 @@ $(function() {
   cmt.init(getEl(".comment-wrap"), bno, seq);
 });
 
-// $( window ).resize( function() {
-//   let slideBox = document.querySelectorAll(".slide-box");
-//   let img = document.querySelector(".slide-box li img");
-//   slideBox[i].style.width = img.width * imgNum[i];
-// ​});
-
 $().ready(function() {
   // 슬라이드 필요 변수 선언
-  let slide = document.querySelector(".slide");
   let slideBox = document.querySelectorAll(".slide-box");
-  let leftBtn = document.querySelectorAll(".slide-left");
-  let rightBtn = document.querySelectorAll(".slide-right");
-  let s_itv;
   let s_count = [];
   let s_posX = [];
   let imgNum = [];
+  // let imgs = [];
   let img = document.querySelector(".slide-box li img");
-  // for(let i = 0; i < boxNum; i++){
-  //   s_count.push
-  // }
+  let imgWidth = img.offsetWidth;
+  let leftBtn = document.querySelectorAll(".slide-left");
+  let rightBtn = document.querySelectorAll(".slide-right");
+  let s_itv;
 
   // 각각 슬라이드에 배열변수들 값 초기화 및 이벤트 생성
   for (let i = 0; i < slideBox.length; i++) {
-    // imgNum[i] = slideBox[i].childElementCount;
-    // s_count[i] = 0;
-    // s_posX[i] = 0;
-
     // 각 배열에 초기값 설정
     imgNum.push(slideBox[i].childElementCount);
+    // imgs.push(document.querySelectorAll(".slide-box li img"))
     s_count.push(0);
     s_posX.push(0);
     slideBox[i].style.width = slideBox[i].offsetWidth * imgNum[i] + "px";
@@ -221,34 +221,10 @@ $().ready(function() {
       }
       if (s_count[i] == 0) {
         leftBtn[i].style.display = "none";
-      } else {
-        rightBtn[i].style.display = "block";
       }
+      rightBtn[i].style.display = "block";
+      // slideBox[i].style.height = img.offsetHeight + "px";
     });
-
-    // 왼쪽 이동 함수
-    function slideToLeft(i) {
-      s_itv = setInterval(frame, 1);
-      function frame() {
-        let slideX = -(s_count[i] * img.width + s_posX[i]);
-        if (0 == slideX) {
-          clearInterval(s_itv);
-        } else if (100 < slideX) {
-          s_posX[i] += 6;
-          slideBox[i].style.left = s_posX[i] + "px";
-        } else if (40 < slideX) {
-          s_posX[i] += 3;
-          slideBox[i].style.left = s_posX[i] + "px";
-        } else if (10 < slideX) {
-          s_posX[i] += 2;
-          slideBox[i].style.left = s_posX[i] + "px";
-        } else {
-          s_posX[i] += 1;
-          slideBox[i].style.left = s_posX[i] + "px";
-        }
-      }
-    }
-
     rightBtn[i].addEventListener("click", function() {
       if (s_count[i] < imgNum[i]) {
         clearInterval(s_itv);
@@ -257,113 +233,80 @@ $().ready(function() {
       }
       if (s_count[i] == imgNum[i] - 1) {
         rightBtn[i].style.display = "none";
-      } else {
-        leftBtn[i].style.display = "block";
       }
+      leftBtn[i].style.display = "block";
+      // slideBox[i].style.height = img.offsetHeight + "px";
     });
-
-    // 오른쪽 이동 함수
-    function slideToRight(i) {
-      s_itv = setInterval(frame, 1);
-      function frame() {
-        let slideX = s_count[i] * img.offsetWidth + s_posX[i];
-        if (0 == slideX) {
-          clearInterval(s_itv);
-        } else if (100 < slideX) {
-          s_posX[i] -= 6;
-          slideBox[i].style.left = s_posX[i] + "px";
-        } else if (40 < slideX) {
-          s_posX[i] -= 3;
-          slideBox[i].style.left = s_posX[i] + "px";
-        } else if (10 < slideX) {
-          s_posX[i] -= 2;
-          slideBox[i].style.left = s_posX[i] + "px";
-        } else {
-          s_posX[i] -= 1;
-          slideBox[i].style.left = s_posX[i] + "px";
-        }
+  }
+  // 변경된 이미지 크기 반영
+  imgWidth = img.offsetWidth;
+  // 왼쪽 이동 함수
+  function slideToLeft(i) {
+    s_itv = setInterval(frameLeft, 1);
+    function frameLeft() {
+      let slideX = -(s_count[i] * imgWidth + s_posX[i]);
+      if (0 == slideX) {
+        clearInterval(s_itv);
+      } else if (100 < slideX) {
+        s_posX[i] += 6;
+        slideBox[i].style.left = s_posX[i] + "px";
+      } else if (40 < slideX) {
+        s_posX[i] += 3;
+        slideBox[i].style.left = s_posX[i] + "px";
+      } else if (10 < slideX) {
+        s_posX[i] += 2;
+        slideBox[i].style.left = s_posX[i] + "px";
+      } else {
+        s_posX[i] += 1;
+        slideBox[i].style.left = s_posX[i] + "px";
       }
     }
   }
+  // 오른쪽 이동 함수
+  function slideToRight(i) {
+    s_itv = setInterval(frameRight, 1);
+    function frameRight() {
+      let slideX = s_count[i] * imgWidth + s_posX[i];
+      if (0 == slideX) {
+        clearInterval(s_itv);
+      } else if (100 < slideX) {
+        s_posX[i] -= 6;
+        slideBox[i].style.left = s_posX[i] + "px";
+      } else if (40 < slideX) {
+        s_posX[i] -= 3;
+        slideBox[i].style.left = s_posX[i] + "px";
+      } else if (10 < slideX) {
+        s_posX[i] -= 2;
+        slideBox[i].style.left = s_posX[i] + "px";
+      } else {
+        s_posX[i] -= 1;
+        slideBox[i].style.left = s_posX[i] + "px";
+      }
+    }
+  }
+  // 인터넷 창 크기 변할 때 리사이징 & 위치 이동 이벤트
+  window.addEventListener("resize", function() {
+    for (let i = 0; i < slideBox.length; i++) {
+      imgNum.push(slideBox[i].childElementCount);
+      slideBox[i].style.width = 100 + "%";
+      slideBox[i].style.width = slideBox[i].offsetWidth * imgNum[i] + "px";
+
+      if (img.offsetWidth > imgWidth) {
+        clearInterval(s_itv);
+        imgWidth = img.offsetWidth;
+
+        let slideX = s_count[i] * imgWidth + s_posX[i];
+        s_posX[i] -= slideX;
+        slideBox[i].style.left = s_posX[i] + "px";
+        //
+      } else if (img.offsetWidth < imgWidth) {
+        clearInterval(s_itv);
+        imgWidth = img.offsetWidth;
+
+        let slideX = -(s_count[i] * imgWidth + s_posX[i]);
+        s_posX[i] += slideX;
+        slideBox[i].style.left = s_posX[i] + "px";
+      }
+    }
+  });
 });
-
-// $(function() {
-//   let slide = document.getElementById("slide_box");
-//   let slide_bt_L = document.getElementById("left_bt");
-//   let slide_bt_R = document.getElementById("right_bt");
-//   let s_itv;
-//   let s_count = 0;
-//   let s_posX = 0;
-//   let $img = $("#slide_box li img");
-//   let img = document.querySelector("#slide_box li img");
-
-//   // slide.style.width =
-
-//   slide_bt_R.addEventListener("click", function() {
-//     if (s_count < 4) {
-//       clearInterval(s_itv);
-//       s_count++;
-//       S_ani_R();
-//     }
-//     if (s_count == 4) {
-//       slide_bt_R.style.display = "none";
-//     } else {
-//       slide_bt_L.style.display = "block";
-//     }
-//   });
-//   function S_ani_R() {
-//     s_itv = setInterval(frame, 1);
-//     function frame() {
-//       const slideX = s_count * img.width + s_posX;
-//       if (0 == slideX) {
-//         clearInterval(s_itv);
-//       } else if (100 < slideX) {
-//         s_posX -= 6;
-//         slide.style.left = s_posX + "px";
-//       } else if (40 < slideX) {
-//         s_posX -= 3;
-//         slide.style.left = s_posX + "px";
-//       } else if (10 < slideX) {
-//         s_posX -= 2;
-//         slide.style.left = s_posX + "px";
-//       } else {
-//         s_posX -= 1;
-//         slide.style.left = s_posX + "px";
-//       }
-//     }
-//   }
-
-//   slide_bt_L.addEventListener("click", function() {
-//     if (s_count > 0) {
-//       clearInterval(s_itv);
-//       s_count--;
-//       S_ani_L();
-//     }
-//     if (s_count == 0) {
-//       slide_bt_L.style.display = "none";
-//     } else {
-//       slide_bt_R.style.display = "block";
-//     }
-//   });
-//   function S_ani_L() {
-//     s_itv = setInterval(frame, 1);
-//     function frame() {
-//       const slideX = -(s_count * img.width + s_posX);
-//       if (0 == slideX) {
-//         clearInterval(s_itv);
-//       } else if (100 < slideX) {
-//         s_posX += 6;
-//         slide.style.left = s_posX + "px";
-//       } else if (40 < slideX) {
-//         s_posX += 3;
-//         slide.style.left = s_posX + "px";
-//       } else if (10 < slideX) {
-//         s_posX += 2;
-//         slide.style.left = s_posX + "px";
-//       } else {
-//         s_posX += 1;
-//         slide.style.left = s_posX + "px";
-//       }
-//     }
-//   }
-// });
