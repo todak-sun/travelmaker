@@ -39,6 +39,7 @@ public class FriendPageController {
 		model.addAttribute("fno", fno);
 		model.addAttribute("friendDateStart", friendDTO.getDateStart());
 		model.addAttribute("friendDateEnd", friendDTO.getDateEnd());
+		model.addAttribute("title", friendDTO.getTitle());
 		// [용주] : 테스트를 위해 routeWrite2 변경함!!!
 		return "/friend/routeWrite2";
 	}

@@ -2,12 +2,40 @@
  * 
  */
 
-$(function () {
-	var token = $("meta[name='_csrf']").attr('content');
+$(function () {	
+    // 클래스
+    const {getEl, addEvent} = new travelmaker.utils();
+    const v = new travelmaker.validation();
+    const modal = new travelmaker.modal('#modal');
+    const t = new travelmaker.template();
+
+    // 변수
+    const dateStart = getEl('#date-start');
+    const dateEnd = getEl('#date-end');
+    const btnSearchPlace = getEl('#btn-search-place');
+    const inputSearchPlace = getEl('#input-search-place');
+    const content = getEl('#content');
+    const inputLat = getEl('#lat');
+    const inputLng = getEl('#lng');
+    const inputCity = getEl('#city');
+    const btnNext = getEl('#btn-next');
+    const btnCheck = getEl('#btn-check');
+    const btnCancel = getEl('#btn-cancel');
+    const friendDateStart = getEl('#friendDateStart');
+    const friendDateEnd = getEl('#friendDateEnd');
+    const isDomestic = +getEl('#is_domestic').value;
+    const routeGroup = getEl('.list-zone .list-group');
+
+    // 다음 지도의 정보를 가지고 있는 함수.
+    // 지도에서 특정 위치를 선택하면 값이 할당 됨.
+    let getMapData;
+    
+    var token = $("meta[name='_csrf']").attr('content');
     var header = $("meta[name='_csrf_header']").attr('content');
     
     let dataList = {};
     let count = 0;
+    let current = null;
 	
 	$.ajax({
     	type: 'post',
@@ -30,37 +58,19 @@ $(function () {
         	$('#lat').val(dataList.lat[0]);
         	$('#lng').val(dataList.lng[0]);
         	$('#city').val(dataList.city[0]);
+        	
+        	for(var i = 0; i < dataList.fcno.length; i++) {
+        		const $frag = $(document.createDocumentFragment());
+        		$frag.append(t.routeItem(inputCity.value, dateStart.value, dateEnd.value, content.value));
+        		routeGroup.appendChild($frag[0]);
+        	}
+        	current = $('.list-group li:first').children();
+        	current.addClass('current');
         },
         error: function(error) {
         	console.log(error);
         }
     });
-	
-    // 클래스
-    const {getEl, addEvent} = new travelmaker.utils();
-    const v = new travelmaker.validation();
-    const modal = new travelmaker.modal('#modal');
-    const t = new travelmaker.template();
-
-    // 변수
-    const dateStart = getEl('#date-start');
-    const dateEnd = getEl('#date-end');
-    const btnSearchPlace = getEl('#btn-search-place');
-    const inputSearchPlace = getEl('#input-search-place');
-    const content = getEl('#content');
-    const inputLat = getEl('#lat');
-    const inputLng = getEl('#lng');
-    const inputCity = getEl('#city');
-    const btnNext = getEl('#btn-next');
-    const btnCheck = getEl('#btn-check');
-    const btnCancel = getEl('#btn-cancel');
-    const friendDateStart = getEl('#friendDateStart');
-    const friendDateEnd = getEl('#friendDateEnd');
-    const isDomestic = +getEl('#is_domestic').value;
-
-    // 다음 지도의 정보를 가지고 있는 함수.
-    // 지도에서 특정 위치를 선택하면 값이 할당 됨.
-    let getMapData;
 
     addEvent(dateStart, 'blur', (e) => {
         const value = e.target.value;
@@ -156,67 +166,13 @@ $(function () {
 	                xhr.setRequestHeader(header, token);
 	            },
 	            success: function () {
-	                $('<table/>', {
-	                    class: 'table table-dark table-striped'
-	                })
-	                    .append(
-	                        $('<tr/>')
-	                            .append(
-	                                $('<th/>', {
-	                                    text: '방문시작날짜'
-	                                })
-	                            )
-	                            .append(
-	                                $('<td/>', {
-	                                    text: dateStart.value
-	                                })
-	                            )
-	                    )
-	                    .append(
-	                        $('<tr/>')
-	                            .append(
-	                                $('<th/>', {
-	                                    text: '방문종료날짜'
-	                                })
-	                            )
-	                            .append(
-	                                $('<td/>', {
-	                                    text: dateEnd.value
-	                                })
-	                            )
-	                    )
-	                    .append(
-	                        $('<tr/>')
-	                            .append(
-	                                $('<th/>', {
-	                                    text: '방문 도시'
-	                                })
-	                            )
-	                            .append(
-	                                $('<td/>', {
-	                                    text: inputCity.value
-	                                })
-	                            )
-	                    )
-	                    .append(
-	                        $('<tr/>')
-	                            .append(
-	                                $('<th/>', {
-	                                    text: '내용'
-	                                })
-	                            )
-	                            .append(
-	                                $('<td/>', {
-	                                    text: content.value
-	                                })
-	                            )
-	                    )
-	                    .appendTo($('#resultDiv'));
-	                $('<br/>').appendTo($('#resultDiv'));
-	                
 	                count++;
 	                if(dataList.fcno.length >= count + 1) {
-			            $('#fcno').val(dataList.fcno[count]);
+	                	current.attr('class', 'list-item');
+	                	current = current.parent().next().children();
+	                	current.addClass('current');
+			            
+	                	$('#fcno').val(dataList.fcno[count]);
 			            $('#date-start').val(dataList.dateStart[count].substring(0, 10));
 			            $('#date-end').val(dataList.dateEnd[count].substring(0, 10));
 			            $('#input-search-place').val(dataList.city[count]);
@@ -233,6 +189,7 @@ $(function () {
         } else {
         	alert('수정할 글이 없습니다.');
         	
+        	current.attr('class', 'list-item');
             $('#date-start').val(null);
             $('#date-end').val(null);
             $('#input-search-place').val(null);

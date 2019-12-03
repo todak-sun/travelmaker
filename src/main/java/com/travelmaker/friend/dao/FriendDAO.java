@@ -44,5 +44,7 @@ public interface FriendDAO {
 
 	public void setRouteModify(FriendRouteDTO friendRouteDTO);
 
+	public void updateDivision(FriendRouteDTO friendRouteDTO);
+
 
 }
