@@ -24,7 +24,7 @@ $(function () {
 
     if(btnModify)
     addEvent(btnModify, 'click', () => {
-        if (confirm('수정하시겠습니까?')) return location.href = '/friend/modify' + fno;
+        if (confirm('수정하시겠습니까?')) return location.href = '/friend/modify/' + fno;
     });
 
     if(btnDelete)

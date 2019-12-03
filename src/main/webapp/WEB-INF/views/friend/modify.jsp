@@ -6,7 +6,7 @@
 <%@include file="../common/head-meta.jsp"%>
 <%@include file="../common/head-css.jsp"%>
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/friend/write2.css">
+	href="${pageContext.request.contextPath}/resources/css/friend/write.css">
 <title>수정</title>
 </head>
 <body>
@@ -27,20 +27,21 @@
 				</div>
 
 				<div class="input-wrap">
-					<label for="title">제목</label> <input type="text" id="title"
-						name="title" class="v" value="${friendDTO.title }" />
+					<label for="title">제목</label>
+					<input type="text" id="title"
+						name="title" class="v v-pass" value="${friendDTO.title }" />
 					<div class="v-feed"></div>
 					<div class="iv-feed"></div>
 				</div>
 				<div class="input-wrap">
-					<label for="date-start">여행 시작일</label> <input type="date"
-						id="date-start" name="dateStart" class="v"/>
+					<label for="date-start">여행 시작일</label>
+					<input type="date" id="date-start" name="dateStart" class="v v-pass"/>
 					<div class="v-feed"></div>
 					<div class="iv-feed"></div>
 				</div>
 				<div class="input-wrap">
 					<label for="date-end">여행 종료일</label> <input type="date"
-						id="date-end" name="dateEnd" class="v"/>
+						id="date-end" name="dateEnd" class="v v-pass"/>
 					<div class="v-feed"></div>
 					<div class="iv-feed"></div>
 				</div>
