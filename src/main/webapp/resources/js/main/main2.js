@@ -224,24 +224,6 @@ $(function () {
                 .catch((error) => console.log('에러가 났네 ~_~', error));
         }
 
-        function timerStart(sec, timer, callbackFunc) {
-            let restTime = sec;
-            const start = setInterval(function () {
-                restTime -= 1;
-                if (restTime < 0) return timerEnd();
-                let min = Math.floor(restTime / 60);
-                let sec = restTime % 60;
-                timer.innerText = `0${min}:${sec < 10 ? '0' + sec : sec}`;
-            }, 1000);
-
-            function timerEnd() {
-                clearInterval(start);
-                alert('시간이 초과되었습니다. 다시 시도해주세요.');
-                if (callbackFunc) callbackFunc();
-            }
-
-            return timerEnd;
-        }
 
         function emailChangeHandler(e) {
             if (v.isValid(btnEmailCheck)) {
@@ -255,24 +237,12 @@ $(function () {
             const id = this.value;
             const [vFeed, ivFeed] = v.getFeedBox(this);
             if (!id) return v.setInvalid(this, ivFeed, '아이디를 입력해주세요.');
-            if (!regex.test(id))
-                return v.setInvalid(
-                    this,
-                    ivFeed,
-                    '아이디는 이메일 형식으로 입력해주세요.'
-                );
+            if (!regex.test(id)) return v.setInvalid(this, ivFeed, '아이디는 이메일 형식으로 입력해주세요.');
 
-            new travelmaker.ajax()
-                .checkId({id: id, registerMethod: getRegisterMethod()})
+            ajax.checkId({id: id, registerMethod: getRegisterMethod()})
                 .then((ret) => {
-                    if (ret === 'exist') {
-                        return v.setInvalid(
-                            registerId,
-                            ivFeed,
-                            '이미 사용중인 아이디입니다. 다시 입력해주세요.'
-                        );
-                    }
-                    return v.setValid(registerId, vFeed, '사용 가능한 아이디 입니다.');
+                    if (ret === 'exist') return v.setInvalid(registerId, ivFeed, '이미 사용중인 아이디입니다. 다시 입력해주세요.');
+                    else return v.setValid(registerId, vFeed, '사용 가능한 아이디 입니다.');
                 })
                 .catch(console.error);
         }

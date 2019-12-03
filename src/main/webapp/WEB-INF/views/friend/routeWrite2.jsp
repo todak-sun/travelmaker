@@ -15,12 +15,20 @@
         <form action="" class="editor-second" id="routeWriteForm">
             <div class="hidden">
                 <input type="hidden" name="is_domestic" id="is_domestic" value="${is_domestic}">
-                <input type="hidden" name="fno" value="${fno}">
+                <input type="hidden" name="fno" value="${fno}" id="fno">
                 <input type="hidden" name="friendDateStart" id="friendDateStart" value="${friendDateStart }">
                 <input type="hidden" name="friendDateEnd" id="friendDateEnd" value="${friendDateEnd }">
                 <input type="hidden" name="lat" id="lat">
                 <input type="hidden" name="lng" id="lng">
                 <input type="hidden" name="city" id="city">
+            </div>
+
+            <div class="info-wrap">
+                <h2>1에서 설정한 제목</h2>
+                <p class="date">
+                    <span class="from">${friendDateStart}</span>
+                    <span class="to">${friendDateEnd}</span>
+                </p>
             </div>
 
             <div class="input-wrap">
@@ -58,12 +66,13 @@
                 <button type="button" id="btn-cancel" class="btn btn-tdanger">취소</button>
             </div>
         </form>
-        <br/>
-        <br/>
-        <div id="resultDiv"></div>
+    </div>
+    <div class="list-zone">
+        <h3>작성한 계획목록</h3>
+        <ul class="list-group"></ul>
     </div>
 </div>
-<%@include file="../common/footer.jsp"%>
+<%@include file="../common/footer.jsp" %>
 <%@include file="../common/editor-js.jsp" %>
 <script src="${pageContext.request.contextPath}/resources/js/friend/routeWrite2.js"></script>
 </body>
