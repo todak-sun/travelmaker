@@ -18,6 +18,8 @@
 				<input type="hidden" id="loginNickname" value="${userDetail.nickname }">
 				<input type="hidden" id="nickname" value="${purchaseDTO.nickname }">
 				<input type="hidden" id="bno" value="${purchaseDTO.bno }">
+				<input type="hidden" id="username"
+						value="${userDetail.username }">
 			</div>
 			</sec:authorize>
 

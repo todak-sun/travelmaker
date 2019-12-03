@@ -24,7 +24,7 @@ $(function () {
             case 'my-info' :
                 return initMyInfo();
             case 'my-alarm' :
-                return console.log('아직 구현 못함');
+                return initInfoAlarm();
             default :
                 throw new Error('뭔데');
         }
@@ -35,6 +35,7 @@ $(function () {
     function initOnLoad() {
         initMyArticle();
     }
+    
 
     function initMyInfo() {
         mainWrap.innerHTML = '';
@@ -236,6 +237,154 @@ $(function () {
             })
             .catch(console.error);
     }
+    
+    function initInfoAlarm(){
+    	mainWrap.innerHTML = '';
+    	$(mainWrap).append(t.alarmlist());
+
+    	const tableHead = getEl('.table-head');
+        const tableContent = getEl('.table-content');
+        const lnbList = getElList('.lnb-my-alarm ul li a');
+         
+         addAllSameEvent(lnbList, 'click', function (e) {
+             lnbList.forEach(menu => menu.classList.remove('on2'));
+             this.classList.add('on2');
+             switch (this.dataset.page) {
+                 case 'allAlarm' :
+                     return initAllalarm();
+                 case 'friend' :
+                     return initFriendAlarm();
+                 case 'purchase' :
+                     return initPurchaseAlarm();
+                 case 'like':
+                	 return initLikeAlarm();
+                 case 'comment':
+                	 return initCommentAlarm();
+                 default :
+                     throw new Error('뭔데?');
+             }
+         });
+         initAllalarm();
+         
+         function initAllalarm(){
+        	 resetTable();
+        	 $(tableHead).append(t.alarmTableHead());
+      	     
+        	 // 용주형 이거 에이작스 형코드로 리펙토링해도되요 일단해놓은거[기능우선]
+        	 alarmAjax(seq,1);
+        	 
+         }
+         
+         function initFriendAlarm(){
+        	 resetTable();
+        	 $(tableHead).append(t.alarmTableHead());
+        	 alarmAjax(seq,2);
+        	 
+         }
+         
+         function initPurchaseAlarm(){
+        	 resetTable();
+        	 $(tableHead).append(t.alarmTableHead());
+        	 alarmAjax(seq,3);
+        	 
+         }
+         
+         function initLikeAlarm(){
+        	 resetTable();
+        	 $(tableHead).append(t.alarmTableHead());
+        	 // alarmAjax(seq,4);
+         }
+
+         function initCommentAlarm(){
+        	 resetTable();
+        	 $(tableHead).append(t.alarmTableHead());
+        	 // alarmAjax(seq,5);
+         }
+         
+         function resetTable() {
+             tableHead.innerHTML = '';
+             tableContent.innerHTML = '';
+         }
+         
+         function alarmAjax(seq,con){
+        	 /* con : 1.전체알람,2.동행,3.대리구매,4.좋아요,5.댓글 */
+         	 let token = $("meta[name='_csrf']").attr("content");
+        	 let header = $("meta[name='_csrf_header']").attr("content");
+         	 
+         	 $.ajax({
+  				type : 'get',
+  				url : '/alarm/myalarmload',
+  				data : {
+  					'seq' : seq,
+  					'con' : con
+  				},
+  				dataType : 'json',
+  				beforeSend : function(xhr) {
+  					xhr.setRequestHeader(header, token);
+  				},
+  				success : function(data) {
+  					let template = '';
+  					$.each(data, function(index, items) {
+  						template+=t.mypageAlarmviewTemplate(items);
+  					});
+  					tableContent.innerHTML=template;
+  				},
+  				error : function(error) {
+  					console.log(error);
+  				}
+  			});
+         }
+         
+         $('.deleteAlarm').click(function(){
+        	 let token = $("meta[name='_csrf']").attr("content");
+        	 let header = $("meta[name='_csrf_header']").attr("content");
+        	 
+        	 let con = $(this).data('con');
+        	 let alarmtype =$('.on2').data('page');
+        	 let convertAlarmtype='';
+        	 
+        	 if(alarmtype=='allAlarm'){
+        		 convertAlarmtype='1';
+        	 }else if(alarmtype=='friend'){
+        		 convertAlarmtype='2';
+        	 }else if(alarmtype=='purchase'){
+        		 convertAlarmtype='3';
+        	 }else if(alarmtype=='like'){
+        		 convertAlarmtype='4';
+        	 }else if(alarmtype=='comment'){
+        		 convertAlarmtype='5';
+        	 }else{
+        		 console.log('ERROR');
+        	 }
+        	 
+         	 $.ajax({
+  				type : 'delete',
+  				url : '/alarm/deleteAlarm/'+con+'/'+seq+'/'+convertAlarmtype,
+  				dataType : 'text',
+  				beforeSend : function(xhr) {
+  					xhr.setRequestHeader(header, token);
+  				},
+  				success : function(data) {
+  					if(data=='1'){
+  						initAllalarm();
+  					}else if(data=='2'){
+  						initFriendAlarm();
+  					}else if(data=='3'){
+  						initPurchaseAlarm();
+  					}else if(data=='4'){
+  						initCommentAlarm();
+  					}else if(data=='5'){
+  						initCommentAlarm();
+  					}
+  				},
+  				error : function(error) {
+  					console.log(error);
+  				}
+  			});
+         });
+         
+    }
+    
 
     function initMyArticle() {
         mainWrap.innerHTML = '';
