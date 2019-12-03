@@ -181,6 +181,21 @@ let travelmaker = (function (window) {
             `;
         };
 
+        Template.prototype.routeItem = function(city, from, to, detail){
+            return `
+            <li>
+                <div class="list-item">
+                    <h4 class="city">${city}</h4>
+                    <p class="date">
+                        <span class="from">${from}</span>
+                        <span class="to">${to}</span>
+                    </p>
+                    <p class="detail">${detail}</p>
+                </div>
+            </li>
+            `
+        }
+
         Template.prototype.hashBox = function () {
             return `
                 <div>
@@ -992,9 +1007,29 @@ let travelmaker = (function (window) {
             this.getFriendRequestView = getFriendRequestView;
             this.checkAlarm = checkAlarm;
             this.deleteFriendRequest = deleteFriendRequest;
+            this.setRouteWrite = setRouteWrite;
+            this.deleteRouteWrite = deleteRouteWrite;
         };
 
         const {setRequestHeader} = new Utils();
+
+        function setRouteWrite(data) {
+            return $.ajax({
+                type: 'post',
+                url: '/friend/setRouteWrite',
+                data: data,
+                beforeSend: setRequestHeader
+            });
+        }
+
+        function deleteRouteWrite(fno){
+            return $.ajax({
+                type: 'post',
+                url: '/friend/cancelWrite',
+                data: {fno: fno},
+                beforeSend: setRequestHeader
+            });
+        }
 
         function checkAlarm(header, ano) {
             return $.ajax({
@@ -1004,7 +1039,7 @@ let travelmaker = (function (window) {
             });
         }
 
-        function deleteFriendRequest(fno){
+        function deleteFriendRequest(fno) {
             return $.ajax({
                 type: 'delete',
                 url: '/friend/delete',
@@ -1760,8 +1795,8 @@ let travelmaker = (function (window) {
 
     const Handler = (function (w) {
         const Handler = function () {
+        };
 
-        }
         const myRegex = new Regex();
         const v = new Validation();
         const {addEvent} = new Utils();
@@ -1778,20 +1813,23 @@ let travelmaker = (function (window) {
             const btnConfirm = getEl('#btn-email-confirm'); // 버튼
             const timer = getEl('.timer');
             const close = getEl('.tmodal-mini .close');
+            const timerEnd = timerStart(180, timer, () => close.click());
 
-            // timerStart(180, timer, () => close.click());
             addEvent(emailConfirm, 'keyup', (e) => {
                 if (e.keyCode === 13) btnConfirm.click();
             });
 
+            addEvent(close, 'click', () => timerEnd());
+
             addEvent(btnConfirm, 'click', () => {
                 const [vFeed, ivFeed] = v.getFeedBox(emailConfirm);
                 if (emailConfirm.value !== emailCode) {
-                    v.setInvalid(emailConfirm, ivFeed, '발송한 인증코드와 불일치 합니다. 다시 확인해주세요.');
+                    v.setInvalid(emailConfirm, ivFeed, '발송된 인증코드와 불일치 합니다. 다시 확인해주세요.');
                     emailConfirm.value = '';
                     emailConfirm.focus();
                 } else {
                     close.click();
+                    timerEnd();
                     changedBtn.innerText = '완료';
                     changedBtn.classList.remove('ing');
                     email1.disabled = true;
@@ -1799,6 +1837,25 @@ let travelmaker = (function (window) {
                     v.changeValid(changedBtn);
                 }
             });
+        }
+
+        function timerStart(sec, timer, callbackFunc) {
+            let restTime = sec;
+            const start = setInterval(function () {
+                restTime -= 1;
+                if (restTime < 0) return timerEnd();
+                let min = Math.floor(restTime / 60);
+                let sec = restTime % 60;
+                timer.innerText = `0${min}:${sec < 10 ? '0' + sec : sec}`;
+            }, 1000);
+
+            function timerEnd() {
+                clearInterval(start);
+                alert('시간이 초과되었습니다. 다시 시도해주세요.');
+                if (callbackFunc) callbackFunc();
+            }
+
+            return timerEnd;
         }
 
 

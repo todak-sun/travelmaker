@@ -284,7 +284,6 @@ function routeDataList(data) {
 		dataList.city.push(d.city);
 		dataList.lat.push(d.lat);
 		dataList.lng.push(d.lng);
-		
 	});
 	return dataList;
 }
