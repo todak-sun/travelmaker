@@ -1,16 +1,18 @@
 $(function () {
-    //클래스
+	// 새로고침 막기
+	document.onkeydown = noEvent;
+    // 클래스
     const {getEl, addEvent} = new travelmaker.utils();
     const v = new travelmaker.validation();
     const modal = new travelmaker.modal('#modal');
     const t = new travelmaker.template();
     const ajax = new travelmaker.ajax();
 
-    //상수
+    // 상수
     const fno = +getEl('#fno').value;
     const isDomestic = +getEl('#is_domestic').value;
 
-    //엘리먼트
+    // 엘리먼트
     const dateStart = getEl('#date-start');
     const dateEnd = getEl('#date-end');
     const btnSearchPlace = getEl('#btn-search-place');
@@ -26,8 +28,8 @@ $(function () {
     const friendDateEnd = getEl('#friendDateEnd');
     const routeGroup = getEl('.list-zone .list-group');
 
-    //다음 지도의 정보를 가지고 있는 함수.
-    //지도에서 특정 위치를 선택하면 값이 할당 됨.
+    // 다음 지도의 정보를 가지고 있는 함수.
+    // 지도에서 특정 위치를 선택하면 값이 할당 됨.
     let getMapData;
 
     addEvent(dateStart, 'blur', (e) => {
@@ -85,19 +87,33 @@ $(function () {
     });
 
     addEvent(btnCheck, 'click', () => {
-        if (
-            !dateStart.value ||
-            !dateEnd.value ||
-            !content.value ||
-            !inputSearchPlace.value
-        ) {
-            alert('내용을 입력 후 저장버튼을 눌러주세요.');
+        if(dateStart.value && dateEnd.value && content.value && inputSearchPlace.value) {
+        	$('#division').val('check');
+        	var result = confirm('정말로 저장하시겠습니까?');
+        	
+        	if(result) {
+	            ajax.setRouteWrite($('#routeWriteForm').serialize())
+	                .then(() => {
+	                    alert('저장완료!');
+	                    location.href = '/friend/list/1';
+	                }).catch(console.error);
+        	}
+        } else if(!dateStart.value && !dateEnd.value && !content.value && !inputSearchPlace.value){
+        	$('#division').val('check');
+        	// 임의의 값
+        	$('#lat').val('35.353');
+        	$('#lng').val('35.353');
+        	var result = confirm('정말로 저장하시겠습니까?');
+        	
+        	if(result) {
+        		ajax.updateDivision($('#routeWriteForm').serialize())
+        			.then(() => {
+        				alert('저장완료!');
+                		location.href = '/friend/list/1';
+        			}).catch(console.error);
+        	}
         } else {
-            ajax.setRouteWrite($('#routeWriteForm').serialize())
-                .then(() => {
-                    alert('저장완료!');
-                    location.href = '/friend/list/1';
-                }).catch(console.error);
+            alert('내용을 입력 후 저장버튼을 눌러주세요.');
         }
     });
 
@@ -123,7 +139,11 @@ $(function () {
         } else if (!v.isValid(content)) {
             v.setInvalid(content, v.getFeedBox(content)[1], '내용을 입력해주세요.');
             return content.focus();
-        } else {
+        } else if (!dateStart.value && !dateEnd.value && !content.value && !inputSearchPlace.value) {
+        	alert('내용을 입력해주세요.');
+        }
+        else {
+        	$('#division').val('next');
             ajax.setRouteWrite($('#routeWriteForm').serialize())
                 .then(() => {
                     const $frag = $(document.createDocumentFragment());
@@ -169,3 +189,13 @@ $(function () {
         inputCity.value = '';
     }
 });
+
+function noEvent() {
+	if (event.keyCode == 116) {
+		event.keyCode= 2;
+		return false;
+		}
+	else if(event.ctrlKey && (event.keyCode==78 || event.keyCode == 82)) {
+		return false;
+	}
+}

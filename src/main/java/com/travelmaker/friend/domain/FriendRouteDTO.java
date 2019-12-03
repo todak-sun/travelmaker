@@ -24,4 +24,5 @@ public class FriendRouteDTO {
 	private double lng;
 	private String city;
 	private List<FriendRequestDTO> friendRequestDTOs;
+	private String division;
 }

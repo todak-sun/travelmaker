@@ -1,6 +1,5 @@
 package com.travelmaker.friend.dao;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +20,7 @@ public class FriendDAOMybatis implements FriendDAO {
 	
 	@Override
 	public List<FriendDTO> getList(Map<String, Integer> map) {
+		sqlSession.delete("friendSQL.abnormalDelete");
 		List<FriendDTO> list = sqlSession.selectList("friendSQL.getList", map);
 		
 		for(FriendDTO friendDTO : list) {
@@ -39,6 +39,9 @@ public class FriendDAOMybatis implements FriendDAO {
 
 	@Override
 	public void setRouteWrite(FriendRouteDTO friendRouteDTO) {
+		if(friendRouteDTO.getDivision().equals("check")) {
+			sqlSession.update("friendSQL.normalUpdate", friendRouteDTO.getFno());
+		}
 		sqlSession.insert("friendSQL.setRouteWrite", friendRouteDTO);
 	}
 
@@ -124,5 +127,10 @@ public class FriendDAOMybatis implements FriendDAO {
 	@Override
 	public void setRouteModify(FriendRouteDTO friendRouteDTO) {
 		sqlSession.update("friendSQL.setRouteModify", friendRouteDTO);
+	}
+
+	@Override
+	public void updateDivision(FriendRouteDTO friendRouteDTO) {
+		sqlSession.update("friendSQL.normalUpdate", friendRouteDTO.getFno());
 	}
 }

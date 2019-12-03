@@ -69,6 +69,11 @@ public class FriendApiController {
 	public void setRouteWrite(@ModelAttribute FriendRouteDTO friendRouteDTO) {
 		friendService.setRouteWrite(friendRouteDTO);
 	}
+	// division만 수정
+	@PostMapping("/updateDivision")
+	public void updateDivision(@ModelAttribute FriendRouteDTO friendRouteDTO) {
+		friendService.updateDivision(friendRouteDTO);
+	}
 	// 취소버튼 클릭 후 작성중인 데이터 삭제
 	@PostMapping(value = "/cancelWrite")
 	public void cancelWrite(@RequestParam String fno) {

@@ -2,9 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="friendSQL">
+	<delete id="abnormalDelete">
+		DELETE FROM friends WHERE is_normal = 1
+	</delete>
 	<select id="getList" parameterType="java.util.Map"
 		resultType="friend">
-		<![CDATA[SELECT * FROM (SELECT rownum rn, tt.* FROM (SELECT fno, seq, id, title, is_domestic, to_char(dateStart, 'YYYY-MM-DD') AS dateStart, to_char(dateEnd, 'YYYY-MM-DD') AS dateEnd, is_finish, kakao_chat, to_char(date_of_issue, 'YYYY-MM-DD') AS date_of_issue from friends order by fno desc) tt) WHERE rn BETWEEN #{startNum} AND #{endNum}]]>
+		<![CDATA[SELECT * FROM (SELECT rownum rn, tt.* FROM (SELECT fno, seq, id, title, is_domestic, to_char(dateStart, 'YYYY-MM-DD') AS dateStart, to_char(dateEnd, 'YYYY-MM-DD') AS dateEnd, is_finish, kakao_chat, to_char(date_of_issue, 'YYYY-MM-DD') AS date_of_issue, is_normal from friends order by fno desc) tt) WHERE rn BETWEEN #{startNum} AND #{endNum}]]>
 	</select>
 	<select id="getNickName" parameterType="int" resultType="String">
 		SELECT nickname FROM users WHERE seq = #{seq}
@@ -20,13 +23,16 @@
 	<insert id="setWrite" parameterType="friend">
 		INSERT INTO friends
 		values(seq_fno.nextval, #{seq}, #{id}, #{title}, #{is_domestic},
-		#{dateStart}, #{dateEnd}, 0, 'sdfsdf', sysdate)
+		#{dateStart}, #{dateEnd}, 0, 'sdfsdf', sysdate, 1)
 	</insert>
 	<select id="getSelectFno" parameterType="int" resultType="int">
 		SELECT
 		* FROM (SELECT fno FROM friends WHERE seq = #{seq} order by fno desc)
 		where rownum = 1
 	</select>
+	<update id="normalUpdate" parameterType="int">
+		UPDATE friends SET is_normal = 0 WHERE fno = #{fno}
+	</update>
 	<insert id="setRouteWrite" parameterType="friendRoute">
 		INSERT INTO
 		friends_route values(#{fno}, seq_fcno.nextval, #{dateStart},
@@ -45,7 +51,7 @@
 		SELECT fno,
 		seq, id, title, is_domestic, to_char(dateStart, 'YYYY-MM-DD') as
 		dateStart, to_char(dateEnd, 'YYYY-MM-DD') as dateEnd, is_finish,
-		kakao_chat, to_char(date_of_issue, 'YYYY-MM-DD') as date_of_issue
+		kakao_chat, to_char(date_of_issue, 'YYYY-MM-DD') as date_of_issue, is_normal
 		FROM
 		friends WHERE fno = #{fno}
 	</select>

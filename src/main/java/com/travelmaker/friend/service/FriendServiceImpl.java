@@ -104,4 +104,9 @@ public class FriendServiceImpl implements FriendService {
 		friendDAO.setRouteModify(friendRouteDTO);
 	}
 
+	@Override
+	public void updateDivision(FriendRouteDTO friendRouteDTO) {
+		friendDAO.updateDivision(friendRouteDTO);
+	}
+
 }
