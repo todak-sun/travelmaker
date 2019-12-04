@@ -45,12 +45,17 @@
 }
 
 .story .story-img-wrap {
+    overflow: hidden;
     width: 100%;
-    height: auto;
+    height: 12rem;
+    /* max-height 추가 해놓음!!!!!!!!!!!!!!!!! 수정 바람 */
+    /* height: auto; */
 }
 
 .story .story-img-wrap .story-img {
-    min-width: 100%;
+	min-width: 100%;
+	min-height: 100%;
+    width: auto;
     height: auto;
 }
 

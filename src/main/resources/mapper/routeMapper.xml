@@ -4,9 +4,17 @@
 <mapper namespace="routeSQL">
 
     <insert id="setRoute" parameterType="route">
-        INSERT INTO route (bno, rno, seq, title, fixed, is_domestic)
-        VALUES (bno.nextval, rno.nextval, #{seq}, #{title, jdbcType=VARCHAR}, 0, #{isDomestic})
+        INSERT INTO route (bno, rno, seq, title, fixed, is_domestic, image_name)
+        VALUES (bno.nextval, rno.nextval, #{seq}, #{title, jdbcType=VARCHAR}, 0, #{isDomestic}, #{imageName})
     </insert>
+    
+    <update id="modifySetRoute" parameterType="route">
+        UPDATE route
+        	SET title=#{title},
+        		image_name=#{imageName}
+        	WHERE rno = #{rno}
+        	  AND seq = #{seq}
+    </update>
 
     <update id="saveRoute" parameterType="route">
         begin
@@ -21,11 +29,24 @@
             UPDATE route_content SET fixed=1 WHERE rno = #{rno};
         end;
     </update>
+    
+    <update id="modifySaveRoute" parameterType="route">
+		UPDATE route
+		SET content=#{content},
+		    hashtag=#{hashtag},
+		    date_update=SYSDATE,
+		where rno = #{rno}
+		  and seq = #{seq}
+    </update>
 
     <select id="getRoute" parameterType="Integer" resultType="route">
-        SELECT *
-        FROM route
-        WHERE rno = #{rno}
+        SELECT bno, C.rno, C.seq, title, content, likes, views, hashtag, date_write, date_update, image_name, fixed, is_domestic, date_from, date_to, nickname FROM (
+            SELECT bno, A.rno, seq, title, content, likes, views, hashtag, date_write, date_update, image_name, fixed, is_domestic,  TO_CHAR(date_from,'YYYY-MM-DD') AS date_from, TO_CHAR(date_to,'YYYY-MM-DD') AS date_to FROM (
+                SELECT * FROM route
+            ) A LEFT OUTER JOIN (
+                SELECT min(date_start) as date_from, max(date_end) as date_to, rno FROM route_content GROUP BY rno
+            ) B ON A.rno = B.rno WHERE A.rno=#{rno}
+        ) C JOIN (SELECT nickname, seq from users) D ON C.seq = D.seq
     </select>
 
     <select id="getRouteByBno" parameterType="int" resultType="route">
@@ -50,13 +71,13 @@
         VALUES (crno.NEXTVAL, #{rno}, #{content}, #{lat}, #{lng}, #{location},
                 TO_DATE('${dateStart}', 'YYYY-MM-DD'), TO_DATE('${dateEnd}', 'YYYY-MM-DD'), #{score}, 0)
     </insert>
-
+    
     <update id="saveOrder" parameterType="Map">
         UPDATE route_content
         SET cnt_order=#{cntOrder}
         WHERE crno = #{crno}
     </update>
-
+    
     <update id="patchCourse" parameterType="routeContent">
         UPDATE route_content
         SET content=#{content},
@@ -67,13 +88,16 @@
             date_end=TO_DATE('${dateEnd}', 'YYYY-MM-DD'),
             score=#{score}
         WHERE rno = #{rno}
-          and crno = #{crno}
+          AND crno = #{crno}
     </update>
-
+    
     <delete id="deleteCourse" parameterType="Integer">
-        DELETE route_content
-        WHERE crno = #{crno}
+   	    begin
+	        DELETE route_image WHERE crno = #{crno};
+	        DELETE route_content WHERE crno = #{crno};
+        end;
     </delete>
+    
 
     <select id="getCourse" parameterType="Integer" resultType="routeContent">
         SELECT crno,
@@ -102,11 +126,12 @@
     </insert>
 
     <select id="getRouteContentStory" parameterType="int" resultType="routeContent">
-        SELECT *
+        SELECT crno, rno, content, lat, lng, location, TO_CHAR(date_start, 'YYYY-MM-DD') AS date_start, TO_CHAR(date_end, 'YYYY-MM-DD') AS date_end, score, fixed, cnt_order        
         FROM route_content
         WHERE RNO = #{rno}
         ORDER BY cnt_order DESC
     </select>
+    
 
     <select id="getRouteImageStory" parameterType="int" resultType="routeImage">
         SELECT img
@@ -117,5 +142,28 @@
     <select id="getRouteListByUserSeq" parameterType="int" resultType="route">
         SELECT * FROM route WHERE seq = #{seq} AND fixed = 1
     </select>
-
+    
+	<select id="getRouteFromTo" parameterType="int" resultType="Map">
+		SELECT MIN(date_start) as route_from, max(date_end) as route_to from route_content WHERE rno=#{rno};
+	</select>
+	
+	<select id="getRouteTemp" parameterType="int" resultType="int">
+		SELECT MAX(rno) FROM route WHERE seq=#{seq} and fixed=0
+	</select>
+	
+	<select id="getCourseImageByRno" parameterType="int" resultType="routeImage">
+		SELECT * FROM (SELECT crno FROM route_content WHERE rno = #{rno})A INNER JOIN route_image B ON A.crno = B.crno;
+	</select>
+	
+	<delete id="deleteRoute" parameterType="int">
+	    begin
+	        DELETE (SELECT * FROM (SELECT crno FROM route_content WHERE rno = #{rno})A INNER JOIN route_image B ON A.crno = B.crno);
+	        DELETE route_content WHERE rno = #{rno};
+	        DELETE route WHERE rno = #{rno};
+		end;
+	</delete>
+	
+	<delete id="deleteRouteImage" parameterType="String">
+		DELETE route_image WHERE img=#{img}
+	</delete>
 </mapper>
