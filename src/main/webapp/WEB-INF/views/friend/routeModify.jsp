@@ -60,8 +60,10 @@
                 <button type="button" id="btn-cancel" class="btn btn-tdanger">취소</button>
             </div>
         </form>
-        <br/> <br/>
-        <div id="resultDiv"></div>
+    </div>
+    <div class="list-zone">
+    	<h3>작성한 계획목록</h3>
+    	<ul class="list-group"></ul>
     </div>
 </div>
 <%@include file="../common/footer.jsp" %>

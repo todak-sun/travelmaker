@@ -43,4 +43,6 @@ public interface FriendService {
 	public List<FriendRouteDTO> getRouteModify(String fno);
 
 	public void setRouteModify(FriendRouteDTO friendRouteDTO);
+
+	public void updateDivision(FriendRouteDTO friendRouteDTO);
 }

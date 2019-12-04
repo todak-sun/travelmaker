@@ -1117,6 +1117,7 @@ let travelmaker = (function (window) {
             this.checkAlarm = checkAlarm;
             this.deleteFriendRequest = deleteFriendRequest;
             this.setRouteWrite = setRouteWrite;
+            this.updateDivision = updateDivision
             this.deleteRouteWrite = deleteRouteWrite;
             this.getPurchaseList = getPurchaseList;
             this.getOrderView = getOrderView;
@@ -1225,6 +1226,15 @@ let travelmaker = (function (window) {
                 beforeSend: setRequestHeader
             });
         }
+        
+        function updateDivision(data) {
+			return $.ajax({
+				type: 'post',
+				url: '/friend/updateDivision',
+				data: data,
+				beforeSend: setRequestHeader
+			});
+		}
 
         function deleteRouteWrite(fno) {
             return $.ajax({
