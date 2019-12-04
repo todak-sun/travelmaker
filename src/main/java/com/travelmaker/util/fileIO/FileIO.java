@@ -14,6 +14,10 @@ public class FileIO {
 
     @Autowired
     ServletContext servletContext;
+    @Autowired
+    UploadService uploadService;
+    
+    private static final String amazonURLPath = "https://travelmaker-bucket.s3.ap-northeast-2.amazonaws.com/";
 
     public String readFile(String fileName) {
         String dirPath = servletContext.getRealPath("/resources/storage/essay");
@@ -59,37 +63,41 @@ public class FileIO {
         }
     }
 
-    public String saveImage(MultipartFile imageFile) {
-        String dirPath = servletContext.getRealPath("/resources/storage/essay");
-        String imageName = LocalDateTime.now().toString() + imageFile.getOriginalFilename();
+    public String saveImage(MultipartFile imageFile, String temp) {
+    	String imageName = uploadService.upload(imageFile, temp);
+    	//String dirPath = servletContext.getRealPath("/resources/storage/essay");
+        //String imageName = LocalDateTime.now().toString() + imageFile.getOriginalFilename();
+    	String imageURL = amazonURLPath + "profile/" + imageName;
+    	System.out.println(imageFile.getOriginalFilename());
 
-        InputStream is = null;
-        FileOutputStream fos = null;
-        try {
-            is = imageFile.getInputStream();
-            fos = new FileOutputStream(new File(dirPath, imageName));
-            FileCopyUtils.copy(is, fos);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (is != null) {
-                    is.close();
-                }
-                if (fos != null) {
-                    fos.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return imageName;
+//        InputStream is = null;
+//        FileOutputStream fos = null;
+//        try {
+//            is = imageFile.getInputStream();
+//            fos = new FileOutputStream(new File(dirPath, imageName));
+//            FileCopyUtils.copy(is, fos);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } finally {
+//            try {
+//                if (is != null) {
+//                    is.close();
+//                }
+//                if (fos != null) {
+//                    fos.close();
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+        return imageURL;
     }
-
-    public void deleteImage(String savedImageName) {
-        String dirPath = servletContext.getRealPath("/resources/storage/essay");
-        File file = new File(dirPath, savedImageName);
-        file.delete();
+    
+    public void deleteImage(String savedImageName, String temp) {
+    	uploadService.delete(savedImageName, temp);
+//        String dirPath = servletContext.getRealPath("/resources/storage/essay");
+//        File file = new File(dirPath, savedImageName);
+//        file.delete();
     }
 
     public void deleteFile(String savedFileName) {

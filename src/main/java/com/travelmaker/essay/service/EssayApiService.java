@@ -59,8 +59,9 @@ public class EssayApiService implements EssayApiInterface<EssayApiRequest, Essay
     @Override
     public Header<EssayApiResponse> create(EssayApiRequest request) {
         System.out.println(request);
+        String temp = "essay";
         String imageName = Optional.ofNullable(request.getImageFile())
-                .map(imageFile -> fileIO.saveImage(imageFile))
+                .map(imageFile -> fileIO.saveImage(imageFile, temp))
                 .orElse(null);
         String fileName = UUID.randomUUID().toString() + LocalDateTime.now().toString() + ".txt";
         fileIO.saveFile(request.getContent(), fileName);
@@ -81,11 +82,12 @@ public class EssayApiService implements EssayApiInterface<EssayApiRequest, Essay
 
     @Override
     public String upload(int rno, EssayApiRequest request) {
+    	String temp = "essay";
         return Optional.ofNullable(essayDAO.readOne(rno))
                 .map((essayDTO) -> {
-                    Optional.ofNullable(essayDTO.getImageName()).ifPresent(imageName -> fileIO.deleteImage(imageName));
+                    Optional.ofNullable(essayDTO.getImageName()).ifPresent(imageName -> fileIO.deleteImage(imageName, temp));
                     String imageName = Optional.ofNullable(request.getImageFile())
-                            .map((imageFile) -> fileIO.saveImage(imageFile))
+                            .map((imageFile) -> fileIO.saveImage(imageFile, temp))
                             .orElse(null);
                     essayDTO.setImageName(imageName);
                     return essayDAO.update(essayDTO).getImageName();
@@ -96,6 +98,7 @@ public class EssayApiService implements EssayApiInterface<EssayApiRequest, Essay
     @Override
     public Header<EssayApiResponse> update(int rno, EssayApiRequest request) {
         Optional<EssayDTO> optional = Optional.ofNullable(essayDAO.readOne(rno));
+        String temp = "essay";
         return optional.map(essayDTO -> {
             //바뀐 내용을 기존에 있던 내용에 저장
             fileIO.saveFile(request.getContent(), essayDTO.getFileName());
@@ -109,15 +112,15 @@ public class EssayApiService implements EssayApiInterface<EssayApiRequest, Essay
                             return savedImageName;
                             //임시 수정중인 이미지의 이름과 같지 않다면 기존의 파일을 삭제하고, 새로 들어온 이미지 파일을 저장하거나 null로 처리
                         } else {
-                            fileIO.deleteImage(savedImageName);
+                            fileIO.deleteImage(savedImageName, temp);
                             return Optional.ofNullable(request.getImageFile())
-                                    .map(imageFile -> fileIO.saveImage(imageFile))
+                                    .map(imageFile -> fileIO.saveImage(imageFile, temp))
                                     .orElse(null);
                         }
                     })
                     //DB에 이미지가 없다면, 새로 들어온 배경이미지가 있는지 조사하고, 새로 들어온 이미지 파일을 저장하거나 null로 처리.
                     .orElse(Optional.ofNullable(request.getImageFile())
-                            .map(imageFile -> fileIO.saveImage(imageFile))
+                            .map(imageFile -> fileIO.saveImage(imageFile, temp))
                             .orElse(null));
 
             essayDTO.setTitle(request.getTitle())
@@ -137,11 +140,12 @@ public class EssayApiService implements EssayApiInterface<EssayApiRequest, Essay
     @Override
     public Header delete(int rno) {
         Optional<EssayDTO> optional = Optional.ofNullable(essayDAO.readOne(rno));
+        String temp = "essay";
         return optional.map(essayDTO -> {
             //파일 이름이 있다면, 해당 파일 삭제.
             Optional.ofNullable(essayDTO.getFileName()).ifPresent(fileName -> fileIO.deleteFile(fileName));
             //이미지 이름이 있다면, 해당 이미지 삭제
-            Optional.ofNullable(essayDTO.getImageName()).ifPresent(imageName -> fileIO.deleteImage(imageName));
+            Optional.ofNullable(essayDTO.getImageName()).ifPresent(imageName -> fileIO.deleteImage(imageName, temp));
             //해당 게시물에 달린 댓글이 있다면, 댓글 모두 삭제
             Optional.of(commentDAO.readAll(essayDTO.getBno()))
                     .ifPresent((essayDTOList) -> commentDAO.deleteAll(essayDTO.getBno()));
