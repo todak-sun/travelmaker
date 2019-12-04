@@ -681,6 +681,41 @@ let travelmaker = (function (window) {
                   </div>
            `
         };
+        
+        Template.prototype.alarmlist = function(){
+        	return `
+        	
+        	<nav class="lnb-my-alarm">
+                <ul>
+                    <li><a href="#" class="on2" data-page="allAlarm">전체알람</a></li>
+                    <li><a href="#" data-page="friend">동행</a></li>
+                    <li><a href="#" data-page="purchase">대리구매</a></li>
+                    <li><a href="#" data-page="like">좋아요</a></li>
+                    <li><a href="#" data-page="comment">댓글</a></li>
+                </ul>
+            </nav>
+           
+           <input type="button" class="deleteAlarm" data-con="1" value="읽은 알람 지우기">
+           <input type="button" class="deleteAlarm" data-con="2" value="모든 알람 지우기">
+           <table class="table">
+                <thead class="table-head"></thead>
+                <tbody class="table-content"></tbody>
+            </table>
+            
+        	`;
+        }
+        
+        Template.prototype.alarmTableHead = function () {
+            return `
+            
+             <tr>
+                <th class="content">내용</th>
+                <th class="date">작성일</th>
+                <th class="type">구분</th>
+            </tr>
+          `;
+        };
+        
 
         Template.prototype.register1 = function () {
             return `
@@ -1049,6 +1084,36 @@ let travelmaker = (function (window) {
                 <td>${dateWrite}</td>
               </tr>
             `
+        };
+        
+        Template.prototype.mypageAlarmviewTemplate = function (items) {
+        	
+        	let type ='';
+        	let url='';
+        	if(items.header=='friend'){
+        		type='동행';
+        		url='/friend/view/'+items.dataSeq;
+        	}else if(items.header=='purA'){
+        		type='대리구매';
+        		url='/pur/view/1/'+items.dataSeq;
+        	}else if(items.header=='purB'){
+        		type='대리구매';
+        		url='/pur/view/2/'+items.dataSeq;
+        	}else if(items.header=='like'){
+        		type='좋아요';
+        	}else if(items.header=='comment'){
+        		type='댓글';
+        	}else {
+        		console.log('error');
+        	}
+        	
+            return `
+             <tr>
+                <td class="content"><a href="`+url+`" >${items.content}</a></th>
+                <td class="date">${items.alarmDate}</th>
+                <td class="type">`+type+`</th>
+            </tr>
+          `;
         };
 
 
@@ -1526,6 +1591,7 @@ let travelmaker = (function (window) {
                 beforeSend: setRequestHeader
             });
         }
+
 
 
         return Ajax;

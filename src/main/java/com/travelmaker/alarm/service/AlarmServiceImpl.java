@@ -31,6 +31,17 @@ public class AlarmServiceImpl implements AlarmService {
 	public void alarmDelete(String dataseq) {
 		alarmDAO.alarmDelete(dataseq);
 	}
+	@Override
+	public List<AlarmDTO> getMyAlarmList(String userSeq,String con) {
+		return alarmDAO.getMyAlarmList(userSeq,con);
+	}
+	@Override
+	public void deleteNreadAlarm(String requestFid ,int con,int alarmType) {
+		alarmDAO.deleteNreadAlarm(requestFid,con,alarmType);
+	}
 
+	
+	
+	
 	
 }
