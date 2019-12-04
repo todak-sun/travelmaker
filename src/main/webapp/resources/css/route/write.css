@@ -1,752 +1,791 @@
 html {
-    position: relative;
-    min-height: 100vh;
-    height: 100%;
-    width: 100%;
-    background-image: url('/resources/img/back-map.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    overflow: hidden;
+  position: relative;
+  min-height: 100vh;
+  height: 100%;
+  width: 100%;
+  background-image: url("/resources/img/back-map.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: hidden;
 }
 
 html::before {
-    content: '';
-    background-color: #000000;
-    position: absolute;
-    z-index: 1;
-    width: 100%;
-    height: 100%;
-    opacity: 0.5;
+  content: "";
+  background-color: #000000;
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  opacity: 0.5;
 }
 
 .container-wrap {
-    margin-top: 50px;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index: 2;
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    grid-template-rows: repeat(10, 1fr);
+  margin-top: 50px;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  overflow: auto;
 }
 
 .container-wrap .editor-wrap {
-    min-width: 980px;
-    height: 100%;
-    grid-column: 3/11;
-    grid-row: 2/8;
-
-    display: grid;
-    grid-template-columns: repeat(8, 1fr);
+  min-width: 980px;
+  min-height: 530px;
+  height: 100%;
+  grid-column: 3/11;
+  grid-row: 2/8;
+	
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
 }
 
 .editor-wrap .editor-zone {
-    position: relative;
-    background-color: #ffffff;
-    box-shadow: 2px 2px 10px 0 rgba(0, 0, 0, 0.5);
-    grid-column: 1/6;
+  position: relative;
+  background-color: #ffffff;
+  box-shadow: 2px 2px 10px 0 rgba(0, 0, 0, 0.5);
+  grid-column: 1/6;
 }
 
 .editor-zone .level-bar {
-    position: absolute;
-    top: -2.2rem;
-    left: 0;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
+  position: absolute;
+  top: -2.2rem;
+  left: 0;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .editor-zone .level-bar .level {
-    box-sizing: border-box;
-    padding: 0.5rem 1.25rem;
-    background-color: #d8d8d8;
-    border: 2px solid #757575;
-    margin-right: 0.1rem;
-    color: #ffffff;
+  box-sizing: border-box;
+  padding: 0.5rem 1.25rem;
+  background-color: #d8d8d8;
+  border: 2px solid #757575;
+  margin-right: 0.1rem;
+  color: #ffffff;
 }
 
 .level-bar .level.level-1 {
-    background-color: #ffb530;
-    border: 2px solid #ff9216;
+  background-color: #ffb530;
+  border: 2px solid #ff9216;
 }
 
 .level-bar .level.level-2 {
-    background-color: #f3623a;
-    border: 2px solid #f05429;
+  background-color: #f3623a;
+  border: 2px solid #f05429;
 }
 
 .level-bar .level.level-3 {
-    background-color: #69ac68;
-    border: 2px solid #278a25;
+  background-color: #69ac68;
+  border: 2px solid #278a25;
 }
 
 /* 첫번째 에디터 */
 .editor-first .title-expression {
-    position: absolute;
-    top: 3rem;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: #00c1da;
-    width: 50%;
-    padding: 1rem 4rem;
-    border-radius: 2rem;
-    color: #ffffff;
+  position: absolute;
+  top: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #00c1da;
+  width: 50%;
+  height: 10%;
+  padding: 1rem 4rem;
+  border-radius: 2rem;
+  color: #ffffff;
 }
 
 .editor-first .title-expression h3 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
 }
 
 .editor-first .title-expression p {
-    font-size: 1rem;
+  font-size: 1rem;
 }
 
 .editor-first .input-wrap {
-    position: absolute;
-    left: 50%;
-    top: 15rem;
-    transform: translateX(-50%);
-    background-color: #d8d8d8;
-    width: 80%;
-    padding: 1.5rem 2rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  position: absolute;
+  top: 12rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #d8d8d8;
+  width: 70%;
+  padding: 1.5rem 2rem;
+  
+  flex-direction: column;
 }
 
 .editor-first .input-wrap input {
-    display: block;
-    width: 100%;
-    font-size: 1.3rem;
-    color: #5a5a5a;
-    padding: 1rem;
-    outline: none;
-    border: none;
-    text-align: center;
-    background: none;
-    border-bottom: 1px solid #5a5a5a;
+  display: block;
+  width: 100%;
+  font-size: 1.3rem;
+  color: #5a5a5a;
+  padding: 1rem;
+  outline: none;
+  border: none;
+  text-align: center;
+  background: none;
+  border-bottom: 1px solid #5a5a5a;
 }
+.editor-first .image-wrap {
+  position: absolute;
+  top: 21rem;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 1.5px solid gray;
+  border-radius: 1.5rem;
+  box-sizing: border-box;
+  height: 35%;
+  width: 60%;
+  padding: -0.5rem;
+  overflow: hidden;
+}
+
+.editor-first .image-wrap img {
+  /* 	display: flex;
+	justify-content: center; */
+  max-width: 100%;
+  height: auto;
+}
+
+.editor-first .image-wrap span {
+  position: absolute;
+  top: 3rem;
+  width: 70%;
+  font-size: 1.2rem;
+  margin: 1rem;
+}
+
 /* 첫번째 에디터 */
 
 /* 두번째 에디터 */
 .editor-second {
-    min-width: 630px;
-    width: 100%;
-    height: 100%;
-    display: grid;
-    grid-template-rows: repeat(13, 1fr);
-    grid-template-columns: 30px 1fr 1fr 1fr 30px;
+  min-width: 630px;
+  width: 100%;
+  height: 100%;
+  max-height: 670px;
+  display: grid;
+  grid-template-rows: repeat(12, 1fr);
+  grid-template-columns: 30px 1fr 1fr 1fr 30px;
 }
 
 .editor-second .title {
-    grid-column: 2/5;
-    grid-row: 2/3;
-    background-color: #d8d8d8;
-    border-radius: 0.5rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 1rem;
+  grid-column: 2/5;
+  grid-row: 2/3;
+  background-color: #d8d8d8;
+  border-radius: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  margin-bottom: 15px;
 }
 
 .title h4 {
-    font-size: 1.4rem;
+  font-size: 1.4rem;
 }
 
 .editor-second .input-wrap {
-    display: flex;
-    justify-content: start;
-    align-items: center;
-    padding: 0.5rem;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  padding: 0.5rem;
 }
 
 .editor-second .input-wrap label {
-    width: 50px;
+  width: 50px;
 }
 
 .editor-second .input-wrap label::after {
-    content: ':';
+  content: ":";
 }
 
 .editor-second .input-wrap span {
-    display: flex;
-    justify-content: center;
-    background-color: #d8d8d8;
-    padding: 0.5rem 1rem;
-    border-radius: 1rem;
-    width: 60%;
+  display: flex;
+  justify-content: center;
+  background-color: #d8d8d8;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  width: 60%;
 }
 
 .editor-second .input-wrap input {
-    border: none;
-    outline: none;
-    background-color: #d8d8d8;
-    padding: 0.5rem;
-    border-radius: 1rem;
+  border: none;
+  outline: none;
+  background-color: #d8d8d8;
+  padding: 0.5rem;
+  border-radius: 1rem;
 }
 
 .editor-second .input-wrap .place-finder {
-    width: 10%;
-    padding: 0.5rem;
-    border: 2px solid #555555;
-    color: #555555;
-    font-weight: 600;
+  width: 10%;
+  padding: 0.5rem;
+  border: 2px solid #555555;
+  color: #555555;
+  font-weight: 600;
 }
 
-.editor-second .input-wrap.country {
-    grid-column: 2/3;
-    grid-row: 3/4;
+/* .editor-second .input-wrap.country {
+  grid-column: 2/3;
+  grid-row: 3/4;
 }
 
 .editor-second .input-wrap.city {
-    grid-column: 3/4;
-    grid-row: 3/4;
-}
+  grid-column: 3/4;
+  grid-row: 3/4;
+} */
 
 .editor-second .input-wrap.place {
-    grid-column: 2/5;
-    grid-row: 4/5;
+  grid-column: 2/5;
+  grid-row: 3/4;
 }
 
 .editor-second .input-wrap.from {
-    grid-column: 4/5;
-    grid-row: 5/6;
+  grid-column: 4/5;
+  grid-row: 4/5;
 }
 
 .editor-second .input-wrap.to {
-    grid-column: 4/5;
-    grid-row: 6/7;
+  grid-column: 4/5;
+  grid-row: 5/6;
 }
 
 .editor-second .score-wrap {
-    grid-column: 2/4;
-    grid-row: 6/7;
-    display: flex;
-    justify-content: start;
-    align-items: center;
+  grid-column: 2/4;
+  grid-row: 5/6;
+  display: flex;
+  justify-content: start;
+  align-items: center;
 }
 
 .editor-second .score-wrap .score-group {
-    width: 40%;
-    display: flex;
-    justify-content: space-around;
+  width: 40%;
+  display: flex;
+  justify-content: space-around;
 }
 
 .score {
 }
 
 .score::before {
-    display: flex;
-    content: '';
-    width: 1.5rem;
-    height: 1.5rem;
-    background-image: url('/resources/img/score.svg');
+  display: flex;
+  content: "";
+  width: 1.5rem;
+  height: 1.5rem;
+  background-image: url("/resources/img/score.svg");
 }
 
 .score.on::before {
-    background-image: url('/resources/img/score-on.svg');
+  background-image: url("/resources/img/score-on.svg");
 }
 
 .editor-second .input-wrap.content {
-    grid-column: 2/5;
-    grid-row: 7/10;
+  grid-column: 2/5;
+  grid-row: 6/9;
 }
 
 .editor-second .input-wrap.content textarea {
-    resize: none;
-    width: 100%;
-    height: 100%;
-    padding: 1rem;
-    box-sizing: border-box;
+  resize: none;
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+  box-sizing: border-box;
 }
 
 .editor-second .image-wrap {
-    position: relative;
-    grid-column: 2/5;
-    grid-row: 11/13;
-    border: 1px solid gray;
-    border-radius: 1.5rem;
-    box-sizing: border-box;
-    width: 100%;
-    display: flex;
-    padding: 0.5rem;
+  position: relative;
+  grid-column: 2/5;
+  grid-row: 10/12;
+  border: 1px solid gray;
+  border-radius: 1.5rem;
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  padding: 0.5rem;
 }
 
-.editor-second .input-wrap input{
-    width:100%;
-    font-size:1rem;
+.editor-second .input-wrap input {
+  width: 100%;
+  font-size: 1rem;
 }
 
 .editor-second .image-wrap button {
-    position: absolute;
-    top: -2.5rem;
-    right: 1rem;
-    padding: 0.5rem 1rem;
-    border: 2px solid #00c1da;
-    color: #00c1da;
-    background-color: #ffffff;
-    border-radius: 1rem;
+  position: absolute;
+  top: -2.5rem;
+  right: 1rem;
+  padding: 0.5rem 1rem;
+  border: 2px solid #00c1da;
+  color: #00c1da;
+  background-color: #ffffff;
+  border-radius: 1rem;
 }
 
 .editor-second .image-wrap button:hover {
-    color: #ffffff;
-    background-color: #00c1da;
+  color: #ffffff;
+  background-color: #00c1da;
 }
 
 .editor-second .image-wrap .image-group {
-    margin: 0 auto;
-    width: 90%;
-    display: flex;
-    justify-content: space-between;
-    gap: 0.5rem;
+  margin: 0 auto;
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
 }
 
 .image-group li {
-    position: relative;
-    border: 1px solid gray;
-    width: 20%;
-    height: 90px;
-    box-sizing: border-box;
-    overflow: hidden;
-    padding: 0.2rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  position: relative;
+  border: 1px solid gray;
+  width: 20%;
+  height: 90px;
+  box-sizing: border-box;
+  overflow: hidden;
+  padding: 0.2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .image-group li .delete {
-    position: absolute;
-    top: 0.1rem;
-    right: 0.1rem;
-    font-size: 1.25rem;
+  position: absolute;
+  top: 0.1rem;
+  right: 0.1rem;
+  font-size: 1.25rem;
 }
 
 .image-group li img {
-    display: block;
-    width: auto;
-    height: 100%;
+  display: block;
+  width: auto;
+  height: 100%;
 }
 /* 두번째 에디터 */
 
 /* 세번째 에디터 */
 .editor-third {
-    position: relative;
-    width: 100%;
-    height: 100%;
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 
 .editor-third .title-expression {
-    position: absolute;
-    left: 50%;
-    top: 4rem;
-    transform: translateX(-50%);
-    background-color: #00c1da;
-    width: 70%;
-    color: #ffffff;
-    padding: 1rem;
-    text-align: center;
-    border-radius: 2rem;
+  position: absolute;
+  left: 50%;
+  top: 4rem;
+  transform: translateX(-50%);
+  background-color: #00c1da;
+  width: 70%;
+  color: #ffffff;
+  padding: 1rem;
+  text-align: center;
+  border-radius: 2rem;
 }
 
 .editor-third .title-expression h2 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .editor-third .content {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    top: 11rem;
-    text-align: center;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  top: 11rem;
+  text-align: center;
 }
 
 .editor-third .content textarea {
-    width: 90%;
-    resize: none;
-    height: 200px;
-    padding: 1rem;
-    border: 2px solid gray;
+  width: 90%;
+  resize: none;
+  height: 200px;
+  padding: 1rem;
+  border: 2px solid gray;
 }
 
 .editor-third .hash-area {
-    position: absolute;
-    bottom: 1rem;
-    width: 90%;
-    left: 50%;
-    transform: translate(-50%);
-    padding: 1rem;
+  position: absolute;
+  bottom: 1rem;
+  width: 90%;
+  left: 50%;
+  transform: translate(-50%);
+  padding: 1rem;
 }
 
 .editor-third .hash-area .input-wrap {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 0.5rem;
 }
 
 .editor-third .hash-area .input-wrap input {
-    padding: 0.25rem;
+  padding: 0.25rem;
 }
 
 .editor-third .hash-area .input-wrap button {
-    padding: 0.3rem 0.5rem;
-    border: 2px solid #808080;
-    color: #808080;
-    box-sizing: border-box;
-    background-color: #ffffff;
+  padding: 0.3rem 0.5rem;
+  border: 2px solid #808080;
+  color: #808080;
+  box-sizing: border-box;
+  background-color: #ffffff;
 }
 
 .editor-third .hash-area .hash-view {
-    position: relative;
-    border: 1px solid gray;
-    height: 50px;
-    padding: 0.5rem;
-    box-sizing: border-box;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  position: relative;
+  border: 1px solid gray;
+  height: 50px;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .editor-third .hash-area .hash-view::before {
-    content: '#해시태그를 입력해보세요!';
-    position: absolute;
-    top: -1.1rem;
-    left: 0;
-    color: #555555;
+  content: "#해시태그를 입력해보세요!";
+  position: absolute;
+  top: -1.1rem;
+  left: 0;
+  color: #555555;
 }
 
 .hash {
-    position: relative;
-    border: 2px solid gray;
-    padding: 0.4rem;
-    border-radius: 0.25rem;
-    font-size: 0.9rem;
-    margin: 0.3rem;
-    cursor: pointer;
+  position: relative;
+  border: 2px solid gray;
+  padding: 0.4rem;
+  border-radius: 0.25rem;
+  font-size: 0.9rem;
+  margin: 0.3rem;
+  cursor: pointer;
 }
 
 .hash::before {
-    content: '#';
+  content: "#";
 }
 
 .hash:hover {
-    border: 2px solid #00c1da;
-    color: #00c1da;
+  border: 2px solid #00c1da;
+  color: #00c1da;
 }
 
 /* 세번째 에디터 */
 
 /* 네비게이션 존 */
 .container-wrap .nav-zone {
-    background-color: #ffffff;
-    grid-column: 7/9;
-    box-shadow: 2px 2px 10px 0 rgba(0, 0, 0, 0.5);
-    display: grid;
-    grid-template-rows: 60px 1fr 50px;
+  background-color: #ffffff;
+  grid-column: 7/9;
+  box-shadow: 2px 2px 10px 0 rgba(0, 0, 0, 0.5);
+  display: grid;
+  grid-template-rows: 60px 1fr 50px;
+  max-height: 670px;
 }
 
 .nav-zone .button-wrap {
-    padding: 0.5rem;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    column-gap: 0.5rem;
+  padding: 0.5rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  column-gap: 0.5rem;
 }
 
 .nav-zone .button-wrap button {
-    padding: 0.5rem;
-    border-radius: 1rem;
-    font-size: 1rem;
-    box-sizing: border-box;
-    border: #bbbbbb 2px solid;
-    background-color: #bbbbbb;
-    color: #ffffff;
+  padding: 0.5rem;
+  border-radius: 1rem;
+  font-size: 1rem;
+  box-sizing: border-box;
+  border: #bbbbbb 2px solid;
+  background-color: #bbbbbb;
+  color: #ffffff;
 }
 
 .button-wrap button:hover {
-    background-color: #ffffff;
-    color: #bbbbbb;
+  background-color: #ffffff;
+  color: #bbbbbb;
 }
 
 .button-wrap button.btn-wide {
-    grid-column: 3/5;
+  grid-column: 3/5;
 }
 
 .button-wrap button.btn-wide {
-    background-color: #ffffff;
-    border: 2px solid #00c1da;
-    color: #00c1da;
+  background-color: #ffffff;
+  border: 2px solid #00c1da;
+  color: #00c1da;
 }
 
 .button-wrap button.btn-wide-style {
-    background-color: #ffffff;
-    border: 2px solid #00c1da;
-    color: #00c1da;
+  background-color: #ffffff;
+  border: 2px solid #00c1da;
+  color: #00c1da;
 }
 
 .button-wrap button.btn-wide:hover {
-    background-color: #00c1da;
-    color: #ffffff;
+  background-color: #00c1da;
+  color: #ffffff;
 }
 
 .button-wrap button.btn-wide:disabled {
-    border: #bbbbbb 2px solid;
-    background-color: #ffffff;
-    color: #bbbbbb;
-    cursor: not-allowed;
+  border: #bbbbbb 2px solid;
+  background-color: #ffffff;
+  color: #bbbbbb;
+  cursor: not-allowed;
 }
 
 .route-wrap {
-    /* border: 1px solid red; */
+  margin-top: 30px;
+  max-height: 610px;
+  overflow: auto;
 }
 
 .route-wrap .route-group {
-    padding: 0.5rem;
+  padding: 0.5rem;
 }
 
 .route-group li {
-    padding: 0.3rem;
+  padding: 0.3rem;
 }
 
 .route-item {
-    position: relative;
-    border: 2px solid gray;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    padding: 0.5rem;
-    cursor: pointer;
+  position: relative;
+  border: 2px solid gray;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+  cursor: pointer;
 }
 
 .route-item:hover {
-    border: 2px solid #000000;
+  border: 2px solid #000000;
 }
 
 .route-item:active {
-    border: 3px solid #000000;
+  border: 3px solid #000000;
 }
 
 .route-item .delete {
-    position: absolute;
-    top: 0.3rem;
-    right: 0.3rem;
-    color: #888888;
+  position: absolute;
+  top: 0.3rem;
+  right: 0.3rem;
+  color: #888888;
 }
 
 .delete:hover {
-    cursor: pointer;
-    color: #000000;
+  cursor: pointer;
+  color: #000000;
 }
 
 .route-item h5 {
-    font-size: 1rem;
+  font-size: 1rem;
 }
 
 .route-item .route-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
 }
 
 .route-item .route-info p {
-    color: #787878;
-    font-size: 0.8rem;
+  color: #787878;
+  font-size: 0.8rem;
 }
 
 .route-item .route-info button {
-    box-sizing: border-box;
-    border: 2px solid #333333;
-    background-color: #333333;
-    color: #ffffff;
-    border-radius: 0.2rem;
-    padding: 0.2rem 0.4rem;
+  box-sizing: border-box;
+  border: 2px solid #333333;
+  background-color: #333333;
+  color: #ffffff;
+  border-radius: 0.2rem;
+  padding: 0.2rem 0.4rem;
 }
 
 .route-item .route-info button:hover {
-    color: #333333;
-    background-color: #ffffff;
+  color: #333333;
+  background-color: #ffffff;
 }
 
 .route-item .page-wrap {
-    align-self: center;
+  align-self: center;
 }
 
 .page-wrap ul {
-    margin: 0 auto;
-    width: 80%;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+  margin: 0 auto;
+  width: 80%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
 
 .page-number {
-    text-decoration: none;
-    box-sizing: border-box;
-    display: block;
-    font-size: 0.9rem;
-    border: 2px solid #008c9e;
-    color: #008c9e;
-    padding: 0.3rem 0.5rem;
+  text-decoration: none;
+  box-sizing: border-box;
+  display: block;
+  font-size: 0.9rem;
+  border: 2px solid #008c9e;
+  color: #008c9e;
+  padding: 0.3rem 0.5rem;
 }
 
 .page-number:hover {
-    background-color: #008c9e;
-    color: #ffffff;
+  background-color: #008c9e;
+  color: #ffffff;
 }
 /* 네비게이션 존 */
 
 .hide {
-    display: none;
+  display: none;
 }
 
 /* 지도 모달 레이아웃 */
 
 .map-wrap {
-    display: flex;
-    height: 500px;
+  display: flex;
+  height: 500px;
 }
 
 .map-wrap .search-area {
-    width: 30%;
-    box-sizing: border-box;
-    border: 2px solid gray;
-    padding: 0.2rem;
-    margin-right: 0.5rem;
-    display: flex;
-    flex-direction: column;
+  width: 30%;
+  box-sizing: border-box;
+  border: 2px solid gray;
+  padding: 0.2rem;
+  margin-right: 0.5rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .map-wrap .search-area .input-wrap {
-    display: flex;
+  display: flex;
 }
 
 .map-wrap .search-area .input-wrap input {
-    outline: none;
-    width: 80%;
-    padding: 0.2rem;
-    font-size: 1rem;
-    border:1px solid gray;
-    color:#000000;
+  outline: none;
+  width: 80%;
+  padding: 0.2rem;
+  font-size: 1rem;
+  border: 1px solid gray;
+  color: #000000;
 }
 
 .map-wrap .search-area .input-wrap button {
-    width: 20%;
-    background-color: #ffffff;
-    border: 2px solid #00c1da;
-    color: #00c1da;
-    padding: 0.3rem 0;
-    font-size: 0.8rem;
+  width: 20%;
+  background-color: #ffffff;
+  border: 2px solid #00c1da;
+  color: #00c1da;
+  padding: 0.3rem 0;
+  font-size: 0.8rem;
 }
 
 .map-wrap .search-area .input-wrap button:hover {
-    background-color: #00c1da;
-    color: #ffffff;
+  background-color: #00c1da;
+  color: #ffffff;
 }
 
 .map-wrap .search-area .result-wrap {
-    box-sizing: border-box;
-    height: 100%;
-    overflow: auto;
+  box-sizing: border-box;
+  height: 100%;
+  overflow: auto;
 }
 
 .result-wrap .result-item {
-    list-style: none;
-    box-sizing: border-box;
-    padding: 0.2rem;
+  list-style: none;
+  box-sizing: border-box;
+  padding: 0.2rem;
 }
 
 .result {
-    position: relative;
-    border: 1px solid gray;
-    font-size: 0.9rem;
-    padding: 0.5rem;
-    line-height: 1rem;
-    cursor: pointer;
+  position: relative;
+  border: 1px solid gray;
+  font-size: 0.9rem;
+  padding: 0.5rem;
+  line-height: 1rem;
+  cursor: pointer;
 }
 
 .result .place-addr {
-    font-size: 0.7rem;
-    color: #707070;
+  font-size: 0.7rem;
+  color: #707070;
 }
 
 .result .btn-add-map {
-    position: absolute;
-    top: 0.15rem;
-    right: 0.15rem;
-    background-color: #ffffff;
-    border: 2px solid #333333;
-    border-radius: 0.5rem;
-    color: #333333;
-    font-size: 0.7rem;
+  position: absolute;
+  top: 0.15rem;
+  right: 0.15rem;
+  background-color: #ffffff;
+  border: 2px solid #333333;
+  border-radius: 0.5rem;
+  color: #333333;
+  font-size: 0.7rem;
 }
 
 .result:hover {
-    color: #00c1da;
-    font-weight: 500;
+  color: #00c1da;
+  font-weight: 500;
 }
 
 .page-group {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
 
 .page-group li {
-    padding: 0.1rem;
-    list-style: none;
+  padding: 0.1rem;
+  list-style: none;
 }
 
 .page-group li a {
-    color: #5a5a5a;
-    text-decoration: none;
+  color: #5a5a5a;
+  text-decoration: none;
 }
 
 .page-group li a:hover {
-    color: #00c1da;
+  color: #00c1da;
 }
 
 .page-group li a.on {
-    color: #00c1da;
+  color: #00c1da;
 }
 
 .map-wrap .map-area {
-    width: 80%;
+  width: 80%;
 }
 
 .map-wrap .map-area > div {
-    width: 100%;
-    height: 100%;
-    border: 2px solid gray;
+  width: 100%;
+  height: 100%;
+  border: 2px solid gray;
 }
 
 /* 구글 지도 검색결과 표출 하는 부분 */
 .map-wrap-g {
-    display: flex;
-    height: 500px;
-    position: relative;
+  display: flex;
+  height: 500px;
+  position: relative;
 }
 
-.map-wrap-g #map{
-    width:100%;
+.map-wrap-g #map {
+  width: 100%;
 }
 
 .map-wrap-g .search-location {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index:1400;
-    font-size: 1rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1400;
+  font-size: 1rem;
 }
 
 .pac-container {
-    z-index: 1500;
+  z-index: 1500;
 }
 
 /* 지도 모달 레이아웃 */

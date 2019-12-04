@@ -76,7 +76,7 @@ $(function() {
       <article class="story">
         <div class="story-img-wrap">
           <img
-            src="https://picsum.photos/300/200?random=1"
+            src="/resources/storage/${storyType}/${imageName}"
             alt=""
             class="story-img"
           />
