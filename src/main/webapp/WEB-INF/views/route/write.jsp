@@ -1,4 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="ko">
   <head>
@@ -14,7 +16,19 @@
     <%@include file="../common/navbar2.jsp" %>
     <!-- 메인 컨텐츠 영역 -->
     <div class="hide">
-      <input type="hidden" name="isDomestic" id="isDomestic" />
+      <input type="hidden" name="rno" id="rno" value="${routeDTO.rno}" />
+      <input
+        type="hidden"
+        name="imageName"
+        id="imageName"
+        value="${routeDTO.imageName}"
+      />
+      <input
+        type="hidden"
+        name="isDomestic"
+        id="isDomestic"
+        value="${routeDTO.isDomestic}"
+      />
       <input type="hidden" name="location" id="location" />
       <input type="hidden" name="lat" id="lat" value="0" />
       <input type="hidden" name="lng" id="lng" value="0" />
@@ -48,12 +62,24 @@
             </div>
 
             <div class="input-wrap">
-              <input type="text" name="title" id="route-title" />
+              <input
+                type="text"
+                name="title"
+                id="route-title"
+                value="${routeDTO.title }"
+              />
             </div>
             <div class="image-wrap" id="image-main-display">
-              <span class="image-change"
-                >여행이야기의 대표 이미지를 설정해주세요!!</span
-              >
+              <div>
+                <img
+                  id="image-main-prev"
+                  alt=""
+                  src="/resources/storage/route/${routeDTO.imageName}"
+                />
+                <span class="image-change"
+                  >여행이야기의 대표 이미지를 설정해주세요!!</span
+                >
+              </div>
             </div>
           </div>
           <!-- 첫번쨰 에디터 -->
@@ -64,7 +90,7 @@
               <h4>이곳에 제목이 들어갑니다</h4>
             </div>
 
-            <div class="input-wrap country">
+            <!-- <div class="input-wrap country">
               <label for="nation">국가</label>
               <input type="text" name="nation" id="nation" value="" />
             </div>
@@ -72,7 +98,7 @@
             <div class="input-wrap city">
               <label for="city">도시</label>
               <input type="text" name="city" id="city" value="" />
-            </div>
+            </div> -->
 
             <div class="input-wrap place">
               <label for="place">장소</label>
@@ -135,7 +161,7 @@
                 id="route-epilogue"
                 name="content"
                 placeholder="내용을 입력해주세요"
-              ></textarea>
+              >${routeDTO.content}</textarea>
             </div>
 
             <div class="hash-area">
@@ -143,7 +169,15 @@
                 <input type="text" id="hash-input" />
                 <button id="hash-add">추가</button>
               </div>
-              <div class="hash-view" id="hash-view"></div>
+              <div class="hash-view" id="hash-view">
+                <c:set
+                  var="hashes"
+                  value="${fn:split(routeDTO.hashtag, ' ')}"
+                />
+                <c:forEach items="${hashes}" var="hash">
+                  <span class="hash">${hash}</span>
+                </c:forEach>
+              </div>
             </div>
           </div>
         </div>
@@ -160,16 +194,22 @@
           </div>
 
           <div class="route-wrap">
-            <ul class="route-group saved-courses"></ul>
-          </div>
-
-          <div class="page-wrap">
-            <ul>
-              <li><a href="#" class="page-number on">1</a></li>
-              <li><a href="#" class="page-number">2</a></li>
-              <li><a href="#" class="page-number">3</a></li>
-              <li><a href="#" class="page-number">4</a></li>
-              <li><a href="#" class="page-number">5</a></li>
+            <ul class="route-group saved-courses">
+              <!-- 수정시 네비존 채우기 -->
+              <c:forEach var="course" items="${contentList }">
+                  <li draggable="true" droppable="true" style="[draggable='true'] {
+                    -khtml-user-drag: element; }" >
+                    <div class="route-item" name="item">
+                      <span class="delete" name="delete-course">&times;</span>
+                      <h5>${course.location}</h5>
+                      <div class="route-info" name="info">
+                        <p><span>${course.dateStart}</span> ~ <span>${course.dateEnd}</span></p>
+                        <button name="modify-course">수정</button>
+                        <input type="hidden" name="crno" value=${course.crno}>
+                      </div>
+                    </div>
+                  </li>                
+              </c:forEach>
             </ul>
           </div>
         </div>

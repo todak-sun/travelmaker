@@ -25,5 +25,5 @@ public class RouteDTO {
 	private int cmt; //디폴트
 	private int fixed; //웹에서
 	private int isDomestic; //웹&DB 비교
-	private MultipartFile image;
+//	private MultipartFile image;
 }

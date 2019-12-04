@@ -22,12 +22,11 @@ public class RoutePageController {
     @GetMapping(value = {"write","/write/{rno}"})
     public String routeWirteForm(Model model, @PathVariable Optional<Integer> rno) {
     	
-    	// 해당 아이디로 작성중인 글이 있었다면 불러오겠냐고 한번 물어봐줌 , 예 하면 불러와주고 아니고 하면 DB에서 삭제함 ========= 나중에 추가할 기능
-    	if(rno.isPresent()) {
-	    	RouteDTO routeDTO = routeService.getRoute(rno.get());
-	    	model.addAttribute("RouteDTO", routeDTO);
-    	}
-        // dto를 서버DB에 저장
+    	if(rno.isPresent()) { // 수정으로 들어왔다면 Route 와 RouteContent 를 모델에 담는다 		
+	    	model.addAttribute("routeDTO", routeService.getRoute(rno.get()));
+	    	model.addAttribute("contentList", routeService.getRouteContentStory(rno.get()));    	
+    	} 
+ 
         return "route/write";
     }
     

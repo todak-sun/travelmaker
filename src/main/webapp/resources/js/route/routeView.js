@@ -3,6 +3,7 @@ $().ready(function() {
   console.log("seq = " + $("#seq").val());
   const { useState, setRequestHeader } = new travelmaker.utils();
   const btnModify = document.querySelector("#btn-route-modify");
+  const btnDelete = document.querySelector("#btn-route-delete");
   const rno = document.querySelector("#rno").value;
   const seq = document.querySelector("#seq")
     ? document.querySelector("#seq").value
@@ -14,8 +15,22 @@ $().ready(function() {
     btnModify.addEventListener("click", function() {
       location.href = "/route/write/" + rno;
     });
+    btnDelete.addEventListener("click", function() {
+      if (confirm("글을 삭제하시겠습니까?(다시 복구할 수 없습니다)")) {
+        $.ajax({
+          type: "DELETE",
+          url: `/api/route/${rno}`,
+          beforeSend: setRequestHeader,
+          success: function() {
+            alert("삭제 완료");
+            location.href = `${window.location.protocol}//${window.location.host}/story`;
+          }
+        });
+      }
+    });
   } else {
     btnModify.parentElement.removeChild(btnModify);
+    btnDelete.parentElement.removeChild(btnDelete);
   }
 
   function UpdateLikes() {
@@ -191,13 +206,14 @@ $(function() {
 
 $().ready(function() {
   // 슬라이드 필요 변수 선언
+  let slide = document.querySelector(".slide");
   let slideBox = document.querySelectorAll(".slide-box");
   let s_count = [];
   let s_posX = [];
   let imgNum = [];
   // let imgs = [];
   let img = document.querySelector(".slide-box li img");
-  let imgWidth = img.offsetWidth;
+  let imgWidth = slide.offsetWidth;
   let leftBtn = document.querySelectorAll(".slide-left");
   let rightBtn = document.querySelectorAll(".slide-right");
   let s_itv;
@@ -206,12 +222,9 @@ $().ready(function() {
   for (let i = 0; i < slideBox.length; i++) {
     // 각 배열에 초기값 설정
     imgNum.push(slideBox[i].childElementCount);
-    // imgs.push(document.querySelectorAll(".slide-box li img"))
     s_count.push(0);
     s_posX.push(0);
-    slideBox[i].style.width = slideBox[i].offsetWidth * imgNum[i] + "px";
     if (imgNum[i] == 1) rightBtn[i].style.display = "none";
-
     // 왼, 오른쪽 버튼에 이벤트 생성
     leftBtn[i].addEventListener("click", function() {
       if (s_count[i] > 0) {
@@ -223,7 +236,6 @@ $().ready(function() {
         leftBtn[i].style.display = "none";
       }
       rightBtn[i].style.display = "block";
-      // slideBox[i].style.height = img.offsetHeight + "px";
     });
     rightBtn[i].addEventListener("click", function() {
       if (s_count[i] < imgNum[i]) {
@@ -235,11 +247,11 @@ $().ready(function() {
         rightBtn[i].style.display = "none";
       }
       leftBtn[i].style.display = "block";
-      // slideBox[i].style.height = img.offsetHeight + "px";
     });
+    slideBox[i].style.width =
+      document.querySelector(".content-left").clientWidth * imgNum[i] + "px";
   }
-  // 변경된 이미지 크기 반영
-  imgWidth = img.offsetWidth;
+
   // 왼쪽 이동 함수
   function slideToLeft(i) {
     s_itv = setInterval(frameLeft, 1);
@@ -285,28 +297,18 @@ $().ready(function() {
     }
   }
   // 인터넷 창 크기 변할 때 리사이징 & 위치 이동 이벤트
-  window.addEventListener("resize", function() {
+  window.addEventListener("resize", resizeSlide);
+  // 이미지 슬라이드 리사이징 및 위치 이동
+  function resizeSlide() {
     for (let i = 0; i < slideBox.length; i++) {
-      imgNum.push(slideBox[i].childElementCount);
-      slideBox[i].style.width = 100 + "%";
-      slideBox[i].style.width = slideBox[i].offsetWidth * imgNum[i] + "px";
+      slideBox[i].style.width = slide.offsetWidth * imgNum[i] + "px";
 
-      if (img.offsetWidth > imgWidth) {
-        clearInterval(s_itv);
-        imgWidth = img.offsetWidth;
+      clearInterval(s_itv);
+      imgWidth = slide.offsetWidth;
 
-        let slideX = s_count[i] * imgWidth + s_posX[i];
-        s_posX[i] -= slideX;
-        slideBox[i].style.left = s_posX[i] + "px";
-        //
-      } else if (img.offsetWidth < imgWidth) {
-        clearInterval(s_itv);
-        imgWidth = img.offsetWidth;
-
-        let slideX = -(s_count[i] * imgWidth + s_posX[i]);
-        s_posX[i] += slideX;
-        slideBox[i].style.left = s_posX[i] + "px";
-      }
+      let slideX = s_count[i] * imgWidth + s_posX[i];
+      s_posX[i] -= slideX;
+      slideBox[i].style.left = s_posX[i] + "px";
     }
-  });
+  }
 });

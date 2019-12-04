@@ -22,8 +22,16 @@ public class RouteDAOMybatis implements RouteDAO {
 	
 	@Override
 	public int setRoute(RouteDTO routeDTO) {
+		System.out.println("셋루트로 들어옴");
 		sqlSession.insert("routeSQL.setRoute",routeDTO);
 		return sqlSession.selectOne("routeSQL.getCurrRnoSeq");
+	}
+	
+	@Override
+	public int modifySetRoute(RouteDTO routeDTO) {
+		System.out.println("모디파이셋루트로 들어옴");
+		sqlSession.update("routeSQL.modifySetRoute",routeDTO);
+		return routeDTO.getRno();
 	}
 
 	@Override
@@ -100,12 +108,28 @@ public class RouteDAOMybatis implements RouteDAO {
 
 	@Override
 	public void saveOrder(Map<String, Integer> map) {
-		sqlSession.update("routeSQL.saveOrder",map);		
+		sqlSession.update("routeSQL.saveOrder", map);		
 	}
 
 	@Override
 	public void updateViews(int rno) {
-		sqlSession.update("routeSQL.updateViews",rno);		
+		sqlSession.update("routeSQL.updateViews", rno);		
 	}
+
+	@Override
+	public int getRouteTemp(int seq) {
+		return sqlSession.selectOne("routeSQL.getRouteTemp", seq);
+	}
+
+	@Override
+	public void deleteRoute(int rno) {
+		sqlSession.delete("routeSQL.deleteRoute", rno);
+	}
+
+	@Override
+	public void deleteRouteImage(String delImage) {
+		sqlSession.delete("routeSQL.deleteRouteImage", delImage);
+	}
+
 	
 }

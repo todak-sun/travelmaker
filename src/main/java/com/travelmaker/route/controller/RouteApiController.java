@@ -49,24 +49,9 @@ public class RouteApiController {
 	RouteService routeService;
 	
 	@PostMapping(value = "/showWriteForm")
-	public Map<String, Object> showWriteForm(Model model, @ModelAttribute RouteDTO routeDTO) {
-
-		if(routeDTO.getImage()!=null) {
-			String filePath = servletContext.getRealPath("/resources/storage/route");
-			MultipartFile img = routeDTO.getImage();
-			String fileName = (LocalDateTime.now()+img.getOriginalFilename()).replace(":", "-");
-			File file = new File(filePath, fileName);	
-			
-			try {
-				FileCopyUtils.copy(img.getInputStream(), new FileOutputStream(file));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-			routeDTO.setImageName(fileName);
-		}
-		int rno = routeService.setRoute(routeDTO);
-		System.out.println("rno값 생성 : "+rno);	
+	public Map<String, Object> showWriteForm(Model model, @ModelAttribute RouteDTO routeDTO, @RequestParam(required = false) MultipartFile image) {
+		
+		int rno = routeService.setRoute(routeDTO, image);
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("rno", rno);
@@ -76,79 +61,28 @@ public class RouteApiController {
 	@PostMapping(value = "/Course")
 	public Map<String, Object> saveCourse(Model model, @ModelAttribute RouteContentDTO routeContentDTO) {
 		
-		RouteImageDTO routeImageDTO = new RouteImageDTO();
-		String filePath = servletContext.getRealPath("/resources/storage/route");
-		int crno = routeService.saveCourse(routeContentDTO); //저장한 코스의 crno 반환
-		System.out.println("getImages : " + routeContentDTO.getImages());
-		if(routeContentDTO.getImages()!=null) { // 이미지가 있을 때
-			int i = 1; // 이미지 순서
-			for(MultipartFile img : routeContentDTO.getImages()) {
-				String fileName = (LocalDateTime.now()+img.getOriginalFilename()).replace(":", "-");
-				File file = new File(filePath, fileName);
-				
-				System.out.println("파일 경로 : " + filePath);
-				System.out.println("파일 이름 : " + fileName);
-				
-				try {
-					FileCopyUtils.copy(img.getInputStream(), new FileOutputStream(file));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				
-				routeImageDTO.setImgOrder(i);
-				routeImageDTO.setImg(fileName);
-				routeImageDTO.setCrno(crno);
-				i++;
-				routeService.saveRouteImage(routeImageDTO);
-			}
-		}
+		int crno = routeService.saveCourse(routeContentDTO); // 저장한 코스의 crno 반환
+
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("crno", crno);
-		// ajax로 리턴해서 자바스크립트에서 양식 뿌려주기
 		return map;
 	}
 	
 	@PostMapping(value = "/Course-Modify")
 	public Map<String, Object> patchCourse(Model model, @ModelAttribute RouteContentDTO routeContentDTO) {
 		
-		RouteImageDTO routeImageDTO = new RouteImageDTO();
-		String filePath = servletContext.getRealPath("/resources/storage/route");
-		//여기서부터 다시
 		int crno = routeContentDTO.getCrno();
-		System.out.println("getContent : "+routeContentDTO.getContent());
-		routeService.patchCourse(routeContentDTO); //저장한 코스의 crno 반환
-		if(routeContentDTO.getImages()!=null) { // 이미지가 있을 때
-			int i = 1; // 이미지 순서
-			for(MultipartFile img : routeContentDTO.getImages()) {
-				String fileName = img.getOriginalFilename();
-				File file = new File(filePath, fileName);
-				
-				System.out.println("파일 경로 : " + filePath);
-				System.out.println("파일 이름 : " + fileName);
-				
-				try {
-					FileCopyUtils.copy(img.getInputStream(), new FileOutputStream(file));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				
-				routeImageDTO.setImgOrder(i);
-				routeImageDTO.setImg(fileName);
-				routeImageDTO.setCrno(crno);
-				i++;
-				routeService.saveRouteImage(routeImageDTO);
-			}
-		}
+		routeService.patchCourse(routeContentDTO);
 		
 		// 이미지가 없을 때 이미지 다 지우는 DB문 추가
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("crno", crno);
-		// ajax로 리턴해서 자바스크립트에서 양식 뿌려주기
 		return map;
 	}
 	
 	@DeleteMapping(value = "/Course/{crno}")
 	public void deleteCourse(@PathVariable int crno) {
+		// 리턴값이 파일명
 		routeService.deleteCourse(crno);
 	}
 	
@@ -157,7 +91,7 @@ public class RouteApiController {
 
 		RouteContentDTO routeContentDTO = routeService.getCourse(crno);
 		
-		System.out.println("스타트날짜찍어보기 : "+routeContentDTO.getDateStart());
+//		System.out.println("스타트날짜찍어보기 : "+routeContentDTO.getDateStart());
 		return routeContentDTO;
 	}
 	
@@ -225,9 +159,7 @@ public class RouteApiController {
         	cookie.setMaxAge(60*60*24);
         	res.addCookie(cookie);
     	}
-
 //        modelAndView.setViewName("jsonView");
-//
 //        return modelAndView;
     }
     
@@ -246,4 +178,16 @@ public class RouteApiController {
 	public List<RouteDTO> getRouteListByUserSeq(@PathVariable int seq){
 		return routeService.getRouteListByUserSeq(seq);
 	}
+    
+    @GetMapping(value="/temp/{seq}")
+	public int getRouteTemp(@PathVariable int seq){
+    	System.out.println("임시글불러오기로들어옴");
+		return routeService.getRouteTemp(seq);
+	}
+    
+    @DeleteMapping(value="/{rno}")
+    public void deleteRoute(@PathVariable int rno) {
+    	// 여기에 파일 삭제도 추가해야 함
+    	routeService.deleteRoute(rno);
+    }
 }

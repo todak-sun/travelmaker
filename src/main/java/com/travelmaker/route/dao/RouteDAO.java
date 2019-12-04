@@ -11,6 +11,8 @@ public interface RouteDAO {
 
 	public int setRoute(RouteDTO routeDTO);
 
+	public int modifySetRoute(RouteDTO routeDTO);
+
 	public int saveCourse(RouteContentDTO routeContentDTO);
 
 	public void saveRoute(RouteDTO routeDTO);
@@ -34,6 +36,12 @@ public interface RouteDAO {
 	public void saveOrder(Map<String, Integer> map);
 
 	public void updateViews(int rno);
+
+	public int getRouteTemp(int seq);
+
+	public void deleteRoute(int rno);
+
+	public void deleteRouteImage(String delImage);
 
 
 }
