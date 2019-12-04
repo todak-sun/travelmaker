@@ -151,6 +151,91 @@ let travelmaker = (function (window) {
             `;
         };
 
+        Template.prototype.purReqRequest = function(bno, nickname, seq){
+            return `
+                <form id="requestForm" class="write-form">
+                    <div class="hidden">
+                        <input type="hidden" name="bno" id="bno" value="${bno}">
+                        <input type="hidden" name="nickname" id="nickname" value="${nickname}">
+                        <input type="hidden" name="requestUserSeq" id="requestUserSeq" value="${seq}">
+                    </div>
+                    
+                    <div class="input-wrap textarea">
+                        <label for="req-content">상세내용</label>
+                        <textarea id="req-content" name="content"></textarea>
+                    </div>
+                    
+                    <div class="button-wrap">
+                        <button type="button" class="btn btn-tsave" id="btn-try-req">신청하기</button>
+                    </div>
+                </form>
+            `
+        };
+
+        Template.prototype.purOrderRequest = function (bno, nickname, seq, id, content) {
+            return `
+                <form id="requestForm" class="write-form">
+                    <div class="hidden">
+                        <input type="hidden" name="bno" id="request-bno" value="${bno}"> 
+                        <input type="hidden" name="nickname" id="nickname" value="${nickname}">
+                        <input type="hidden" name="requestUserSeq" id="requestUserSeq" value="${seq}">
+                        <input type="hidden" name="id" id="id" value="${id}">
+                    </div>
+                    
+                    <div class="input-wrap">
+                        <label for="productname">상품명</label>
+                        <input type="text" id="productname" name="productname"/>
+                    </div>
+                    
+                    <div class="input-wrap">
+                        <label for="quantity">수량</label>
+                        <input type="number" id="quantity" name="quantity" min="1" max="100" step="1" value="1"/>
+                    </div>
+                    
+                     <div class="input-wrap">
+                        <label for="price">예상가격</label>
+                        <input type="text" id="price" name="price"/>
+                    </div>
+                    
+                    <div class="input-wrap textarea">
+                        <label for="req-content">상세내용</label>
+                        <textarea id="req-content" name="content"></textarea>
+                    </div>
+                    
+                    <div class="button-wrap">
+                        <button type="button" class="btn btn-tsave" id="btn-try-req">신청하기</button>
+                    </div>
+                </form>
+            `;
+        };
+
+        Template.prototype.purOrderView = function (order) {
+            const {isPermit, prno, nickname, productname, price, quantity, content} = order;
+            const agree = isPermit === 1 ? '수락됨[OK]' : '수락';
+            const disagree = isPermit === 2 ? '거절됨[OK]' : '거절';
+            return `
+                <li>
+                    <div class="request-item">
+                        <div class="user-area">
+                            <p class="author">아이디 : ${nickname}</p>
+                            ${productname ? '${<p class="author">상품명 : ${productname}</p>}' : ''}
+                            ${price ? '${<p class="author">가격 : ${price}</p>}' : ''}
+                            ${quantity ? '${<p class="author">수량 : ${quantity}</p>}' : ''}
+                        </div>
+                        <div class="content-area">
+                            <div class="content-detail">
+                                <p>내용: ${content}</p>
+                                <div class="button-wrap">
+                                    <button class="btn-agree" data-seq="${prno}">${agree}</button>
+                                    <button class="btn-disagree" data-seq="${prno}">${disagree}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            `
+        };
+
         Template.prototype.message = function (alarm) {
             if (typeof alarm === 'string') {
                 return `
@@ -181,7 +266,33 @@ let travelmaker = (function (window) {
             `;
         };
 
-        Template.prototype.routeItem = function(city, from, to, detail){
+        Template.prototype.purListItem = function (pur) {
+            const {nickname, title, location, productname, con, bno} = pur;
+            return `
+            <li>
+              <div class="pur-item ${con === 1 ? 'to-request' : 'to-buy'}">
+                <span class="badge">${con === 1 ? '사 주세요!' : '사 줄게요!'}</span>
+                <div class="item-top">
+                  <div class="user-wrap">
+                    <div class="image-wrap">
+                      <img src="https://source.unsplash.com/collection/190727/200x150" alt=""/>
+                    </div>
+                    <p class="nickname">${nickname}</p>
+                  </div>
+                  <h3>${title}</h3>
+                </div>
+                <div class="item-bottom">
+                  <p class="location">${location}</p>
+                  ${con === 1 ? `<p class="product">${productname}</p>` : ''}
+                  <a href="/pur/view/${con}/${bno}">보러가기</a>
+                </div>
+              </div>
+            </li>
+            `
+        };
+
+
+        Template.prototype.routeItem = function (city, from, to, detail) {
             return `
             <li>
                 <div class="list-item">
@@ -306,16 +417,14 @@ let travelmaker = (function (window) {
 
         Template.prototype.purchase = function () {
             return `
-              <div class="location-wrap">
-                <h2>사다주세요 or 사다줄께요</h2>
+              <div class="select-wrap">
                 <div class="btn-wrap">
-                  <button id="btn-Request" data-purchase="1"></button>
-                  <button id="btn-Order" data-purchase="0"></button>
+                  <button data-purchase="0" class="to-buy">사 줄게요</button>
+                  <button data-purchase="1" class="to-request">사 주세요</button>
                 </div>
               </div>
             `
         };
-
 
         Template.prototype.essayTemp = function (essay) {
             const {rno, title, imageName, isDomestic, dateWrite} = essay;
@@ -1009,9 +1118,104 @@ let travelmaker = (function (window) {
             this.deleteFriendRequest = deleteFriendRequest;
             this.setRouteWrite = setRouteWrite;
             this.deleteRouteWrite = deleteRouteWrite;
+            this.getPurchaseList = getPurchaseList;
+            this.getOrderView = getOrderView;
+            this.deletePur0 = deletePur0;
+            this.deletePur1 = deletePur1;
+            this.createPurOrder = createPurOrder;
+            this.createPurRequest = createPurRequest;
+            this.updatePermitStatusOrder = updatePermitStatusOrder;
+            this.updatePermitStatusReq = updatePermitStatusReq;
+            this.getRequestView = getRequestView;
         };
 
         const {setRequestHeader} = new Utils();
+
+        function deletePur0(bno) {
+            return $.ajax({
+                type: 'delete',
+                url: '/pur/deletePurchaseO/' + bno,
+                beforeSend: setRequestHeader
+            });
+        }
+
+        function deletePur1(bno) {
+            return $.ajax({
+                type: 'delete',
+                url: '/pur/deletePurchaseR/' + bno,
+                beforeSend: setRequestHeader
+            });
+        }
+
+        function updatePermitStatusReq(data) {
+            return $.ajax({
+                type: 'put',
+                url: '/pur/setRequestPermit',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                dataType: 'json',
+                beforeSend: setRequestHeader
+            });
+        }
+
+        function updatePermitStatusOrder(data) {
+            return $.ajax({
+                type: 'put',
+                url: '/pur/setOrderPermit',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                dataType: 'json',
+                beforeSend: setRequestHeader
+            });
+        }
+
+        function createPurOrder(data) {
+            return $.ajax({
+                type: 'post',
+                url: '/pur/setOrderWrite',
+                data: data,
+                beforeSend: setRequestHeader
+            });
+        }
+
+        function createPurRequest(data) {
+            return $.ajax({
+                type: 'post',
+                url: '/pur/setRequestWrite',
+                data: data,
+                beforeSend: setRequestHeader
+            });
+        }
+
+        function getRequestView(bno) {
+            return $.ajax({
+                type: 'get',
+                url: '/pur/getRequestView',
+                data: {bno: bno},
+                dataType: 'json',
+                beforeSend: setRequestHeader
+            });
+        }
+
+        function getOrderView(bno) {
+            return $.ajax({
+                type: 'get',
+                url: '/pur/getOrderView',
+                data: {bno: bno},
+                dataType: 'json',
+                beforeSend: setRequestHeader
+            });
+        }
+
+        function getPurchaseList(pg) {
+            return $.ajax({
+                type: 'get',
+                url: '/pur/getList',
+                data: {pg: pg},
+                dataType: 'json',
+                beforeSend: setRequestHeader
+            });
+        }
 
         function setRouteWrite(data) {
             return $.ajax({
@@ -1022,7 +1226,7 @@ let travelmaker = (function (window) {
             });
         }
 
-        function deleteRouteWrite(fno){
+        function deleteRouteWrite(fno) {
             return $.ajax({
                 type: 'post',
                 url: '/friend/cancelWrite',
@@ -1045,7 +1249,7 @@ let travelmaker = (function (window) {
                 url: '/friend/delete',
                 data: fno,
                 beforeSend: setRequestHeader
-            })
+            });
         }
 
         function getFriendRequestView(fcno) {

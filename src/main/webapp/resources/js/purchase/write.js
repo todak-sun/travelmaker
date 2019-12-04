@@ -12,10 +12,12 @@ $(function () {
     const dateStart = getEl('#date-start');
     const dateEnd = getEl('#date-end');
     const content = getEl('#content');
-    
+    const imageFile = getEl('#image-file');
+    const imageArea = getEl('.image-area');
+
     const btnNext = getEl('#next-btn');
     const cancel = getEl('#cancel');
-    
+
     addEvent(title, 'blur', (e) => {
         const value = e.target.value;
         const [vFeed, ivFeed] = v.getFeedBox(e.target);
@@ -23,30 +25,50 @@ $(function () {
         return v.changeValid(e.target);
     });
 
-    if(productname!=null){
-	    addEvent(productname, 'blur', (e) => {
-	        const value = e.target.value;
-	        const [vFeed, ivFeed] = v.getFeedBox(e.target);
-	        if (!value) return v.setInvalid(e.target, ivFeed, '상품을 입력해주세요.');
-	        return v.changeValid(e.target);
-	    });
+    if (imageFile)
+        addEvent(imageFile, 'change', function (e) {
+            const image = e.target.files[0];
+            if (image) {
+                const fr = new FileReader();
+                fr.readAsDataURL(image);
+                fr.onload = function () {
+                    imageArea.style.backgroundColor = 'darkgrey';
+                    imageArea.style.backgroundImage = `url(${fr.result})`;
+                    imageArea.innerText = '';
+                }
+            } else {
+                imageArea.innerText = '클릭하신 후 상품사진을 추가해보세요!';
+                imageArea.style.background = '#ffffff';
+            }
+        });
+
+    if (imageArea)
+        addEvent(imageArea, 'click', () => imageFile.click());
+
+    if (productname != null) {
+        addEvent(productname, 'blur', (e) => {
+            const value = e.target.value;
+            const [vFeed, ivFeed] = v.getFeedBox(e.target);
+            if (!value) return v.setInvalid(e.target, ivFeed, '상품을 입력해주세요.');
+            return v.changeValid(e.target);
+        });
     }
-    if(price!=null){
-	    addEvent(price, 'blur', (e) => {
-	        const value = e.target.value;
-	        const [vFeed, ivFeed] = v.getFeedBox(e.target);
-	        if (!value) return v.setInvalid(e.target, ivFeed, '가격을 입력해주세요.');
-	        return v.changeValid(e.target);
-	    });
+    if (price != null) {
+        addEvent(price, 'blur', (e) => {
+            const value = e.target.value;
+            const [vFeed, ivFeed] = v.getFeedBox(e.target);
+            if (!value) return v.setInvalid(e.target, ivFeed, '가격을 입력해주세요.');
+            return v.changeValid(e.target);
+        });
     }
-    
-    if(quantity!=null){
-	    addEvent(quantity, 'blur', (e) => {
-	        const value = e.target.value;
-	        const [vFeed, ivFeed] = v.getFeedBox(e.target);
-	        if (!value) return v.setInvalid(e.target, ivFeed, '수량을 입력해주세요.');
-	        return v.changeValid(e.target);
-	    });
+
+    if (quantity != null) {
+        addEvent(quantity, 'blur', (e) => {
+            const value = e.target.value;
+            const [vFeed, ivFeed] = v.getFeedBox(e.target);
+            if (!value) return v.setInvalid(e.target, ivFeed, '수량을 입력해주세요.');
+            return v.changeValid(e.target);
+        });
     }
     addEvent(location, 'blur', (e) => {
         const value = e.target.value;
@@ -54,14 +76,15 @@ $(function () {
         if (!value) return v.setInvalid(e.target, ivFeed, '지역을 입력해주세요.');
         return v.changeValid(e.target);
     });
-    if(dateStart!=null){
-	    addEvent(dateStart, 'blur', (e) => {
-	        const value = e.target.value;
-	        console.log(value);
-	        const [vFeed, ivFeed] = v.getFeedBox(e.target);
-	        if (!value) return v.setInvalid(e.target, ivFeed, '시작일을 입력해주세요.');
-	        return v.changeValid(e.target);
-	    });
+
+    if (dateStart != null) {
+        addEvent(dateStart, 'blur', (e) => {
+            const value = e.target.value;
+            console.log(value);
+            const [vFeed, ivFeed] = v.getFeedBox(e.target);
+            if (!value) return v.setInvalid(e.target, ivFeed, '시작일을 입력해주세요.');
+            return v.changeValid(e.target);
+        });
     }
     addEvent(dateEnd, 'blur', (e) => {
         const value = e.target.value;
@@ -70,38 +93,37 @@ $(function () {
         if (!value) return v.setInvalid(e.target, ivFeed, '종료일을 입력해주세요.');
         return v.changeValid(e.target);
     });
-    
+
     addEvent(content, 'blur', (e) => {
         const value = e.target.value;
         const [vFeed, ivFeed] = v.getFeedBox(e.target);
         if (!value) return v.setInvalid(e.target, ivFeed, '상세내용을 입력해주세요.');
         return v.changeValid(e.target);
     });
-    
-    
+
 
     addEvent(btnNext, 'click', () => {
         if (!v.isValid(title)) {
             v.setInvalid(title, v.getFeedBox(title)[1], '제목을 입력해주세요');
             return title.focus();
         }
-        if(productname!=null){
-	        if (!v.isValid(productname)) {
-	            v.setInvalid(productname, v.getFeedBox(title)[1], '상품명을 입력해주세요');
-	            return productname.focus();
-	        }
+        if (productname != null) {
+            if (!v.isValid(productname)) {
+                v.setInvalid(productname, v.getFeedBox(title)[1], '상품명을 입력해주세요');
+                return productname.focus();
+            }
         }
-        if(price!=null){
-	        if (!v.isValid(price)) {
-	            v.setInvalid(price, v.getFeedBox(price)[1], '가격을 입력해주세요');
-	            return price.focus();
-	        }
+        if (price != null) {
+            if (!v.isValid(price)) {
+                v.setInvalid(price, v.getFeedBox(price)[1], '가격을 입력해주세요');
+                return price.focus();
+            }
         }
-        if(quantity!=null){
-	        if (!v.isValid(quantity)) {
-	            v.setInvalid(quantity, v.getFeedBox(quantity)[1], '수량을 입력해주세요');
-	            return quantity.focus();
-	        }
+        if (quantity != null) {
+            if (!v.isValid(quantity)) {
+                v.setInvalid(quantity, v.getFeedBox(quantity)[1], '수량을 입력해주세요');
+                return quantity.focus();
+            }
         }
         if (!v.isValid(location)) {
             v.setInvalid(location, v.getFeedBox(location)[1], '지역을 입력해주세요');
@@ -111,8 +133,7 @@ $(function () {
             v.setInvalid(content, v.getFeedBox(content)[1], '상세내용을 입력해주세요');
             return content.focus();
         }
-        
-        
+
         getEl('#writeForm').submit();
     });
 
