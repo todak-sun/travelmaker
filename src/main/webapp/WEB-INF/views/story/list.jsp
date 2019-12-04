@@ -1,20 +1,25 @@
 <%@ page language="java" contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <%@include file="../common/head-meta.jsp" %>
-    <%@include
-            file="../common/head-css.jsp" %>
+    <%@include file="../common/head-css.jsp" %>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/story/story.css"/>
     <title>스토리페이지</title>
 </head>
 <body>
 <%@include file="../common/navbar2.jsp" %>
+
 <div class="btn-wrap">
-    <button id="btn-write">+ 글 작성하러 가기</button>
     <input type="hidden" class="currPage" value/>
+    <sec:authorize access="isAuthenticated()">
+        <button id="btn-write">+ 글 작성하러 가기</button>
+    </sec:authorize>
 </div>
+
 <div class="container-wrap">
     <section class="sec-story">
         <c:forEach var="story" items="${storyList }">
