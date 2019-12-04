@@ -239,13 +239,6 @@
     margin-top: 2rem;
 }
 
-.btn-wrap {
-    margin-top: 120px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 .btn-wrap button {
     background-color: #d8d8d8;
     border: 2px solid #979797;
@@ -255,6 +248,10 @@
 }
 
 .location-wrap .btn-wrap {
+    margin-top: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .location-wrap .btn-wrap button {

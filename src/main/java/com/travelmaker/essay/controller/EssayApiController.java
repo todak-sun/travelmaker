@@ -21,12 +21,6 @@ public class EssayApiController implements EssayApiInterface<EssayApiRequest, Es
     EssayApiService essayApiService;
 
     @Override
-//    @GetMapping(path = "", produces = "application/json; charset=UTF-8")
-    public Header<List<EssayApiResponse>> readAll() {
-        return essayApiService.readAll();
-    }
-
-    @Override
     @GetMapping(path = "", produces = "application/json; charset=UTF-8")
     public Header<List<EssayApiResponse>> readAll(@ModelAttribute EssaySearchFilter essaySearchFilter) {
         return essayApiService.readAll(essaySearchFilter);

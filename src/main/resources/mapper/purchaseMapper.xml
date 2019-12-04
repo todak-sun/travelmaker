@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="purchaseSQL">
+	<select id="getList" parameterType="java.util.Map"
+		resultType="pur">
+		<![CDATA[SELECT * FROM (SELECT rownum rn, tt.* FROM (SELECT bno,title,nickname,writeUserSeq,productname,img, price,quantity,location,content,to_char(dateWrite, 'YYYY-MM-DD') AS dateWrite,to_char(dateStart, 'YYYY-MM-DD') AS dateStart,to_char(dateEnd, 'YYYY-MM-DD') AS dateEnd,  requestUserSeq,requestUsername, con from purchase order by bno desc) tt) WHERE rn BETWEEN #{startNum} AND #{endNum}]]>
+	</select>
+
+	<select id="getTotalA" resultType="int">
+		SELECT count(rownum) FROM
+		purchase
+	</select>
+
+
+	<select id="getPurchaseDTO" resultType="pur">
+		SELECT bno,title,nickname,username,writeUserSeq,productname,img,
+		price,quantity,location,content,to_char(dateWrite, 'YYYY-MM-DD') AS
+		dateWrite,to_char(dateStart, 'YYYY-MM-DD') AS
+		dateStart,to_char(dateEnd, 'YYYY-MM-DD') AS dateEnd,
+		requestUserSeq,requestUsername, con from purchase where bno = #{bno}
+
+	</select>
+
+	<insert id="purchaseRequestWrite">
+		insert into purchase VALUES
+		(seq_bno.nextval,#{title},#{nickname},#{username},#{writeUserSeq},#{productname},#{img},#{price},#{quantity},#{location},#{content},sysdate,#{dateStart},#{dateEnd},0,null,#{con})
+	</insert>
+	
+	
+	
+	<insert id="setRequestWrite">
+		insert into PurchaseRequest VALUES(seq_PurchaseRequest.nextval,#{bno},#{nickname},#{requestUserSeq},#{content},0)
+	</insert>
+	
+	<select id="getPurchaseRequest" resultType="purR">
+		select * from PurchaseRequest where bno=#{bno}
+	</select>
+	
+	<insert id="setOrderWrite">
+		insert into PurchaseOrder values(seq_PurchaseOrder.nextval,#{bno},#{nickname},#{requestUserSeq},#{productname},#{price},#{quantity},#{content},0)
+	</insert>
+	
+	<select id="getPurchaseOrder" resultType="purO">
+		select * from PurchaseOrder where bno=#{bno}
+	</select>
+	
+	<delete id="puchaseDelete">
+		delete purchase where bno=#{bno}
+	</delete>
+	
+	<delete id="purchaseRequestDelete">
+		delete purchaseRequest where bno=#{bno}
+	</delete>
+	
+	<delete id="purchaseOrderDelete">
+		delete purchaseOrder where bno=#{bno}
+	</delete>
+	
+	<update id="updatePurchase1" parameterType="pur">
+		update purchase set title=#{title}, productname=#{productname}, price=#{price}, quantity =#{quantity}, location=#{location}, dateStart=#{dateEnd},dateEnd=#{dateEnd},content=#{content}, dateWrite=sysdate where bno =#{bno}
+	</update>
+	
+	<update id="updatePurchase2" parameterType="pur">
+		update purchase set title=#{title}, location=#{location}, dateStart=#{dateStart},dateEnd=#{dateEnd},content=#{content}, dateWrite=sysdate where bno =#{bno}
+	</update>
+	
+	
+	<update id="purchaseOrderSetPermit" parameterType="purO">
+		update purchaseorder set is_permit=#{isPermit} where prno=#{prno}
+	</update>
+	
+	<update id="purchaseRequestSetPermit">
+		update purchaserequest set is_permit=#{isPermit} where prno=#{prno}
+	</update>
+	
+</mapper>

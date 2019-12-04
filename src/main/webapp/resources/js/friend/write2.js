@@ -10,6 +10,19 @@ $(function () {
     const btnNext = getEl('#next-btn');
     const cancel = getEl('#cancel');
 
+    dateStart.value = getCurrentDateString();
+    dateEnd.value = getCurrentDateString();
+
+    function getCurrentDateString() {
+        const cal = new Date();
+        let year = cal.getFullYear();
+        let month = cal.getMonth() + 1;
+        month = month < 10 ? '0' + month : month;
+        let date = cal.getDate() + 1;
+        date = date < 10 ? '0' + date : date;
+        return `${year}-${month}-${date}`
+    }
+
     addEvent(title, 'blur', (e) => {
         const value = e.target.value;
         const [vFeed, ivFeed] = v.getFeedBox(e.target);
@@ -22,16 +35,16 @@ $(function () {
         console.log(value);
         const [vFeed, ivFeed] = v.getFeedBox(e.target);
         if (!value) {
-        	return v.setInvalid(e.target, ivFeed, '시작일을 입력해주세요.');
+            return v.setInvalid(e.target, ivFeed, '시작일을 입력해주세요.');
         } else { // 날짜 유효성
-        	var sDate = new Date(value).getTime();
-        	var now = new Date().getTime();
-        	
-        	if(sDate < now) {
-        		return v.setInvalid(e.target, ivFeed, '날짜를 다시 입력해주세요.');
-        	} else {
-        		return v.changeValid(e.target);
-        	}
+            var sDate = new Date(value).getTime();
+            var now = new Date().getTime();
+
+            if (sDate < now) {
+                return v.setInvalid(e.target, ivFeed, '날짜를 다시 입력해주세요.');
+            } else {
+                return v.changeValid(e.target);
+            }
         }
     });
 
@@ -40,24 +53,24 @@ $(function () {
         console.log(value);
         const [vFeed, ivFeed] = v.getFeedBox(e.target);
         if (!value) {
-        	return v.setInvalid(e.target, ivFeed, '종료일을 입력해주세요.');
+            return v.setInvalid(e.target, ivFeed, '종료일을 입력해주세요.');
         } else {
-        	var sDate = new Date(dateStart.value).getTime();
-        	var eDate = new Date(value).getTime();
-        	
-        	if(sDate > eDate) {
-        		return v.setInvalid(e.target, ivFeed, '날짜를 다시 입력해주세요.');
-        	} else {
-        		return v.changeValid(e.target);
-        	}
+            var sDate = new Date(dateStart.value).getTime();
+            var eDate = new Date(value).getTime();
+
+            if (sDate > eDate) {
+                return v.setInvalid(e.target, ivFeed, '날짜를 다시 입력해주세요.');
+            } else {
+                return v.changeValid(e.target);
+            }
         }
     });
 
     addEvent(btnNext, 'click', () => {
-    	var sDate = new Date(dateStart.value).getTime();
-    	var eDate = new Date().getTime();
-    	var now = new Date().getTime();
-    	
+        var sDate = new Date(dateStart.value).getTime();
+        var eDate = new Date().getTime();
+        var now = new Date().getTime();
+
         if (!v.isValid(title)) {
             v.setInvalid(title, v.getFeedBox(title)[1], '제목을 입력해주세요');
             return title.focus();

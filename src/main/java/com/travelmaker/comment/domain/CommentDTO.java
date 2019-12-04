@@ -1,5 +1,7 @@
 package com.travelmaker.comment.domain;
 
+import com.travelmaker.essay.domain.EssayDTO;
+import com.travelmaker.route.domain.RouteDTO;
 import com.travelmaker.user.domain.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,5 +24,7 @@ public class CommentDTO {
 	private String dateWrite;
 	private int pcno;
 
+	private RouteDTO routeDTO;
+	private EssayDTO essayDTO;
 	private UserDTO userDTO;
 }

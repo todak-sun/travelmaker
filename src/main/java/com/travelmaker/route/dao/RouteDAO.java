@@ -1,11 +1,11 @@
 package com.travelmaker.route.dao;
 
-import java.util.List;
-import java.util.Map;
-
 import com.travelmaker.route.domain.RouteContentDTO;
 import com.travelmaker.route.domain.RouteDTO;
 import com.travelmaker.route.domain.RouteImageDTO;
+
+import java.util.List;
+import java.util.Map;
 
 public interface RouteDAO {
 
@@ -23,8 +23,12 @@ public interface RouteDAO {
     
     public RouteDTO getRouteByBno(int bno);
 
+    public RouteDTO getRouteByBno(int bno);
+
     public List<RouteContentDTO> getRouteContentStory(int rno);
     
+    public List<RouteDTO> getRouteListByUserSeq(int seq);
+
     public List<RouteDTO> getRouteListByUserSeq(int seq);
 
 	public RouteContentDTO getCourse(int crno);

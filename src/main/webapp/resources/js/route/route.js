@@ -219,84 +219,152 @@ $(function() {
           return alert("없는 명령어 입니다.");
       }
     });
-  }
 
-  // 단계별 버튼 내용 변경
-  function showCommand(commandLevel) {
-    switch (commandLevel) {
-      case 1:
-        leverBar.children[1].classList.remove("level-2");
-
-        editorFirst.classList.remove("hide");
-        editorSecond.classList.add("hide");
-
-        btnPrevious.setAttribute("disabled", "disabled"); //
-        btnPrevious.name = "previous-btn-1";
-
-        btnNext.removeAttribute("disabled"); //
-        btnNext.name = "next-btn-1";
-
-        btnCourseSave.setAttribute("disabled", "disabled"); //
-        btnCourseSave.name = "course-save-btn";
-        break;
-      case 2:
-        leverBar.children[1].classList.add("level-2");
-        leverBar.children[2].classList.remove("level-3");
-
-        editorFirst.classList.add("hide");
-        editorSecond.classList.remove("hide");
-        editorThird.classList.add("hide");
-
-        btnPrevious.removeAttribute("disabled"); //
-        btnPrevious.name = "previous-btn-2";
-
-        btnNext.removeAttribute("disabled"); //
-        btnNext.name = "next-btn-2";
-        btnNext.classList.remove("hide");
-
-        btnRouteSave.setAttribute("disabled", "disabled");
-        btnRouteSave.name = "route-save-btn";
-        btnRouteSave.classList.add("hide");
-
-        btnPreview.setAttribute("disabled", "disabled");
-        btnPreview.name = "preview-btn";
-        btnPreview.classList.add("hide");
-
-        btnCourseSave.removeAttribute("disabled"); //
-        btnCourseSave.name = "course-save-btn";
-        btnCourseSave.classList.remove("hide");
-
-        break;
-      case 3:
-        leverBar.children[2].classList.add("level-3");
-
-        editorSecond.classList.add("hide");
-        editorThird.classList.remove("hide");
-
-        btnPrevious.removeAttribute("disabled"); //
-        btnPrevious.name = "previous-btn-3";
-
-        btnNext.setAttribute("disabled", "disabled");
-        btnNext.name = "next-btn-3";
-        btnNext.classList.add("hide");
-
-        btnRouteSave.removeAttribute("disabled"); //
-        btnRouteSave.name = "route-save-btn";
-        btnRouteSave.classList.remove("hide");
-
-        btnPreview.removeAttribute("disabled"); //
-        btnPreview.name = "preview-btn";
-        btnPreview.classList.remove("hide");
-
-        btnCourseSave.setAttribute("disabled", "disabled");
-        btnCourseSave.name = "course-save-btn";
-        btnCourseSave.classList.add("hide");
-        break;
-      default:
-        alert("코딩 다시해");
-        break;
+    function deleteHash(e) {
+        let hashtag = "";
+        // hashList = e.target.parentElement;
+        let index = getElementIndex(e.target);
+        $hashView[0].removeChild($hashView[0].children[index]);
+        $hashView.children("span").each(function (index, span) {
+            hashtag += span.innerText;
+            hashtag += " ";
+        });
+        setRoute({hashtag: hashtag});
     }
-  }
+
+    addSameEvent("change", routeDataBindHandler, title, epilogue);
+    addSameEvent(
+        "click",
+        selectCommand,
+        btnPrevious,
+        btnNext,
+        btnRouteSave,
+        btnPreview,
+        btnCourseSave
+    );
+    addSameEvent(
+        "change",
+        routeContentBindHandler,
+        nation,
+        city,
+        place,
+        content,
+        location,
+        dateStart,
+        dateEnd
+    );
+
+    // 처음 필요한 작업들 실행
+    showCommand(1);
+
+    // *******페이지 첫 로딩 시 필요한 처리들 끝*******
+    //
+    //
+    //
+    //
+    //
+    // 클릭 선택으로부터 페이지 시작!!!!!!!!!!!!!! 분기점 모음!!!!!!!!!!!!!!!!!!!!!
+
+    function selectCommand(e) {
+        return new Promise(function () {
+            let command = e.target.name;
+            switch (command) {
+                case "previous-btn-2": // 1단계로 빽
+                    return backToLevel(1);
+                case "previous-btn-3": // 2단계로 빽
+                    return backToLevel(2);
+                case "next-btn-1": // 2단계로 전진
+                    return showLevel(2);
+                case "next-btn-2": // 3단계로 전진
+                    return showLevel(3);
+                case "course-save-btn": // 코스 저장 버튼
+                    return saveCourse();
+                case "preview-btn": // 미리보기 버튼
+                    return showPreview();
+                case "route-save-btn": // 최종 저장 버튼
+                    return saveRoute();
+                default:
+                    return alert("없는 명령어 입니다.");
+            }
+        });
+    }
+
+    // 단계별 버튼 내용 변경
+    function showCommand(commandLevel) {
+        switch (commandLevel) {
+            case 1:
+                leverBar.children[1].classList.remove("level-2");
+
+                editorFirst.classList.remove("hide");
+                editorSecond.classList.add("hide");
+
+                btnPrevious.setAttribute("disabled", "disabled"); //
+                btnPrevious.name = "previous-btn-1";
+
+                btnNext.removeAttribute("disabled"); //
+                btnNext.name = "next-btn-1";
+
+                btnCourseSave.setAttribute("disabled", "disabled"); //
+                btnCourseSave.name = "course-save-btn";
+                break;
+            case 2:
+                leverBar.children[1].classList.add("level-2");
+                leverBar.children[2].classList.remove("level-3");
+
+                editorFirst.classList.add("hide");
+                editorSecond.classList.remove("hide");
+                editorThird.classList.add("hide");
+
+                btnPrevious.removeAttribute("disabled"); //
+                btnPrevious.name = "previous-btn-2";
+
+                btnNext.removeAttribute("disabled"); //
+                btnNext.name = "next-btn-2";
+                btnNext.classList.remove("hide");
+
+                btnRouteSave.setAttribute("disabled", "disabled");
+                btnRouteSave.name = "route-save-btn";
+                btnRouteSave.classList.add("hide");
+
+                btnPreview.setAttribute("disabled", "disabled");
+                btnPreview.name = "preview-btn";
+                btnPreview.classList.add("hide");
+
+                btnCourseSave.removeAttribute("disabled"); //
+                btnCourseSave.name = "course-save-btn";
+                btnCourseSave.classList.remove("hide");
+
+                break;
+            case 3:
+                leverBar.children[2].classList.add("level-3");
+
+                editorSecond.classList.add("hide");
+                editorThird.classList.remove("hide");
+
+                btnPrevious.removeAttribute("disabled"); //
+                btnPrevious.name = "previous-btn-3";
+
+                btnNext.setAttribute("disabled", "disabled");
+                btnNext.name = "next-btn-3";
+                btnNext.classList.add("hide");
+
+                btnRouteSave.removeAttribute("disabled"); //
+                btnRouteSave.name = "route-save-btn";
+                btnRouteSave.classList.remove("hide");
+
+                btnPreview.removeAttribute("disabled"); //
+                btnPreview.name = "preview-btn";
+                btnPreview.classList.remove("hide");
+
+                btnCourseSave.setAttribute("disabled", "disabled");
+                btnCourseSave.name = "course-save-btn";
+                btnCourseSave.classList.add("hide");
+                break;
+            default:
+                alert("코딩 다시해");
+                break;
+        }
+    }
 
   // 단계별 실행 내용
   function showLevel(level) {
@@ -1018,8 +1086,28 @@ $(function() {
                         />
                       </li>
                     `);
-        $frag.append($li);
-        $imageGroup.append($frag);
+                $frag.append($li);
+                $imageGroup.append($frag);
+
+                if (fileList.length === $imageGroup[0].childElementCount) {
+                    document.querySelectorAll(".image-group span").forEach(span => {
+                        span.addEventListener("click", deleteImage);
+                    });
+                }
+            };
+            reader.readAsDataURL(image);
+        });
+    }
+
+    function deleteImage(e) {
+        // 리스트 index 값 찾아서 이미지 삭제
+        // e.stopPropagation();
+        let li = e.target.parentElement;
+        let parent = li.parentElement;
+        let index = getElementIndex(li);
+        parent.removeChild(parent.children[index]);
+        fileList.splice(index, 1);
+    }
 
         if (fileList.length === $imageGroup[0].childElementCount) {
           document.querySelectorAll(".image-group span").forEach(span => {
@@ -1123,7 +1211,7 @@ $(function() {
 
 // 이벤트 거는 함수
 function addSameEvent(event, handler, ...targets) {
-  targets.forEach(target => {
-    target.addEventListener(event, handler);
-  });
+    targets.forEach(target => {
+        target.addEventListener(event, handler);
+    });
 }

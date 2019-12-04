@@ -16,5 +16,5 @@ public class FriendRequestDTO {
 	private String dateStart;
 	private String dateEnd;
 	private int is_read;
-	private String nickname;
+	//private String nickname;
 }
