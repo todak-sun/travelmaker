@@ -15,6 +15,7 @@
 <sec:authorize access="hasRole('ROLE_USER') and isAuthenticated()">
     <div class="hidden">
         <input type="hidden" id="bno" value="${purchaseDTO.bno}">
+        <input type="hidden" id="request-user-seq" value="${purchaseDTO.writeUserSeq}">
         <input type="hidden" id="nickname" value="${userDetail.nickname}">
         <input type="hidden" id="seq" value="${userDetail.seq}">
         <input type="hidden" id="id" value="${userDetail.id}">

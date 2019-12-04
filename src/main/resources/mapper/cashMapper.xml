@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cashSQL">
+
+    <insert id="registerCash" parameterType="cash">
+        insert into CASHTRADE
+        values ( seq_cash.nextval, #{type}, #{requestUser}, #{requestUserSeq}, #{seller}, #{sellerSeq}, #{requestUserCheck}
+               , #{sellerCheck}, #{productName}, #{quantity}, #{price}, #{applyNum}, #{paidAt})
+    </insert>
+
+    <insert id="create" parameterType="cash">
+        INSERT INTO CASHTRADE(CNO, TYPE, REQUESTUSER, REQUESTUSERSEQ, SELLER, SELLERSEQ, PRODUCTNAME, QUANTITY, PRICE,
+                              APPLYNUM, PAIDAT, CDATE)
+        VALUES ( seq_cash.nextval, #{type}, #{requestUser}, #{requestUserSeq}, #{seller}, #{sellerSeq}, #{productName}
+               , #{quantity}, #{price}, #{applyNum, jdbcType=VARCHAR}, #{paidAt, jdbcType=VARCHAR}, sysdate)
+    </insert>
+
+    <select id="readAllBySeq" parameterType="int" resultType="cash">
+        SELECT CNO,
+               TYPE,
+               REQUESTUSER,
+               REQUESTUSERSEQ,
+               SELLER,
+               SELLERSEQ,
+               REQUESTUSERCHECK,
+               SELLERCHECK,
+               PRODUCTNAME,
+               QUANTITY,
+               PRICE,
+               APPLYNUM,
+               PAIDAT,
+               to_char(CDATE, 'YYYY-MM-DD') as CDATE
+        FROM CASHTRADE
+        WHERE REQUESTUSERSEQ = #{seq}
+           OR SELLERSEQ = #{seq}
+    </select>
+
+    <update id="update" parameterType="cash">
+        UPDATE CASHTRADE
+        SET REQUESTUSERCHECK = #{requestUserCheck},
+            SELLERCHECK      = #{sellerCheck}
+        WHERE CNO = #{cno}
+    </update>
+</mapper>

@@ -1,31 +1,19 @@
 package com.travelmaker.friend.controller;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
-
 import com.travelmaker.friend.domain.FriendDTO;
 import com.travelmaker.friend.domain.FriendPaging;
 import com.travelmaker.friend.domain.FriendRequestDTO;
 import com.travelmaker.friend.domain.FriendRouteDTO;
 import com.travelmaker.friend.service.FriendService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/friend")
@@ -34,6 +22,11 @@ public class FriendApiController {
 	private FriendService friendService;
 	@Autowired
 	private FriendPaging friendPaging;
+
+	@GetMapping(path="/readBySeq", produces = "application/json")
+	public ResponseEntity<List<FriendDTO>> readBySeq(@RequestParam int seq){
+		return friendService.readBySeq(seq);
+	}
 	
 	@PostMapping(path = "/getList", produces = "application/json")
 	public ModelAndView getList(@RequestParam(required = false, defaultValue = "1") String pg) {

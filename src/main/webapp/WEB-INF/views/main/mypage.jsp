@@ -20,6 +20,7 @@
             <li><a href="#" data-page="my-article" class="on">내가 쓴 글</a></li>
             <li><a href="#" data-page="my-alarm">알림 모아보기</a></li>
             <li><a href="#" data-page="my-info">나의 정보보기</a></li>
+            <li><a href="#" data-page="my-payment">나의 결제정보</a></li>
         </ul>
     </nav>
     <section class="main-wrap">
@@ -28,6 +29,7 @@
 <%@include file="../common/footer.jsp" %>
 <%@include file="../common/foot-js.jsp" %>
 <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+<script src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/main/mypage.js"></script>
 </body>
 </html>

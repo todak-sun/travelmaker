@@ -122,27 +122,6 @@
     margin-right: 1rem;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .container-wrap .main-wrap .lnb-my-article {
     background-color: #00c1da;
     border-radius: 1.5rem;
@@ -202,7 +181,7 @@
     color: #ffffff;
 }
 
-.container-wrap .main-wrap table th.title {
+.container-wrap .main-wrap table th.content {
     width: 65%;
 }
 
@@ -214,6 +193,14 @@
     border: 1px solid gray;
     padding: 0.5rem;
     text-align: left;
+}
+
+.container-wrap .main-wrap table td.link:hover {
+    background-color: #353535;
+}
+
+.container-wrap .main-wrap table td.link:hover a{
+    color: #ffffff;
 }
 
 .container-wrap .main-wrap .form-register {
@@ -363,7 +350,7 @@
     border: 2px solid #363636;
 }
 
-.btn-travel-main.off:hover{
+.btn-travel-main.off:hover {
     background-color: #363636;
     color: #ffffff;
 }

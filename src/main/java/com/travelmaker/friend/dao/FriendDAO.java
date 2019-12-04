@@ -1,11 +1,11 @@
 package com.travelmaker.friend.dao;
 
-import java.util.List;
-import java.util.Map;
-
 import com.travelmaker.friend.domain.FriendDTO;
 import com.travelmaker.friend.domain.FriendRequestDTO;
 import com.travelmaker.friend.domain.FriendRouteDTO;
+
+import java.util.List;
+import java.util.Map;
 
 public interface FriendDAO {
 
@@ -46,5 +46,5 @@ public interface FriendDAO {
 
 	public void updateDivision(FriendRouteDTO friendRouteDTO);
 
-
+    List<FriendDTO> readBySeq(int seq);
 }

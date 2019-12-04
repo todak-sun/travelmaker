@@ -12,6 +12,22 @@ let travelmaker = (function (window) {
         Utils.prototype.getElList = getElList;
         Utils.prototype.getFormData = getFormData;
 
+        Utils.prototype.getObjFromDataSet = getObjFromDataSet;
+
+        function getObjFromDataSet(dataset) {
+            let obj = {};
+            let keys = Object.keys(dataset);
+            let values = Object.values(dataset);
+            for (let i = 0; i < keys.length; i++) {
+                let value = values[i];
+                if (typeof value === 'string') {
+                    value = value.trim();
+                }
+                obj[keys[i]] = value;
+            }
+            return obj;
+        }
+
         Utils.prototype.getTokenCSRF = function () {
             return getEl('meta[name="_csrf"]').content;
         };
@@ -151,7 +167,7 @@ let travelmaker = (function (window) {
             `;
         };
 
-        Template.prototype.purReqRequest = function(bno, nickname, seq){
+        Template.prototype.purReqRequest = function (bno, nickname, seq) {
             return `
                 <form id="requestForm" class="write-form">
                     <div class="hidden">
@@ -210,7 +226,7 @@ let travelmaker = (function (window) {
         };
 
         Template.prototype.purOrderView = function (order) {
-            const {isPermit, prno, nickname, productname, price, quantity, content} = order;
+            const {isPermit, prno, nickname, productname, price, quantity, content, requestUserSeq} = order;
             const agree = isPermit === 1 ? '수락됨[OK]' : '수락';
             const disagree = isPermit === 2 ? '거절됨[OK]' : '거절';
             return `
@@ -218,14 +234,21 @@ let travelmaker = (function (window) {
                     <div class="request-item">
                         <div class="user-area">
                             <p class="author">아이디 : ${nickname}</p>
-                            ${productname ? '${<p class="author">상품명 : ${productname}</p>}' : ''}
-                            ${price ? '${<p class="author">가격 : ${price}</p>}' : ''}
-                            ${quantity ? '${<p class="author">수량 : ${quantity}</p>}' : ''}
+                            ${productname ? '<p class="author">상품명 : ' + productname + '</p>' : ''}
+                            ${price ? '<p class="author">가격 : ' + price + '</p>' : ''}
+                            ${quantity ? '<p class="author">수량 : ' + quantity + '</p>' : ''}
                         </div>
                         <div class="content-area">
                             <div class="content-detail">
                                 <p>내용: ${content}</p>
                                 <div class="button-wrap">
+                                    <input type="hidden" 
+                                    data-nickname="${nickname}" 
+                                    data-sellerseq="${requestUserSeq}" 
+                                    data-price="${price}"
+                                    data-quantity="${quantity}"
+                                    data-productname="${productname}"
+                                    >
                                     <button class="btn-agree" data-seq="${prno}">${agree}</button>
                                     <button class="btn-disagree" data-seq="${prno}">${disagree}</button>
                                 </div>
@@ -681,9 +704,9 @@ let travelmaker = (function (window) {
                   </div>
            `
         };
-        
-        Template.prototype.alarmlist = function(){
-        	return `
+
+        Template.prototype.alarmlist = function () {
+            return `
         	
         	<nav class="lnb-my-alarm">
                 <ul>
@@ -704,10 +727,9 @@ let travelmaker = (function (window) {
             
         	`;
         }
-        
+
         Template.prototype.alarmTableHead = function () {
             return `
-            
              <tr>
                 <th class="content">내용</th>
                 <th class="date">작성일</th>
@@ -715,7 +737,7 @@ let travelmaker = (function (window) {
             </tr>
           `;
         };
-        
+
 
         Template.prototype.register1 = function () {
             return `
@@ -1021,6 +1043,21 @@ let travelmaker = (function (window) {
             return result;
         };
 
+        Template.prototype.myPayment = function () {
+            return `
+            <nav class="lnb-my-article">
+                <ul>
+                    <li><a href="#" class="on" data-page="payment-wait">결제 대기</a></li>
+                    <li><a href="#" data-page="payment-ing">진행중인 거래내역</a></li>
+                    <li><a href="#" data-page="payment-finish">거래 완료내역</a></li>
+                </ul>
+            </nav>
+            <table class="table">
+                <thead class="table-head"></thead>
+                <tbody class="table-content"></tbody>
+            </table>
+            `
+        }
 
         Template.prototype.myArticle = function () {
             return `
@@ -1052,11 +1089,13 @@ let travelmaker = (function (window) {
         };
 
         Template.prototype.storyTableBody = function (story) {
-            const {title, dateWrite, likes, views, rno} = story;
+            const {title, dateWrite, likes, views, rno, fileName} = story;
+            let type = fileName ? 'essay' : 'route';
+            let link = type + '/view/' + rno;
             return `
                 <tr>
-                    <td data-rno="${rno}">${title}</td>
-                    <td>${dateWrite}</td>
+                    <td data-rno="${rno}" class="link"><a href="${link}">${title}</a></td>
+                    <td>${dateWrite.substr(0, 10)}</td>
                     <td>${likes}</td>
                     <td>${views}</td>
                 </tr>
@@ -1069,49 +1108,133 @@ let travelmaker = (function (window) {
                 <th class="title">게시물제목</th>
                 <th class="content">댓글내용</th>
                 <th class="date">작성일</th>
-            </tr>
+             </tr>
           `;
         };
 
         Template.prototype.commentTableBody = function (comment) {
             const {essayDTO, routeDTO, content, dateWrite} = comment;
             let story = essayDTO ? essayDTO : routeDTO;
+            let type = essayDTO ? 'essay' : 'route';
             let category = essayDTO ? '에세이' : '경로';
+            let link = type + '/view/' + story.rno;
             return `
               <tr>
                 <td data-rno="${story.rno}">[${category}]${story.title}</td>
-                <td>${content}</td>
+                <td class="link"><a href="${link}">${content}</a></td>
                 <td>${dateWrite}</td>
               </tr>
-            `
+            `;
         };
-        
-        Template.prototype.mypageAlarmviewTemplate = function (items) {
-        	
-        	let type ='';
-        	let url='';
-        	if(items.header=='friend'){
-        		type='동행';
-        		url='/friend/view/'+items.dataSeq;
-        	}else if(items.header=='purA'){
-        		type='대리구매';
-        		url='/pur/view/1/'+items.dataSeq;
-        	}else if(items.header=='purB'){
-        		type='대리구매';
-        		url='/pur/view/2/'+items.dataSeq;
-        	}else if(items.header=='like'){
-        		type='좋아요';
-        	}else if(items.header=='comment'){
-        		type='댓글';
-        	}else {
-        		console.log('error');
-        	}
-        	
+
+        Template.prototype.friendTableHead = function () {
             return `
              <tr>
-                <td class="content"><a href="`+url+`" >${items.content}</a></th>
+                <th class="title">게시물제목</th>
+                <th>떠나는 날</th>
+                <th>돌아오는 날</th>
+             </tr>
+            `;
+        };
+
+        Template.prototype.friendTableBody = function (friend) {
+            const {fno, title, dateStart, dateEnd} = friend;
+            const link = '/friend/view/' + fno;
+            return `
+              <tr>
+                <td class="link"><a href="${link}">${title}</a></td>
+                <td>${dateStart.substr(0, 10)}</td>
+                <td>${dateEnd.substr(0, 10)}</td>
+              </tr>
+            `;
+        };
+
+        Template.prototype.paymentWaitHead = function () {
+            return `
+                <tr>
+                    <th>타입</th>
+                    <th>거래자</th>
+                    <th>상품명</th>
+                    <th>수량</th>
+                    <th>가격</th>
+                    <th>결제금액</th>
+                    <th>결제일자</th>
+                    <th></th>
+                </tr>
+            `;
+        };
+
+        Template.prototype.paymentWaitBody = function (seq, payment) {
+            const {cno, type, requestUser, requestUserSeq, seller, sellerSeq, requestUserCheck, sellerCheck, productName, quantity, price, applyNum, paidAt} = payment;
+            let total = price * quantity;
+            let status = '';
+
+            if (seq === sellerSeq) {
+                if (requestUserCheck === 0) {
+                    if (sellerCheck === 0) status = '결제대기';
+                } else if (requestUserCheck === 1) {
+                    if (sellerCheck === 0) status = '<button class="btn-check-pay">입금확인</button>';
+                    if (sellerCheck === 1) status = '<button class="btn-deliver">배송완료</button>';
+                } else if (requestUserCheck === 2) {
+                    if (sellerCheck === 1) status = '배송완료';
+                    if (sellerCheck === 2) status = '거래완료';
+                }
+            } else if (seq === requestUserSeq) {
+                if (requestUserCheck === 0) {
+                    if (sellerCheck === 0) status = '<button class="btn-pay">결제</button>';
+                } else if (requestUserCheck === 1) {
+                    if (sellerCheck === 0) status = '결제완료';
+                    if (sellerCheck === 1) status = '배송중';
+                } else if (requestUserCheck === 2) {
+                    if (sellerCheck === 1) status = '<button class="btn-check-deliver">상품수령확인</button>';
+                    if (sellerCheck === 2) status = '거래완료';
+                }
+            } else {
+                throw new Error('뭐야시발');
+            }
+
+            let partner = seq === requestUserSeq ? seller : requestUser;
+            let me = seq !== requestUserSeq ? seller : requestUser;
+            return `
+                <tr>
+                    <td>${type}</td>
+                    <td>${partner}</td>
+                    <td>${productName}</td>
+                    <td>${quantity}</td>
+                    <td>${price}</td>
+                    <td>${total}</td>
+                    <td>2011-11-11</td>
+                    <td data-cno="${cno}" data-productName="${productName}" data-total="${total}" data-buyer_name="${me}">${status}</td>
+                </tr>
+            `;
+        };
+
+        Template.prototype.mypageAlarmviewTemplate = function (items) {
+
+            let type = '';
+            let url = '';
+            if (items.header === 'friend') {
+                type = '동행';
+                url = '/friend/view/' + items.dataSeq;
+            } else if (items.header === 'purA') {
+                type = '대리구매';
+                url = '/pur/view/1/' + items.dataSeq;
+            } else if (items.header === 'purB') {
+                type = '대리구매';
+                url = '/pur/view/2/' + items.dataSeq;
+            } else if (items.header === 'like') {
+                type = '좋아요';
+            } else if (items.header === 'comment') {
+                type = '댓글';
+            } else {
+                console.log('error');
+            }
+
+            return `
+             <tr>
+                <td class="content"><a href="` + url + `" >${items.content}</a></th>
                 <td class="date">${items.alarmDate}</th>
-                <td class="type">`+type+`</th>
+                <td class="type">` + type + `</th>
             </tr>
           `;
         };
@@ -1193,9 +1316,53 @@ let travelmaker = (function (window) {
             this.updatePermitStatusOrder = updatePermitStatusOrder;
             this.updatePermitStatusReq = updatePermitStatusReq;
             this.getRequestView = getRequestView;
+            this.readFriendBySeq = readFriendBySeq;
+            this.createPayment = createPayment;
+            this.getListPaymentBySeq = getListPaymentBySeq;
+            this.updatePayment = updatePayment;
         };
 
         const {setRequestHeader} = new Utils();
+
+        function getListPaymentBySeq(seq) {
+            return $.ajax({
+                type: 'GET',
+                url: '/api/cash/' + seq,
+                dataType: 'json',
+                contentType: 'application/json',
+                beforeSend: setRequestHeader
+            })
+        }
+
+        function updatePayment(data) {
+            return $.ajax({
+                type: 'PUT',
+                url: '/api/cash',
+                dataType: 'text',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                beforeSend: setRequestHeader
+            })
+        }
+
+        function createPayment(data) {
+            return $.ajax({
+                type: 'POST',
+                url: '/api/cash',
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                beforeSend: setRequestHeader
+            })
+        }
+
+        function readFriendBySeq(seq) {
+            return $.ajax({
+                type: 'GET',
+                url: '/friend/readBySeq?seq=' + seq,
+                dataType: 'json'
+            });
+        }
 
         function deletePur0(bno) {
             return $.ajax({
@@ -1291,15 +1458,15 @@ let travelmaker = (function (window) {
                 beforeSend: setRequestHeader
             });
         }
-        
+
         function updateDivision(data) {
-			return $.ajax({
-				type: 'post',
-				url: '/friend/updateDivision',
-				data: data,
-				beforeSend: setRequestHeader
-			});
-		}
+            return $.ajax({
+                type: 'post',
+                url: '/friend/updateDivision',
+                data: data,
+                beforeSend: setRequestHeader
+            });
+        }
 
         function deleteRouteWrite(fno) {
             return $.ajax({
@@ -1591,7 +1758,6 @@ let travelmaker = (function (window) {
                 beforeSend: setRequestHeader
             });
         }
-
 
 
         return Ajax;
@@ -2368,6 +2534,39 @@ let travelmaker = (function (window) {
         return Alarm;
     })(_w);
 
+    const Cash = (function () {
+        const Cash = function () {
+            this.IMP = window.IMP;
+            this.IMP.init('imp42270163');
+        };
+
+        const ajax = new Ajax();
+
+        Cash.prototype.requestPay = function (pgtype, productname, total, buyer_name) {
+
+            let payInfo = {
+                pg: pgtype,
+                pay_method: 'card',
+                merchant_uid: productname + new Date().getTime(), // 상품명
+                name: productname, // 품목이름
+                amount: total, // 금액
+                buyer_name: buyer_name, // 주문자
+            };
+
+            return requestPay(this.IMP, payInfo);
+        };
+
+        function requestPay(IMP, payInfo) {
+            return new Promise((resolve, reject) => {
+                IMP.request_pay(payInfo, function (ret) {
+                    resolve(ret);
+                })
+            });
+        }
+
+        return Cash;
+    })(_w);
+
     travelmaker.googleMap = GoogleMap;
     travelmaker.kakaoMap = KakaoMap;
     travelmaker.url = url;
@@ -2381,6 +2580,7 @@ let travelmaker = (function (window) {
     travelmaker.comment = Comment;
     travelmaker.handler = Handler;
     travelmaker.alarm = Alarm;
+    travelmaker.Cash = Cash;
 
     _w.travelmaker = travelmaker;
     return travelmaker;

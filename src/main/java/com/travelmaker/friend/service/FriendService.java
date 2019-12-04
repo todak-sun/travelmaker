@@ -1,11 +1,12 @@
 package com.travelmaker.friend.service;
 
-import java.util.List;
-import java.util.Map;
-
 import com.travelmaker.friend.domain.FriendDTO;
 import com.travelmaker.friend.domain.FriendRequestDTO;
 import com.travelmaker.friend.domain.FriendRouteDTO;
+import org.springframework.http.ResponseEntity;
+
+import java.util.List;
+import java.util.Map;
 
 public interface FriendService {
 
@@ -45,4 +46,6 @@ public interface FriendService {
 	public void setRouteModify(FriendRouteDTO friendRouteDTO);
 
 	public void updateDivision(FriendRouteDTO friendRouteDTO);
+
+    ResponseEntity<List<FriendDTO>> readBySeq(int seq);
 }

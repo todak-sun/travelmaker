@@ -13,7 +13,6 @@ import com.travelmaker.util.fileIO.FileIO;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -38,7 +37,7 @@ public class EssayApiService implements EssayApiInterface<EssayApiRequest, Essay
     FileIO fileIO;
 
     @Override
-    public Header<List<EssayApiResponse>> readAll(@ModelAttribute EssaySearchFilter essaySearchFilter) {
+    public Header<List<EssayApiResponse>> readAll(EssaySearchFilter essaySearchFilter) {
         return Optional.ofNullable(essayDAO.readAll(essaySearchFilter))
                 .map(this::response)
                 .orElse(null);
@@ -181,6 +180,7 @@ public class EssayApiService implements EssayApiInterface<EssayApiRequest, Essay
                     .seq(essayDTO.getSeq())
                     .title(essayDTO.getTitle())
                     .likes(essayDTO.getLikes())
+                    .fileName(essayDTO.getFileName())
                     .views(essayDTO.getLikes())
                     .imageName(essayDTO.getImageName())
                     .hashtag(essayDTO.getHashtag())

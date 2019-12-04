@@ -23,6 +23,7 @@ public class EssayApiResponse {
     private String hashtag;
     private String content;
     private String imageName;
+    private String fileName;
     private int fixed;
     private int isDomestic;
     private String dateWrite;
