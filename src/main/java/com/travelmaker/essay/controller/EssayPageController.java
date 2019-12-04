@@ -11,35 +11,27 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping(value = "/essay")
-public class EssayPageController {
+public class EssayPageController{
 
-    @Autowired
-    EssayPageInterface essayPageService;
+	@Autowired
+	EssayPageInterface essayPageService;
 
-    @GetMapping("/write")
-    public String write() {
-        return "/essay/write2";
-    }
+	@GetMapping("/write")
+	public String write() {
+		return "/essay/write2";
+	}
 
-    @GetMapping("/view")
-    public String view() {
-        return "/essay/view2";
-    }
+	@GetMapping("/view")
+	public String view() {
+		return "/essay/view2";
+	}
 
-    @GetMapping("/view/{rno}")
-    public ModelAndView view(@PathVariable int rno, ModelAndView mv) {
-        EssayDTO essayDTO = essayPageService.readOne(rno);
-        mv.addObject("essayDTO", essayDTO);
-        mv.setViewName("/essay/view2");
-        return mv;
-    }
-
-    @GetMapping("/modify/{rno}")
-    public ModelAndView modify(@PathVariable int rno, ModelAndView mv) {
+	@GetMapping("/view/{rno}")
+	public ModelAndView view(@PathVariable int rno, ModelAndView mv){
 		EssayDTO essayDTO = essayPageService.readOne(rno);
 		mv.addObject("essayDTO", essayDTO);
-		mv.setViewName("/essay/modify");
-        return mv;
-    }
+		mv.setViewName("/essay/view2");
+		return mv;
+	}
 
 }

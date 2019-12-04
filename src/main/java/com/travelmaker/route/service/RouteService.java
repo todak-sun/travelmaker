@@ -8,8 +8,6 @@ import com.travelmaker.route.domain.RouteContentDTO;
 import com.travelmaker.route.domain.RouteDTO;
 import com.travelmaker.route.domain.RouteImageDTO;
 
-import java.util.List;
-
 public interface RouteService {
 
 	public int setRoute(RouteDTO routeDTO, MultipartFile image);
@@ -39,7 +37,5 @@ public interface RouteService {
 	public int getRouteTemp(int seq);
 
 	public void deleteRoute(int rno);
-
-	public List<RouteDTO> getRouteListByUserSeq(int seq);
 
 }

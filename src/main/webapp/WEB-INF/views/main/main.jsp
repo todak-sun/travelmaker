@@ -26,6 +26,8 @@
     <section class="sec-story"></section>
     <section></section>
 </div>
+
+
 <%@include file="../common/footer.jsp"%>
 <%@include file="../common/foot-js.jsp" %>
 </body>

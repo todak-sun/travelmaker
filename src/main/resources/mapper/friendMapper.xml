@@ -2,12 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="friendSQL">
-	<delete id="abnormalDelete">
-		DELETE FROM friends WHERE is_normal = 1
-	</delete>
 	<select id="getList" parameterType="java.util.Map"
 		resultType="friend">
-		<![CDATA[SELECT * FROM (SELECT rownum rn, tt.* FROM (SELECT fno, seq, id, title, is_domestic, to_char(dateStart, 'YYYY-MM-DD') AS dateStart, to_char(dateEnd, 'YYYY-MM-DD') AS dateEnd, is_finish, kakao_chat, to_char(date_of_issue, 'YYYY-MM-DD') AS date_of_issue, is_normal from friends order by fno desc) tt) WHERE rn BETWEEN #{startNum} AND #{endNum}]]>
+		<![CDATA[SELECT * FROM (SELECT rownum rn, tt.* FROM (SELECT fno, seq, id, title, is_domestic, to_char(dateStart, 'YYYY-MM-DD') AS dateStart, to_char(dateEnd, 'YYYY-MM-DD') AS dateEnd, is_finish, kakao_chat, to_char(date_of_issue, 'YYYY-MM-DD') AS date_of_issue from friends order by fno desc) tt) WHERE rn BETWEEN #{startNum} AND #{endNum}]]>
 	</select>
 	<select id="getNickName" parameterType="int" resultType="String">
 		SELECT nickname FROM users WHERE seq = #{seq}
@@ -23,16 +20,13 @@
 	<insert id="setWrite" parameterType="friend">
 		INSERT INTO friends
 		values(seq_fno.nextval, #{seq}, #{id}, #{title}, #{is_domestic},
-		#{dateStart}, #{dateEnd}, 0, 'sdfsdf', sysdate, 1)
+		#{dateStart}, #{dateEnd}, 0, 'sdfsdf', sysdate)
 	</insert>
 	<select id="getSelectFno" parameterType="int" resultType="int">
 		SELECT
 		* FROM (SELECT fno FROM friends WHERE seq = #{seq} order by fno desc)
 		where rownum = 1
 	</select>
-	<update id="normalUpdate" parameterType="int">
-		UPDATE friends SET is_normal = 0 WHERE fno = #{fno}
-	</update>
 	<insert id="setRouteWrite" parameterType="friendRoute">
 		INSERT INTO
 		friends_route values(#{fno}, seq_fcno.nextval, #{dateStart},
@@ -51,15 +45,9 @@
 		SELECT fno,
 		seq, id, title, is_domestic, to_char(dateStart, 'YYYY-MM-DD') as
 		dateStart, to_char(dateEnd, 'YYYY-MM-DD') as dateEnd, is_finish,
-		kakao_chat, to_char(date_of_issue, 'YYYY-MM-DD') as date_of_issue, is_normal
+		kakao_chat, to_char(date_of_issue, 'YYYY-MM-DD') as date_of_issue
 		FROM
 		friends WHERE fno = #{fno}
-	</select>
-	<select id="getRouteView" parameterType="int"
-		resultType="friendRoute">
-		SELECT fno, fcno, to_char(dateStart, 'YYYY-MM-DD') as
-		dateStart, to_char(dateEnd, 'YYYY-MM-DD') as dateEnd, content, fcnt,
-		is_finish, lat, lng, city FROM friends_route WHERE fno = #{fno}
 	</select>
 
 	<select id="getFriendRequestDTO" parameterType="int"
@@ -75,6 +63,12 @@
 	<select id="getFriendDTO" parameterType="int"
 		resultType="friend">
 		SELECT * FROM friends where fno=#{fno}
+	</select>
+	<select id="getRouteView" parameterType="int"
+		resultType="friendRoute">
+		SELECT fno, fcno, to_char(dateStart, 'YYYY-MM-DD') as
+		dateStart, to_char(dateEnd, 'YYYY-MM-DD') as dateEnd, content, fcnt,
+		is_finish, lat, lng, city FROM friends_route WHERE fno = #{fno}
 	</select>
 	<select id="getRequestView" parameterType="int"
 		resultType="friendRequest">
@@ -99,30 +93,5 @@
 	</update>
 	<update id="requestReject" parameterType="int">
 		UPDATE friend_request SET is_permit = 2 WHERE fccno = #{fccno}
-	</update>
-	
-	<delete id="delete" parameterType="int">
-		DELETE FROM friends WHERE fno = #{fno}
-	</delete>
-	<select id="routeSelect" parameterType="int" resultType="friendRoute">
-		SELECT fcno FROM friends_route WHERE fno = #{fno}
-	</select>
-	<delete id="routeDelete" parameterType="int">
-		DELETE FROM friends_route WHERE fno = #{fno}
-	</delete>
-	<delete id="requestDelete" parameterType="int">
-		DELETE FROM friend_request WHERE fcno = #{fcno}
-	</delete>
-	
-	<update id="setModify" parameterType="friend">
-		UPDATE friends SET title = #{title}, datestart = #{dateStart}, dateend = #{dateEnd}, date_of_issue = sysdate WHERE fno = #{fno}
-	</update>
-	
-	<select id="getRouteModify" parameterType="int" resultType="friendRoute">
-		SELECT * FROM friends_route WHERE fno = #{fno}
-	</select>
-	
-	<update id="setRouteModify" parameterType="friendRoute">
-		UPDATE friends_route SET dateStart = #{dateStart}, dateEnd = #{dateEnd}, content = #{content}, lat = #{lat}, lng = #{lng}, city = #{city} WHERE fcno = #{fcno}
 	</update>
 </mapper>

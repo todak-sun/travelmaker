@@ -1,7 +1,6 @@
 package com.travelmaker.comment.dao;
 
 import com.travelmaker.comment.domain.CommentDTO;
-import com.travelmaker.comment.domain.CommentSearchFilter;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -9,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository(value = "commentDAO")
-public class CommentDAOMybatis implements CommentDAO {
+public class CommentDAOMybatis implements CommentDAO{
 
     @Autowired
     SqlSession sqlSession;
@@ -25,12 +24,6 @@ public class CommentDAOMybatis implements CommentDAO {
         List<CommentDTO> commentDTOList = sqlSession.selectList("commentSQL.readAll", bno);
         return commentDTOList;
     }
-
-    @Override
-    public List<CommentDTO> readAll(CommentSearchFilter commentSearchFilter) {
-        return sqlSession.selectList("commentSQL.readAllBySearchFilter", commentSearchFilter);
-    }
-
 
     @Override
     public CommentDTO create(CommentDTO commentDTO) {

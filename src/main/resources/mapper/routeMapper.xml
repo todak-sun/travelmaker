@@ -55,12 +55,6 @@
         WHERE bno = #{bno}
     </select>
 
-    <select id="getRouteByBno" parameterType="int" resultType="route">
-        SELECT *
-        FROM route
-        WHERE bno = #{bno}
-    </select>
-
     <select id="getCurrRnoSeq" resultType="Integer">
         SELECT rno.CURRVAL
         FROM DUAL
@@ -77,13 +71,13 @@
         VALUES (crno.NEXTVAL, #{rno}, #{content}, #{lat}, #{lng}, #{location},
                 TO_DATE('${dateStart}', 'YYYY-MM-DD'), TO_DATE('${dateEnd}', 'YYYY-MM-DD'), #{score}, 0)
     </insert>
-
+    
     <update id="saveOrder" parameterType="Map">
         UPDATE route_content
         SET cnt_order=#{cntOrder}
         WHERE crno = #{crno}
     </update>
-
+    
     <update id="patchCourse" parameterType="routeContent">
         UPDATE route_content
         SET content=#{content},
@@ -96,7 +90,7 @@
         WHERE rno = #{rno}
           AND crno = #{crno}
     </update>
-
+    
     <delete id="deleteCourse" parameterType="Integer">
    	    begin
 	        DELETE route_image WHERE crno = #{crno};

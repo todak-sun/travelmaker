@@ -1,12 +1,11 @@
 <%@ page language="java" contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <%@include file="../common/head-meta.jsp" %>
-    <%@include file="../common/head-css.jsp" %>
+    <%@include
+            file="../common/head-css.jsp" %>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/story/story.css"/>
     <title>스토리페이지</title>
   </head>

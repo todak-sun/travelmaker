@@ -37,24 +37,29 @@
 	</select>
 
 	<update id="userModify" parameterType="user">
+
 		update users set realname
 		= #{realname}
 		, nickname = #{nickname}
 		, email1 = #{email1}
-		, email2 = #{email2}
+		, email2 =
+		#{email2}
 		, password = #{password}
 		, gender = #{gender}
-		, phone1 = #{phone1}
+		, phone1 =
+		#{phone1}
 		, phone2 = #{phone2}
 		, phone3 = #{phone3}
-		, postcode = #{postcode}
+		, postcode =
+		#{postcode}
 		, addr1 = #{addr1}
 		, addr2 = #{addr2}
-		, contentProfile = #{contentProfile}
-		, IMGPROFILE = #{imgProfile}
+		, contentProfile =
+		#{contentProfile}
 		, account = #{account}
 		, dateRegist=sysdate where
 		id=#{id} and registerMethod =#{registerMethod}
+
 	</update>
 
 	<update id="userWithdrawal" parameterType="user">
@@ -68,20 +73,6 @@
 		*
 		from users where nickname = #{nickname}
 	</select>
-
-	<select id="userIdFind" parameterType="java.util.Map" resultType="user">
-		select * from users where realname = #{realname} and email1 = #{email1} and email2 = #{email2} and registerMethod='travelMaker'
-	</select>
-
-	<!--비밀 번호 찾기  -->
-	<select id="userPwFind" parameterType="java.util.Map" resultType="user">
-		select * from users where id = #{id} and email1 = #{email1} and email2 = #{email2} and registerMethod='travelMaker'
-	</select>
-
-	<update id = "setPassword" parameterType="user">
-		update users set password = #{password} where id = #{id} and registerMethod='travelMaker'
-	</update>
-	<!--비밀 번호 찾기  -->
 
 
 </mapper>

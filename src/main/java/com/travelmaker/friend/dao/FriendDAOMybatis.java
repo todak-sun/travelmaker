@@ -20,7 +20,6 @@ public class FriendDAOMybatis implements FriendDAO {
 	
 	@Override
 	public List<FriendDTO> getList(Map<String, Integer> map) {
-		sqlSession.delete("friendSQL.abnormalDelete");
 		List<FriendDTO> list = sqlSession.selectList("friendSQL.getList", map);
 		
 		for(FriendDTO friendDTO : list) {
@@ -39,9 +38,6 @@ public class FriendDAOMybatis implements FriendDAO {
 
 	@Override
 	public void setRouteWrite(FriendRouteDTO friendRouteDTO) {
-		if(friendRouteDTO.getDivision().equals("check")) {
-			sqlSession.update("friendSQL.normalUpdate", friendRouteDTO.getFno());
-		}
 		sqlSession.insert("friendSQL.setRouteWrite", friendRouteDTO);
 	}
 
@@ -58,15 +54,21 @@ public class FriendDAOMybatis implements FriendDAO {
 
 	@Override
 	public FriendDTO getView(String fno) {
-		FriendDTO friendDTO = sqlSession.selectOne("friendSQL.getView", Integer.parseInt(fno));
-		friendDTO.setFriendRouteDTOs(sqlSession.selectList("friendSQL.getRouteView", Integer.parseInt(fno)));
-		
-		return friendDTO;
+		return sqlSession.selectOne("friendSQL.getView", Integer.parseInt(fno));
 	}
 
 	@Override
-	public List<FriendRequestDTO> getRequestView(String fcno) {
-		return sqlSession.selectList("friendSQL.getRequestView", Integer.parseInt(fcno));
+	public List<FriendRouteDTO> getRouteView(String fno) {
+		List<FriendRouteDTO> list = sqlSession.selectList("friendSQL.getRouteView", Integer.parseInt(fno));
+		
+		for(FriendRouteDTO friendRouteDTO : list) {
+			friendRouteDTO.setFriendRequestDTOs(sqlSession.selectList("friendSQL.getRequestView", friendRouteDTO.getFcno()));
+			
+			for(FriendRequestDTO friendRequestDTO : friendRouteDTO.getFriendRequestDTOs()) {
+				friendRequestDTO.setNickname(sqlSession.selectOne("friendSQL.getRequestNickname", friendRequestDTO.getSeq()));
+			}
+		}
+		return list;
 	}
 
 	@Override
@@ -95,42 +97,5 @@ public class FriendDAOMybatis implements FriendDAO {
 	@Override
 	public void requestReject(String fccno) {
 		sqlSession.update("friendSQL.requestReject", Integer.parseInt(fccno));
-	}
-
-	@Override
-	public void delete(Map<String, String> map) {
-		sqlSession.delete("friendSQL.delete", Integer.parseInt(map.get("dataseq")));
-		List<FriendRouteDTO> list = sqlSession.selectList("friendSQL.routeSelect", Integer.parseInt(map.get("dataseq")));
-		sqlSession.delete("friendSQL.routeDelete", Integer.parseInt(map.get("dataseq")));
-		
-		for(FriendRouteDTO friendRouteDTO : list) {
-			sqlSession.delete("friendSQL.requestDelete", friendRouteDTO.getFcno());
-		}
-		sqlSession.delete("alarmSQL.delete", map);
-	}
-
-	@Override
-	public FriendDTO modify(String fno) {
-		return sqlSession.selectOne("friendSQL.getFriendDTO", Integer.parseInt(fno));
-	}
-
-	@Override
-	public void setModify(FriendDTO friendDTO) {
-		sqlSession.update("friendSQL.setModify", friendDTO);
-	}
-
-	@Override
-	public List<FriendRouteDTO> getRouteModify(String fno) {
-		return sqlSession.selectList("friendSQL.getRouteModify", Integer.parseInt(fno));
-	}
-
-	@Override
-	public void setRouteModify(FriendRouteDTO friendRouteDTO) {
-		sqlSession.update("friendSQL.setRouteModify", friendRouteDTO);
-	}
-
-	@Override
-	public void updateDivision(FriendRouteDTO friendRouteDTO) {
-		sqlSession.update("friendSQL.normalUpdate", friendRouteDTO.getFno());
 	}
 }

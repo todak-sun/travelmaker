@@ -20,8 +20,6 @@ import com.travelmaker.alarm.domain.AlarmDTO;
 import com.travelmaker.alarm.service.AlarmServiceImpl;
 import com.travelmaker.friend.domain.FriendDTO;
 import com.travelmaker.friend.service.FriendServiceImpl;
-import com.travelmaker.purchase.domain.PurchaseDTO;
-import com.travelmaker.purchase.service.PurchaseImpleService;
 import com.travelmaker.user.domain.UserDTO;
 import com.travelmaker.user.service.UserServiceImpl;
 
@@ -38,9 +36,6 @@ public class WebsocketHandler extends TextWebSocketHandler {
 
 	@Autowired
 	private AlarmServiceImpl alarmServiceImpl;
-	
-	@Autowired
-	private PurchaseImpleService purchaseImpleService;
 	
 	private JsonParser parser = new JsonParser();
 
@@ -100,6 +95,7 @@ public class WebsocketHandler extends TextWebSocketHandler {
 		// 동행신청 알람
 		if (header.compareTo("friend") == 0) {
 			int fno = data.getAsJsonObject().get("fno").getAsInt();
+			System.out.println("fno : "+fno);
 			sendUserId = data.getAsJsonObject().get("username").getAsString();
 			/* 큰글 */
 			FriendDTO friendDTO = friendServiceImpl.getFriendDTO(fno);
@@ -108,25 +104,6 @@ public class WebsocketHandler extends TextWebSocketHandler {
 			targetId = userDTO.getId()+"%"+userDTO.getRegisterMethod();
 			dataseq = fno;
 			responseMessage = sendUserId.split("%")[0]+"동행신청을 했습니다";
-		}
-		if(header.compareTo("pur")==0) {
-			System.out.println("pur");
-			int bno = data.getAsJsonObject().get("bno").getAsInt();
-			PurchaseDTO purchaseDTO = purchaseImpleService.getPurchaseDTO(String.valueOf(bno));
-			targetId = purchaseDTO.getUsername();
-			dataseq = bno;
-			sendUserId = data.getAsJsonObject().get("username").getAsString();
-			
-			System.out.println("DTO : "+purchaseDTO.toString());
-			
-			if(purchaseDTO.getCon()==1) {
-				System.out.println("A");
-				header = "purA";
-			}else if(purchaseDTO.getCon()==2) {
-				System.out.println("B");
-				header = "purB";
-			}
-			responseMessage = sendUserId.split("%")[0]+"대리구매 요청을 했습니다";
 		}
 		
 		//알람 생성
@@ -145,7 +122,7 @@ public class WebsocketHandler extends TextWebSocketHandler {
 		ResponsePacket responsePacket = new ResponsePacket();
 		responsePacket.setHeader(header);
 		responsePacket.setData(responseMessage);
-		responsePacket.setNo(dataseq); //대행 : fno //대리구매 : bno
+		responsePacket.setNo(dataseq); //대행 : fno //댓글 : bno
 		
 		while (mapIter.hasNext()) {
 			WebSocketSession key = mapIter.next();

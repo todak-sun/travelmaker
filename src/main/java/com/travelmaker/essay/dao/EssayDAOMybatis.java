@@ -15,16 +15,9 @@ public class EssayDAOMybatis implements EssayDAO {
     private SqlSession sqlSession;
 
     @Override
-    public EssayDTO readOneByBno(int bno) {
-        return sqlSession.selectOne("essaySQL.readOneByBno", bno);
-    }
-
-    @Override
     public EssayDTO readOne(int rno) {
         return sqlSession.selectOne("essaySQL.readOne", rno);
     }
-
-
 
     @Override
     public List<EssayDTO> readAll(EssaySearchFilter essaySearchFilter) {
@@ -49,8 +42,8 @@ public class EssayDAOMybatis implements EssayDAO {
     }
 
     @Override
-    public List<EssayDTO> readAll(int seq) {
-        return sqlSession.selectList("essaySQL.getAllByUserSeq", seq);
+    public List<EssayDTO> readAll() {
+        return sqlSession.selectList("essaySQL.getAll");
     }
 
 }

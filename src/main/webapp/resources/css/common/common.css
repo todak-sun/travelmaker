@@ -142,28 +142,6 @@ header .header-group {
 
 /* 네비게이션 */
 
-div[class$='feed'] {
-    display: none;
-}
-
-.v ~ div[class$='feed'] {
-    position: absolute;
-    /*left: 50%;*/
-    bottom: -1.5rem;
-    /*transform: translateX(-50%);*/
-    font-size: 0.9rem;
-}
-
-.v-pass ~ .v-feed {
-    display: block;
-    color: #00c1da;
-}
-
-.v-fail ~ .iv-feed {
-    display: block;
-    color: red;
-}
-
 /* 모달 */
 .tmodal-back {
     position: absolute;
@@ -276,23 +254,6 @@ div[class$='feed'] {
     outline: none;
     text-align: center;
     color: #ffffff;
-}
-
-.form-login .wrap-link {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding-top: 1rem;
-}
-
-.form-login .wrap-link a {
-    color: black;
-    text-decoration: none;
-    margin: 0 0.5rem;
-}
-
-.form-login .wrap-link a:hover {
-    color: #00c1da;
 }
 
 .form-login .wrap-buttons {
@@ -456,6 +417,28 @@ div[class$='feed'] {
     outline: none;
 }
 
+div[class$='feed'] {
+    display: none;
+}
+
+.v ~ div[class$='feed'] {
+    position: absolute;
+    /*left: 50%;*/
+    bottom: -1.5rem;
+    /*transform: translateX(-50%);*/
+    font-size: 0.9rem;
+}
+
+.v-pass ~ .v-feed {
+    display: block;
+    color: #00c1da;
+}
+
+.v-fail ~ .iv-feed {
+    display: block;
+    color: red;
+}
+
 .input-email2-wrap::before {
     content: '@';
     color: #ffffff;
@@ -544,6 +527,7 @@ div[class$='feed'] {
     border: 1px solid #00cda8;
 }
 
+
 .btn-travel {
     display: block;
     font-size: 1.25rem;
@@ -557,162 +541,6 @@ div[class$='feed'] {
 }
 
 /* 회원가입 폼 */
-
-/* 아이디 찾기 폼 */
-.tmodal-body .id-search {
-    display: grid;
-    grid-template-columns: 70px 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 300px;
-    max-width: 550px;
-    row-gap: 2rem;
-}
-
-.tmodal-body .id-search label {
-    grid-column: 1/2;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.tmodal-body .id-search .input-wrap {
-    box-sizing: border-box;
-    grid-column: 2/3;
-    background-color: #c8c8c8;
-    padding: 1rem;
-    border-radius: 1rem;
-    margin-left: 0.5rem;
-    position: relative;
-}
-
-.tmodal-body .id-search .input-wrap input {
-    box-sizing: border-box;
-    width: 100%;
-    font-size: 1rem;
-    outline: none;
-    border: none;
-    border-bottom: 1px solid #ffffff;
-    background: none;
-    color: #ffffff;
-    text-align: center;
-}
-
-.tmodal-body .id-search .input-email2-wrap {
-    grid-column: 3/5;
-    display: flex;
-}
-
-.tmodal-body .id-search .input-wrap-4 {
-    grid-column: 2/5;
-    display: flex;
-}
-
-.tmodal-body .id-search .input-wrap-4 .input-wrap {
-    width: 80%;
-    margin-right: 1rem;
-}
-
-.tmodal-body .id-search .input-wrap-4 button {
-    width: 20%;
-    font-size: 0.9rem;
-    border-radius: 0.5rem;
-    border: 2px solid #00c1da;
-    background-color: #ffffff;
-    color: #00c1da;
-}
-
-.tmodal-body .id-search .input-wrap-4 button:hover {
-    background-color: #00c1da;
-    color: #ffffff;
-}
-
-.tmodal-body .id-search .message-box {
-    grid-column: 1/5;
-    grid-row: 3/4;
-    border: 2px solid gray;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-/* 아이디 찾기 */
-
-/* 비밀번호 찾기 */
-.tmodal-body .pw-search {
-    display: grid;
-    grid-template-columns: 1fr 130px 270px 1fr;
-    grid-template-rows: 1fr 1fr 300px;
-    max-width: 550px;
-    row-gap: 2rem;
-}
-
-.tmodal-body .pw-search label {
-    grid-column: 1/2;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.tmodal-body .pw-search .input-wrap {
-    box-sizing: border-box;
-    background-color: #c8c8c8;
-    padding: 1rem;
-    border-radius: 1rem;
-    margin-left: 0.5rem;
-    position: relative;
-}
-
-.tmodal-body .pw-search .input-wrap.id-wrap {
-    grid-column: 2/4;
-}
-
-.tmodal-body .pw-search .input-wrap input {
-    box-sizing: border-box;
-    width: 100%;
-    font-size: 1rem;
-    outline: none;
-    border: none;
-    border-bottom: 1px solid #ffffff;
-    background: none;
-    color: #ffffff;
-    text-align: center;
-}
-
-.tmodal-body .pw-search .input-email2-wrap {
-    grid-column: 3/4;
-    display: flex;
-}
-
-.tmodal-body .pw-search .button-wrap {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.tmodal-body .pw-search .button-wrap button {
-    font-size: 0.9rem;
-    border-radius: 0.5rem;
-    border: 2px solid #00c1da;
-    background-color: #ffffff;
-    color: #00c1da;
-    padding: 1rem;
-}
-
-.tmodal-body .pw-search .button-wrap button:hover {
-    background-color: #00c1da;
-    color: #ffffff;
-}
-
-.tmodal-body .pw-search .message-box {
-    grid-column: 1/5;
-    grid-row: 3/4;
-    border: 2px solid gray;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* 비닐번호 찾기 */
 
 /* 리모컨 */
 .remote-controller {
@@ -746,11 +574,10 @@ div[class$='feed'] {
 }
 
 .remote-controller.on {
-    /*animation-name: message;*/
-    /*animation-iteration-count: infinite;*/
-    /*animation-duration: 500ms;*/
+    animation-name: message;
+    animation-iteration-count: infinite;
+    animation-duration: 500ms;
     opacity: 1;
-    background: linear-gradient(130deg, red, orange);
 }
 
 .remote-controller.on::before {
@@ -758,109 +585,10 @@ div[class$='feed'] {
     background-image: url('/resources/img/rc-bell.svg');
 }
 
-.remote-controller .message-box {
-    position: absolute;
-    width: 180px;
-    box-sizing: border-box;
-    padding: 0.25rem;
-    top: -3.5rem;
-    transform: translateX(50%);
-    right: 50%;
-    display: none;
-}
-
-.remote-controller.onfocus .message-box {
-    display: block;
-    animation-name: spread;
-    animation-iteration-count: 1;
-    animation-duration: 2s;
-}
-
-.remote-controller .message-box .message-group {
-    box-sizing: border-box;
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-}
-
-.remote-controller .message-box .message-group li {
-    box-sizing: border-box;
-    padding: 0.1rem;
-    width: 100%;
-}
-
-.remote-controller .message-box .message-group .message-item {
-    position: relative;
-    width: 100%;
-    height: 4.5rem;
-    border: 2px solid gray;
-    background-color: #ffffff;
-    box-sizing: border-box;
-    border-radius: 1rem;
-    padding: 0.5rem;
-    cursor: initial;
-}
-
-.remote-controller .message-box .message-group .message-item:hover {
-    border: 2px solid #00c1da;
-}
-
-.remote-controller .message-box .message-group .message-item .close {
-    position: absolute;
-    right: 0.5rem;
-    top: 0.5rem;
-    cursor: pointer;
-}
-
-.remote-controller .message-box .message-group .message-item .close:hover {
-    color: #ff7504;
-}
-
-.remote-controller .message-box .message-group .message-item p {
-    font-size: 0.9rem;
-    padding-right: 0.2rem;
-    box-sizing: border-box;
-    margin-bottom: 0.5rem;
-}
-
-.remote-controller .message-box .message-group .message-item .button-wrap {
-    box-sizing: border-box;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-}
-
-.remote-controller .message-box .message-group .message-item .button-wrap a {
-    box-sizing: border-box;
-    display: block;
-    padding: 0.2rem;
-    border-radius: 0.3rem;
-    font-size: 0.8rem;
-    text-decoration: none;
-    color: #ffffff;
-    background-color: #353535;
-    border: 1px solid #353535;
-}
-
-.remote-controller .message-box .message-group .message-item .button-wrap a:hover {
-    color: #353535;
-    background-color: #ffffff;
-}
-
-.remote-controller .message-box .message-group .message-item .button-wrap .time {
-    font-size: 0.7rem;
-}
-
-.remote-controller .message-box .message-group .message-item .button-wrap .time::after {
-    content: '전';
-    font-size: 0.7rem;
-}
-
 .remote-controller .remote-controller-group {
     position: absolute;
     top: -2.5rem;
-    transform: translateX(50%);
-    right: 50%;
+    right: 0;
     display: none;
 }
 
@@ -869,6 +597,7 @@ div[class$='feed'] {
     animation-name: spread;
     animation-iteration-count: 1;
     animation-duration: 2s;
+    animation-play-state: running;
 }
 
 .remote-controller-group li {
@@ -882,14 +611,7 @@ div[class$='feed'] {
     align-items: center;
 }
 
-.remote-controller-group li.onfocus {
-    box-sizing: border-box;
-    background: linear-gradient(130deg, red, orange);
-}
-
 .remote-controller-group a {
-    width: 100%;
-    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -929,145 +651,19 @@ div[class$='feed'] {
     }
 }
 
-/*@keyframes message {*/
-/*    0% {*/
-/*        right: 5.2%;*/
-/*        opacity: 0.8;*/
-/*    }*/
-/*    50% {*/
-/*        right: 4.8%;*/
-/*    }*/
-/*    100% {*/
-/*        right: 5%;*/
-/*    }*/
-/*}*/
-/* 리모컨 */
-
-/* 로딩 */
-.lds-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-color: #000000;
-    z-index: 2000;
-    top: 0;
-    left: 0;
-    opacity: 0.5;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.lds-back.hidden {
-    display: none;
-}
-
-.lds-roller {
-    display: inline-block;
-    position: relative;
-    width: 80px;
-    height: 80px;
-}
-
-.lds-roller div {
-    animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-    transform-origin: 40px 40px;
-}
-
-.lds-roller div:after {
-    content: ' ';
-    display: block;
-    position: absolute;
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #fff;
-    margin: -4px 0 0 -4px;
-}
-
-.lds-roller div:nth-child(1) {
-    animation-delay: -0.036s;
-}
-
-.lds-roller div:nth-child(1):after {
-    top: 63px;
-    left: 63px;
-}
-
-.lds-roller div:nth-child(2) {
-    animation-delay: -0.072s;
-}
-
-.lds-roller div:nth-child(2):after {
-    top: 68px;
-    left: 56px;
-}
-
-.lds-roller div:nth-child(3) {
-    animation-delay: -0.108s;
-}
-
-.lds-roller div:nth-child(3):after {
-    top: 71px;
-    left: 48px;
-}
-
-.lds-roller div:nth-child(4) {
-    animation-delay: -0.144s;
-}
-
-.lds-roller div:nth-child(4):after {
-    top: 72px;
-    left: 40px;
-}
-
-.lds-roller div:nth-child(5) {
-    animation-delay: -0.18s;
-}
-
-.lds-roller div:nth-child(5):after {
-    top: 71px;
-    left: 32px;
-}
-
-.lds-roller div:nth-child(6) {
-    animation-delay: -0.216s;
-}
-
-.lds-roller div:nth-child(6):after {
-    top: 68px;
-    left: 24px;
-}
-
-.lds-roller div:nth-child(7) {
-    animation-delay: -0.252s;
-}
-
-.lds-roller div:nth-child(7):after {
-    top: 63px;
-    left: 17px;
-}
-
-.lds-roller div:nth-child(8) {
-    animation-delay: -0.288s;
-}
-
-.lds-roller div:nth-child(8):after {
-    top: 56px;
-    left: 12px;
-}
-
-@keyframes lds-roller {
+@keyframes message {
     0% {
-        transform: rotate(0deg);
+        right: 5.2%;
+        opacity: 0.8;
+    }
+    50% {
+        right: 4.8%;
     }
     100% {
-        transform: rotate(360deg);
+        right: 5%;
     }
 }
-
-/* 로딩 */
-
+/* 리모컨 */
 
 div.hidden {
     display: none;
@@ -1075,5 +671,3 @@ div.hidden {
     top: -9999px;
     left: -9999px;
 }
-
-

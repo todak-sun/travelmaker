@@ -1,7 +1,6 @@
 package com.travelmaker.comment.dao;
 
 import com.travelmaker.comment.domain.CommentDTO;
-import com.travelmaker.comment.domain.CommentSearchFilter;
 
 import java.util.List;
 
@@ -11,8 +10,6 @@ public interface CommentDAO {
     CommentDTO createRe(CommentDTO commentDTO);
 
     List<CommentDTO> readAll(int bno);
-
-    List<CommentDTO> readAll(CommentSearchFilter commentSearchFilter);
 
     CommentDTO update(CommentDTO commentDTO);
 

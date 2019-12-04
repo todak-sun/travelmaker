@@ -355,7 +355,6 @@ html::before {
   justify-content: center;
   align-items: center;
 }
-/* 첫번째 에디터 */
 
 .image-group li .delete {
   position: absolute;
@@ -715,7 +714,6 @@ html::before {
   font-size: 0.7rem;
   color: #707070;
 }
-/* 네비게이션 존 */
 
 .result .btn-add-map {
   position: absolute;

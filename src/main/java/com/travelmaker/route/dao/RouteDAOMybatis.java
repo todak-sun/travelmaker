@@ -1,16 +1,17 @@
 package com.travelmaker.route.dao;
 
-import com.travelmaker.route.domain.RouteContentDTO;
-import com.travelmaker.route.domain.RouteDTO;
-import com.travelmaker.route.domain.RouteImageDTO;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import com.travelmaker.route.domain.RouteContentDTO;
+import com.travelmaker.route.domain.RouteDTO;
+import com.travelmaker.route.domain.RouteImageDTO;
 
 @Repository("routeDAO")
 @Transactional
@@ -59,12 +60,7 @@ public class RouteDAOMybatis implements RouteDAO {
         return sqlSession.selectOne("routeSQL.getRoute", rno);
     }
 
-	@Override
-	public RouteDTO getRouteByBno(int bno) {
-		return sqlSession.selectOne("routeSQL.getRouteByBno", bno);
-	}
-
-	@Override
+    @Override
     public List<RouteContentDTO> getRouteContentStory(int rno) {
 
         List<RouteContentDTO> list = sqlSession.selectList("routeSQL.getRouteContentStory", rno);

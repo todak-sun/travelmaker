@@ -9,7 +9,7 @@ const [setUserData, getUserData] = useState({
 });
 
 /* 카카오 로그인 관련 */
-// 카카오 로그인 시도시 아래의 함수를 콜백 호출
+//카카오 로그인 시도시 아래의 함수를 콜백 호출
 function kakaoLogin() {
   Kakao.Auth.createLoginButton({
     container: '#kakao-login-btn',
@@ -18,7 +18,7 @@ function kakaoLogin() {
   });
 }
 
-// 카카오 API에 유저정보 요청
+//카카오 API에 유저정보 요청
 function kakaoApiRequest(authObj) {
   // console.log(authObj);
   Kakao.API.request({
@@ -27,7 +27,7 @@ function kakaoApiRequest(authObj) {
   });
 }
 
-// 카카오 유저정보를 가지고 옴.
+//카카오 유저정보를 가지고 옴.
 function getKakaoUserInfo(res) {
   setUserData({
     id: res.kaccount_email,
@@ -99,11 +99,11 @@ function setRegisterByGoogle(ret) {
     emitRegisterEvent();
     setRegisterForm(id, name, 'google');
   } else if (ret !== 'null') {
-    doLogin(id, ret, registerMethod);
+    doLogin(id, ret);
   }
 }
 
-// registerMethod에 요청
+//registerMethod에 요청
 function ajaxRegisterMethod(data) {
   return $.ajax({
     type: 'post',
@@ -115,7 +115,7 @@ function ajaxRegisterMethod(data) {
 }
 
 function emitRegisterEvent() {
-  const Link = getEl('.btn-register');
+  const Link = getEl('#btn-regist');
   const event = document.createEvent('MouseEvents');
   event.initEvent('click', false, true);
   Link.dispatchEvent(event);

@@ -4,7 +4,7 @@
 <head>
     <%@include file="../common/head-meta.jsp" %>
     <%@include file="../common/head-css.jsp" %>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/friend/write.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/friend/write2.css">
     <title>동행 게시글 작성</title>
 </head>
 <body>

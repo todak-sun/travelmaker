@@ -1,13 +1,10 @@
 package com.travelmaker.comment.ifs;
 
-import com.travelmaker.comment.domain.CommentSearchFilter;
 import com.travelmaker.model.network.Header;
 
 import java.util.List;
 
 public interface CommentApiInterface<Request, Response> {
-
-    public Header<List<Response>> readAll(CommentSearchFilter commentSearchFilter);
 
     public Header<List<Response>> readAll(int bno);
 

@@ -3,50 +3,20 @@
 
 <mapper namespace="commentSQL">
     <select id="readOne" parameterType="int" resultType="comment">
-        SELECT *
-        FROM CMT
-        WHERE CNO = #{cno}
+        SELECT * FROM CMT WHERE CNO = #{cno}
     </select>
 
     <select id="readAll" parameterType="int" resultType="comment">
-        SELECT CNO,
-               BNO,
-               CONTENT,
-               LIKES,
-               UNLIKES,
-               SEQ,
-               DATE_WRITE,
-               PCNO
-        FROM CMT
-        WHERE BNO = #{bno}
-        ORDER BY PCNO, CNO
+        SELECT CNO, BNO, CONTENT, LIKES, UNLIKES, SEQ, DATE_WRITE, PCNO FROM CMT WHERE BNO = #{bno} ORDER BY PCNO, CNO
     </select>
 
-    <select id="readAllBySearchFilter" parameterType="commentSearchFilter" resultType="comment">
-        SELECT CNO,
-        BNO,
-        CONTENT,
-        LIKES,
-        UNLIKES,
-        SEQ,
-        to_char(DATE_WRITE, 'yyyy-mm-dd') as DATE_WRITE,
-        PCNO
-        FROM CMT
-        <if test="seq != 0">
-            WHERE SEQ = #{seq}
-        </if>
-        <if test="order != null">
-            ORDER BY ${order} DESC
-        </if>
-    </select>
-
-    <insert id="create" parameterType="comment">
-        <selectKey keyProperty="cno" resultType="int" order="BEFORE">
-            SELECT cno.nextval FROM dual
-        </selectKey>
+   <insert id="create" parameterType="comment">
+       <selectKey keyProperty="cno" resultType="int" order="BEFORE">
+           SELECT cno.nextval FROM dual
+       </selectKey>
         INSERT INTO CMT(CNO, BNO, content, LIKES, UNLIKES, SEQ, DATE_WRITE , pcno)
         VALUES(#{cno}, #{bno}, #{content}, 0, 0, #{seq}, sysdate, #{cno})
-    </insert>
+   </insert>
 
     <insert id="createRe" parameterType="comment">
         <selectKey keyProperty="cno" resultType="int" order="BEFORE">
@@ -57,24 +27,16 @@
     </insert>
 
     <update id="update" parameterType="comment">
-        UPDATE CMT
-        SET CONTENT    = #{content},
-            LIKES      = #{likes},
-            UNLIKES    = #{unlikes},
-            DATE_WRITE = sysdate
+        UPDATE CMT SET CONTENT = #{content}, LIKES = #{likes}, UNLIKES = #{unlikes}, DATE_WRITE = sysdate
         WHERE CNO = #{cno}
     </update>
 
     <delete id="delete" parameterType="Integer">
-        DELETE
-        FROM CMT
-        WHERE CNO = #{cno}
+        DELETE FROM CMT WHERE CNO = #{cno}
     </delete>
 
     <delete id="deleteAll" parameterType="Integer">
-        DELETE
-        FROM CMT
-        WHERE BNO = #{bno}
+        DELETE FROM CMT WHERE BNO = #{bno}
     </delete>
 
 </mapper>

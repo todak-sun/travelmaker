@@ -7,17 +7,38 @@ $(function () {
         getElList,
         addAllSameEvent,
         addEvent,
-        getRegisterMethod,
-        showLoading,
-        closeLoading
+        getRegisterMethod
     } = new travelmaker.utils();
     const modal = new travelmaker.modal('#modal');
     const ajax = new travelmaker.ajax();
     const myRegex = new travelmaker.regex();
     const v = new travelmaker.validation();
     const t = new travelmaker.template();
-    const h = new travelmaker.handler();
 
+    // 알람 [ 용주형 여기 정리좀해주세요 ]
+    // const alarmOnBtn = document.querySelector('#alarmOn');
+    // const alarmOffBtn = document.querySelector('#alarmOff');
+
+    // var seq = $('#alarmOff').data('seq');
+    // console.log(seq);
+    //
+    // if (seq > 0) {
+    //   // 로그인 되어있으면 알람 로드
+    //   alarmDataload(seq);
+    // }
+    // if (alarmOnBtn != null) {
+    //   alarmOnBtn.addEventListener('click', alarmBtnHandler);
+    // }
+    //
+    // if (alarmOffBtn != null) {
+    //   alarmOffBtn.addEventListener('click', alarmBtnHandler);
+    // }
+    //
+    // function alarmBtnHandler() {
+    //   $('#alarmDisplay').show();
+    // }
+
+    // 배열형
     //seq의 존재여부로 로그인/비로그인 여부를 가림.
     const seq = getEl('#seq');
 
@@ -42,106 +63,15 @@ $(function () {
         const btnLogin = getEl('#btn-login');
         const btnRegister = getEl('.btn-register');
 
-        const linkIdSearch = getEl('.link-id-search');
-        const linkPasswordSearch = getEl('.link-password-search');
-
-        addEvent(linkIdSearch, 'click', function (e) {
-            e.preventDefault();
-            modal.createCustom(t.idSearch(), function () {
-                const email1 = getEl('#email1');
-                const email2 = getEl('#email2');
-                const realname = getEl('#realname');
-                const btnSearch = getEl('#btn-search');
-                const messageBox = getEl('.message-box');
-
-                addEvent(email1, 'blur', function (e) {
-                    checkValueValidation(e, '입력하세요!')
-                });
-
-                addEvent(email2, 'blur', function (e) {
-                    checkValueValidation(e, '뒷자리도 입력하세요!');
-                });
-
-                addEvent(realname, 'blur', function (e) {
-                    checkValueValidation(e, '가입시 실명을 입력하세요!');
-                });
-
-                addEvent(btnSearch, 'click', function (e) {
-                    if (!v.isValid(email1)) return email1.focus();
-                    if (!v.isValid(email2)) return email2.focus();
-                    if (!v.isValid(realname)) return realname.focus();
-
-                    showLoading();
-                    ajax.checkHasId({realname: realname.value, email1: email1.value, email2: email2.value})
-                        .then(ret => {
-                            messageBox.innerHTML = '';
-                            let $messageBox = $(messageBox);
-                            if (!ret.length) $messageBox.append(`<p>조회된 아이디가 없습니다.</p>`);
-                            else {
-                                $messageBox.append(`<p>총 ${ret.length}개의 아이디가 조회되었습니다.</p>`);
-                                ret.forEach(id => $messageBox.append(`<p>${id}</p>`));
-                            }
-                            closeLoading();
-                        })
-                        .catch(console.error);
-                });
-            })
-        });
-
-        function checkValueValidation(e, message) {
-            const [vFeed, ivFeed] = v.getFeedBox(e.target);
-            if (!e.target.value) return v.setInvalid(e.target, ivFeed, message);
-            v.changeValid(e.target)
-        }
-
-        addEvent(linkPasswordSearch, 'click', function (e) {
-            e.preventDefault();
-            modal.createCustom(t.passwordSearch(), function () {
-                const id = getEl('#id');
-                const email1 = getEl('#email1');
-                const email2 = getEl('#email2');
-                const btnSend = getEl('#btn-send');
-                const messageBox = getEl('.message-box');
-
-                addEvent(id, 'blur', function (e) {
-                    checkValueValidation(e, '아이디를 입력하세요!');
-                });
-
-                addEvent(email1, 'blur', function (e) {
-                    checkValueValidation(e, '입력하세요!');
-                });
-
-                addEvent(email2, 'blur', function (e) {
-                    checkValueValidation(e, '뒷자리도 입력하세요!');
-                });
-
-                addEvent(btnSend, 'click', function (e) {
-                    if (!v.isValid(id)) return id.focus();
-                    if (!v.isValid(email1)) return email1.focus();
-                    if (!v.isValid(email2)) return email2.focus();
-                    showLoading();
-                    ajax.searchIdAndSendEmail({id: id.value, email1: email1.value, email2: email2.value})
-                        .then(ret => {
-                            messageBox.innerHTML = '';
-                            const $messageBox = $(messageBox);
-                            if (ret) $messageBox.append(`<p>가입하신 이메일로 임시 비밀번호를 전송했습니다.</p>`);
-                            else $messageBox.append(`<p>존재하지 않는 아이디 또는 가입시 입력한 이메일이 아닙니다.</p>`);
-                            closeLoading();
-                        })
-                        .catch(console.error);
-                });
-            })
-        });
-
         initApiLogin();
         mid.focus();
         addEvent(mid, 'blur', midBlurHandler);
         addEvent(pwd, 'blur', pwdBlurHandler);
-        addEvent(btnKa, 'click', () => getEl('#kakao-login-btn').click());
-        addEvent(btnNa, 'click', () => getEl('#naverIdLogin_loginButton').click());
-        addEvent(btnGo, 'click', () => getEl('.abcRioButton').click());
+        addEvent(btnKa, 'click', loginKaHandler);
+        addEvent(btnNa, 'click', loginNaHandler);
+        addEvent(btnGo, 'click', loginGoHandler);
         addEvent(btnLogin, 'click', btnLoginHandler);
-        addEvent(btnRegister, 'click', () => modal.create('register', initRegisterModal));
+        addEvent(btnRegister, 'click', btnRegisterHandler);
 
         function midBlurHandler(e) {
             const [vFeed, ivFeed] = v.getFeedBox(this);
@@ -158,10 +88,30 @@ $(function () {
         }
 
         function btnLoginHandler(e) {
-            if (!v.isValid(mid)) return mid.focus();
-            if (!v.isValid(pwd)) return pwd.focus();
+            if (!v.isValid(mid)) {
+                return mid.focus();
+            }
+            if (!v.isValid(pwd)) {
+                return pwd.focus();
+            }
             id.value = mid.value + '===travelMaker';
             document.loginForm.submit();
+        }
+
+        function btnRegisterHandler(e) {
+            modal.create('register', initRegisterModal);
+        }
+
+        function loginNaHandler(e) {
+            getEl('#naverIdLogin_loginButton').click();
+        }
+
+        function loginKaHandler(e) {
+            getEl('#kakao-login-btn').click();
+        }
+
+        function loginGoHandler(e) {
+            getEl('.abcRioButton').click();
         }
     }
 
@@ -174,11 +124,10 @@ $(function () {
         const customRadios = getElList('.radio-wrap label');
 
         addEvent(checkAll, 'click', checkAllHandler);
-        addAllSameEvent(customRadios, 'click', h.customRadioHandler.bind(null, customRadios));
+        addAllSameEvent(customRadios, 'click', customRadioHandler);
         addAllSameEvent(checkBoxes, 'click', checkBoxHandler);
 
         const realname = getEl('#realname');
-        const nickname = getEl('#nickname');
         const registerId = getEl('#register-id');
         const registerPassword = getEl('#register-password');
         const registerRepassword = getEl('#register-repassword');
@@ -194,36 +143,108 @@ $(function () {
         addEvent(realname, 'input', v.resetValidClass);
         addEvent(registerId, 'blur', registerIdHandler);
         addEvent(registerId, 'input', v.resetValidClass);
-        addEvent(nickname, 'blur', nicknameHandler);
-        addEvent(nickname, 'input', v.resetValidClass);
         addEvent(registerPassword, 'blur', registerPasswordHandler);
         addEvent(registerPassword, 'input', v.resetValidClass);
         addEvent(registerPassword, 'change', passwordChangeHandler);
         addEvent(registerRepassword, 'blur', registerRepasswordHandler);
         addEvent(btnUserRegister, 'click', btnUserHandler);
-        addEvent(phone1, 'blur', h.phoneHandler);
-        addEvent(phone2, 'blur', h.phoneHandler);
-        addEvent(phone3, 'blur', h.phoneHandler);
-        addEvent(email1, 'blur', h.emailHandler);
-        addEvent(email2, 'blur', h.emailHandler);
+        addEvent(phone1, 'blur', phoneHandler);
+        addEvent(phone2, 'blur', phoneHandler);
+        addEvent(phone3, 'blur', phoneHandler);
+        addEvent(email1, 'blur', emailHandler);
+        addEvent(email2, 'blur', emailHandler);
         addEvent(email1, 'change', emailChangeHandler);
         addEvent(email2, 'change', emailChangeHandler);
         addEvent(btnEmailCheck, 'click', emailCheckHandler);
 
-
+        // //여기부터
         function emailCheckHandler() {
             if (!v.isValid(email1)) return email1.focus();
             if (!v.isValid(email2)) return email2.focus();
 
-            showLoading();
-            ajax.sendEmailCode(email1.value, email2.value)
-                .then((ret) => {
-                    closeLoading();
-                    miniModal.createMini(t.emailConfirm(), h.initEmailConfirmModal.bind(null, btnEmailCheck, ret.emailCode, email1, email2));
+            sendEmailCode()
+                .then((emailCode) => {
+                    miniModal.createMini(t.emailConfirm(), (e) => {
+                        const emailConfirm = getEl('#input-email-confirm'); // 인증번호
+                        // 입력받는
+                        // 칸
+                        const btnConfirm = getEl('#btn-email-confirm'); // 버튼
+
+                        const timer = getEl('.timer');
+                        const close = miniModal.m.querySelector('.close');
+
+                        timerStart(10, timer, () => close.click());
+
+                        addEvent(emailConfirm, 'keyup', (e) => {
+                            // 엔터키 치면
+                            // 확인함.
+                            if (e.keyCode === 13) btnConfirm.click();
+                        });
+
+                        addEvent(btnConfirm, 'click', () => {
+                            const [vFeed, ivFeed] = v.getFeedBox(emailConfirm);
+                            if (emailConfirm.value !== emailCode) {
+                                v.setInvalid(
+                                    emailConfirm,
+                                    ivFeed,
+                                    '발송한 인증코드와 불일치 합니다. 다시 확인해주세요.'
+                                );
+                                emailConfirm.value = '';
+                                emailConfirm.focus();
+                            } else {
+                                close.click();
+                                btnEmailCheck.innerText = '완료';
+                                v.changeValid(btnEmailCheck);
+                            }
+                        });
+                    });
                 })
                 .catch((error) => console.log('에러가 났네 ~_~', error));
         }
 
+        function sendEmailCode() {
+            return new Promise((resolve, reject) => {
+                // 사용자에게 이메일 코드를 발급하고, 발급된 이메일 코드를 resolve의 파라미터로 전달할 것.
+                // 대충 아래 주석형태로 구현하면 될듯.
+
+                // $.ajax({
+                // url:'어쩌구저쩌꾸',
+                // ~~~
+                // success:function(result){ <= 이 result 또는 result의 내부 값이 이메일
+                // 코드여야 함.
+                // resolve(result);
+                // },
+                // error:function(error){
+                // reject(error)
+                // }
+                // });
+
+                // 이건 돌아가는 형태 보여주려고 하드코딩한 이메일코드 값.
+                let emailCode = '12345';
+                resolve(emailCode);
+            });
+        }
+
+        // //여기까지 이메일 코드
+
+        function timerStart(sec, timer, callbackFunc) {
+            alert(`딱 ${sec}초 준다.`);
+            let restTime = sec;
+
+            const start = setInterval(function () {
+                restTime -= 1;
+                if (restTime < 0) return timerEnd();
+                let min = Math.floor(restTime / 60);
+                let sec = restTime % 60;
+                timer.innerText = `0${min}:${sec < 10 ? '0' + sec : sec}`;
+            }, 1000);
+
+            function timerEnd() {
+                clearInterval(start);
+                alert('시간이 초과되었습니다. 다시 시도해주세요.');
+                if (callbackFunc) callbackFunc();
+            }
+        }
 
         function emailChangeHandler(e) {
             if (v.isValid(btnEmailCheck)) {
@@ -232,17 +253,34 @@ $(function () {
             }
         }
 
+        function customRadioHandler(e) {
+            customRadios.forEach((radio) => radio.classList.remove('clicked'));
+            this.classList.add('clicked');
+        }
+
         function registerIdHandler(e) {
             const regex = myRegex.email;
             const id = this.value;
             const [vFeed, ivFeed] = v.getFeedBox(this);
             if (!id) return v.setInvalid(this, ivFeed, '아이디를 입력해주세요.');
-            if (!regex.test(id)) return v.setInvalid(this, ivFeed, '아이디는 이메일 형식으로 입력해주세요.');
+            if (!regex.test(id))
+                return v.setInvalid(
+                    this,
+                    ivFeed,
+                    '아이디는 이메일 형식으로 입력해주세요.'
+                );
 
-            ajax.checkId({id: id, registerMethod: getRegisterMethod()})
+            new travelmaker.ajax()
+                .checkId({id: id, registerMethod: getRegisterMethod()})
                 .then((ret) => {
-                    if (ret === 'exist') return v.setInvalid(registerId, ivFeed, '이미 사용중인 아이디입니다. 다시 입력해주세요.');
-                    else return v.setValid(registerId, vFeed, '사용 가능한 아이디 입니다.');
+                    if (ret === 'exist') {
+                        return v.setInvalid(
+                            registerId,
+                            ivFeed,
+                            '이미 사용중인 아이디입니다. 다시 입력해주세요.'
+                        );
+                    }
+                    return v.setValid(registerId, vFeed, '사용 가능한 아이디 입니다.');
                 })
                 .catch(console.error);
         }
@@ -257,17 +295,30 @@ $(function () {
             checkAll.checked = getElList('.checkbox:checked').length === 2;
         }
 
-        function nicknameHandler(e) {
-            let regex = myRegex.nickname;
+        function phoneHandler(e) {
+            const regex = myRegex.number;
             const [vFeed, ivFeed] = v.getFeedBox(this);
-            if (!this.value) return v.setInvalid(this, ivFeed, '닉네임을 입력해주세요.');
-            if (!regex.test(this.value)) return v.setInvalid(this, ivFeed, '한글 최대 10자, 영문 20자로 한글, 영문, 숫자만 사용 가능합니다.');
-            ajax.checkNickname(this.value)
-                .then(ret => {
-                    if (ret === 'exist') return v.setInvalid(e.target, ivFeed, '이미 존재하는 닉네임입니다. 다시 입력해주세요.');
-                    if (ret === 'not_exist') return v.setValid(e.target, vFeed, '사용 가능한 닉네임입니다.');
-                })
-                .catch(console.error);
+            if (!this.value)
+                return v.setInvalid(this, ivFeed, '휴대폰번호를 입력해주세요.');
+            if (!regex.test(this.value))
+                return v.setInvalid(
+                    this,
+                    ivFeed,
+                    '숫자가 아닌 값은 입력할 수 없습니다.'
+                );
+            v.changeValid(this);
+        }
+
+        function emailHandler(e) {
+            let regex;
+            if (e.target.name === 'email1') regex = myRegex.englishAndNumber;
+            if (e.target.name === 'email2') regex = myRegex.englishWithPoint;
+            const [vFeed, ivFeed] = v.getFeedBox(this);
+            const value = e.target.value;
+            if (!value) return v.setInvalid(this, ivFeed, '이메일을 입력해주세요.');
+            if (!regex.test(value))
+                return v.setInvalid(e, ivFeed, '정확한 이메일을 입력해주세요.');
+            v.changeValid(this);
         }
 
         function realnameHandler(e) {
@@ -335,104 +386,33 @@ $(function () {
 
     //리모컨 & 소켓 처리
     if (seq) {
-        const sock = new SockJS("/echo");
-
         const remocon = getEl('.remote-controller');
         const scrollUp = getEl('.scroll-up');
         const scrollDown = getEl('.scroll-down');
         const myPage = getEl('.my-page');
         const message = getEl('.message');
-        const messageGroup = getEl('.message-group');
+
         const $html = $('html');
 
-        //로그인을 하면, 자신의 알람 중 확인하지 않은 데이터를 불러옴
-        ajax.alarmDataLoad(seq.value)
-            .then(ret => {
-                //확인하지 않은 데이터가 있다면, 리모콘의 모양을 변화.
-                if (ret.length) {
-                    remocon.classList.add('on');
-                    message.parentElement.classList.add('onfocus');
-                }
-            });
-
         addEvent(remocon, 'click', (e) => {
-            e.stopPropagation();
             const target = e.target;
             target.classList.remove('on');
-
             if (target.classList.contains('onfocus')) {
                 return target.classList.remove('onfocus');
             } else {
                 return target.classList.add('onfocus');
             }
         });
-
         addEvent(scrollUp, 'click', (e) => {
             e.preventDefault();
             $html.stop().animate({scrollTop: 0}, 800);
         });
-
         addEvent(scrollDown, 'click', (e) => {
             e.preventDefault();
             $html.stop().animate({scrollTop: document.body.scrollHeight}, 800);
         });
 
-        //메시지 버튼에 대한 핸들러 처리
-        addEvent(message, 'click', messageOpenHandler);
-
-        //해당 핸들러는 알람데이터를 조회한 후 화면에 뿌려주고 이벤트를 연결하는 것을 담당한다.
-        function messageOpenHandler(e) {
-            e.preventDefault();
-            this.parentElement.classList.remove('onfocus');
-            //안읽은 알람을 가지고 와서 출력 & 이벤트 연결.
-            ajax.alarmDataLoad(seq.value)
-                .then(printMessage)
-                .catch(console.error);
-            //이벤트를 제거한 후, 새로운 이벤트를 부여.
-            this.removeEventListener('click', messageOpenHandler);
-            addEvent(this, 'click', messageCloseHandler);
-        }
-
-        //해당 핸들러는 화면에 그려진 알람들을 전부 지워주는(프론트 상에서만) 역할을 한다.
-        function messageCloseHandler(e) {
-            e.preventDefault();
-            messageGroup.innerHTML = '';
-            this.removeEventListener('click', messageCloseHandler);
-            addEvent(this, 'click', messageOpenHandler);
-        }
-
-        function printMessage(alarmList) {
-            messageGroup.innerHTML = '';
-            //알람데이터가 없을 경우, 알람이 없다는 메시지만 출력해줌.
-            if (!alarmList.length) {
-                $(messageGroup).append(t.message('새로운 알람이 없습니다!'));
-            } else {
-                //읽지 않은 알람 데이터가 있다면, 화면에 뿌려준 후 이벤트 연결.
-                const $frag = $(document.createDocumentFragment());
-                alarmList.forEach(alarm => $frag.append(t.message(alarm)));
-                messageGroup.appendChild($frag[0]);
-
-                const checkList = getElList('.button-wrap .check');
-                const deleteList = getElList('.button-wrap .delete');
-                addAllSameEvent(checkList, 'click', function (e) {
-                    const {header, ano} = e.target.parentElement.dataset;
-                    ajax.checkAlarm(header, ano)
-                        .then(({fno}) => {
-                            if (header === 'friend') return location.href = `/${header}/view/${fno}`;
-                            if (header === 'purA') return location.href = `/pur/view/1/${fno}`;
-                            if (header === 'purB') return location.href = `/pur/view/2/${fno}`;
-                        })
-                        .catch(console.error)
-                });
-                addAllSameEvent(deleteList, 'click', function () {
-                    console.log('삭제 클릭');
-                    //삭제에 대한 컨트롤러는 따로 없어 보여서 아직 구현 안함.
-                });
-            }
-            const closeList = getElList('.message-item .close');
-            addAllSameEvent(closeList, 'click', (e) => $(e.target).closest('li')[0].remove());
-        }
-
+        let sock = new SockJS("/echo");
 
         sock.onmessage = function (msg) {
             const data = JSON.parse(msg.data);
@@ -440,7 +420,9 @@ $(function () {
 
             if (data.header === 'friend') {
                 remocon.classList.add('on');
-                message.classList.add('onfocus');
+                ajax.alarmDataLoad(seq.value)
+                    .then()
+                    .catch(console.error);
             }
         };
 
@@ -449,6 +431,46 @@ $(function () {
         };
     }
 });
+
+
+function success(data) {
+    $.each(data, function (index, items) {
+        $('#alarmDisplay').append(
+            '<button type="button" class="alarmBtn" data-ano ="'
+            + items.ano + '" data-header="' + items.header
+            + '">' + items.content + '</button><br>');
+        $('#alarmDisplay').append('<input type="hidden" ');
+    });
+    console.log(data.length);
+    if (data.length < 1) {
+        $('#alarmOff').show();
+        $('#alarmOn').hide();
+        $('#alarmDisplay').hide();
+    } else {
+        $('#alarmOff').hide();
+        $('#alarmOn').show();
+        $('#alarmDisplay').hide();
+    }
+
+    $('.alarmBtn').click(function () {
+        console.log('음..아주 좆같구먼');
+        var ano = $(this).data('ano');
+        var header = $(this).data('header');
+
+        $.ajax({
+            type: 'get',
+            url: '/alarm/' + header + '/' + ano,
+            dataType: 'json',
+            success: function (data) {
+                console.log(data.fno);
+                location.href = '/' + header + '/view/' + data.fno;
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    });
+};
 
 function includeJs(jsFilePath) {
     let js = document.createElement('script');
@@ -491,4 +513,3 @@ function logoutSubmit() {
 
 function alarm() {
 }
-

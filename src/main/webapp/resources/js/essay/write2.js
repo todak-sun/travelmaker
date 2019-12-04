@@ -139,7 +139,7 @@ $(function () {
             }
         });
 
-        ajax.getEssayList(hiddenSeq.value, 0, 'date_write')
+        ajax.getEssayTempList(hiddenSeq.value, 0, 'date_write')
             .then(ret => {
                 console.log(ret.data);
                 const $frag = $(document.createDocumentFragment());

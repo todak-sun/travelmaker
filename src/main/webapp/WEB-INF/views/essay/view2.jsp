@@ -14,12 +14,8 @@
 <body>
 <%@include file="../common/navbar2.jsp" %>
 <div class="hidden">
-    <input id="rno" type="hidden" value="${essayDTO.rno}">
     <input id="bno" type="hidden" value="${essayDTO.bno}"/>
     <input id="essay-seq" type="hidden" value="${essayDTO.seq}"/>
-    <sec:authorize access="isAuthenticated()">
-        <input type="hidden" id="my-seq" value="${userDetail.seq}">
-    </sec:authorize>
 </div>
 <!-- 메인 컨텐츠 영역 -->
 <div class="container-wrap">
@@ -36,14 +32,6 @@
             <div class="info-area">
                 <div class="info-view">${essayDTO.views}</div>
                 <div class="info-likes">${essayDTO.likes}</div>
-            </div>
-            <div class="button-wrap">
-                <sec:authorize access="isAuthenticated()">
-                    <c:if test="${userDetail.seq eq essayDTO.seq}">
-                        <button id="btn-modify">수정</button>
-                        <button id="btn-delete">삭제</button>
-                    </c:if>
-                </sec:authorize>
             </div>
         </div>
     </div>

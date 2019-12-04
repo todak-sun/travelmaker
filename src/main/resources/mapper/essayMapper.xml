@@ -4,15 +4,7 @@
 <mapper namespace="essaySQL">
 
     <select id="readOne" parameterType="int" resultType="essay">
-        SELECT BNO, RNO, SEQ, TITLE, LIKES, VIEWS, HASHTAG, to_char(DATE_WRITE, 'YYYY-MM-DD') as DATE_WRITE, to_char(DATE_UPDATE, 'YYYY-MM-DD') as DATE_UPDATE, FILE_NAME, IMAGE_NAME, FIXED, IS_DOMESTIC
-        FROM essay
-        WHERE rno = #{rno}
-    </select>
-
-    <select id="readOneByBno" parameterType="int" resultType="essay">
-        SELECT BNO, RNO, SEQ, TITLE, LIKES, VIEWS, HASHTAG, to_char(DATE_WRITE, 'YYYY-MM-DD') as DATE_WRITE, to_char(DATE_UPDATE, 'YYYY-MM-DD') as DATE_UPDATE, FILE_NAME, IMAGE_NAME, FIXED, IS_DOMESTIC
-        FROM essay
-        WHERE bno = #{bno}
+        SELECT BNO, RNO, SEQ, TITLE, LIKES, VIEWS, HASHTAG, to_char(DATE_WRITE, 'YYYY-MM-DD') as DATE_WRITE, to_char(DATE_UPDATE, 'YYYY-MM-DD') as DATE_UPDATE, FILE_NAME, IMAGE_NAME, FIXED, IS_DOMESTIC FROM essay WHERE rno = #{rno}
     </select>
 
     <insert id="create" parameterType="essay">
@@ -27,13 +19,9 @@
     <select id="search" parameterType="essaySearchFilter" resultType="essay">
         SELECT *
         FROM essay
-        <if test="seq != null">
-            WHERE seq = #{seq}
-        </if>
+        WHERE seq = #{seq}
         AND fixed = #{fixed}
-        <if test="order != order">
-            ORDER BY ${order} DESC
-        </if>
+        ORDER BY ${order} DESC
     </select>
 
     <update id="update" parameterType="essay">
@@ -52,7 +40,9 @@
         DELETE FROM essay WHERE rno = #{rno}
     </delete>
 
-    <select id="getAllByUserSeq" resultType="essay" parameterType="int">
-        SELECT * FROM essay WHERE seq = #{seq}
+    <!--이 위로 쓰는 것.-->
+
+    <select id="getAll" resultType="essay">
+        SELECT * FROM essay
     </select>
 </mapper>

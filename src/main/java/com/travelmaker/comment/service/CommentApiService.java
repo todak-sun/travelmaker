@@ -2,13 +2,10 @@ package com.travelmaker.comment.service;
 
 import com.travelmaker.comment.dao.CommentDAO;
 import com.travelmaker.comment.domain.CommentDTO;
-import com.travelmaker.comment.domain.CommentSearchFilter;
 import com.travelmaker.comment.domain.network.request.CommentApiRequest;
 import com.travelmaker.comment.domain.network.response.CommentApiResponse;
 import com.travelmaker.comment.ifs.CommentApiInterface;
-import com.travelmaker.essay.dao.EssayDAO;
 import com.travelmaker.model.network.Header;
-import com.travelmaker.route.dao.RouteDAO;
 import com.travelmaker.user.dao.UserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,20 +21,7 @@ public class CommentApiService implements CommentApiInterface<CommentApiRequest,
     CommentDAO commentDAO;
 
     @Autowired
-    EssayDAO essayDAO;
-
-    @Autowired
     UserDAO userDAO;
-
-    @Autowired
-    RouteDAO routeDAO;
-
-    @Override
-    public Header<List<CommentApiResponse>> readAll(CommentSearchFilter commentSearchFilter) {
-        return Optional.ofNullable(commentDAO.readAll(commentSearchFilter))
-                .map(this::responseWithStory)
-                .orElse(null);
-    }
 
     @Override
     public Header<List<CommentApiResponse>> readAll(int bno) {
@@ -123,26 +107,6 @@ public class CommentApiService implements CommentApiInterface<CommentApiRequest,
                     .dateWrite(commentDTO.getDateWrite())
                     .content(commentDTO.getContent())
                     .userDTO(userDAO.getUserDTO(commentDTO.getSeq()))
-                    .build();
-            commentApiResponseList.add(essayApiResponse);
-        });
-        return Header.OK(commentApiResponseList, "데이터 조회 성공");
-    }
-
-    private Header<List<CommentApiResponse>> responseWithStory(List<CommentDTO> commentDTOList){
-        List<CommentApiResponse> commentApiResponseList = new ArrayList<>();
-        commentDTOList.forEach((commentDTO) -> {
-            CommentApiResponse essayApiResponse = CommentApiResponse.builder()
-                    .cno(commentDTO.getCno())
-                    .pcno(commentDTO.getPcno())
-                    .bno(commentDTO.getBno())
-                    .seq(commentDTO.getSeq())
-                    .likes(commentDTO.getLikes())
-                    .unlikes(commentDTO.getUnlikes())
-                    .dateWrite(commentDTO.getDateWrite())
-                    .content(commentDTO.getContent())
-                    .essayDTO(essayDAO.readOneByBno(commentDTO.getBno()))
-                    .routeDTO(routeDAO.getRouteByBno(commentDTO.getBno()))
                     .build();
             commentApiResponseList.add(essayApiResponse);
         });
