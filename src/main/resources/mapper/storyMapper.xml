@@ -6,7 +6,7 @@
 	<select id="getList" parameterType="storySearchFilter" resultType="story" >
 		SELECT C.*, D.cmt FROM(
 		    SELECT * FROM(
-		        SELECT ROWNUM rn, A.*, B.nickname, B.imgprofile FROM(
+		        SELECT ROWNUM rn, A.*, B.nickname, B.imgProfile FROM(
 		            SELECT bno, rno, seq, title, likes, views, hashtag, date_write, date_update, file_name, image_name, fixed, is_domestic 
 		            FROM essay
 		            WHERE fixed = 1

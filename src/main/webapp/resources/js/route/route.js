@@ -81,7 +81,7 @@ $(function() {
   // 국내외, 유저정보 입력, 수정할 때 해쉬태그 입력
   if (+getJSONfromQueryString().isDomestic)
     isDomestic.value = +getJSONfromQueryString().isDomestic;
-  let existHashtag;
+  let existHashtag = "";
   Array.from(document.querySelectorAll(".hash")).forEach(tag => {
     existHashtag += tag.innerText + " ";
   });
@@ -142,6 +142,7 @@ $(function() {
     content.value = "";
     // 자바스크립트에 저장된 데이터셋 초기화
     fileList.splice(0);
+    delFileList.splice(0);
     setRouteContent({
       crno: 0,
       content: null,
@@ -306,8 +307,8 @@ $(function() {
         if (
           checkTitleValidation(title.value) &&
           checkMainImageValidation($imageMainInput[0].value)
-        )
           // 다 생성되있으면 route 틀 저장 및 작성 폼 생성
+        )
           return showWriteFormAjax(getMainFormData(getRoute()))
             .then(function(result) {
               showWriteForm(getRoute().isDomestic);
@@ -468,7 +469,7 @@ $(function() {
   function courseAjaxSuccess(crno) {
     // < 3.웹페이지에 코스 임시저장
     // 수정된 임시저장코스 삭제(삭제할 게 있을 경우만)
-    let patchedCourse = document.querySelector(
+    let patchedCourse = +document.querySelector(
       `.route-info input[value='${crno}']`
     );
     if (patchedCourse)
@@ -521,26 +522,16 @@ $(function() {
 
   function modifyCourse(e) {
     const crno = e.target.nextElementSibling.value;
-    // parentElement.children.namedItem("crno").value;
-    alert(crno + "에이작스로 수정할 게시글 불러오기 추가");
+    // alert(crno + "에이작스로 수정할 게시글 불러오기 추가");
 
     getCourseAjax(crno).then(result => {
       console.log(result);
-      // 불러 온 후에 불러온 내용 루트컨텐트에 저장
-      // 에이작스 석세스시 추가할 내용
+      // Course 데이터 불러온 후 코스 작성 폼 초기화
+      initCourseForm();
 
-      // let arrLocation = result.location.split("_");
+      // 불러온 내용 코스작성폼에 저장
       location.value = result.location;
       place.value = result.location;
-      // if (arrLocation.length == 1) {
-      //   place.value = arrLocation[0];
-      //   console.log("국내");
-      // } else {
-      //   nation.value = arrLocation[0];
-      //   city.value = arrLocation[1];
-      //   place.value = arrLocation[2];
-      //   console.log("해외");
-      // }
       content.value = result.content;
 
       $starRatings.removeClass("on");
@@ -562,17 +553,15 @@ $(function() {
         score: result.score,
         fixed: 0
       });
-
+      // 코스 이미지 그려줌
       result.imgs.forEach(image => {
-        console.log(image);
-        let imgSrc = `${window.location.protocol}//${window.location.host}/resources/storage/route/${image}`;
         const $frag = $(document.createDocumentFragment());
         const $li = $(`
                       <li>
                         <span class="delete">&times;</span>
                         <img
-                          src="${imgSrc}"
-                          alt="${image}"
+                          src="${image}"
+                          alt=""
                         />
                       </li>
                     `);
@@ -580,6 +569,7 @@ $(function() {
         $imageGroup.append($frag);
       });
       document.querySelectorAll(".image-group span").forEach(span => {
+        // 기존 코스 이미지 삭제 이벤트 걸어줌
         span.addEventListener("click", deleteCourseImage2);
       });
     });
@@ -588,19 +578,18 @@ $(function() {
   function deleteCourse(e) {
     const crno =
       e.target.nextElementSibling.nextElementSibling.children["crno"].value;
-    alert(crno + "에이작스로 삭제하기");
-    deleteCourseAjax(crno).then(result => {
-      let patchedCourse = document.querySelector(
-        `.route-info input[value='${crno}']`
-      );
-      if (patchedCourse)
-        $savedCourses[0].removeChild(
-          patchedCourse.parentElement.parentElement.parentElement
+    if (confirm("코스를 삭제하시겠습니까?(다시 복구할 수 없습니다!)"))
+      return deleteCourseAjax(crno).then(result => {
+        let patchedCourse = document.querySelector(
+          `.route-info input[value='${crno}']`
         );
-
-      console.log(result);
-      alert(crno + "코스를 삭제했습니다");
-    });
+        if (patchedCourse)
+          $savedCourses[0].removeChild(
+            patchedCourse.parentElement.parentElement.parentElement
+          );
+        console.log(result);
+        initCourseForm();
+      });
   }
 
   function dragstart(ev) {
@@ -638,13 +627,15 @@ $(function() {
   function getFormData(data) {
     const formData = new FormData();
 
+    // 새로 저장할 이미지 폼에 저장
     fileList.forEach((image, idx) => {
-      // console.log(idx + " : " + image);
       formData.append("images", image);
     });
+    // 수정 시 삭제할 이미지 폼에 저장
     delFileList.forEach((delImage, idx) => {
       formData.append("delImages", delImage);
     });
+    // 이미지 외 다른 데이터들 폼에 저장
     const keys = Object.keys(data);
     const values = Object.values(data);
     for (let i = 0; i < keys.length; i++) {
@@ -667,7 +658,7 @@ $(function() {
 
   function saveRoute() {
     // 유효성 검사
-    checkEpilogueValidation(epilogue.value);
+    if (!checkEpilogueValidation(epilogue.value)) return;
     // <-- 루트 저장
     let route = getRoute();
     saveRouteAjax(route)
@@ -682,8 +673,7 @@ $(function() {
     const url = `${window.location.protocol}//${
       window.location.host
     }/route/preview/${getRoute().rno}`;
-    // 지도 넓이에 맞춤
-    window.open(url, "", "width=815,height=600,left=300");
+    window.open(url, "", "width=800,height=600,left=300");
   }
 
   function getOrder() {
@@ -806,12 +796,11 @@ $(function() {
   }
 
   function checkMainImageValidation(value) {
-    if (
-      !value &&
-      getEl("#image-main-prev").src ==
-        `${window.location.protocol}//${window.location.host}/resources/storage/route/`
-    ) {
-      //유효성 검사 실패 로직
+    let imageMain = getEl("#image-main-prev");
+    if (imageMain == null) {
+      alert("대표 이미지를 선택해주세요");
+      return false;
+    } else if (!value && imageMain.clientHeight == 0) {
       alert("대표 이미지를 선택해주세요");
       return false;
     }
@@ -911,7 +900,7 @@ $(function() {
     });
   }
 
-  // 코스 순서 수정
+  // 코스 순서 저장
   function saveOrderAjax(order) {
     return $.ajax({
       type: "PATCH",
@@ -1106,7 +1095,7 @@ $(function() {
   // 코스 기존이미지 삭제
   function deleteCourseImage2(e) {
     // 삭제리스트에 등록
-    delFileList.push(e.target.nextElementSibling.alt);
+    delFileList.push(e.target.nextElementSibling.src);
     let li = e.target.parentElement;
     let parent = li.parentElement;
     let index = getElementIndex(li);

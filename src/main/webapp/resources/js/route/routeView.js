@@ -8,12 +8,18 @@ $().ready(function() {
   const seq = document.querySelector("#seq")
     ? document.querySelector("#seq").value
     : 0;
-  const isDomestic = document.querySelector("#isDomestic").value;
+  const isDomestic = +document.querySelector("#isDomestic").value;
+  const lat = document.querySelectorAll(".lat");
+  const lng = document.querySelectorAll(".lng");
+  let latlng = [];
 
+  for (let i = 0; i < lat.length; i++) {
+    latlng.push({ lat: +lat[i].value, lng: +lng[i].value });
+  }
   if (isDomestic) {
-    kakaoMap();
+    kakaoMap(latlng);
   } else {
-    googleMap();
+    googleMap(latlng);
   }
   document.querySelector("#likes").addEventListener("click", UpdateLikes);
 
@@ -69,85 +75,85 @@ $().ready(function() {
 });
 
 // 카카오맵
-function kakaoMap() {
-  const kmap = new travelmaker.kakaoMap(getEl("#map"));
-  kmap.getStaticMap(getEl("#map"), {
-    lat: "37.566826",
-    lng: "126.9786567",
-    address: "테스트A",
-    placeName: "테스트P"
-  });
-  // var container = document.getElementById("map");
-  // var options = {
-  //   center: new kakao.maps.LatLng(
-  //     flightPlanCoordinates[0]["lat"],
-  //     flightPlanCoordinates[0]["lng"]
-  //   ),
-  //   level: 3
-  // };
-  // var map = new kakao.maps.Map(container, options);
-  // var linePath = [];
-
-  // // 선을 구성하는 좌표 배열입니다. 이 좌표들을 이어서 선을 표시
-  // for (var i = 0; i < flightPlanCoordinates.length; i++) {
-  //   linePath.push(
-  //     new kakao.maps.LatLng(
-  //       flightPlanCoordinates[i]["lat"],
-  //       flightPlanCoordinates[i]["lng"]
-  //     )
-  //   );
-  // }
-
-  // /*
-  //  * // 선을 구성하는 좌표 배열입니다. 이 좌표들을 이어서 선을 표시 var linePath = [ new
-  //  * kakao.maps.LatLng(33.452344169439975, 126.56878163224233), new
-  //  * kakao.maps.LatLng(33.452739313807456, 126.5709308145358), new
-  //  * kakao.maps.LatLng(33.45178067090639, 126.5726886938753) ];
-  //  */
-
-  // // 지도에 표시할 선을 생성
-  // var polyline = new kakao.maps.Polyline({
-  //   path: linePath, // 선을 구성하는 좌표배열
-  //   strokeWeight: 10, // 선의 두께
-  //   strokeColor: "#00FA9A", // 선의 색깔
-  //   strokeOpacity: 0.5, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명
-  //   strokeStyle: "solid" // 선의 스타일
+function kakaoMap(flightPlanCoordinates) {
+  // const kmap = new travelmaker.kakaoMap(getEl("#map"));
+  // kmap.getStaticMap(getEl("#map"), {
+  //   lat: "37.566826",
+  //   lng: "126.9786567",
+  //   address: "테스트A",
+  //   placeName: "테스트P"
   // });
+  var container = document.getElementById("map");
+  var options = {
+    center: new kakao.maps.LatLng(
+      flightPlanCoordinates[0]["lat"],
+      flightPlanCoordinates[0]["lng"]
+    ),
+    level: 3
+  };
+  var map = new kakao.maps.Map(container, options);
+  var linePath = [];
 
-  // var positions = [];
+  // 선을 구성하는 좌표 배열입니다. 이 좌표들을 이어서 선을 표시
+  for (var i = 0; i < flightPlanCoordinates.length; i++) {
+    linePath.push(
+      new kakao.maps.LatLng(
+        flightPlanCoordinates[i]["lat"],
+        flightPlanCoordinates[i]["lng"]
+      )
+    );
+  }
 
-  // // 마커를 표시할 위치와 title 배열
-  // for (var i = 0; i < linePath.length; i++) {
-  //   positions.push({ latlng: linePath[i] });
-  // }
+  /*
+   * // 선을 구성하는 좌표 배열입니다. 이 좌표들을 이어서 선을 표시 var linePath = [ new
+   * kakao.maps.LatLng(33.452344169439975, 126.56878163224233), new
+   * kakao.maps.LatLng(33.452739313807456, 126.5709308145358), new
+   * kakao.maps.LatLng(33.45178067090639, 126.5726886938753) ];
+   */
 
-  // // 마커를 표시할 위치와 title 배열
-  // /*
-  //  * var positions = [ { title: '카카오', latlng: new
-  //  * kakao.maps.LatLng(33.452344169439975, 126.56878163224233) }, { title:
-  //  * '생태연못', latlng: new kakao.maps.LatLng(33.452739313807456,
-  //  * 126.5709308145358) }, { title: '텃밭', latlng: new
-  //  * kakao.maps.LatLng(33.45178067090639, 126.5726886938753) } ];
-  //  */
+  // 지도에 표시할 선을 생성
+  var polyline = new kakao.maps.Polyline({
+    path: linePath, // 선을 구성하는 좌표배열
+    strokeWeight: 10, // 선의 두께
+    strokeColor: "#00FA9A", // 선의 색깔
+    strokeOpacity: 0.5, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명
+    strokeStyle: "solid" // 선의 스타일
+  });
 
-  // for (var i = 0; i < positions.length; i++) {
-  //   /*
-  //    * // 마커 이미지의 이미지 크기 var imageSize = new kakao.maps.Size(24, 35);
-  //    *  // 마커 이미지를 생성 var markerImage = new kakao.maps.MarkerImage(imageSrc,
-  //    * imageSize);
-  //    */
+  var positions = [];
 
-  //   // 마커를 생성
-  //   var marker = new kakao.maps.Marker({
-  //     map: map, // 마커를 표시할 지도
-  //     position: positions[i].latlng // 마커를 표시할 위치
-  //     // title : positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시
-  //     /* image : markerImage // 마커 이미지 */
-  //   });
-  // }
+  // 마커를 표시할 위치와 title 배열
+  for (var i = 0; i < linePath.length; i++) {
+    positions.push({ latlng: linePath[i] });
+  }
 
-  // // 지도에 선을 표시합니다
-  // polyline.setMap(map);
+  // 마커를 표시할 위치와 title 배열
+  /*
+   * var positions = [ { title: '카카오', latlng: new
+   * kakao.maps.LatLng(33.452344169439975, 126.56878163224233) }, { title:
+   * '생태연못', latlng: new kakao.maps.LatLng(33.452739313807456,
+   * 126.5709308145358) }, { title: '텃밭', latlng: new
+   * kakao.maps.LatLng(33.45178067090639, 126.5726886938753) } ];
+   */
+
+  for (var i = 0; i < positions.length; i++) {
+    /*
+     * // 마커 이미지의 이미지 크기 var imageSize = new kakao.maps.Size(24, 35);
+     *  // 마커 이미지를 생성 var markerImage = new kakao.maps.MarkerImage(imageSrc,
+     * imageSize);
+     */
+
+    // 마커를 생성
+    var marker = new kakao.maps.Marker({
+      map: map, // 마커를 표시할 지도
+      position: positions[i].latlng // 마커를 표시할 위치
+      // title : positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시
+      /* image : markerImage // 마커 이미지 */
+    });
+  }
+
+  // 지도에 선을 표시합니다
+  polyline.setMap(map);
 }
 
 // RouteView GoogleMap 마커 경로 표시
