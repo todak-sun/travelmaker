@@ -73,5 +73,8 @@
 	<update id="purchaseRequestSetPermit">
 		update purchaserequest set is_permit=#{isPermit} where prno=#{prno}
 	</update>
+	<select id="getDeleteImage" parameterType="int" resultType="String">
+		select img from purchase where bno = ${bno}
+	</select>
 	
 </mapper>

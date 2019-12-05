@@ -80,9 +80,7 @@ uri="http://www.springframework.org/security/tags" %>
                       <ul class="slide-box" id="slide-box">
                         <c:forEach var="img" items="${course.imgs}">
                           <li>
-                            <img src="/resources/storage/route/<c:out
-                              value="${img}"
-                            />" alt="${img}"/>
+                            <img src="<c:out value="${img}"/>" alt="${img}"/>
                           </li>
                         </c:forEach>
                       </ul>

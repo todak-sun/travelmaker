@@ -33,7 +33,7 @@
 	        <article class="story">
 	          <div class="story-img-wrap">
 				<img
-					src="<c:out value="/resources/storage/${storyType}/${story.imageName}"/>"
+					src="<c:out value="${story.imageName}"/>"
 					alt=""
 					class="story-img"
 				/>

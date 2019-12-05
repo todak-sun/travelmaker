@@ -102,8 +102,11 @@ public class RouteDAOMybatis implements RouteDAO {
 	}
 
 	@Override
-	public void deleteCourse(int crno) {
+	public List<RouteImageDTO> deleteCourse(int crno) {
+		List<RouteImageDTO> list = sqlSession.selectList("routeSQL.getRouteImageStory", crno);
 		sqlSession.delete("routeSQL.deleteCourse",crno);
+		
+		return list;
 	}
 
 	@Override
@@ -122,8 +125,12 @@ public class RouteDAOMybatis implements RouteDAO {
 	}
 
 	@Override
-	public void deleteRoute(int rno) {
+	public List<String> deleteRoute(int rno) {
+		List<String> list = sqlSession.selectList("routeSQL.getDeleteRouteImage", rno);
+		list.add(sqlSession.selectOne("routeSQL.getDeleteMainImage", rno));
 		sqlSession.delete("routeSQL.deleteRoute", rno);
+		
+		return list;
 	}
 
 	@Override
