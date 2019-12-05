@@ -159,6 +159,7 @@ $(function () {
 
         function imageChangeHandler(e){
             const imageFile = this.files[0];
+            console.log(imageFile);
             if (!imageFile) return;
             const fr = new FileReader();
             fr.readAsDataURL(imageFile);
@@ -167,6 +168,7 @@ $(function () {
                 imgArea.style.backgroundImage = `url(${fr.result})`;
                 setUserData({imageFile: imageFile, imgProfile: imageFile.name});
             }
+            setUserData({imageFile: imageFile, imgProfile: imageFile.name});
         }
 
 
@@ -228,7 +230,7 @@ $(function () {
                 if (ret.gender) customRadios[1].click();
                 else customRadios[0].click();
                 if (ret.imgProfile) {
-                    imgArea.style.backgroundImage = `url(/resources/storage/essay/${ret.imgProfile})`;
+                    imgArea.style.backgroundImage = `url(${ret.imgProfile})`;
                     imgArea.classList.add('on');
                 }
 

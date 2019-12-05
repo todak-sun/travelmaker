@@ -19,6 +19,8 @@ import com.travelmaker.route.dao.RouteDAO;
 import com.travelmaker.route.domain.RouteContentDTO;
 import com.travelmaker.route.domain.RouteDTO;
 import com.travelmaker.route.domain.RouteImageDTO;
+import com.travelmaker.util.fileIO.FileIO;
+import com.travelmaker.util.fileIO.UploadService;
 
 @Service(value = "routeService")
 public class RouteServiceImpl implements RouteService {
@@ -29,26 +31,29 @@ public class RouteServiceImpl implements RouteService {
 	@Autowired
 	RouteDAO routeDAO;
 	
+	@Autowired
+	FileIO fileIO;
+	
 	@Override
 	public int setRoute(RouteDTO routeDTO, MultipartFile image) {
 		
 		// 서비스에서 rno 값 여부로 신규 or 수정 구분하여 rno 값 다시 반환
 		System.out.println("rno 가져온 값 : "+routeDTO.getRno());
 		System.out.println("기존 대표이미지 이름 : "+routeDTO.getImageName());
-		if(image!=null) { // 대표 이미지 있으면 이미지 저장
-			String filePath = servletContext.getRealPath("/resources/storage/route");
-			String fileName = (LocalDateTime.now()+image.getOriginalFilename()).replace(":", "-");
-			File file = new File(filePath, fileName);	
-			
-			try {
-				FileCopyUtils.copy(image.getInputStream(), new FileOutputStream(file));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-			routeDTO.setImageName(fileName);
-		} 
+		String temp = "route";
 		
+		if(image!=null) { // 대표 이미지 있으면 이미지 저장
+			if(routeDTO.getImageName().equals("")) {
+				String imageUrl = fileIO.saveImage(image, temp);
+				routeDTO.setImageName(imageUrl);
+				
+			} else {
+				String[] imageName = routeDTO.getImageName().split("/");
+				fileIO.deleteImage(imageName[4], temp);
+				String imageUrl = fileIO.saveImage(image, temp);
+				routeDTO.setImageName(imageUrl);
+			}
+		}
 		System.out.println("교체한 대표이미지 이름 : "+routeDTO.getImageName());
 		return routeDTO.getRno()>0 ? routeDAO.modifySetRoute(routeDTO) : routeDAO.setRoute(routeDTO);
 	}
@@ -59,25 +64,27 @@ public class RouteServiceImpl implements RouteService {
 		int crno = routeDAO.saveCourse(routeContentDTO); //저장한 코스의 crno 반환
 		
 		RouteImageDTO routeImageDTO = new RouteImageDTO();
-		String filePath = servletContext.getRealPath("/resources/storage/route");
+		String temp = "route";
+		//String filePath = servletContext.getRealPath("/resources/storage/route");
 //		System.out.println("getImages : " + routeContentDTO.getImages());
 		if(routeContentDTO.getImages()!=null) { // 이미지가 있을 때
 			int i = 1; // 이미지 순서
 			for(MultipartFile img : routeContentDTO.getImages()) {
-				String fileName = (LocalDateTime.now()+img.getOriginalFilename()).replace(":", "-");
-				File file = new File(filePath, fileName);
-				
-				System.out.println("파일 경로 : " + filePath);
-				System.out.println("파일 이름 : " + fileName);
-				
-				try {
-					FileCopyUtils.copy(img.getInputStream(), new FileOutputStream(file));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				String imageUrl = fileIO.saveImage(img, temp);
+//				String fileName = (LocalDateTime.now()+img.getOriginalFilename()).replace(":", "-");
+//				File file = new File(filePath, fileName);
+//				
+//				System.out.println("파일 경로 : " + filePath);
+//				System.out.println("파일 이름 : " + fileName);
+//				
+//				try {
+//					FileCopyUtils.copy(img.getInputStream(), new FileOutputStream(file));
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
 				
 				routeImageDTO.setImgOrder(i);
-				routeImageDTO.setImg(fileName);
+				routeImageDTO.setImg(imageUrl);
 				routeImageDTO.setCrno(crno);
 				i++;
 				routeDAO.saveRouteImage(routeImageDTO);
@@ -123,6 +130,9 @@ public class RouteServiceImpl implements RouteService {
 		// 삭제할 이미지가 있다면 삭제
 		if(routeContentDTO.getDelImages()!=null) {
 			for(String delImage : routeContentDTO.getDelImages()) {
+				String temp = "route";
+				String[] imageName = delImage.split("/");
+				fileIO.deleteImage(imageName[4], temp);
 				routeDAO.deleteRouteImage(delImage);	
 			}
 		}
@@ -157,7 +167,13 @@ public class RouteServiceImpl implements RouteService {
 
 	@Override
 	public void deleteCourse(int crno) {
-		routeDAO.deleteCourse(crno);
+		List<RouteImageDTO> list = routeDAO.deleteCourse(crno);
+		String temp = "route";
+		
+		for(RouteImageDTO routeImageDTO : list) {
+			String[] imageUrl = routeImageDTO.getImg().split("/");
+			fileIO.deleteImage(imageUrl[4], temp);
+		}
 	}
 
 	@Override
@@ -189,7 +205,13 @@ public class RouteServiceImpl implements RouteService {
 
 	@Override
 	public void deleteRoute(int rno) {
-		routeDAO.deleteRoute(rno);
+		List<String> list = routeDAO.deleteRoute(rno);
+		String temp = "route";
+		
+		for(String imageName : list) {
+			String[] imageUrl = imageName.split("/");
+			fileIO.deleteImage(imageUrl[4], temp);
+		}
 	}
 	
 }

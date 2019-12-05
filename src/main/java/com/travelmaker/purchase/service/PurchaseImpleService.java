@@ -35,8 +35,9 @@ public class PurchaseImpleService implements PurchaseService {
 
     @Override
     public int purchaseWrite(PurchaseDTO purchaseDTO) {
+    	String temp = "purchase";
         String img = Optional.ofNullable(purchaseDTO.getImageFile())
-                .map(imageFile -> fileIO.saveImage(imageFile))
+                .map(imageFile -> fileIO.saveImage(imageFile, temp))
 				.orElse("tempImg");
 
         purchaseDTO.setImg(img);
@@ -58,7 +59,11 @@ public class PurchaseImpleService implements PurchaseService {
 
     @Override
     public void puchaseDelete(String bno) {
-        purchaseDAO.puchaseDelete(bno);
+        String imageName = purchaseDAO.puchaseDelete(bno);
+        String[] imageUrl = imageName.split("/");
+        String temp = "purchase";
+        
+        fileIO.deleteImage(imageUrl[4], temp);
     }
 
     @Override
