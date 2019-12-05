@@ -37,9 +37,9 @@ import com.amazonaws.services.s3.model.S3Object;
 @Component
 public class UploadService implements ServletContextAware {
 	// 엑세스키
-	private static final String accessKey = "AKIAIN76F7KCSNA5YUHA";
+	private static final String accessKey = "";
 	// 보안 엑세스키
-	private static final String secretKey = "F5dquEqPbO+KOMLQ/NGHhX16uuN8bb8ZCzwWkDGV";
+	private static final String secretKey = "";
 	// Amazon S3 버킷 이름
 	private static final String bucketName = "travelmaker-bucket";
 	
