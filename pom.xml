@@ -253,6 +253,12 @@
 			<version>1.4</version>
 		</dependency>
 
+		<!-- Amazon S3 -->
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk-s3</artifactId>
+			<version>1.11.683</version>
+		</dependency>
 
 	</dependencies>
 	<build>

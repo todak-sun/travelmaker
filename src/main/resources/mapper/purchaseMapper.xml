@@ -1,10 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="purchaseSQL">
-    <select id="getList" parameterType="java.util.Map"
-            resultType="pur">
-		<![CDATA[
+    <select id="getList" parameterType="java.util.Map" resultType="pur">
+        <![CDATA[
         SELECT *
         FROM (SELECT rownum rn, tt.*
               FROM (SELECT bno,
@@ -27,7 +26,7 @@
                     order by bno desc) tt)
         WHERE rn BETWEEN #{startNum} AND #{endNum}
         ]]>
-	</select>
+    </select>
 
     <select id="getTotalA" resultType="int">
         SELECT count(rownum)
@@ -66,17 +65,18 @@
                 #{quantity}, #{location}, #{content}, sysdate, #{dateStart}, #{dateEnd}, 0, null, #{con})
     </insert>
 
-
     <insert id="setRequestWrite">
         insert into PurchaseRequest
         VALUES (seq_PurchaseRequest.nextval, #{bno}, #{nickname}, #{requestUserSeq}, #{content}, 0)
     </insert>
+
 
     <select id="getPurchaseRequest" resultType="purR">
         select *
         from PurchaseRequest
         where bno = #{bno}
     </select>
+
 
     <insert id="setOrderWrite">
         insert into PurchaseOrder
@@ -90,6 +90,7 @@
         where bno = #{bno}
     </select>
 
+
     <delete id="puchaseDelete">
         delete purchase
         where bno = #{bno}
@@ -100,10 +101,12 @@
         where bno = #{bno}
     </delete>
 
+
     <delete id="purchaseOrderDelete">
         delete purchaseOrder
         where bno = #{bno}
     </delete>
+
 
     <update id="updatePurchase1" parameterType="pur">
         update purchase
@@ -118,6 +121,7 @@
             dateWrite=sysdate
         where bno = #{bno}
     </update>
+
 
     <update id="updatePurchase2" parameterType="pur">
         update purchase
@@ -143,4 +147,8 @@
         where prno = #{prno}
     </update>
 
+
+    <select id="getDeleteImage" parameterType="int" resultType="String">
+		select img from purchase where bno = ${bno}
+	</select>
 </mapper>

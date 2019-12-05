@@ -1,16 +1,17 @@
 package com.travelmaker.route.dao;
 
-import com.travelmaker.route.domain.RouteContentDTO;
-import com.travelmaker.route.domain.RouteDTO;
-import com.travelmaker.route.domain.RouteImageDTO;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import com.travelmaker.route.domain.RouteContentDTO;
+import com.travelmaker.route.domain.RouteDTO;
+import com.travelmaker.route.domain.RouteImageDTO;
 
 @Repository("routeDAO")
 @Transactional
@@ -21,8 +22,16 @@ public class RouteDAOMybatis implements RouteDAO {
 	
 	@Override
 	public int setRoute(RouteDTO routeDTO) {
+		System.out.println("셋루트로 들어옴");
 		sqlSession.insert("routeSQL.setRoute",routeDTO);
 		return sqlSession.selectOne("routeSQL.getCurrRnoSeq");
+	}
+	
+	@Override
+	public int modifySetRoute(RouteDTO routeDTO) {
+		System.out.println("모디파이셋루트로 들어옴");
+		sqlSession.update("routeSQL.modifySetRoute",routeDTO);
+		return routeDTO.getRno();
 	}
 
 	@Override
@@ -41,18 +50,17 @@ public class RouteDAOMybatis implements RouteDAO {
 		sqlSession.insert("routeSQL.saveRouteImage",routeImageDTO);
 	}
 	
-
+	@Override
+	public RouteDTO getRouteByBno(int bno) {
+		return sqlSession.selectOne("routeSQL.getRouteByBno", bno);
+	}
+	
     @Override
     public RouteDTO getRoute(int rno) {
         return sqlSession.selectOne("routeSQL.getRoute", rno);
     }
 
-	@Override
-	public RouteDTO getRouteByBno(int bno) {
-		return sqlSession.selectOne("routeSQL.getRouteByBno", bno);
-	}
-
-	@Override
+    @Override
     public List<RouteContentDTO> getRouteContentStory(int rno) {
 
         List<RouteContentDTO> list = sqlSession.selectList("routeSQL.getRouteContentStory", rno);
@@ -73,10 +81,19 @@ public class RouteDAOMybatis implements RouteDAO {
 	public List<RouteDTO> getRouteListByUserSeq(int seq) {
 		return sqlSession.selectList("routeSQL.getRouteListByUserSeq", seq);
 	}
-
+    
 	@Override
 	public RouteContentDTO getCourse(int crno) {
-		return sqlSession.selectOne("routeSQL.getCourse",crno);
+		
+        List<String> imgs = new ArrayList<String>();
+        List<RouteImageDTO> imageList = sqlSession.selectList("routeSQL.getRouteImageStory", crno);
+        for (RouteImageDTO routeImageDTO : imageList) {
+            imgs.add(routeImageDTO.getImg());
+            System.out.println("img = " + imgs);
+        }
+        RouteContentDTO routeContentDTO = sqlSession.selectOne("routeSQL.getCourse",crno);
+        routeContentDTO.setImgs(imgs);
+        return routeContentDTO;
 	}
 
 	@Override
@@ -85,18 +102,41 @@ public class RouteDAOMybatis implements RouteDAO {
 	}
 
 	@Override
-	public void deleteCourse(int crno) {
+	public List<RouteImageDTO> deleteCourse(int crno) {
+		List<RouteImageDTO> list = sqlSession.selectList("routeSQL.getRouteImageStory", crno);
 		sqlSession.delete("routeSQL.deleteCourse",crno);
+		
+		return list;
 	}
 
 	@Override
 	public void saveOrder(Map<String, Integer> map) {
-		sqlSession.update("routeSQL.saveOrder",map);		
+		sqlSession.update("routeSQL.saveOrder", map);		
 	}
 
 	@Override
 	public void updateViews(int rno) {
-		sqlSession.update("routeSQL.updateViews",rno);		
+		sqlSession.update("routeSQL.updateViews", rno);		
 	}
+
+	@Override
+	public int getRouteTemp(int seq) {
+		return sqlSession.selectOne("routeSQL.getRouteTemp", seq);
+	}
+
+	@Override
+	public List<String> deleteRoute(int rno) {
+		List<String> list = sqlSession.selectList("routeSQL.getDeleteRouteImage", rno);
+		list.add(sqlSession.selectOne("routeSQL.getDeleteMainImage", rno));
+		sqlSession.delete("routeSQL.deleteRoute", rno);
+		
+		return list;
+	}
+
+	@Override
+	public void deleteRouteImage(String delImage) {
+		sqlSession.delete("routeSQL.deleteRouteImage", delImage);
+	}
+
 	
 }

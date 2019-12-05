@@ -39,8 +39,11 @@ public class PurchaseImplDAO implements PurchaseDAO {
 	}
 
 	@Override
-	public void puchaseDelete(String bno) {
+	public String puchaseDelete(String bno) {
+		String imageName = sqlSession.selectOne("purchaseSQL.getDeleteImage", bno);
 		sqlSession.delete("purchaseSQL.puchaseDelete", Integer.parseInt(bno));	
+		
+		return imageName;
 	}
 
 	@Override

@@ -45,7 +45,7 @@
         <div class="input-wrap">
             <label for="image-file">상품사진</label>
             <div class="image-area">
-                <img src="${pageContext.request.contextPath}/resources/storage/essay/${purchaseDTO.img}" alt="">
+                <img src="${purchaseDTO.img}" alt="">
             </div>
         </div>
 
