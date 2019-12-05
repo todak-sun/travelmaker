@@ -18,7 +18,7 @@ uri="http://www.springframework.org/security/tags" %>
     <div class="hidden">
       <input type="hidden" value="${routeDTO.bno}" id="bno" />
       <input type="hidden" value="${routeDTO.rno }" id="rno" />
-      <input type="hidden" value="${routeDTO.isDomestic }" id="isdomestic" />
+      <input type="hidden" value="${routeDTO.isDomestic }" id="isDomestic" />
     </div>
     <!-- 메인 컨텐츠 영역 -->
 
@@ -48,8 +48,7 @@ uri="http://www.springframework.org/security/tags" %>
               <span class="to"><c:out value="${routeDTO.dateTo }"/></span>
             </div>
           </div>
-          <div class="header-map">
-            <img src="./images/front-map.png" alt="" />
+          <div class="header-map" id="map">
           </div>
         </div>
       </div>
@@ -60,6 +59,9 @@ uri="http://www.springframework.org/security/tags" %>
             <li>
               <div class="route-item">
                 <div class="route-info">
+                  <input type="hidden" name="lat" value="${course.lat}">
+                  <input type="hidden" name="lng" value="${course.lng}">
+                  <input type="hidden" name="location" value="${course.location}">
                   <h4 class="route-title">
                     <span class="number"
                       ><c:out value="${course.cntOrder }"/></span
@@ -164,7 +166,7 @@ uri="http://www.springframework.org/security/tags" %>
       </div>
     </div>
     <%@include file="../common/footer.jsp" %> <%@include
-    file="../common/foot-js.jsp" %>
+    file="../common/editor-js.jsp" %>
     <script
       type="text/javascript"
       src="${pageContext.request.contextPath}/resources/js/route/routeView.js"
