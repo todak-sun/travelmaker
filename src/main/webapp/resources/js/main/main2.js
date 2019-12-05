@@ -424,9 +424,13 @@ $(function () {
                         })
                         .catch(console.error)
                 });
-                addAllSameEvent(deleteList, 'click', function () {
-                    console.log('삭제 클릭');
-                    //삭제에 대한 컨트롤러는 따로 없어 보여서 아직 구현 안함.
+                addAllSameEvent(deleteList, 'click', function (e) {
+                    const ano = e.target.parentElement.dataset.ano;
+                    ajax.deleteAlarmByAno(ano).then(ret => {
+                        if (ret === 'OK') {
+                            $(e.target).closest('li')[0].remove();
+                        }
+                    })
                 });
             }
             const closeList = getElList('.message-item .close');

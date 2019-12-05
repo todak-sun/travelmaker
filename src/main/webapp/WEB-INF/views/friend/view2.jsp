@@ -24,7 +24,7 @@
         <input type="hidden" id="friendDate_start" value="${friendDTO.dateStart}">
         <input type="hidden" id="friendDate_end" value="${friendDTO.dateEnd}">
         <input type="hidden" id="friendDate_of_issue" value="${friendDTO.date_of_issue}">
-        <input type="hidden" id="username" value="${userDetail.username}">
+        <input type="hidden" id="username" value="${userDetail.nickname}">
     </div>
 
     <!-- 용주형 이거 큰틀 없어서 예시로 박아놨어요 ㅎㅎ -->

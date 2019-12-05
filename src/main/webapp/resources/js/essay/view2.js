@@ -9,7 +9,12 @@ $(function () {
     const bno = +getEl('#bno').value;
     const seq = getEl('#seq') ? +getEl('#seq').value : 0;
     const rno = +getEl('#rno').value;
+    const category = getEl('#category').value;
     const essaySeq = +getEl('#essay-seq').value;
+    let nickname;
+    if (getEl('#nickname')) {
+        nickname = getEl('#nickname').value;
+    }
 
     //엘리먼트
     const btnModify = getEl('#btn-modify');
@@ -25,7 +30,7 @@ $(function () {
             if (confirm('정말 삭제하시겠습니까?')) ajax.essayDelete(rno);
         });
 
-    cmt.init(getEl('.comment-wrap'), bno, seq);
+    cmt.init(getEl('.comment-wrap'), bno, seq, rno, category, nickname);
 
 
 });

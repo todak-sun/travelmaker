@@ -1,14 +1,13 @@
 package com.travelmaker.alarm.dao;
 
-import java.util.List;
-
+import com.travelmaker.alarm.domain.AlarmDTO;
+import com.travelmaker.user.domain.UserDTO;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.travelmaker.alarm.domain.AlarmDTO;
-import com.travelmaker.user.domain.UserDTO;
+import java.util.List;
 
 @Transactional
 @Repository
@@ -50,8 +49,6 @@ public class AlarmDAOImpl implements AlarmDAO {
 		} else if (con.equals("3")) {
 			return sqlSession.selectList("alarmSQL.getMyAlarmListPurchase", userSeq);
 		} else if (con.equals("4")) { // 매퍼 아직안함 --> 알람기능 해놓고
-			return sqlSession.selectList("alarmSQL.getMyAlarmListLike", userSeq);
-		} else if (con.equals("5")) { // 매퍼 아직안함 --> 알람기능 해놓고
 			return sqlSession.selectList("alarmSQL.getMyAlarmListComment", userSeq);
 		} else {
 			return null;
@@ -68,9 +65,7 @@ public class AlarmDAOImpl implements AlarmDAO {
 				sqlSession.delete("alarmSQL.deleteNreadAlarmFriend",requestFid);
 			} else if (alarmType == 3) { // 대리구매알람
 				sqlSession.delete("alarmSQL.deleteNreadAlarmPurchase",requestFid);
-			} else if (alarmType == 4) { // 좋아요알람
-				sqlSession.delete("alarmSQL.deleteNreadAlarmLike",requestFid);
-			} else if (alarmType == 5) { // 댓글알람
+			}  else if (alarmType == 4) { // 댓글알람
 				sqlSession.delete("alarmSQL.deleteNreadAlarmComment",requestFid);
 			}
 
@@ -81,15 +76,18 @@ public class AlarmDAOImpl implements AlarmDAO {
 				sqlSession.delete("alarmSQL.deleteAreadAlarmFriend", requestFid);
 			} else if (alarmType == 3) { // 대리구매알람
 				sqlSession.delete("alarmSQL.deleteAreadAlarmPurchase", requestFid);
-			} else if (alarmType == 4) { // 좋아요알람
-				sqlSession.delete("alarmSQL.deleteAreadAlarmLike", requestFid);
-			} else if (alarmType == 5) { // 댓글알람
+			}  else if (alarmType == 4) { // 댓글알람
 				sqlSession.delete("alarmSQL.deleteAreadAlarmComment", requestFid);
 			}
 		} else {
 			System.out.println("ERROR");
 		}
 
+	}
+
+	@Override
+	public int delete(int ano) {
+		return sqlSession.delete("alarmSQL.deleteByAno", ano);
 	}
 
 }

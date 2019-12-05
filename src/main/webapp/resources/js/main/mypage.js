@@ -5,10 +5,12 @@ $(function () {
     const v = new travelmaker.validation();
     const h = new travelmaker.handler();
     const cash = new travelmaker.Cash();
+    const alarm = new travelmaker.alarm(new SockJS('/echo'));
 
     const modal = new travelmaker.modal('#modal');
 
     const seq = +getEl('#seq').value;
+    const nickname = getEl('#nickname').value;
     const mainWrap = getEl('.main-wrap');
     const menuList = getElList('.menu-group li a');
 
@@ -63,40 +65,157 @@ $(function () {
         initWait();
 
         function initWait() {
-            console.log('wait...');
+            resetTable();
+            showLoading();
             $(tableHead).append(t.paymentWaitHead());
 
-            ajax.getListPaymentBySeq(seq).then(ret => {
+            ajax.getListPayment(seq, 0, 0).then(ret => {
+                closeLoading();
                 const $frag = $(document.createDocumentFragment());
                 ret.forEach(payment => $frag.append(t.paymentWaitBody(seq, payment)));
                 tableContent.appendChild($frag[0]);
 
                 const btnPayList = getElList('.btn-pay');
+                const btnPurCancleList = getElList('.btn-pur-cancel');
+                addAllSameEvent(btnPurCancleList, 'click', function () {
+                    if (confirm('해당 거래를 취소하시겠습니까?')) {
+                        ajax.deletePayment(this.dataset.cno)
+                            .then(ret => {
+                                if (ret === 'ok') {
+                                    alert('해당 거래를 취소하였습니다.');
+                                    initWait();
+                                }
+                            }).catch(console.error);
+                    }
+
+                });
                 addAllSameEvent(btnPayList, 'click', function () {
                     const dataset = this.parentElement.dataset;
                     cash.requestPay('kakaopay', dataset.productname, dataset.total, dataset.buyer_name)
                         .then(ret => {
-                            return ajax.updatePayment({
-                                cno: dataset.cno,
-                                requestUserCheck: 1,
-                                sellerCheck: 0
-                            });
+                            if (ret.success)
+                                return ajax.updatePayment({cno: dataset.cno, requestUserCheck: 1, sellerCheck: 0});
                         })
                         .then(ret => {
-                            initWait();
+                            if (ret === 'ok') {
+                                alarm.send('cash', {username: nickname, cno: dataset.cno, seq: seq, status: "pay"});
+                                return initWait();
+                            }
                         })
                         .catch(console.error);
                 });
-            })
 
+
+            })
         }
 
         function initIng() {
-            console.log('ing...');
+            resetTable();
+            showLoading();
+            $(tableHead).append(t.paymentWaitHead());
+
+            ajax.getListPayment(seq, 1, 1)
+                .then(ret => {
+                    closeLoading();
+                    const $frag = $(document.createDocumentFragment());
+                    ret.forEach(payment => $frag.append(t.paymentWaitBody(seq, payment)));
+                    tableContent.appendChild($frag[0]);
+
+                    const btnCheckPayList = getElList('.btn-check-pay');
+                    const btnDeliverList = getElList('.btn-deliver');
+                    const btnCheckDeliverList = getElList('.btn-check-deliver');
+                    const btnPurCancleList = getElList('.btn-pur-cancel');
+                    addAllSameEvent(btnPurCancleList, 'click', function () {
+                        if (confirm('해당 거래를 취소하시겠습니까?')) {
+                            ajax.deletePayment(this.dataset.cno)
+                                .then(ret => {
+                                    if (ret === 'ok') {
+                                        alert('해당 거래를 취소하였습니다.');
+                                        initWait();
+                                    }
+                                }).catch(console.error);
+                        }
+
+                    });
+                    addAllSameEvent(btnCheckPayList, 'click', function () {
+                        const dataset = this.parentElement.dataset;
+                        ajax.updatePayment({cno: dataset.cno, requestUserCheck: 1, sellerCheck: 1})
+                            .then(ret => {
+                                if (ret === 'ok') {
+                                    alarm.send('cash', {
+                                        username: nickname,
+                                        cno: dataset.cno,
+                                        seq: seq,
+                                        status: "start"
+                                    });
+                                    return initIng();
+                                }
+                            })
+                            .catch(console.error);
+                    });
+
+                    addAllSameEvent(btnDeliverList, 'click', function () {
+                        const dataset = this.parentElement.dataset;
+                        ajax.updatePayment({cno: dataset.cno, requestUserCheck: 2, sellerCheck: 1})
+                            .then(ret => {
+                                if (ret === 'ok') {
+                                    alarm.send('cash', {username: nickname, cno: dataset.cno, seq: seq, status: "end"});
+                                    return initIng();
+                                }
+                            })
+                            .catch(console.error);
+                    });
+
+                    addAllSameEvent(btnCheckDeliverList, 'click', function () {
+                        const dataset = this.parentElement.dataset;
+                        ajax.updatePayment({cno: dataset.cno, requestUserCheck: 2, sellerCheck: 2})
+                            .then(ret => {
+                                if (ret === 'ok') {
+                                    alarm.send('cash', {
+                                        username: nickname,
+                                        cno: dataset.cno,
+                                        seq: seq,
+                                        status: "done"
+                                    });
+                                    return lnbList[2].click();
+                                }
+                            })
+                            .catch(console.error);
+                    });
+                })
         }
 
         function initFinish() {
-            console.log('finish...');
+            resetTable();
+            showLoading();
+            $(tableHead).append(t.paymentWaitHead());
+
+            ajax.getListPayment(seq, 2, 2)
+                .then(ret => {
+                    closeLoading();
+                    const $frag = $(document.createDocumentFragment());
+                    ret.forEach(payment => $frag.append(t.paymentWaitBody(seq, payment)));
+                    tableContent.appendChild($frag[0]);
+
+                    const btnPurCancleList = getElList('.btn-pur-cancel');
+                    addAllSameEvent(btnPurCancleList, 'click', function () {
+                        if (confirm('해당 거래를 취소하시겠습니까?')) {
+                            ajax.deletePayment(this.dataset.cno)
+                                .then(ret => {
+                                    if (ret === 'ok') {
+                                        alert('해당 거래를 취소하였습니다.');
+                                        initWait();
+                                    }
+                                }).catch(console.error);
+                        }
+
+                    });
+                }).catch(console.error);
+        }
+
+        function resetTable() {
+            tableHead.innerHTML = '';
+            tableContent.innerHTML = '';
         }
 
     }
@@ -320,8 +439,6 @@ $(function () {
                     return initFriendAlarm();
                 case 'purchase' :
                     return initPurchaseAlarm();
-                case 'like':
-                    return initLikeAlarm();
                 case 'comment':
                     return initCommentAlarm();
                 default :
@@ -350,19 +467,12 @@ $(function () {
             resetTable();
             $(tableHead).append(t.alarmTableHead());
             alarmAjax(seq, 3);
-
-        }
-
-        function initLikeAlarm() {
-            resetTable();
-            $(tableHead).append(t.alarmTableHead());
-            // alarmAjax(seq,4);
         }
 
         function initCommentAlarm() {
             resetTable();
             $(tableHead).append(t.alarmTableHead());
-            // alarmAjax(seq,5);
+            alarmAjax(seq, 4);
         }
 
         function resetTable() {
@@ -392,6 +502,15 @@ $(function () {
                         template += t.mypageAlarmviewTemplate(items);
                     });
                     tableContent.innerHTML = template;
+                    const deleteList = getElList('.btn-alarm-delete');
+                    addAllSameEvent(deleteList, 'click', (e) => {
+                        ajax.deleteAlarmByAno(e.target.dataset.ano)
+                            .then(ret => {
+                                if (ret === 'OK') {
+                                    $(e.target).closest('tr')[0].remove();
+                                }
+                            })
+                    })
                 },
                 error: function (error) {
                     console.log(error);
@@ -413,10 +532,8 @@ $(function () {
                 convertAlarmtype = '2';
             } else if (alarmtype == 'purchase') {
                 convertAlarmtype = '3';
-            } else if (alarmtype == 'like') {
-                convertAlarmtype = '4';
             } else if (alarmtype == 'comment') {
-                convertAlarmtype = '5';
+                convertAlarmtype = '4';
             } else {
                 console.log('ERROR');
             }
@@ -437,8 +554,6 @@ $(function () {
                         initPurchaseAlarm();
                     } else if (data == '4') {
                         initCommentAlarm();
-                    } else if (data == '5') {
-                        initCommentAlarm();
                     }
                 },
                 error: function (error) {
@@ -446,7 +561,6 @@ $(function () {
                 }
             });
         });
-
     }
 
     function initMyArticle() {

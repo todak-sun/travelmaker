@@ -11,8 +11,9 @@
 </head>
 <body>
 <%@include file="../common/navbar2.jsp" %>
+<sec:authentication var="userDetail" property="principal"/>
 <div class="hidden">
-    <input type="hidden" value="">
+    <input id="nickname" type="hidden" value="${userDetail.nickname}">
 </div>
 <div class="container-wrap">
     <nav class="lnb-side">

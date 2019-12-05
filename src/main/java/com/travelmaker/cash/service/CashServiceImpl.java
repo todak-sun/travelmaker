@@ -39,6 +39,13 @@ public class CashServiceImpl implements CashService {
     }
 
     @Override
+    public ResponseEntity<List<CashDTO>> readAll(CashDTO cashDTO) {
+        return Optional.ofNullable(cashDAO.readAll(cashDTO))
+                .map(cashDTOList -> new ResponseEntity<>(cashDTOList, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
+    }
+
+    @Override
     public ResponseEntity<String> update(CashDTO cashDTO) {
         int result = cashDAO.update(cashDTO);
         if (result == 1) {
@@ -47,4 +54,16 @@ public class CashServiceImpl implements CashService {
             return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
         }
     }
+
+    @Override
+    public ResponseEntity<String> delete(int cno) {
+        int result = cashDAO.delete(cno);
+        if (result == 1) {
+            return new ResponseEntity<>("ok", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
 }

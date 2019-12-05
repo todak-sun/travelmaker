@@ -31,8 +31,30 @@ public class CashDAOImpl implements CashDAO {
     }
 
     @Override
+    public List<CashDTO> readAll(CashDTO cashDTO) {
+        return sqlSession.selectList("cashSQL.readAll", cashDTO);
+    }
+
+    @Override
+    public CashDTO readOne(int prno) {
+        return sqlSession.selectOne("cashSQL.readOneByPrno", prno);
+    }
+
+    @Override
+    public CashDTO readOneByCno(int cno){
+        return sqlSession.selectOne("cashSQL.readOneByCno", cno);
+    }
+
+    @Override
     public int update(CashDTO cashDTO) {
         return sqlSession.update("cashSQL.update", cashDTO);
     }
+
+    @Override
+    public int delete(int cno) {
+        return sqlSession.delete("cashSQL.delete", cno);
+    }
+
+
 
 }

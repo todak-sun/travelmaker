@@ -227,8 +227,8 @@ let travelmaker = (function (window) {
 
         Template.prototype.purOrderView = function (order) {
             const {isPermit, prno, nickname, productname, price, quantity, content, requestUserSeq} = order;
-            const agree = isPermit === 1 ? '수락됨[OK]' : '수락';
-            const disagree = isPermit === 2 ? '거절됨[OK]' : '거절';
+            const agree = isPermit === 1 ? '<span class="span-agree">수락됨</span>' : `<button class="btn-agree" data-seq="${prno}">수락</button>`;
+            const disagree = isPermit === 2 ? '<span class="span-disagree">거절됨</span>' : `<button class="btn-disagree" data-seq="${prno}">거절</button>`;
             return `
                 <li>
                     <div class="request-item">
@@ -249,8 +249,8 @@ let travelmaker = (function (window) {
                                     data-quantity="${quantity}"
                                     data-productname="${productname}"
                                     >
-                                    <button class="btn-agree" data-seq="${prno}">${agree}</button>
-                                    <button class="btn-disagree" data-seq="${prno}">${disagree}</button>
+                                    ${agree}
+                                    ${disagree}
                                 </div>
                             </div>
                         </div>
@@ -470,7 +470,7 @@ let travelmaker = (function (window) {
         };
 
         Template.prototype.comment = function (mySeq, comment) {
-            const {cno, bno, content, likes, unlikes, seq, dateWrite, pcno, userDTO: {realname}} = comment;
+            const {cno, bno, content, likes, unlikes, seq, dateWrite, pcno, userDTO: {nickname}} = comment;
             let commentItem = `
                 <li class="${cno === pcno ? '' : 're'}">
                     <div class="comment-item">
@@ -478,7 +478,7 @@ let travelmaker = (function (window) {
                             <div class="img-wrap">
                                 <img src="https://source.unsplash.com/collection/190727/80x80" alt="" />
                             </div>
-                            <p class="author-nickname">${realname}</p>
+                            <p class="author-nickname">${nickname}</p>
                         </div>
                         <div class="content-area">
                             <textarea class="comment-content" disabled>${content}</textarea>
@@ -707,13 +707,11 @@ let travelmaker = (function (window) {
 
         Template.prototype.alarmlist = function () {
             return `
-        	
         	<nav class="lnb-my-alarm">
                 <ul>
-                    <li><a href="#" class="on2" data-page="allAlarm">전체알람</a></li>
+                    <li><a href="#" class="on2 on" data-page="allAlarm">전체알람</a></li>
                     <li><a href="#" data-page="friend">동행</a></li>
                     <li><a href="#" data-page="purchase">대리구매</a></li>
-                    <li><a href="#" data-page="like">좋아요</a></li>
                     <li><a href="#" data-page="comment">댓글</a></li>
                 </ul>
             </nav>
@@ -724,7 +722,6 @@ let travelmaker = (function (window) {
                 <thead class="table-head"></thead>
                 <tbody class="table-content"></tbody>
             </table>
-            
         	`;
         }
 
@@ -734,6 +731,7 @@ let travelmaker = (function (window) {
                 <th class="content">내용</th>
                 <th class="date">작성일</th>
                 <th class="type">구분</th>
+                <th></th>
             </tr>
           `;
         };
@@ -1160,12 +1158,13 @@ let travelmaker = (function (window) {
                     <th>결제금액</th>
                     <th>결제일자</th>
                     <th></th>
+                    <th></th>
                 </tr>
             `;
         };
 
         Template.prototype.paymentWaitBody = function (seq, payment) {
-            const {cno, type, requestUser, requestUserSeq, seller, sellerSeq, requestUserCheck, sellerCheck, productName, quantity, price, applyNum, paidAt} = payment;
+            const {cno, type, requestUser, requestUserSeq, seller, sellerSeq, requestUserCheck, sellerCheck, productName, quantity, price, cdate, applyNum, paidAt} = payment;
             let total = price * quantity;
             let status = '';
 
@@ -1173,7 +1172,7 @@ let travelmaker = (function (window) {
                 if (requestUserCheck === 0) {
                     if (sellerCheck === 0) status = '결제대기';
                 } else if (requestUserCheck === 1) {
-                    if (sellerCheck === 0) status = '<button class="btn-check-pay">입금확인</button>';
+                    if (sellerCheck === 0) status = '<button class="btn-check-pay">배송시작</button>';
                     if (sellerCheck === 1) status = '<button class="btn-deliver">배송완료</button>';
                 } else if (requestUserCheck === 2) {
                     if (sellerCheck === 1) status = '배송완료';
@@ -1203,8 +1202,9 @@ let travelmaker = (function (window) {
                     <td>${quantity}</td>
                     <td>${price}</td>
                     <td>${total}</td>
-                    <td>2011-11-11</td>
+                    <td>${cdate}</td>
                     <td data-cno="${cno}" data-productName="${productName}" data-total="${total}" data-buyer_name="${me}">${status}</td>
+                    <td><button data-cno=${cno} class="btn-pur-cancel">거래취소</button></td>
                 </tr>
             `;
         };
@@ -1222,8 +1222,6 @@ let travelmaker = (function (window) {
             } else if (items.header === 'purB') {
                 type = '대리구매';
                 url = '/pur/view/2/' + items.dataSeq;
-            } else if (items.header === 'like') {
-                type = '좋아요';
             } else if (items.header === 'comment') {
                 type = '댓글';
             } else {
@@ -1235,6 +1233,7 @@ let travelmaker = (function (window) {
                 <td class="content"><a href="` + url + `" >${items.content}</a></th>
                 <td class="date">${items.alarmDate}</th>
                 <td class="type">` + type + `</th>
+                <td><button class="btn-alarm-delete" data-ano="${items.ano}">삭제</button></td>
             </tr>
           `;
         };
@@ -1320,9 +1319,22 @@ let travelmaker = (function (window) {
             this.createPayment = createPayment;
             this.getListPaymentBySeq = getListPaymentBySeq;
             this.updatePayment = updatePayment;
+            this.deletePayment = deletePayment;
+            this.getListPayment = getListPayment;
+            this.deleteAlarmByAno = deleteAlarmByAno;
         };
 
         const {setRequestHeader} = new Utils();
+
+        function deletePayment(cno) {
+            return $.ajax({
+                type: 'DELETE',
+                url: '/api/cash/' + cno,
+                dataType: 'text',
+                // contentType: 'application/json',
+                beforeSend: setRequestHeader
+            });
+        }
 
         function getListPaymentBySeq(seq) {
             return $.ajax({
@@ -1330,6 +1342,20 @@ let travelmaker = (function (window) {
                 url: '/api/cash/' + seq,
                 dataType: 'json',
                 contentType: 'application/json',
+                beforeSend: setRequestHeader
+            })
+        }
+
+        function getListPayment(seq, requestUserCheck, sellerCheck) {
+            return $.ajax({
+                type: 'GET',
+                url: '/api/cash',
+                dataType: 'json',
+                data: {
+                    requestUserSeq: seq,
+                    requestUserCheck: requestUserCheck,
+                    sellerCheck: sellerCheck
+                },
                 beforeSend: setRequestHeader
             })
         }
@@ -1349,7 +1375,7 @@ let travelmaker = (function (window) {
             return $.ajax({
                 type: 'POST',
                 url: '/api/cash',
-                dataType: 'json',
+                dataType: 'text',
                 contentType: 'application/json',
                 data: JSON.stringify(data),
                 beforeSend: setRequestHeader
@@ -1386,7 +1412,7 @@ let travelmaker = (function (window) {
                 url: '/pur/setRequestPermit',
                 contentType: 'application/json',
                 data: JSON.stringify(data),
-                dataType: 'json',
+                dataType: 'text',
                 beforeSend: setRequestHeader
             });
         }
@@ -1397,7 +1423,7 @@ let travelmaker = (function (window) {
                 url: '/pur/setOrderPermit',
                 contentType: 'application/json',
                 data: JSON.stringify(data),
-                dataType: 'json',
+                dataType: 'text',
                 beforeSend: setRequestHeader
             });
         }
@@ -1436,6 +1462,15 @@ let travelmaker = (function (window) {
                 url: '/pur/getOrderView',
                 data: {bno: bno},
                 dataType: 'json',
+                beforeSend: setRequestHeader
+            });
+        }
+
+        function deleteAlarmByAno(ano) {
+            return $.ajax({
+                type: 'DELETE',
+                url: '/alarm/deleteAlarm/' + ano,
+                dataType: 'text',
                 beforeSend: setRequestHeader
             });
         }
@@ -2353,6 +2388,19 @@ let travelmaker = (function (window) {
         return Handler;
     })(_w);
 
+    const Alarm = (function (w) {
+        const Alarm = function (sock) {
+            this.sock = sock;
+        };
+
+        Alarm.prototype.send = function (header, data) {
+            let message = {header, data};
+            this.sock.send(JSON.stringify(message));
+        };
+
+        return Alarm;
+    })(_w);
+
     const Comment = (function () {
         const Comment = function () {
         };
@@ -2360,25 +2408,30 @@ let travelmaker = (function (window) {
         const {getEl, getEls, getElList, addAllSameEvent, addEvent, useState} = new Utils();
         const ajax = new Ajax();
         const t = new Template();
+        const alarm = new Alarm(new SockJS('/echo'));
 
         // let commentWrap;
-        let _bno, _seq;
+        let _bno, _seq, _rno, _category, _nickname;
         let _setCmt, _getCmt;
         let _commentGroup, _btnAddComment;
 
-        Comment.prototype.init = function (commentWrap, bno, seq) {
+        Comment.prototype.init = function (commentWrap, bno, seq, rno, category, nickname) {
             const [setCmt, getCmt] = useState({seq: 0, content: null});
             const [commentGroup, commentContent, btnAddComment]
                 = getEls(commentWrap, '.comment-group', '#comment-content', '#btn-add-comment');
-            console.log(commentWrap);
-            console.log('bno', bno);
-            console.log('seq', seq);
+            // console.log(commentWrap);
+            // console.log('bno', bno);
+            // console.log('seq', seq);
             _bno = bno;
             _seq = seq;
+            _rno = rno;
+            _category = category;
+            _nickname = nickname;
             _setCmt = setCmt;
             _getCmt = getCmt;
             _commentGroup = commentGroup;
             _btnAddComment = btnAddComment;
+            console.log(alarm);
 
             if (commentContent && btnAddComment) {
                 addEvent(commentContent, 'change', (e) => setCmt({content: e.target.value, seq: seq}));
@@ -2387,8 +2440,9 @@ let travelmaker = (function (window) {
                     if (!commentContent.value) return;
                     ajax.createComment(bno, getCmt())
                         .then((ret) => {
-                            commentContent.value = '';
+                            commentContent.value = ''; //todo 여기서 알람을 보내면 됨.
                             printCommentList();
+                            alarm.send('cmt', {category: "essay", action: "cmt", rno: _rno, username: _nickname, cno: 1});
                         })
                         .catch(console.error);
                 });
@@ -2453,7 +2507,16 @@ let travelmaker = (function (window) {
                 const commentContent = e.target.parentElement.previousElementSibling;
                 setCmtInner({...data, likes: data.likes + 1, content: commentContent.value});
                 ajax.updateComment(_bno, getCmtInner())
-                    .then((ret) => printCommentList())
+                    .then((ret) => {
+                        alarm.send('cmt', {
+                            category: "essay",
+                            action: "like",
+                            rno: _rno,
+                            cno: getCmtInner().cno,
+                            username: _nickname
+                        });
+                        printCommentList()
+                    })
                     .catch(console.error);
             });
 
@@ -2462,7 +2525,16 @@ let travelmaker = (function (window) {
                 const commentContent = e.target.parentElement.previousElementSibling;
                 setCmtInner({...data, unlikes: data.unlikes + 1, content: commentContent.value});
                 ajax.updateComment(_bno, getCmtInner())
-                    .then((ret) => printCommentList())
+                    .then((ret) => {
+                        alarm.send('cmt', {
+                            category: "essay",
+                            action: "unlike",
+                            rno: _rno,
+                            cno: getCmtInner().cno,
+                            username: _nickname
+                        });
+                        printCommentList()
+                    })
                     .catch(console.error);
             });
 
@@ -2484,6 +2556,13 @@ let travelmaker = (function (window) {
                     const cno = +e.target.dataset.cno;
                     ajax.createReComment(_bno, cno, getCmtInner())
                         .then(ret => {
+                            alarm.send('cmt', {
+                                category: "essay",
+                                action: "re",
+                                rno: _rno,
+                                cno: cno,
+                                username: _nickname
+                            });
                             printCommentList()
                         })
                         .catch(console.error);
@@ -2521,29 +2600,13 @@ let travelmaker = (function (window) {
         return Comment;
     })(_w);
 
-    const Alarm = (function (w) {
-        const Alarm = function (sock) {
-            this.sock = sock;
-        };
-
-        Alarm.prototype.send = function (header, data) {
-            let message = {header, data};
-            this.sock.send(JSON.stringify(message));
-        };
-
-        return Alarm;
-    })(_w);
-
     const Cash = (function () {
         const Cash = function () {
             this.IMP = window.IMP;
             this.IMP.init('imp42270163');
         };
 
-        const ajax = new Ajax();
-
         Cash.prototype.requestPay = function (pgtype, productname, total, buyer_name) {
-
             let payInfo = {
                 pg: pgtype,
                 pay_method: 'card',
@@ -2552,7 +2615,6 @@ let travelmaker = (function (window) {
                 amount: total, // 금액
                 buyer_name: buyer_name, // 주문자
             };
-
             return requestPay(this.IMP, payInfo);
         };
 
@@ -2560,7 +2622,7 @@ let travelmaker = (function (window) {
             return new Promise((resolve, reject) => {
                 IMP.request_pay(payInfo, function (ret) {
                     resolve(ret);
-                })
+                });
             });
         }
 

@@ -49,7 +49,7 @@ $(function () {
                     ajax.createPurOrder($(requestForm).serialize())
                         .then(() => {
                             alert('신청 완료되었습니다!');
-                            alarm.send('pur', {bno: bno, username: username});
+                            alarm.send('pur', {bno: bno, username: nickname});
                             modal.clear();
                         })
                         .catch(console.error);
@@ -78,15 +78,27 @@ $(function () {
                         requestUser: dataset.nickname,
                         requestUserSeq: dataset.sellerseq,
                         quantity: dataset.quantity,
-                        productName: dataset.productname
+                        productName: dataset.productname,
+                        prno: this.dataset.seq
                     });
 
-                    ajax.createPayment(getPaymentData());
-                    this.innerText = '수락됨[OK]';
+                    ajax.createPayment(getPaymentData())
+                        .then(ret => {
+                            btnCheck.click();
+                            btnCheck.click();
+                        });
                 });
+
                 addAllSameEvent(btnDisagreeList, 'click', function () {
-                    ajax.updatePermitStatusOrder({prno: this.dataset.seq, isPermit: 2});
-                    this.innerText = '거절됨[OK]';
+                    ajax.updatePermitStatusOrder({prno: this.dataset.seq, isPermit: 2})
+                        .then(ret => {
+                            if (ret === 'FAIL') {
+                                alert('이미 진행중인 거래입니다. 마이페이지에서 확인해주세요!');
+                            } else {
+                                btnCheck.click();
+                                btnCheck.click();
+                            }
+                        })
                 });
 
                 e.target.innerText = '닫기';

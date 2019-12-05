@@ -12,5 +12,13 @@ public interface CashDAO {
 
     List<CashDTO> readAllBySeq(int seq);
 
+    CashDTO readOne(int prno);
+
     int update(CashDTO cashDTO);
+
+    int delete(int cno);
+
+    List<CashDTO> readAll(CashDTO cashDTO);
+
+    CashDTO readOneByCno(int cno);
 }

@@ -10,10 +10,76 @@
 
     <insert id="create" parameterType="cash">
         INSERT INTO CASHTRADE(CNO, TYPE, REQUESTUSER, REQUESTUSERSEQ, SELLER, SELLERSEQ, PRODUCTNAME, QUANTITY, PRICE,
-                              APPLYNUM, PAIDAT, CDATE)
+                              APPLYNUM, PAIDAT, CDATE, PRNO)
         VALUES ( seq_cash.nextval, #{type}, #{requestUser}, #{requestUserSeq}, #{seller}, #{sellerSeq}, #{productName}
-               , #{quantity}, #{price}, #{applyNum, jdbcType=VARCHAR}, #{paidAt, jdbcType=VARCHAR}, sysdate)
+               , #{quantity}, #{price}, #{applyNum, jdbcType=VARCHAR}, #{paidAt, jdbcType=VARCHAR}, sysdate, #{prno})
     </insert>
+
+    <select id="readOneByPrno" parameterType="int" resultType="cash">
+        SELECT CNO,
+               TYPE,
+               REQUESTUSER,
+               REQUESTUSERSEQ,
+               SELLER,
+               SELLERSEQ,
+               REQUESTUSERCHECK,
+               SELLERCHECK,
+               PRODUCTNAME,
+               QUANTITY,
+               PRICE,
+               APPLYNUM,
+               PAIDAT,
+               to_char(CDATE, 'YYYY-MM-DD') as CDATE,
+               PRNO
+        FROM CASHTRADE
+        WHERE prno = #{prno}
+    </select>
+
+    <select id="readAll" parameterType="cash" resultType="cash">
+        SELECT CNO,
+        TYPE,
+        REQUESTUSER,
+        REQUESTUSERSEQ,
+        SELLER,
+        SELLERSEQ,
+        REQUESTUSERCHECK,
+        SELLERCHECK,
+        PRODUCTNAME,
+        QUANTITY,
+        PRICE,
+        APPLYNUM,
+        PAIDAT,
+        to_char(CDATE, 'YYYY-MM-DD') as CDATE,
+        PRNO
+        FROM CASHTRADE
+        WHERE (REQUESTUSERSEQ = #{requestUserSeq} OR SELLERSEQ = #{requestUserSeq})
+        <if test="requestUserCheck != 1">
+            AND (REQUESTUSERCHECK = #{requestUserCheck} AND SELLERCHECK = #{sellerCheck})
+        </if>
+        <if test="requestUserCheck == 1">
+            AND (REQUESTUSERCHECK = 1 OR SELLERCHECK = 1)
+        </if>
+    </select>
+
+    <select id="readOneByCno" parameterType="int" resultType="cash">
+        SELECT CNO,
+               TYPE,
+               REQUESTUSER,
+               REQUESTUSERSEQ,
+               SELLER,
+               SELLERSEQ,
+               REQUESTUSERCHECK,
+               SELLERCHECK,
+               PRODUCTNAME,
+               QUANTITY,
+               PRICE,
+               APPLYNUM,
+               PAIDAT,
+               to_char(CDATE, 'YYYY-MM-DD') as CDATE,
+               PRNO
+        FROM CASHTRADE
+        WHERE CNO = #{cno}
+    </select>
 
     <select id="readAllBySeq" parameterType="int" resultType="cash">
         SELECT CNO,
@@ -29,7 +95,8 @@
                PRICE,
                APPLYNUM,
                PAIDAT,
-               to_char(CDATE, 'YYYY-MM-DD') as CDATE
+               to_char(CDATE, 'YYYY-MM-DD') as CDATE,
+               PRNO
         FROM CASHTRADE
         WHERE REQUESTUSERSEQ = #{seq}
            OR SELLERSEQ = #{seq}
@@ -41,4 +108,10 @@
             SELLERCHECK      = #{sellerCheck}
         WHERE CNO = #{cno}
     </update>
+
+    <delete id="delete" parameterType="int">
+        DELETE
+        FROM CASHTRADE
+        WHERE CNO = #{cno}
+    </delete>
 </mapper>

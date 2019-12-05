@@ -17,7 +17,9 @@
     <input id="rno" type="hidden" value="${essayDTO.rno}">
     <input id="bno" type="hidden" value="${essayDTO.bno}"/>
     <input id="essay-seq" type="hidden" value="${essayDTO.seq}"/>
+    <input id="category" type="hidden" value="essay">
     <sec:authorize access="isAuthenticated()">
+        <input type="hidden" id="nickname" value="${userDetail.nickname}">
         <input type="hidden" id="my-seq" value="${userDetail.seq}">
     </sec:authorize>
 </div>

@@ -27,4 +27,5 @@ public class CashDTO {
     private String applyNum;
     private String paidAt;
     private String cdate;
+    private int prno;
 }

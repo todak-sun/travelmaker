@@ -13,5 +13,11 @@ public interface CashService {
 
     ResponseEntity<List<CashDTO>> readAllBySeq(int seq);
 
+    ResponseEntity<List<CashDTO>> readAll(CashDTO cashDTO);
+
     ResponseEntity<String> update(CashDTO cashDTO);
+
+    ResponseEntity<String> delete(int cno);
+
+
 }

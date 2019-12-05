@@ -52,7 +52,7 @@ $(function () {
                     ajax.createPurRequest($(requestForm).serialize())
                         .then(() => {
                             alert('신청 완료되었습니다!');
-                            alarm.send('pur', {bno: bno, username: username});
+                            alarm.send('pur', {bno: bno, username: nickname});
                             modal.clear();
                         })
                         .catch(console.error);
@@ -70,33 +70,44 @@ $(function () {
                 ret.forEach(request => $frag.append(t.purOrderView(request)));
                 contentGroup.append($frag[0]);
 
-                const btnAgreeList = getElList('.request-item .btn-agree');
-                const btnDisagreeList = getElList('.request-item .btn-disagree');
+                let btnAgreeList = getElList('.request-item .btn-agree');
+                let btnDisagreeList = getElList('.request-item .btn-disagree');
 
-                addAllSameEvent(btnAgreeList, 'click', function () {
+                addAllSameEvent(btnAgreeList, 'click', btnAgreeHandler);
+                addAllSameEvent(btnDisagreeList, 'click', btnDisagreeHandler);
+
+                function btnAgreeHandler() {
                     let dataset = this.parentElement.querySelector('[type="hidden"]').dataset;
                     dataset = getObjFromDataSet(dataset);
                     setPaymentData({
                         seller: dataset.nickname,
-                        sellerSeq: dataset.sellerseq
+                        sellerSeq: dataset.sellerseq,
+                        prno: this.dataset.seq
                     });
 
                     ajax.updatePermitStatusReq({prno: this.dataset.seq, isPermit: 1})
                         .catch(console.error);
 
-
                     ajax.createPayment(getPaymentData())
-                        .then(ret => console.log(ret))
+                        .then(ret => {
+                            btnCheck.click();
+                            btnCheck.click();
+                        })
                         .catch(console.error);
+                }
 
 
-                    this.innerText = '수락됨[OK]';
-                });
-
-                addAllSameEvent(btnDisagreeList, 'click', function () {
-                    ajax.updatePermitStatusReq({prno: this.dataset.seq, isPermit: 2});
-                    this.innerText = '거절됨[OK]';
-                });
+                function btnDisagreeHandler() {
+                    ajax.updatePermitStatusReq({prno: this.dataset.seq, isPermit: 2})
+                        .then(ret => {
+                            if (ret === 'FAIL') {
+                                alert('이미 진행중인 거래입니다. 마이페이지에서 확인해주세요!');
+                            } else {
+                                btnCheck.click();
+                                btnCheck.click();
+                            }
+                        });
+                }
 
                 e.target.innerText = '닫기';
                 e.target.removeEventListener('click', btnCheckOpenHandler);
