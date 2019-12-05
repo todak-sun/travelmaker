@@ -169,11 +169,11 @@
                 <input type="text" id="hash-input" />
                 <button id="hash-add">추가</button>
               </div>
+              <c:set
+                var="hashes"
+                value="${fn:split(routeDTO.hashtag, ' ')}"
+              />
               <div class="hash-view" id="hash-view">
-                <c:set
-                  var="hashes"
-                  value="${fn:split(routeDTO.hashtag, ' ')}"
-                />
                 <c:forEach items="${hashes}" var="hash">
                   <span class="hash">${hash}</span>
                 </c:forEach>

@@ -21,5 +21,5 @@ public class StoryDTO {
 	private int fixed; 
 	private int isDomestic; 
 	private String nickname;
-	private String imgprofile;
+	private String imgProfile;
 }

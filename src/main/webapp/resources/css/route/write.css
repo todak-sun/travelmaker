@@ -339,7 +339,7 @@ html::before {
   margin: 0 auto;
   width: 90%;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 0.5rem;
 }
 

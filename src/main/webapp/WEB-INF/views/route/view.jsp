@@ -59,8 +59,8 @@ uri="http://www.springframework.org/security/tags" %>
             <li>
               <div class="route-item">
                 <div class="route-info">
-                  <input type="hidden" name="lat" value="${course.lat}">
-                  <input type="hidden" name="lng" value="${course.lng}">
+                  <input type="hidden" name="lat" class= "lat" value="${course.lat}">
+                  <input type="hidden" name="lng" class= "lng" value="${course.lng}">
                   <input type="hidden" name="location" value="${course.location}">
                   <h4 class="route-title">
                     <span class="number"
