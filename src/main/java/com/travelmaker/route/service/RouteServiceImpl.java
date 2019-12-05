@@ -139,23 +139,25 @@ public class RouteServiceImpl implements RouteService {
 		// 추가할 이미지가 있다면 저장
 		if(routeContentDTO.getImages()!=null) { // 이미지가 있을 때
 			RouteImageDTO routeImageDTO = new RouteImageDTO();
-			String filePath = servletContext.getRealPath("/resources/storage/route");
+			//String filePath = servletContext.getRealPath("/resources/storage/route");
 			int i = 1; // 이미지 순서
 			for(MultipartFile img : routeContentDTO.getImages()) {
-				String fileName = img.getOriginalFilename();
-				File file = new File(filePath, fileName);
-				
-				System.out.println("파일 경로 : " + filePath);
-				System.out.println("파일 이름 : " + fileName);
-				
-				try {
-					FileCopyUtils.copy(img.getInputStream(), new FileOutputStream(file));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				String temp = "route";
+				String imageName = fileIO.saveImage(img, temp);
+//				String fileName = img.getOriginalFilename();
+//				File file = new File(filePath, fileName);
+//				
+//				System.out.println("파일 경로 : " + filePath);
+//				System.out.println("파일 이름 : " + fileName);
+//				
+//				try {
+//					FileCopyUtils.copy(img.getInputStream(), new FileOutputStream(file));
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
 				
 				routeImageDTO.setImgOrder(i);
-				routeImageDTO.setImg(fileName);
+				routeImageDTO.setImg(imageName);
 				routeImageDTO.setCrno(crno);
 				i++;
 				routeDAO.saveRouteImage(routeImageDTO);
