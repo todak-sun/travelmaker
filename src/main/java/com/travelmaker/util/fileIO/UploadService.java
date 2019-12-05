@@ -1,9 +1,13 @@
 package com.travelmaker.util.fileIO;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -26,14 +30,16 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
+import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.S3Object;
 
 @Component
 public class UploadService implements ServletContextAware {
 	// 엑세스키
-	private static final String accessKey = "AKIAXNK7TV3NWYHAUI5M";
+	private static final String accessKey = "AKIAIN76F7KCSNA5YUHA";
 	// 보안 엑세스키
-	private static final String secretKey = "iHU+dnTc5aO1KJAS6PWYWmGTzA2Vc61HnrnAQdhS";
+	private static final String secretKey = "F5dquEqPbO+KOMLQ/NGHhX16uuN8bb8ZCzwWkDGV";
 	// Amazon S3 버킷 이름
 	private static final String bucketName = "travelmaker-bucket";
 	
@@ -143,14 +149,14 @@ public class UploadService implements ServletContextAware {
 		return imageName;
 	}
 	// 삭제
-	public void delete(String imageName, String temp) {
+	public void delete(String fileName, String temp) {
 		// 생성
 		AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
 		// 각종 정보 등록
 		AmazonS3 s3Client = AmazonS3ClientBuilder.standard().withCredentials(new AWSStaticCredentialsProvider(credentials)).withRegion(regions).build();
 		
 		try {
-			s3Client.deleteObject(new DeleteObjectRequest(bucketName + "/" + temp, imageName));
+			s3Client.deleteObject(new DeleteObjectRequest(bucketName + "/" + temp, fileName));
 			System.out.println("끝냄");
 		} catch (AmazonServiceException ase) {
 			// TODO Auto-generated catch block
@@ -159,5 +165,45 @@ public class UploadService implements ServletContextAware {
 			// TODO Auto-generated catch block
 			ace.printStackTrace();
 		}
+	}
+	
+	// Essay Text 파일 업로드
+	public void uploadTxt(File file, String temp, String fileName) {
+		AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
+		AmazonS3 s3Client = AmazonS3ClientBuilder.standard().withCredentials(new AWSStaticCredentialsProvider(credentials)).withRegion(regions).build();
+
+		PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, temp + "/" + fileName, file);
+		putObjectRequest.setCannedAcl(CannedAccessControlList.PublicRead);
+		
+		s3Client.putObject(putObjectRequest);
+	}
+	// Essay Text 파일 다운로드
+	public String downloadTxt(String fileName, String temp) {
+		AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
+		AmazonS3 s3Client = AmazonS3ClientBuilder.standard().withCredentials(new AWSStaticCredentialsProvider(credentials)).withRegion(regions).build();
+		S3Object object = s3Client.getObject(new GetObjectRequest(bucketName, temp + "/" + fileName));
+		InputStream in = object.getObjectContent();
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		StringBuffer sb = new StringBuffer();
+		
+		while(true) {
+			try {
+				String line = reader.readLine();
+				if(line == null) break;
+				
+				sb.append(line);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		try {
+			reader.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return sb.toString();
 	}
 }
