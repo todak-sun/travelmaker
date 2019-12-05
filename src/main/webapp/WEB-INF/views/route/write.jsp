@@ -74,7 +74,7 @@
                 <img
                   id="image-main-prev"
                   alt=""
-                  src="/resources/storage/route/${routeDTO.imageName}"
+                  src="${routeDTO.imageName}"
                 />
                 <span class="image-change"
                   >여행이야기의 대표 이미지를 설정해주세요!!</span

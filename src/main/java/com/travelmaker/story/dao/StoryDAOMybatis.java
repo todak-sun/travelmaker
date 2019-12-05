@@ -1,5 +1,7 @@
 package com.travelmaker.story.dao;
 
+import com.travelmaker.friend.domain.FriendDTO;
+import com.travelmaker.purchase.domain.PurchaseDTO;
 import com.travelmaker.story.domain.StoryDTO;
 import com.travelmaker.story.domain.StorySearchFilter;
 
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository("storyDAO")
 @Transactional
@@ -39,4 +42,14 @@ public class StoryDAOMybatis implements StoryDAO {
 
         return sqlSession.selectOne("storySQL.selectEssay", bno) == null ? "route" : "essay";
     }
+
+	@Override
+	public List<Map<String, String>> getFriends(StorySearchFilter storySearchFilter) {
+		return sqlSession.selectList("storySQL.getFriends", storySearchFilter);
+	}
+
+	@Override
+	public List<Map<String, String>> getPurchase(StorySearchFilter storySearchFilter) {
+		return sqlSession.selectList("storySQL.getPurchases", storySearchFilter);
+	}
 }

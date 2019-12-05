@@ -1,6 +1,8 @@
 package com.travelmaker.story.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +30,20 @@ public class StoryApiController {
 		storySearchFilter.setEnd(end);
 		storySearchFilter.setKeyword(keyword.isPresent() ? keyword.get() : "");
 		
-		System.out.println("start : "+start);
-		System.out.println("end : "+end);
-		System.out.println("keyword : "+keyword);
+//		System.out.println("start : "+start);
+//		System.out.println("end : "+end);
+//		System.out.println("keyword : "+keyword);
 
 		List<StoryDTO> list = storyService.getStory(storySearchFilter);
 		System.out.println("가져온게시글 수 : "+list.size());
 		return list;
 	}
+	
+	@GetMapping(path ={"/home/{keyword}","/home/"} )
+	public Map<String, Object> homeList(@PathVariable Optional<String> keyword){
+			
+		return storyService.getHomeList(keyword.isPresent() ? keyword.get() : "");
+	}
+
 	
 }

@@ -31,7 +31,7 @@ public interface RouteDAO {
 
 	public void patchCourse(RouteContentDTO routeContentDTO);
 
-	public void deleteCourse(int crno);
+	public List<RouteImageDTO> deleteCourse(int crno);
 
 	public void saveOrder(Map<String, Integer> map);
 
@@ -39,7 +39,7 @@ public interface RouteDAO {
 
 	public int getRouteTemp(int seq);
 
-	public void deleteRoute(int rno);
+	public List<String> deleteRoute(int rno);
 
 	public void deleteRouteImage(String delImage);
 

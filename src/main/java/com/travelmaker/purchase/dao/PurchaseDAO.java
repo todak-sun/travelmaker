@@ -17,7 +17,7 @@ public interface PurchaseDAO {
 
 	public PurchaseDTO getPurchaseDTO(String bno);
 
-	public void puchaseDelete(String bno);
+	public String puchaseDelete(String bno);
 
 	public void updatePurchase1(PurchaseDTO purchaseDTO);
 

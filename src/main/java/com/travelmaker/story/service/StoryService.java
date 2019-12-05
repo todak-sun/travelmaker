@@ -15,4 +15,6 @@ public interface StoryService {
 
     public String selectBoard(int bno);
 
+	public Map<String, Object> getHomeList(String keyword);
+
 }
