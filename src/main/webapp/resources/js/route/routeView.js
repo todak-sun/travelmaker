@@ -2,12 +2,43 @@ $().ready(function() {
   console.log("rno = " + $("#rno").val());
   console.log("seq = " + $("#seq").val());
   const { useState, setRequestHeader } = new travelmaker.utils();
+  const btnModify = document.querySelector("#btn-route-modify");
+  const btnDelete = document.querySelector("#btn-route-delete");
   const rno = document.querySelector("#rno").value;
   const seq = document.querySelector("#seq")
-      ? document.querySelector("#seq").value
-      : 0;
+    ? document.querySelector("#seq").value
+    : 0;
+  const isDomestic = document.querySelector("#isDomestic").value;
 
+  if (isDomestic) {
+    kakaoMap();
+  } else {
+    googleMap();
+  }
   document.querySelector("#likes").addEventListener("click", UpdateLikes);
+
+  if (seq) {
+    btnModify.addEventListener("click", function() {
+      location.href = "/route/write/" + rno;
+    });
+    btnDelete.addEventListener("click", function() {
+      if (confirm("글을 삭제하시겠습니까?(다시 복구할 수 없습니다)")) {
+        $.ajax({
+          type: "DELETE",
+          url: `/api/route/${rno}`,
+          beforeSend: setRequestHeader,
+          success: function() {
+            alert("삭제 완료");
+            location.href = `${window.location.protocol}//${window.location.host}/story`;
+          }
+        });
+      }
+    });
+  } else {
+    btnModify.parentElement.removeChild(btnModify);
+    btnDelete.parentElement.removeChild(btnDelete);
+  }
+
   function UpdateLikes() {
     $.ajax({
       type: "post",
@@ -24,319 +55,99 @@ $().ready(function() {
 
   $.ajax({
     type: "post",
-    url: "/route/getRouteView",
+    url: "/api/route/updateViews",
     data: { rno: rno, seq: seq },
-    dataType: "json",
+    dataType: "text",
     beforeSend: setRequestHeader,
     success: function(data) {
-      // 맵쪽에 뿌려줄 좌표를 담을 배열
-
-      // 작은 Route Content를 동적으로 뿌려줌
-      $.each(data.list, function(index, items) {
-        // $("<div/>", {
-        //   class: "conts_story",
-        //   style: "border: 1px solid red;"
-        // })
-        //   .append(
-        //     $("<div/>", {
-        //       class: "story_para"
-        //     })
-        //       .append(
-        //         $("<div/>", {
-        //           class: "day_info"
-        //         })
-        //       )
-        //       .append(
-        //         $("<span/>", {
-        //           class: "day",
-        //           text: "Day " + (index + 1)
-        //         })
-        //       )
-        //       .append($("<br/>"))
-        //       .append(
-        //         $("<span/>", {
-        //           class: "date",
-        //           text: items.dateStart + " / " + items.dateEnd
-        //         })
-        //       )
-        //   )
-        //   .append(
-        //     $("<div/>", {
-        //       class: "course"
-        //     })
-        //       .append(
-        //         $("<div/>", {
-        //           class: "carousel slide",
-        //           "data-ride": "carousel",
-        //           id: "routeImg" + index
-        //         })
-        //           .append(
-        //             $("<ul/>", {
-        //               class: "carousel-indicators"
-        //             })
-        //           )
-        //           .append(
-        //             $("<div/>", {
-        //               class: "carousel-inner"
-        //             })
-        //           )
-        //           .append(
-        //             $("<a/>", {
-        //               class: "carousel-control-prev",
-        //               href: "#routeImg" + index,
-        //               "data-slide": "prev"
-        //             }).append(
-        //               $("<span/>", {
-        //                 class: "carousel-control-prev-icon"
-        //               })
-        //             )
-        //           )
-        //           .append(
-        //             $("<a/>", {
-        //               class: "carousel-control-next",
-        //               href: "#routeImg" + index,
-        //               "data-slide": "next"
-        //             }).append(
-        //               $("<span/>", {
-        //                 class: "carousel-control-next-icon"
-        //               })
-        //             )
-        //           )
-        //       )
-        //       .append(
-        //         $("<div/>", {
-        //           class: "course_info"
-        //         }).append(
-        //           $("<div/>", {
-        //             class: "course_info_box"
-        //           })
-        //             .append(
-        //               $("<div/>", {
-        //                 class: "loc_info_ico",
-        //                 text: "아이콘 이미지"
-        //               })
-        //             )
-        //             .append(
-        //               $("<div/>", {
-        //                 class: "loc_info_txt"
-        //               }).append(
-        //                 $("<span/>", {
-        //                   class: "loc_txt",
-        //                   text: "위치 : " + items.location
-        //                 })
-        //                   .append($("<br/>"))
-        //                   .append(
-        //                     $("<span/>", {
-        //                       class: "loc_addr",
-        //                       text: "위치 : " + items.location
-        //                     })
-        //                   )
-        //               )
-        //             )
-        //         )
-        //       )
-        //       .append(
-        //         $("<div/>", {
-        //           class: "course_story",
-        //           text: "코스내용 : " + items.content
-        //         })
-        //       )
-        //       .append(
-        //         $("<div/>", {
-        //           class: "course_rate"
-        //         }).append(
-        //           $("<div/>", {
-        //             class: "star_rate"
-        //           })
-        //             .append(
-        //               $("<span/>", {
-        //                 class: "star",
-        //                 text: "별"
-        //               })
-        //             )
-        //             .append(
-        //               $("<span/>", {
-        //                 class: "star",
-        //                 text: "별"
-        //               })
-        //             )
-        //             .append(
-        //               $("<span/>", {
-        //                 class: "star",
-        //                 text: "별"
-        //               })
-        //             )
-        //             .append(
-        //               $("<span/>", {
-        //                 class: "star",
-        //                 text: "별"
-        //               })
-        //             )
-        //             .append(
-        //               $("<span/>", {
-        //                 class: "star",
-        //                 text: "별"
-        //               })
-        //             )
-        //             .append($("<br/>"))
-        //             .append(
-        //               $("<div/>", {
-        //                 class: "rate_txt",
-        //                 text: items.score + "점"
-        //               })
-        //             )
-        //         )
-        //       )
-        //   )
-        //   .appendTo($("#routeContent"));
-
-        var routeContentId = $("#routeContent")
-            .children()
-            .last();
-        /* routeLat.push(items.lat);
-                routeLng.push(items.lng); */
-
-        // 좌표 담기
-        flightPlanCoordinates.push({ lat: items.lat, lng: items.lng });
-
-        // 작은 Route Content 안에 있는 이미지 배열을 뿌림
-        $.each(items.imgs, function(indexImgs, img) {
-          console.log(img);
-          $("<li/>", {
-            "data-target": "#routeImg" + index,
-            "data-slide-to": indexImgs
-          }).appendTo(routeContentId.find(".carousel-indicators"));
-
-          $("<div/>", {
-            class: "carousel-item"
-          })
-              .append(
-                  $("<img/>", {
-                    src: "/resources/storage/route/" + img
-                  })
-              )
-              .appendTo(routeContentId.find(".carousel-inner"));
-        });
-        console.log("-----------------------");
-
-        // 부트스트랩 사진 전환에 쓸 class 생성
-        routeContentId
-            .find(".carousel-indicators")
-            .children()
-            .first()
-            .attr("class", "active");
-        routeContentId
-            .find(".carousel-inner")
-            .children()
-            .first()
-            .attr("class", "carousel-item active");
-      });
-      console.log(flightPlanCoordinates);
-      //////////////////////////////////////////////////////////////////
-      // 해외
-      if ($("#isdomestic").val() == 0) {
-        googleMap(flightPlanCoordinates);
-      } else {
-        // 국내
-        kakaoMap(flightPlanCoordinates);
-      }
-
-      //   // 에필로그랑 해시태그
-      //   $("<div/>", {
-      //     id: "routeFooter"
-      //   })
-      //     .append(
-      //       $("<span>", {
-      //         id: "rout eEpilogue",
-      //         text: "Epilogue : " + $("#epilogue").val()
-      //       })
-      //     )
-      //     .append(
-      //       $("<span/>", {
-      //         id: "routeHashtag",
-      //         text: "HashTag : " + $("#hashtag").val()
-      //       })
-      //     )
-      //     .appendTo($("#routeContent"));
+      console.log("조회수 올리기");
     },
     error: function(error) {
       console.log(error);
     }
   });
 });
+
 // 카카오맵
-function kakaoMap(flightPlanCoordinates) {
-  var container = document.getElementById("map");
-  var options = {
-    center: new kakao.maps.LatLng(
-        flightPlanCoordinates[0]["lat"],
-        flightPlanCoordinates[0]["lng"]
-    ),
-    level: 3
-  };
-  var map = new kakao.maps.Map(container, options);
-  var linePath = [];
-
-  // 선을 구성하는 좌표 배열입니다. 이 좌표들을 이어서 선을 표시
-  for (var i = 0; i < flightPlanCoordinates.length; i++) {
-    linePath.push(
-        new kakao.maps.LatLng(
-            flightPlanCoordinates[i]["lat"],
-            flightPlanCoordinates[i]["lng"]
-        )
-    );
-  }
-
-  /*
-   * // 선을 구성하는 좌표 배열입니다. 이 좌표들을 이어서 선을 표시 var linePath = [ new
-   * kakao.maps.LatLng(33.452344169439975, 126.56878163224233), new
-   * kakao.maps.LatLng(33.452739313807456, 126.5709308145358), new
-   * kakao.maps.LatLng(33.45178067090639, 126.5726886938753) ];
-   */
-
-  // 지도에 표시할 선을 생성
-  var polyline = new kakao.maps.Polyline({
-    path: linePath, // 선을 구성하는 좌표배열
-    strokeWeight: 10, // 선의 두께
-    strokeColor: "#00FA9A", // 선의 색깔
-    strokeOpacity: 0.5, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명
-    strokeStyle: "solid" // 선의 스타일
+function kakaoMap() {
+  const kmap = new travelmaker.kakaoMap(getEl("#map"));
+  kmap.getStaticMap(getEl("#map"), {
+    lat: "37.566826",
+    lng: "126.9786567",
+    address: "테스트A",
+    placeName: "테스트P"
   });
+  // var container = document.getElementById("map");
+  // var options = {
+  //   center: new kakao.maps.LatLng(
+  //     flightPlanCoordinates[0]["lat"],
+  //     flightPlanCoordinates[0]["lng"]
+  //   ),
+  //   level: 3
+  // };
+  // var map = new kakao.maps.Map(container, options);
+  // var linePath = [];
 
-  var positions = [];
+  // // 선을 구성하는 좌표 배열입니다. 이 좌표들을 이어서 선을 표시
+  // for (var i = 0; i < flightPlanCoordinates.length; i++) {
+  //   linePath.push(
+  //     new kakao.maps.LatLng(
+  //       flightPlanCoordinates[i]["lat"],
+  //       flightPlanCoordinates[i]["lng"]
+  //     )
+  //   );
+  // }
 
-  // 마커를 표시할 위치와 title 배열
-  for (var i = 0; i < linePath.length; i++) {
-    positions.push({ latlng: linePath[i] });
-  }
+  // /*
+  //  * // 선을 구성하는 좌표 배열입니다. 이 좌표들을 이어서 선을 표시 var linePath = [ new
+  //  * kakao.maps.LatLng(33.452344169439975, 126.56878163224233), new
+  //  * kakao.maps.LatLng(33.452739313807456, 126.5709308145358), new
+  //  * kakao.maps.LatLng(33.45178067090639, 126.5726886938753) ];
+  //  */
 
-  // 마커를 표시할 위치와 title 배열
-  /*
-   * var positions = [ { title: '카카오', latlng: new
-   * kakao.maps.LatLng(33.452344169439975, 126.56878163224233) }, { title:
-   * '생태연못', latlng: new kakao.maps.LatLng(33.452739313807456,
-   * 126.5709308145358) }, { title: '텃밭', latlng: new
-   * kakao.maps.LatLng(33.45178067090639, 126.5726886938753) } ];
-   */
+  // // 지도에 표시할 선을 생성
+  // var polyline = new kakao.maps.Polyline({
+  //   path: linePath, // 선을 구성하는 좌표배열
+  //   strokeWeight: 10, // 선의 두께
+  //   strokeColor: "#00FA9A", // 선의 색깔
+  //   strokeOpacity: 0.5, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명
+  //   strokeStyle: "solid" // 선의 스타일
+  // });
 
-  for (var i = 0; i < positions.length; i++) {
-    /*
-     * // 마커 이미지의 이미지 크기 var imageSize = new kakao.maps.Size(24, 35);
-     *  // 마커 이미지를 생성 var markerImage = new kakao.maps.MarkerImage(imageSrc,
-     * imageSize);
-     */
+  // var positions = [];
 
-    // 마커를 생성
-    var marker = new kakao.maps.Marker({
-      map: map, // 마커를 표시할 지도
-      position: positions[i].latlng // 마커를 표시할 위치
-      // title : positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시
-      /* image : markerImage // 마커 이미지 */
-    });
-  }
+  // // 마커를 표시할 위치와 title 배열
+  // for (var i = 0; i < linePath.length; i++) {
+  //   positions.push({ latlng: linePath[i] });
+  // }
 
-  // 지도에 선을 표시합니다
-  polyline.setMap(map);
+  // // 마커를 표시할 위치와 title 배열
+  // /*
+  //  * var positions = [ { title: '카카오', latlng: new
+  //  * kakao.maps.LatLng(33.452344169439975, 126.56878163224233) }, { title:
+  //  * '생태연못', latlng: new kakao.maps.LatLng(33.452739313807456,
+  //  * 126.5709308145358) }, { title: '텃밭', latlng: new
+  //  * kakao.maps.LatLng(33.45178067090639, 126.5726886938753) } ];
+  //  */
+
+  // for (var i = 0; i < positions.length; i++) {
+  //   /*
+  //    * // 마커 이미지의 이미지 크기 var imageSize = new kakao.maps.Size(24, 35);
+  //    *  // 마커 이미지를 생성 var markerImage = new kakao.maps.MarkerImage(imageSrc,
+  //    * imageSize);
+  //    */
+
+  //   // 마커를 생성
+  //   var marker = new kakao.maps.Marker({
+  //     map: map, // 마커를 표시할 지도
+  //     position: positions[i].latlng // 마커를 표시할 위치
+  //     // title : positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시
+  //     /* image : markerImage // 마커 이미지 */
+  //   });
+  // }
+
+  // // 지도에 선을 표시합니다
+  // polyline.setMap(map);
 }
 
 // RouteView GoogleMap 마커 경로 표시
@@ -364,10 +175,10 @@ function googleMap(flightPlanCoordinates) {
   // 마커 생성
   for (var i = 0; i < flightPlanCoordinates.length; i++) {
     markers.push(
-        new google.maps.Marker({
-          position: flightPlanCoordinates[i],
-          map: map
-        })
+      new google.maps.Marker({
+        position: flightPlanCoordinates[i],
+        map: map
+      })
     );
   }
   // 마커 이미지 커스텀
@@ -397,13 +208,120 @@ function googleMap(flightPlanCoordinates) {
 
 let flightPlanCoordinates = [];
 
-$(function(){
-  const {getEl} = new travelmaker.utils();
+$(function() {
+  const { getEl } = new travelmaker.utils();
   const cmt = new travelmaker.comment();
 
-  const bno = +getEl('#bno').value;
-  const seq = getEl('#seq') ? +getEl('#seq').value : 0;
-  cmt.init(getEl('.comment-wrap'), bno, seq);
+  const bno = +getEl("#bno").value;
+  const seq = getEl("#seq") ? +getEl("#seq").value : 0;
+  cmt.init(getEl(".comment-wrap"), bno, seq);
+});
 
+$().ready(function() {
+  // 슬라이드 필요 변수 선언
+  let slide = document.querySelector(".slide");
+  let slideBox = document.querySelectorAll(".slide-box");
+  let s_count = [];
+  let s_posX = [];
+  let imgNum = [];
+  // let imgs = [];
+  let img = document.querySelector(".slide-box li img");
+  let imgWidth = slide.offsetWidth;
+  let leftBtn = document.querySelectorAll(".slide-left");
+  let rightBtn = document.querySelectorAll(".slide-right");
+  let s_itv;
 
+  // 각각 슬라이드에 배열변수들 값 초기화 및 이벤트 생성
+  for (let i = 0; i < slideBox.length; i++) {
+    // 각 배열에 초기값 설정
+    imgNum.push(slideBox[i].childElementCount);
+    s_count.push(0);
+    s_posX.push(0);
+    if (imgNum[i] == 1) rightBtn[i].style.display = "none";
+    // 왼, 오른쪽 버튼에 이벤트 생성
+    leftBtn[i].addEventListener("click", function() {
+      if (s_count[i] > 0) {
+        clearInterval(s_itv);
+        s_count[i]--;
+        slideToLeft(i);
+      }
+      if (s_count[i] == 0) {
+        leftBtn[i].style.display = "none";
+      }
+      rightBtn[i].style.display = "block";
+    });
+    rightBtn[i].addEventListener("click", function() {
+      if (s_count[i] < imgNum[i]) {
+        clearInterval(s_itv);
+        s_count[i]++;
+        slideToRight(i);
+      }
+      if (s_count[i] == imgNum[i] - 1) {
+        rightBtn[i].style.display = "none";
+      }
+      leftBtn[i].style.display = "block";
+    });
+    slideBox[i].style.width =
+      document.querySelector(".content-left").clientWidth * imgNum[i] + "px";
+  }
+
+  // 왼쪽 이동 함수
+  function slideToLeft(i) {
+    s_itv = setInterval(frameLeft, 1);
+    function frameLeft() {
+      let slideX = -(s_count[i] * imgWidth + s_posX[i]);
+      if (0 == slideX) {
+        clearInterval(s_itv);
+      } else if (100 < slideX) {
+        s_posX[i] += 6;
+        slideBox[i].style.left = s_posX[i] + "px";
+      } else if (40 < slideX) {
+        s_posX[i] += 3;
+        slideBox[i].style.left = s_posX[i] + "px";
+      } else if (10 < slideX) {
+        s_posX[i] += 2;
+        slideBox[i].style.left = s_posX[i] + "px";
+      } else {
+        s_posX[i] += 1;
+        slideBox[i].style.left = s_posX[i] + "px";
+      }
+    }
+  }
+  // 오른쪽 이동 함수
+  function slideToRight(i) {
+    s_itv = setInterval(frameRight, 1);
+    function frameRight() {
+      let slideX = s_count[i] * imgWidth + s_posX[i];
+      if (0 == slideX) {
+        clearInterval(s_itv);
+      } else if (100 < slideX) {
+        s_posX[i] -= 6;
+        slideBox[i].style.left = s_posX[i] + "px";
+      } else if (40 < slideX) {
+        s_posX[i] -= 3;
+        slideBox[i].style.left = s_posX[i] + "px";
+      } else if (10 < slideX) {
+        s_posX[i] -= 2;
+        slideBox[i].style.left = s_posX[i] + "px";
+      } else {
+        s_posX[i] -= 1;
+        slideBox[i].style.left = s_posX[i] + "px";
+      }
+    }
+  }
+  // 인터넷 창 크기 변할 때 리사이징 & 위치 이동 이벤트
+  window.addEventListener("resize", resizeSlide);
+  // 이미지 슬라이드 리사이징 및 위치 이동
+  function resizeSlide() {
+    for (let i = 0; i < slideBox.length; i++) {
+      slideBox[i].style.width = slide.offsetWidth * imgNum[i] + "px";
+
+      clearInterval(s_itv);
+      imgWidth = slide.offsetWidth;
+
+      let slideX = s_count[i] * imgWidth + s_posX[i];
+      s_posX[i] -= slideX;
+      slideBox[i].style.left = s_posX[i] + "px";
+    }
+  }
 });

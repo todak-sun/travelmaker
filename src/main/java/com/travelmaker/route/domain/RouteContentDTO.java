@@ -21,5 +21,6 @@ public class RouteContentDTO {
 	private int fixed;
 	private int cntOrder;
 	private MultipartFile[] images;
+	private String[] delImages;
 	private List<String> imgs;
 }

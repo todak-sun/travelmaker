@@ -1,205 +1,94 @@
-$(function() {
-	// 웹소켓을 지정한 url로 연결한다.
-	let sock = new SockJS("/echo");
-	var token = $("meta[name='_csrf']").attr("content");
-	var header = $("meta[name='_csrf_header']").attr("content");
-	if($('#loginNickname').val()!=undefined){
-		if($('#loginNickname').val()!=$('#nickname').val()){ // 신청하기 /자신이 아닐때
-			$('.button-wrap').append('<input id="next-btn" type="button" class="btn btn-travel" data-target="#requestWriteModal" value="신청">');
-			$('.content-wrap').remove();
-			
-		}else {
-			$('.button-wrap').append('<input id="modify-btn" type="button" class="btn btn-travel" value="수정">');
-			$('.button-wrap').append('<input id="delete-btn" type="button" class="btn btn-travel" value="삭제">');
-			$('.button-wrap').append('<input id="list-btn" type="button" class="btn btn-travel" value="신청확인">');
+$(function () {
+    // 클래스
+    const {getEl, getElList, addEvent, addAllSameEvent} = new travelmaker.utils();
+    const ajax = new travelmaker.ajax();
+    const t = new travelmaker.template();
+    const modal = new travelmaker.modal('#modal');
+    const alarm = new travelmaker.alarm(new SockJS("/echo"));
 
-			$.ajax({
-				type : 'get',
-				url : '/pur/getRequestView',
-				data : {
-					'bno' : $('#bno').val()
-				},
-				dataType : 'json',
-				beforeSend : function(xhr) {
-					xhr.setRequestHeader(header, token);
-				},
-				success : function(data) {
-					// 맵쪽에 뿌려줄 좌표를 담을 배열
-					console.log(JSON.stringify(data));
-					// 작은 Route Content를 동적으로 뿌려줌
-					$.each(data, function(index, items) {
-						$('.content-group').append(viewTemplate(items));
-					});
-					
-					// 각 버튼 클릭
-					$('.agreeBtn').click(function(){
-						changeIspermit($(this).data('seq'),1);
-						$(this).text("수락됨[OK]");
-					});
-					
-					$('.disagreeBtn').click(function(){
-						changeIspermit($(this).data('seq'),2);
-						$(this).text("거절됨[OK]");
-					});
-					
-				},
-				error : function(error) {
-					console.log(error);
-				}
-			});
-		}
-	}
-	
-	$('#next-btn').click(function(){
-		$('#requestWriteModal').modal('show');
-	});
-	
-	function changeIspermit(seq,con){
-		var token = $("meta[name='_csrf']").attr("content");
-		var header = $("meta[name='_csrf_header']").attr("content");
-		
-		var tjson = {prno : seq, isPermit : con};
-			$.ajax({
-				type : 'put',
-				url : '/pur/setRequestPermit',
-				contentType: 'application/json',
-				data : JSON.stringify(tjson),
-				dataType : 'json',
-				beforeSend : function(xhr) {
-					xhr.setRequestHeader(header, token);
-				},
-				success : function(data) {
-					alert('수락거부 변경');
-				},
-				error : function(error) {
-					console.log(error);
-				}
-			});
-			
-	}
-	
+    //상수
+    let bno, nickname, id, seq, username;
+    if (getEl('#bno')) {
+        bno = +getEl('#bno').value;
+        nickname = getEl('#nickname').value;
+        id = getEl('#id').value;
+        seq = getEl('#seq').value;
+        username = getEl('#username').value;
+    }
 
-	// 작은 게시물에 버튼 클릭하면 동행 신청 모달이동
-	// 동행신청 폼 저장
-	$('#req-btn-try').click(function() {
+    //엘리먼트
+    const contentGroup = getEl('.content-group');
+    const btnTry = getEl('#btn-try');
+    const btnCheck = getEl('#btn-check');
+    const btnModify = getEl('#btn-modify');
+    const btnDelete = getEl('#btn-delete');
 
-		var token = $("meta[name='_csrf']").attr("content");
-		var header = $("meta[name='_csrf_header']").attr("content");
 
-		$.ajax({
-			type : 'post',
-			url : '/pur/setRequestWrite',
-			data : $('#requestForm').serialize(),
-			beforeSend : function(xhr) {
-				xhr.setRequestHeader(header, token);
-			},
-			success : function() {
-				console.log('success');
-				alert('신청 완료 하였습니다.');
-				purAlarm($('#bno').val(), $('#username').val());
-				location.href = '/pur/list/1';
-			},
-			error : function(error) {
-				console.log(error);
-			}
-		});
-	});
+    if (btnTry)
+        addEvent(btnTry, 'click', function () {
+            modal.createCustom(t.purReqRequest(bno, nickname, seq), function () {
+                const btnTryReq = getEl('#btn-try-req');
+                const requestForm = getEl('#requestForm');
 
-	
-  function purAlarm(bno, username) { 
-	  let json =
-	  '{"header":"pur","data":{"bno":"' + bno + '","username":"' + username +'"}}';
-	  sock.send(json);
-  }
-	 
+                addEvent(btnTryReq, 'click', () => {
+                    ajax.createPurRequest($(requestForm).serialize())
+                        .then(() => {
+                            alert('신청 완료되었습니다!');
+                            alarm.send('pur', {bno: bno, username: username});
+                            modal.clear();
+                        })
+                        .catch(console.error);
+                })
+            });
+        });
 
-	function viewTemplate(items){
-		let innerTemp = null;
-		
-		if(items.isPermit==1){
-			innerTemp = `
-											<div class="button-wrap">
-												<button class="agreeBtn" data-seq="${items.prno}">수락됨[OK]</button>
-												<button class="disagreeBtn" data-seq="${items.prno}">거절</button>
-											</div>
-			`;
-		}else if(items.isPermit==2){
-			innerTemp = `
-				<div class="button-wrap">
-					<button class="agreeBtn" data-seq="${items.prno}">수락</button>
-					<button class="disagreeBtn" data-seq="${items.prno}">거절됨[OK]</button>
-				</div>
-				`;
-		}else{
-			innerTemp = `
-				<div class="button-wrap">
-					<button class="agreeBtn" data-seq="${items.prno}">수락</button>
-					<button class="disagreeBtn" data-seq="${items.prno}">거절</button>
-				</div>
-				`;
-		}
-		
-		
-		let temp=
-			`
-					<li>
-					<div class="request-item">
-									<div class="user-area">
-										<p class="author">아이디 : ${items.nickname}</p>
-									</div>
-									<div class="content-area">
-										<div class="content-detail">
-											<p>${items.content}</p>`+innerTemp+
-											
-											
-										`</div>
-									</div>
-								</div>
-					</li>
-			`;
-		
-		
-		
-		return temp;
-	}
-	
-	//수정하기
-	$('#modify-btn').click(function(){
-		location.href = '/pur/modify/'+$('#bno').val();
-	});
-	
-	//삭제하기
-	$('#delete-btn').click(function(){
-		var con = confirm("정말로 삭제하시겠습니까?");
-		if(con == true){
-			var token = $("meta[name='_csrf']").attr("content");
-			var header = $("meta[name='_csrf_header']").attr("content");
-			console.log($('#bno').val());
-			$.ajax({
-				type : 'delete',
-				url : '/pur/deletePurchaseR/'+$('#bno').val(),
-				beforeSend : function(xhr) {
-					xhr.setRequestHeader(header, token);
-				},
-				success : function() {
-					console.log('success');
-					alert('삭제 하였습니다.');
-					location.href = '/pur/list/1';
-				},
-				error : function(error) {
-					console.log(error);
-				}
-			});
-		}
-	});
-	
-	//List 보이기 감추기
-	$('#list-btn').click(function(){
-		 if($(".content-wrap").css("display") == "none"){
-			 $('.content-wrap').css("display","block");
-		 }else{
-			 $('.content-wrap').css("display","none");
-		 }
-	});
-	
+    if (btnCheck)
+        addEvent(btnCheck, 'click', btnCheckOpenHandler);
+
+    function btnCheckOpenHandler(e) {
+        ajax.getRequestView(bno)
+            .then(ret => {
+                const $frag = $(document.createDocumentFragment());
+                ret.forEach(request => $frag.append(t.purOrderView(request)));
+                contentGroup.append($frag[0]);
+
+                const btnAgreeList = getElList('.request-item .btn-agree');
+                const btnDisagreeList = getElList('.request-item .btn-disagree');
+
+                addAllSameEvent(btnAgreeList, 'click', function () {
+                    ajax.updatePermitStatusReq({prno: this.dataset.seq, isPermit: 1});
+                    this.innerText = '수락됨[OK]';
+                });
+
+                addAllSameEvent(btnDisagreeList, 'click', function () {
+                    ajax.updatePermitStatusReq({prno: this.dataset.seq, isPermit: 2});
+                    this.innerText = '거절됨[OK]';
+                });
+
+                e.target.innerText = '닫기';
+                e.target.removeEventListener('click', btnCheckOpenHandler);
+                addEvent(e.target, 'click', btnCheckCloseHandler);
+            })
+            .catch(console.error)
+    }
+
+    function btnCheckCloseHandler(e) {
+        contentGroup.innerHTML = '';
+        e.target.innerText = '신청확인';
+        e.target.removeEventListener('click', btnCheckCloseHandler);
+        addEvent(e.target, 'click', btnCheckOpenHandler);
+    }
+
+    if (btnModify)
+        addEvent(btnModify, 'click', () => location.href = '/pur/modify/' + bno);
+
+    if (btnDelete)
+        addEvent(btnDelete, 'click', function () {
+            if (confirm("정말로 삭제하시겠습니까?")) {
+                ajax.deletePur1(bno).then(() => {
+                    alert('성공적으로 삭제하였습니다.');
+                    location.href = '/pur/list/1';
+                }).catch(console.error);
+            }
+        });
 });
