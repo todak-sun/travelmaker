@@ -120,7 +120,7 @@ public class RouteDAOMybatis implements RouteDAO {
 	}
 
 	@Override
-	public int getRouteTemp(int seq) {
+	public RouteDTO getRouteTemp(int seq) {
 		return sqlSession.selectOne("routeSQL.getRouteTemp", seq);
 	}
 

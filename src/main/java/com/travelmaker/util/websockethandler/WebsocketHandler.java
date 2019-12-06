@@ -113,6 +113,8 @@ public class WebsocketHandler extends TextWebSocketHandler {
         String responseMessage = null; //응답메세지
         int dataseq = -1;
 
+        System.out.println(header);
+
         // 동행신청 알람
         if (header.compareTo("friend") == 0) {
             int fno = data.getAsJsonObject().get("fno").getAsInt();

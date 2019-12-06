@@ -153,7 +153,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public UserDTO userPwFind(String id, String email1, String email2) {
-        return userDAOImpl.userPwFind(id,email1,email2);
+        return userDAOImpl.userPwFind(id, email1, email2);
     }
 
     @Override
@@ -161,7 +161,5 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         userDAOImpl.setPassword(userDTO);
     }
 
-
-    
 
 }

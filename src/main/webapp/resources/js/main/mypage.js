@@ -217,7 +217,6 @@ $(function () {
             tableHead.innerHTML = '';
             tableContent.innerHTML = '';
         }
-
     }
 
     function initMyInfo() {
@@ -227,7 +226,7 @@ $(function () {
 
         const registerMethod = getEl('#registerMethod');
         const realname = getEl('#realname');
-        const nickname = getEl('#nickname');
+        const nickname = getEl('#my-nickname');
         const id = getEl('#id');
         const cpwd = getEl('#cpwd');
         const email1 = getEl('#email1');
@@ -393,6 +392,8 @@ $(function () {
         ajax.getUser(seq)
             .then(ret => {
                 setUserData({...ret, dateRegist: '1991-11-01'});
+                console.log(ret.nickname);
+                console.log(nickname);
                 registerMethod.value = ret.registerMethod;
                 realname.value = ret.realname;
                 nickname.value = ret.nickname;

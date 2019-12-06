@@ -48,6 +48,7 @@ public class UserController {
     /* 회원가입 */
     @RequestMapping(value = "user/register", method = RequestMethod.POST)
     public ModelAndView userRegister(@ModelAttribute UserDTO userDTO, Model model) {
+        System.out.println(userDTO.toString());
         /*
          * System.out.println("[UserController - userRegister -useDTO:] " +
          * userDTO.toString());
@@ -247,48 +248,48 @@ public class UserController {
         return userServiceImpl.userIdFind(realname, email1, email2);
     }
 
-	// 임시 비밀번호
-	@RequestMapping(value = "/user/userPwFind", method = RequestMethod.POST)
-	@ResponseBody
-	public String userPwFind(@RequestParam String id, @RequestParam String email1,@RequestParam String email2) throws IOException {
-		// @RequestParam String id, @RequestParam String email1,@RequestParam String
-		// email2
-		UserDTO userDTO = userServiceImpl.userPwFind(id, email1, email2); // 디비에 있는지 없는지 확인
-		System.out.println("DTO 있니?"+ userDTO);
-		if (userDTO != null) {// 디비에 있으면 실행
+    // 임시 비밀번호
+    @RequestMapping(value = "/user/userPwFind", method = RequestMethod.POST)
+    @ResponseBody
+    public String userPwFind(@RequestParam String id, @RequestParam String email1, @RequestParam String email2) throws IOException {
+        // @RequestParam String id, @RequestParam String email1,@RequestParam String
+        // email2
+        UserDTO userDTO = userServiceImpl.userPwFind(id, email1, email2); // 디비에 있는지 없는지 확인
+        System.out.println("DTO 있니?" + userDTO);
+        if (userDTO != null) {// 디비에 있으면 실행
 
-			StringBuffer sb = new StringBuffer();
-			String newPwd = PwdGenerate.excuteGenerate(); // 이메일로 받는 인증코드 부분 (난수)
+            StringBuffer sb = new StringBuffer();
+            String newPwd = PwdGenerate.excuteGenerate(); // 이메일로 받는 인증코드 부분 (난수)
 
-			userDTO.setPassword(passwordEncoder.encode(newPwd));
-			System.out.println(userDTO.toString());
-			String setfrom = "qoatn94@gmail.com";
-			String title = "임시번호를 발급합니다."; // 제목
-			String content = System.getProperty("line.separator") + System.getProperty("line.separator") + "임시 비밀번호는 "
-					+ newPwd + "입니다!!";
+            userDTO.setPassword(passwordEncoder.encode(newPwd));
+            System.out.println(userDTO.toString());
+            String setfrom = "qoatn94@gmail.com";
+            String title = "임시번호를 발급합니다."; // 제목
+            String content = System.getProperty("line.separator") + System.getProperty("line.separator") + "임시 비밀번호는 "
+                    + newPwd + "입니다!!";
 
-			try {
-				MimeMessage message = mailSender.createMimeMessage();
-				MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
+            try {
+                MimeMessage message = mailSender.createMimeMessage();
+                MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
 
-				messageHelper.setFrom(setfrom); // 보내는사람 생략하면 정상작동을 안함
-				messageHelper.setTo(userDTO.getEmail1() + "@" + userDTO.getEmail2()); // 받는사람 이메일
-				messageHelper.setSubject(title); // 메일제목은 생략이 가능하다
-				messageHelper.setText(content); // 메일 내용
+                messageHelper.setFrom(setfrom); // 보내는사람 생략하면 정상작동을 안함
+                messageHelper.setTo(userDTO.getEmail1() + "@" + userDTO.getEmail2()); // 받는사람 이메일
+                messageHelper.setSubject(title); // 메일제목은 생략이 가능하다
+                messageHelper.setText(content); // 메일 내용
 
-				mailSender.send(message);
+                mailSender.send(message);
 
-			} catch (Exception e) {
-				System.out.println(e);
-			}
+            } catch (Exception e) {
+                System.out.println(e);
+            }
 
-			userServiceImpl.setPassword(userDTO);
+            userServiceImpl.setPassword(userDTO);
 
-			return newPwd;
-		} else {
-			return "";
-		}
+            return newPwd;
+        } else {
+            return "";
+        }
 
-	}
+    }
 
 }

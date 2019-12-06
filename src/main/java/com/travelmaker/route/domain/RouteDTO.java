@@ -1,7 +1,5 @@
 package com.travelmaker.route.domain;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,5 +23,4 @@ public class RouteDTO {
 	private int cmt; //디폴트
 	private int fixed; //웹에서
 	private int isDomestic; //웹&DB 비교
-//	private MultipartFile image;
 }

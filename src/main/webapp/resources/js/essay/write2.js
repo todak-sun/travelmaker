@@ -111,16 +111,16 @@ $(function () {
             ajax.createEssay(getFormData(getEssay()))
                 .then(ret => {
                     if (ret) {
-                        alert('정상적으로 저장되었씁니다.');
-                        location.href = '/';
+                        alert('정상적으로 저장되었습니다.');
+                        location.href = '/story';
                     }
                 }).catch(console.error);
         } else {
             ajax.updateEssay(getEssay().rno, getFormData(getEssay()))
                 .then(ret => {
                     if (ret) {
-                        alert('정상적으로 저장되었씁니다.');
-                        location.href = '/';
+                        alert('정상적으로 저장되었습니다.');
+                        location.href = '/story';
                     }
                 })
                 .catch(console.error);

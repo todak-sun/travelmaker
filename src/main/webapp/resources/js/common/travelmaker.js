@@ -751,7 +751,7 @@ let travelmaker = (function (window) {
 
               <label for="nickname">닉네임</label>
               <div class="input-wrap-4">
-                <input type="text" id="nickname" class="v"/>
+                <input type="text" id="my-nickname" class="v"/>
                 <div class="v-feed"></div>
                 <div class="iv-feed"></div>
               </div>
@@ -970,7 +970,7 @@ let travelmaker = (function (window) {
                     <input type="checkbox" name="" id="check-private" class="checkbox">
                     <label for="check-private">개인정보 이용동의</label>
                   </div>
-                  <button id="btn-user-register" class="btn-travel">회원가입</button>
+                  <button id="btn-user-register" class="btn-travel" type="button">회원가입</button>
                 </div>
               </div>
               
@@ -1322,9 +1322,18 @@ let travelmaker = (function (window) {
             this.deletePayment = deletePayment;
             this.getListPayment = getListPayment;
             this.deleteAlarmByAno = deleteAlarmByAno;
+            this.getMainList = getMainList;
         };
 
         const {setRequestHeader} = new Utils();
+
+        function getMainList(keyword) {
+            return $.ajax({
+                type: "get",
+                url: `/api/story/home/${keyword}`,
+                dataType: "json"
+            });
+        }
 
         function deletePayment(cno) {
             return $.ajax({
@@ -2294,7 +2303,7 @@ let travelmaker = (function (window) {
             const btnConfirm = getEl('#btn-email-confirm'); // 버튼
             const timer = getEl('.timer');
             const close = getEl('.tmodal-mini .close');
-            const timerEnd = timerStart(180, timer, () => close.click());
+            const start = timerStart(180, timer, close);
 
             addEvent(emailConfirm, 'keyup', (e) => {
                 if (e.keyCode === 13) btnConfirm.click();
@@ -2310,33 +2319,36 @@ let travelmaker = (function (window) {
                     emailConfirm.focus();
                 } else {
                     close.click();
-                    timerEnd();
+                    timerEnd(start);
                     changedBtn.innerText = '완료';
                     changedBtn.classList.remove('ing');
-                    email1.disabled = true;
-                    email2.disabled = true;
+                    email1.readonly = true;
+                    email2.readonly = true;
                     v.changeValid(changedBtn);
                 }
             });
         }
 
-        function timerStart(sec, timer, callbackFunc) {
+        function timerStart(sec, timer, close) {
             let restTime = sec;
             const start = setInterval(function () {
                 restTime -= 1;
-                if (restTime < 0) return timerEnd();
+                if (restTime < 0) return clearStart();
                 let min = Math.floor(restTime / 60);
                 let sec = restTime % 60;
                 timer.innerText = `0${min}:${sec < 10 ? '0' + sec : sec}`;
             }, 1000);
 
-            function timerEnd() {
+            function clearStart() {
                 clearInterval(start);
                 alert('시간이 초과되었습니다. 다시 시도해주세요.');
-                if (callbackFunc) callbackFunc();
+                close.click();
             }
+            return start;
+        }
 
-            return timerEnd;
+        function timerEnd(timer) {
+            clearInterval(timer);
         }
 
 
@@ -2442,7 +2454,13 @@ let travelmaker = (function (window) {
                         .then((ret) => {
                             commentContent.value = ''; //todo 여기서 알람을 보내면 됨.
                             printCommentList();
-                            alarm.send('cmt', {category: "essay", action: "cmt", rno: _rno, username: _nickname, cno: 1});
+                            alarm.send('cmt', {
+                                category: "essay",
+                                action: "cmt",
+                                rno: _rno,
+                                username: _nickname,
+                                cno: 1
+                            });
                         })
                         .catch(console.error);
                 });
