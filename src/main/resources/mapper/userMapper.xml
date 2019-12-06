@@ -1,87 +1,107 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="userSQL">
-	<select id="getUserByID" parameterType="user" resultType="user">
-		select
-		*
-		from users where id = #{id} and registerMethod = #{registerMethod}
-	</select>
+    <select id="getUserByID" parameterType="user" resultType="user">
+        select *
+        from users
+        where id = #{id}
+          and registerMethod = #{registerMethod}
+    </select>
 
-	<insert id="UserInsert" parameterType="user">
-		insert into
-		users(seq,id,realname,nickname,password,email1,email2,gender,phone1,phone2,phone3,birthdate,agreeNeed,registerMethod,dateRegist)
-		values(seq_users.nextval,#{id},#{realname},#{nickname},#{password},#{email1},#{email2},#{gender},#{phone1},#{phone2},#{phone3},#{birthdate},#{agreeNeed},#{registerMethod},sysdate)
-	</insert>
+    <insert id="UserInsert" parameterType="user">
+        insert into users(seq, id, realname, nickname, password, email1, email2, gender, phone1, phone2, phone3,
+                          birthdate, agreeNeed, registerMethod, dateRegist)
+        values (seq_users.nextval, #{id}, #{realname}, #{nickname}, #{password}, #{email1, jdbcType=VARCHAR}, #{email2, jdbcType=VARCHAR}, #{gender},
+                #{phone1}, #{phone2}, #{phone3}, #{birthdate}, #{agreeNeed}, #{registerMethod}, sysdate)
+    </insert>
 
-	<select id="checkMethod" parameterType="user" resultType="user">
-		select
-		*
-		from users where id = #{id} and realname =#{realname} and
-		registerMethod =#{registerMethod}
-	</select>
-
-
-	<select id="checkPassword" parameterType="user"
-		resultType="user">
-		select
-		*
-		from users where id = #{id} and registerMethod =
-		#{registerMethod} and password = #{password}
-	</select>
+    <select id="checkMethod" parameterType="user" resultType="user">
+        select *
+        from users
+        where id = #{id}
+          and realname = #{realname}
+          and registerMethod = #{registerMethod}
+    </select>
 
 
-	<select id="getUserDTO" parameterType="int" resultType="user">
-		select
-		*
-		from users where seq = #{seq}
-	</select>
+    <select id="checkPassword" parameterType="user"
+            resultType="user">
+        select *
+        from users
+        where id = #{id}
+          and registerMethod =
+              #{registerMethod}
+          and password = #{password}
+    </select>
 
-	<update id="userModify" parameterType="user">
-		update users set realname
-		= #{realname}
-		, nickname = #{nickname}
-		, email1 = #{email1}
-		, email2 = #{email2}
-		, password = #{password}
-		, gender = #{gender}
-		, phone1 = #{phone1}
-		, phone2 = #{phone2}
-		, phone3 = #{phone3}
-		, postcode = #{postcode}
-		, addr1 = #{addr1}
-		, addr2 = #{addr2}
-		, contentProfile = #{contentProfile}
-		, IMGPROFILE = #{imgProfile}
-		, account = #{account}
-		, dateRegist=sysdate where
-		id=#{id} and registerMethod =#{registerMethod}
-	</update>
 
-	<update id="userWithdrawal" parameterType="user">
-		delete users where
-		id=#{id} and registerMethod =#{registerMethod}
-	</update>
+    <select id="getUserDTO" parameterType="int" resultType="user">
+        select *
+        from users
+        where seq = #{seq}
+    </select>
 
-	<select id="getUserNickname" parameterType="String"
-		resultType="user">
-		select
-		*
-		from users where nickname = #{nickname}
-	</select>
+    <update id="userModify" parameterType="user">
+        update users
+        set realname
+                           = #{realname}
+          , nickname       = #{nickname}
+          , email1         = #{email1}
+          , email2         = #{email2}
+          , password       = #{password}
+          , gender         = #{gender}
+          , phone1         = #{phone1}
+          , phone2         = #{phone2}
+          , phone3         = #{phone3}
+          , postcode       = #{postcode}
+          , addr1          = #{addr1}
+          , addr2          = #{addr2}
+          , contentProfile = #{contentProfile}
+          , IMGPROFILE     = #{imgProfile}
+          , account        = #{account}
+          , dateRegist=sysdate
+        where id = #{id}
+          and registerMethod = #{registerMethod}
+    </update>
 
-	<select id="userIdFind" parameterType="java.util.Map" resultType="user">
-		select * from users where realname = #{realname} and email1 = #{email1} and email2 = #{email2} and registerMethod='travelMaker'
-	</select>
+    <update id="userWithdrawal" parameterType="user">
+        delete users
+        where id = #{id}
+          and registerMethod = #{registerMethod}
+    </update>
 
-	<!--비밀 번호 찾기  -->
-	<select id="userPwFind" parameterType="java.util.Map" resultType="user">
-		select * from users where id = #{id} and email1 = #{email1} and email2 = #{email2} and registerMethod='travelMaker'
-	</select>
+    <select id="getUserNickname" parameterType="String"
+            resultType="user">
+        select *
+        from users
+        where nickname = #{nickname}
+    </select>
 
-	<update id = "setPassword" parameterType="user">
-		update users set password = #{password} where id = #{id} and registerMethod='travelMaker'
-	</update>
-	<!--비밀 번호 찾기  -->
+    <select id="userIdFind" parameterType="java.util.Map" resultType="user">
+        select *
+        from users
+        where realname = #{realname}
+          and email1 = #{email1}
+          and email2 = #{email2}
+          and registerMethod = 'travelMaker'
+    </select>
+
+    <!--비밀 번호 찾기  -->
+    <select id="userPwFind" parameterType="java.util.Map" resultType="user">
+        select *
+        from users
+        where id = #{id}
+          and email1 = #{email1}
+          and email2 = #{email2}
+    </select>
+
+    <update id="setPassword" parameterType="user">
+        update users
+        set password = #{password}
+        where id = #{id}
+          and registerMethod = 'travelMaker'
+    </update>
+    <!--비밀 번호 찾기  -->
 
 
 </mapper>

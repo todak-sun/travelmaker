@@ -4,10 +4,13 @@ $(function () {
     const t = new travelmaker.template();
     const v = new travelmaker.validation();
     const h = new travelmaker.handler();
+    const cash = new travelmaker.Cash();
+    const alarm = new travelmaker.alarm(new SockJS('/echo'));
 
     const modal = new travelmaker.modal('#modal');
 
     const seq = +getEl('#seq').value;
+    const nickname = getEl('#nickname').value;
     const mainWrap = getEl('.main-wrap');
     const menuList = getElList('.menu-group li a');
 
@@ -24,7 +27,9 @@ $(function () {
             case 'my-info' :
                 return initMyInfo();
             case 'my-alarm' :
-                return console.log('아직 구현 못함');
+                return initInfoAlarm();
+            case 'my-payment' :
+                return initPayment();
             default :
                 throw new Error('뭔데');
         }
@@ -36,6 +41,184 @@ $(function () {
         initMyArticle();
     }
 
+    function initPayment() {
+        mainWrap.innerHTML = '';
+        $(mainWrap).append(t.myPayment());
+        const tableHead = getEl('.table-head');
+        const tableContent = getEl('.table-content');
+        const lnbList = getElList('.lnb-my-article ul li a');
+
+        addAllSameEvent(lnbList, 'click', function (e) {
+            lnbList.forEach(menu => menu.classList.remove('on'));
+            this.classList.add('on');
+
+            switch (this.dataset.page) {
+                case  'payment-wait' :
+                    return initWait();
+                case  'payment-ing' :
+                    return initIng();
+                case 'payment-finish' :
+                    return initFinish();
+            }
+        });
+
+        initWait();
+
+        function initWait() {
+            resetTable();
+            showLoading();
+            $(tableHead).append(t.paymentWaitHead());
+
+            ajax.getListPayment(seq, 0, 0).then(ret => {
+                closeLoading();
+                const $frag = $(document.createDocumentFragment());
+                ret.forEach(payment => $frag.append(t.paymentWaitBody(seq, payment)));
+                tableContent.appendChild($frag[0]);
+
+                const btnPayList = getElList('.btn-pay');
+                const btnPurCancleList = getElList('.btn-pur-cancel');
+                addAllSameEvent(btnPurCancleList, 'click', function () {
+                    if (confirm('해당 거래를 취소하시겠습니까?')) {
+                        ajax.deletePayment(this.dataset.cno)
+                            .then(ret => {
+                                if (ret === 'ok') {
+                                    alert('해당 거래를 취소하였습니다.');
+                                    initWait();
+                                }
+                            }).catch(console.error);
+                    }
+
+                });
+                addAllSameEvent(btnPayList, 'click', function () {
+                    const dataset = this.parentElement.dataset;
+                    cash.requestPay('kakaopay', dataset.productname, dataset.total, dataset.buyer_name)
+                        .then(ret => {
+                            if (ret.success)
+                                return ajax.updatePayment({cno: dataset.cno, requestUserCheck: 1, sellerCheck: 0});
+                        })
+                        .then(ret => {
+                            if (ret === 'ok') {
+                                alarm.send('cash', {username: nickname, cno: dataset.cno, seq: seq, status: "pay"});
+                                return initWait();
+                            }
+                        })
+                        .catch(console.error);
+                });
+
+
+            })
+        }
+
+        function initIng() {
+            resetTable();
+            showLoading();
+            $(tableHead).append(t.paymentWaitHead());
+
+            ajax.getListPayment(seq, 1, 1)
+                .then(ret => {
+                    closeLoading();
+                    const $frag = $(document.createDocumentFragment());
+                    ret.forEach(payment => $frag.append(t.paymentWaitBody(seq, payment)));
+                    tableContent.appendChild($frag[0]);
+
+                    const btnCheckPayList = getElList('.btn-check-pay');
+                    const btnDeliverList = getElList('.btn-deliver');
+                    const btnCheckDeliverList = getElList('.btn-check-deliver');
+                    const btnPurCancleList = getElList('.btn-pur-cancel');
+                    addAllSameEvent(btnPurCancleList, 'click', function () {
+                        if (confirm('해당 거래를 취소하시겠습니까?')) {
+                            ajax.deletePayment(this.dataset.cno)
+                                .then(ret => {
+                                    if (ret === 'ok') {
+                                        alert('해당 거래를 취소하였습니다.');
+                                        initWait();
+                                    }
+                                }).catch(console.error);
+                        }
+
+                    });
+                    addAllSameEvent(btnCheckPayList, 'click', function () {
+                        const dataset = this.parentElement.dataset;
+                        ajax.updatePayment({cno: dataset.cno, requestUserCheck: 1, sellerCheck: 1})
+                            .then(ret => {
+                                if (ret === 'ok') {
+                                    alarm.send('cash', {
+                                        username: nickname,
+                                        cno: dataset.cno,
+                                        seq: seq,
+                                        status: "start"
+                                    });
+                                    return initIng();
+                                }
+                            })
+                            .catch(console.error);
+                    });
+
+                    addAllSameEvent(btnDeliverList, 'click', function () {
+                        const dataset = this.parentElement.dataset;
+                        ajax.updatePayment({cno: dataset.cno, requestUserCheck: 2, sellerCheck: 1})
+                            .then(ret => {
+                                if (ret === 'ok') {
+                                    alarm.send('cash', {username: nickname, cno: dataset.cno, seq: seq, status: "end"});
+                                    return initIng();
+                                }
+                            })
+                            .catch(console.error);
+                    });
+
+                    addAllSameEvent(btnCheckDeliverList, 'click', function () {
+                        const dataset = this.parentElement.dataset;
+                        ajax.updatePayment({cno: dataset.cno, requestUserCheck: 2, sellerCheck: 2})
+                            .then(ret => {
+                                if (ret === 'ok') {
+                                    alarm.send('cash', {
+                                        username: nickname,
+                                        cno: dataset.cno,
+                                        seq: seq,
+                                        status: "done"
+                                    });
+                                    return lnbList[2].click();
+                                }
+                            })
+                            .catch(console.error);
+                    });
+                })
+        }
+
+        function initFinish() {
+            resetTable();
+            showLoading();
+            $(tableHead).append(t.paymentWaitHead());
+
+            ajax.getListPayment(seq, 2, 2)
+                .then(ret => {
+                    closeLoading();
+                    const $frag = $(document.createDocumentFragment());
+                    ret.forEach(payment => $frag.append(t.paymentWaitBody(seq, payment)));
+                    tableContent.appendChild($frag[0]);
+
+                    const btnPurCancleList = getElList('.btn-pur-cancel');
+                    addAllSameEvent(btnPurCancleList, 'click', function () {
+                        if (confirm('해당 거래를 취소하시겠습니까?')) {
+                            ajax.deletePayment(this.dataset.cno)
+                                .then(ret => {
+                                    if (ret === 'ok') {
+                                        alert('해당 거래를 취소하였습니다.');
+                                        initWait();
+                                    }
+                                }).catch(console.error);
+                        }
+
+                    });
+                }).catch(console.error);
+        }
+
+        function resetTable() {
+            tableHead.innerHTML = '';
+            tableContent.innerHTML = '';
+        }
+    }
+
     function initMyInfo() {
         mainWrap.innerHTML = '';
         $(mainWrap).append(t.register1());
@@ -43,7 +226,7 @@ $(function () {
 
         const registerMethod = getEl('#registerMethod');
         const realname = getEl('#realname');
-        const nickname = getEl('#nickname');
+        const nickname = getEl('#my-nickname');
         const id = getEl('#id');
         const cpwd = getEl('#cpwd');
         const email1 = getEl('#email1');
@@ -104,7 +287,7 @@ $(function () {
         }
 
 
-        function nicknameHandler(e){
+        function nicknameHandler(e) {
             let regex = new travelmaker.regex().nickname;
             const [vFeed, ivFeed] = v.getFeedBox(this);
             if (this.value === getUserData().nickname) return v.changeValid(this);
@@ -118,7 +301,7 @@ $(function () {
                 .catch(console.error);
         }
 
-        function btnChangePwdHandler(e){
+        function btnChangePwdHandler(e) {
             if (!v.isValid(cpwd)) return cpwd.focus();
 
             modal.createCustom(t.newPassword(), () => {
@@ -156,8 +339,7 @@ $(function () {
         });
 
 
-
-        function imageChangeHandler(e){
+        function imageChangeHandler(e) {
             const imageFile = this.files[0];
             console.log(imageFile);
             if (!imageFile) return;
@@ -172,8 +354,7 @@ $(function () {
         }
 
 
-
-        function btnUpdateHandler(e){
+        function btnUpdateHandler(e) {
             if (!v.isValid(cpwd)) return cpwd.focus();
             if (!v.isValid(nickname)) return nickname.focus();
             if (btnEmailChange.classList.contains('ing')) return alert('이메일 인증을 완료해주세요!');
@@ -211,6 +392,8 @@ $(function () {
         ajax.getUser(seq)
             .then(ret => {
                 setUserData({...ret, dateRegist: '1991-11-01'});
+                console.log(ret.nickname);
+                console.log(nickname);
                 registerMethod.value = ret.registerMethod;
                 realname.value = ret.realname;
                 nickname.value = ret.nickname;
@@ -239,6 +422,150 @@ $(function () {
             .catch(console.error);
     }
 
+    function initInfoAlarm() {
+        mainWrap.innerHTML = '';
+        $(mainWrap).append(t.alarmlist());
+
+        const tableHead = getEl('.table-head');
+        const tableContent = getEl('.table-content');
+        const lnbList = getElList('.lnb-my-alarm ul li a');
+
+        addAllSameEvent(lnbList, 'click', function (e) {
+            lnbList.forEach(menu => menu.classList.remove('on2'));
+            lnbList.forEach(menu => menu.classList.remove('on'));
+            this.classList.add('on');
+            this.classList.add('on2');
+            switch (this.dataset.page) {
+                case 'allAlarm' :
+                    return initAllalarm();
+                case 'friend' :
+                    return initFriendAlarm();
+                case 'purchase' :
+                    return initPurchaseAlarm();
+                case 'comment':
+                    return initCommentAlarm();
+                default :
+                    throw new Error('뭔데?');
+            }
+        });
+        initAllalarm();
+
+        function initAllalarm() {
+            resetTable();
+            $(tableHead).append(t.alarmTableHead());
+
+            // 용주형 이거 에이작스 형코드로 리펙토링해도되요 일단해놓은거[기능우선]
+            alarmAjax(seq, 1);
+
+        }
+
+        function initFriendAlarm() {
+            resetTable();
+            $(tableHead).append(t.alarmTableHead());
+            alarmAjax(seq, 2);
+
+        }
+
+        function initPurchaseAlarm() {
+            resetTable();
+            $(tableHead).append(t.alarmTableHead());
+            alarmAjax(seq, 3);
+        }
+
+        function initCommentAlarm() {
+            resetTable();
+            $(tableHead).append(t.alarmTableHead());
+            alarmAjax(seq, 4);
+        }
+
+        function resetTable() {
+            tableHead.innerHTML = '';
+            tableContent.innerHTML = '';
+        }
+
+        function alarmAjax(seq, con) {
+            /* con : 1.전체알람,2.동행,3.대리구매,4.좋아요,5.댓글 */
+            let token = $("meta[name='_csrf']").attr("content");
+            let header = $("meta[name='_csrf_header']").attr("content");
+
+            $.ajax({
+                type: 'get',
+                url: '/alarm/myalarmload',
+                data: {
+                    'seq': seq,
+                    'con': con
+                },
+                dataType: 'json',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                success: function (data) {
+                    let template = '';
+                    $.each(data, function (index, items) {
+                        template += t.mypageAlarmviewTemplate(items);
+                    });
+                    tableContent.innerHTML = template;
+                    const deleteList = getElList('.btn-alarm-delete');
+                    addAllSameEvent(deleteList, 'click', (e) => {
+                        ajax.deleteAlarmByAno(e.target.dataset.ano)
+                            .then(ret => {
+                                if (ret === 'OK') {
+                                    $(e.target).closest('tr')[0].remove();
+                                }
+                            })
+                    })
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
+
+        $('.deleteAlarm').click(function () {
+            let token = $("meta[name='_csrf']").attr("content");
+            let header = $("meta[name='_csrf_header']").attr("content");
+
+            let con = $(this).data('con');
+            let alarmtype = $('.on2').data('page');
+            let convertAlarmtype = '';
+
+            if (alarmtype == 'allAlarm') {
+                convertAlarmtype = '1';
+            } else if (alarmtype == 'friend') {
+                convertAlarmtype = '2';
+            } else if (alarmtype == 'purchase') {
+                convertAlarmtype = '3';
+            } else if (alarmtype == 'comment') {
+                convertAlarmtype = '4';
+            } else {
+                console.log('ERROR');
+            }
+
+            $.ajax({
+                type: 'delete',
+                url: '/alarm/deleteAlarm/' + con + '/' + seq + '/' + convertAlarmtype,
+                dataType: 'text',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                success: function (data) {
+                    if (data == '1') {
+                        initAllalarm();
+                    } else if (data == '2') {
+                        initFriendAlarm();
+                    } else if (data == '3') {
+                        initPurchaseAlarm();
+                    } else if (data == '4') {
+                        initCommentAlarm();
+                    }
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+    }
+
     function initMyArticle() {
         mainWrap.innerHTML = '';
         $(mainWrap).append(t.myArticle());
@@ -254,13 +581,14 @@ $(function () {
                     return initMyEssay();
                 case 'my-route' :
                     return initMyRoute();
+                case 'my-friend' :
+                    return initMyFriend();
                 case 'my-comment' :
                     return initMyComment();
                 default :
                     throw new Error('뭔데?');
             }
         });
-
 
         initMyEssay();
 
@@ -274,6 +602,20 @@ $(function () {
                     ret.data.forEach(essay => {
                         $frag.append(t.storyTableBody(essay));
                     });
+                    tableContent.appendChild($frag[0]);
+                    closeLoading();
+                })
+                .catch(console.error);
+        }
+
+        function initMyFriend() {
+            showLoading();
+            resetTable();
+            $(tableHead).append(t.friendTableHead());
+            ajax.readFriendBySeq(seq)
+                .then(ret => {
+                    const $frag = $(document.createDocumentFragment());
+                    ret.forEach(friend => $frag.append(t.friendTableBody(friend)));
                     tableContent.appendChild($frag[0]);
                     closeLoading();
                 })

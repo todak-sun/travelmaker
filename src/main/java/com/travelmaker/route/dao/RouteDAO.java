@@ -1,11 +1,11 @@
 package com.travelmaker.route.dao;
 
-import java.util.List;
-import java.util.Map;
-
 import com.travelmaker.route.domain.RouteContentDTO;
 import com.travelmaker.route.domain.RouteDTO;
 import com.travelmaker.route.domain.RouteImageDTO;
+
+import java.util.List;
+import java.util.Map;
 
 public interface RouteDAO {
 
@@ -37,7 +37,7 @@ public interface RouteDAO {
 
 	public void updateViews(int rno);
 
-	public int getRouteTemp(int seq);
+	public RouteDTO getRouteTemp(int seq);
 
 	public List<String> deleteRoute(int rno);
 

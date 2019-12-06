@@ -1,3 +1,7 @@
+/*body {*/
+/*    background: #c8c8c8;*/
+/*}*/
+
 .btn-wrap {
     margin-top: 120px;
     display: flex;
@@ -31,16 +35,17 @@
     grid-template-rows: repeat(3, 1fr);
     column-gap: 1.25rem;
     row-gap: 1.25rem;
+    width: 80%;
+    max-width: 1200px;
 }
 
 .story {
+    background-color: #ffffff;
     border-top-left-radius: 1.25rem;
     border-top-right-radius: 1.25rem;
     box-sizing: border-box;
     overflow: hidden;
-    -webkit-box-shadow: 2px 2px 20px 1px rgba(201, 201, 201, 1);
-    -moz-box-shadow: 2px 2px 20px 1px rgba(201, 201, 201, 1);
-    box-shadow: 2px 2px 20px 1px rgba(201, 201, 201, 1);
+    box-shadow: 3px 3px 20px 2px rgba(201, 201, 201, 1);
     min-width: 260px;
 }
 
@@ -48,13 +53,11 @@
     overflow: hidden;
     width: 100%;
     height: 12rem;
-    /* max-height 추가 해놓음!!!!!!!!!!!!!!!!! 수정 바람 */
-    /* height: auto; */
 }
 
 .story .story-img-wrap .story-img {
-	min-width: 100%;
-	min-height: 100%;
+    min-width: 100%;
+    min-height: 100%;
     width: auto;
     height: auto;
 }
@@ -82,21 +85,31 @@
 }
 
 .story .story-user-wrap {
+    box-sizing: border-box;
     padding: 1rem;
     display: flex;
 }
 
-.story .story-user-wrap img {
-    display: block;
-    width: 3.5rem;
-    height: 3.5rem;
+.story .story-user-wrap .image-wrap {
+    width:20%;
+    min-width:75px;
+    height:75px;
     border-radius: 50%;
+    display: flex;
+    border: 2px solid gray;
+    overflow:hidden;
+}
+
+.story .story-user-wrap .image-wrap img {
+    width: 100%;
+    max-height: 100%;
 }
 
 .story .story-user-wrap .user-info {
-    width: 100%;
+    /*width: 100%;*/
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    justify-content: space-around;
     align-items: flex-end;
 }
 

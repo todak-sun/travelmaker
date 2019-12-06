@@ -10,7 +10,7 @@ public class AlarmDTO {
 	private String header;
 	private int dataSeq;
 	private int is_read;
-	private Date alarmDate;
+	private String alarmDate;
 	private String sendUserId;
 	private String sendUserFid;
 	private String requestUserId;

@@ -15,11 +15,12 @@
 <sec:authorize access="hasRole('ROLE_USER') and isAuthenticated()">
     <div class="hidden">
         <div class="hidden">
+            <input type="hidden" id="request-user-seq" value="${purchaseDTO.requestUserSeq}">
             <input type="hidden" id="bno" value="${purchaseDTO.bno}">
             <input type="hidden" id="nickname" value="${userDetail.nickname}">
             <input type="hidden" id="seq" value="${userDetail.seq}">
             <input type="hidden" id="id" value="${userDetail.id}">
-            <input type="hidden" id="username" value="${userDetail.username}"/>
+            <input type="hidden" id="username" value="${userDetail.nickname}"/>
         </div>
     </div>
 </sec:authorize>

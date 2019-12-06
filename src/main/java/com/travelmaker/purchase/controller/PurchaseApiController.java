@@ -151,17 +151,13 @@ public class PurchaseApiController {
     @PutMapping(value = "setOrderPermit", produces = "application/json; charset=UTF-8")
     public ResponseEntity<String> updateRequestPermit(@RequestBody PurchaseOrderDTO PurchaseOrderDTO) {
         System.out.println(PurchaseOrderDTO.toString());
-        purchaseRequestService.purchaseOrderSetPermit(PurchaseOrderDTO);
-        String responseMessage = "OK";
-        return new ResponseEntity<String>(responseMessage, HttpStatus.OK);
+        return purchaseRequestService.purchaseOrderSetPermit(PurchaseOrderDTO);
     }
 
     @PutMapping(value = "setRequestPermit", produces = "application/json; charset=UTF-8")
     public ResponseEntity<String> setRequestPermit(@RequestBody PurchaseRequestDTO purchaseRequestDTO) {
         System.out.println(purchaseRequestDTO.toString());
-        purchaseRequestService.purchaseRequestSetPermit(purchaseRequestDTO);
-        String responseMessage = "OK";
-        return new ResponseEntity<String>(responseMessage, HttpStatus.OK);
+        return purchaseRequestService.purchaseRequestSetPermit(purchaseRequestDTO);
     }
 
 }

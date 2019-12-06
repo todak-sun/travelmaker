@@ -12,6 +12,22 @@ let travelmaker = (function (window) {
         Utils.prototype.getElList = getElList;
         Utils.prototype.getFormData = getFormData;
 
+        Utils.prototype.getObjFromDataSet = getObjFromDataSet;
+
+        function getObjFromDataSet(dataset) {
+            let obj = {};
+            let keys = Object.keys(dataset);
+            let values = Object.values(dataset);
+            for (let i = 0; i < keys.length; i++) {
+                let value = values[i];
+                if (typeof value === 'string') {
+                    value = value.trim();
+                }
+                obj[keys[i]] = value;
+            }
+            return obj;
+        }
+
         Utils.prototype.getTokenCSRF = function () {
             return getEl('meta[name="_csrf"]').content;
         };
@@ -151,7 +167,7 @@ let travelmaker = (function (window) {
             `;
         };
 
-        Template.prototype.purReqRequest = function(bno, nickname, seq){
+        Template.prototype.purReqRequest = function (bno, nickname, seq) {
             return `
                 <form id="requestForm" class="write-form">
                     <div class="hidden">
@@ -210,24 +226,31 @@ let travelmaker = (function (window) {
         };
 
         Template.prototype.purOrderView = function (order) {
-            const {isPermit, prno, nickname, productname, price, quantity, content} = order;
-            const agree = isPermit === 1 ? '수락됨[OK]' : '수락';
-            const disagree = isPermit === 2 ? '거절됨[OK]' : '거절';
+            const {isPermit, prno, nickname, productname, price, quantity, content, requestUserSeq} = order;
+            const agree = isPermit === 1 ? '<span class="span-agree">수락됨</span>' : `<button class="btn-agree" data-seq="${prno}">수락</button>`;
+            const disagree = isPermit === 2 ? '<span class="span-disagree">거절됨</span>' : `<button class="btn-disagree" data-seq="${prno}">거절</button>`;
             return `
                 <li>
                     <div class="request-item">
                         <div class="user-area">
                             <p class="author">아이디 : ${nickname}</p>
-                            ${productname ? '${<p class="author">상품명 : ${productname}</p>}' : ''}
-                            ${price ? '${<p class="author">가격 : ${price}</p>}' : ''}
-                            ${quantity ? '${<p class="author">수량 : ${quantity}</p>}' : ''}
+                            ${productname ? '<p class="author">상품명 : ' + productname + '</p>' : ''}
+                            ${price ? '<p class="author">가격 : ' + price + '</p>' : ''}
+                            ${quantity ? '<p class="author">수량 : ' + quantity + '</p>' : ''}
                         </div>
                         <div class="content-area">
                             <div class="content-detail">
                                 <p>내용: ${content}</p>
                                 <div class="button-wrap">
-                                    <button class="btn-agree" data-seq="${prno}">${agree}</button>
-                                    <button class="btn-disagree" data-seq="${prno}">${disagree}</button>
+                                    <input type="hidden" 
+                                    data-nickname="${nickname}" 
+                                    data-sellerseq="${requestUserSeq}" 
+                                    data-price="${price}"
+                                    data-quantity="${quantity}"
+                                    data-productname="${productname}"
+                                    >
+                                    ${agree}
+                                    ${disagree}
                                 </div>
                             </div>
                         </div>
@@ -447,7 +470,7 @@ let travelmaker = (function (window) {
         };
 
         Template.prototype.comment = function (mySeq, comment) {
-            const {cno, bno, content, likes, unlikes, seq, dateWrite, pcno, userDTO: {realname}} = comment;
+            const {cno, bno, content, likes, unlikes, seq, dateWrite, pcno, userDTO: {nickname}} = comment;
             let commentItem = `
                 <li class="${cno === pcno ? '' : 're'}">
                     <div class="comment-item">
@@ -455,7 +478,7 @@ let travelmaker = (function (window) {
                             <div class="img-wrap">
                                 <img src="https://source.unsplash.com/collection/190727/80x80" alt="" />
                             </div>
-                            <p class="author-nickname">${realname}</p>
+                            <p class="author-nickname">${nickname}</p>
                         </div>
                         <div class="content-area">
                             <textarea class="comment-content" disabled>${content}</textarea>
@@ -682,6 +705,38 @@ let travelmaker = (function (window) {
            `
         };
 
+        Template.prototype.alarmlist = function () {
+            return `
+        	<nav class="lnb-my-alarm">
+                <ul>
+                    <li><a href="#" class="on2 on" data-page="allAlarm">전체알람</a></li>
+                    <li><a href="#" data-page="friend">동행</a></li>
+                    <li><a href="#" data-page="purchase">대리구매</a></li>
+                    <li><a href="#" data-page="comment">댓글</a></li>
+                </ul>
+            </nav>
+           
+           <input type="button" class="deleteAlarm" data-con="1" value="읽은 알람 지우기">
+           <input type="button" class="deleteAlarm" data-con="2" value="모든 알람 지우기">
+           <table class="table">
+                <thead class="table-head"></thead>
+                <tbody class="table-content"></tbody>
+            </table>
+        	`;
+        }
+
+        Template.prototype.alarmTableHead = function () {
+            return `
+             <tr>
+                <th class="content">내용</th>
+                <th class="date">작성일</th>
+                <th class="type">구분</th>
+                <th></th>
+            </tr>
+          `;
+        };
+
+
         Template.prototype.register1 = function () {
             return `
               <div id="mini-modal"></div>
@@ -696,7 +751,7 @@ let travelmaker = (function (window) {
 
               <label for="nickname">닉네임</label>
               <div class="input-wrap-4">
-                <input type="text" id="nickname" class="v"/>
+                <input type="text" id="my-nickname" class="v"/>
                 <div class="v-feed"></div>
                 <div class="iv-feed"></div>
               </div>
@@ -915,7 +970,7 @@ let travelmaker = (function (window) {
                     <input type="checkbox" name="" id="check-private" class="checkbox">
                     <label for="check-private">개인정보 이용동의</label>
                   </div>
-                  <button id="btn-user-register" class="btn-travel">회원가입</button>
+                  <button id="btn-user-register" class="btn-travel" type="button">회원가입</button>
                 </div>
               </div>
               
@@ -986,6 +1041,21 @@ let travelmaker = (function (window) {
             return result;
         };
 
+        Template.prototype.myPayment = function () {
+            return `
+            <nav class="lnb-my-article">
+                <ul>
+                    <li><a href="#" class="on" data-page="payment-wait">결제 대기</a></li>
+                    <li><a href="#" data-page="payment-ing">진행중인 거래내역</a></li>
+                    <li><a href="#" data-page="payment-finish">거래 완료내역</a></li>
+                </ul>
+            </nav>
+            <table class="table">
+                <thead class="table-head"></thead>
+                <tbody class="table-content"></tbody>
+            </table>
+            `
+        }
 
         Template.prototype.myArticle = function () {
             return `
@@ -1017,11 +1087,13 @@ let travelmaker = (function (window) {
         };
 
         Template.prototype.storyTableBody = function (story) {
-            const {title, dateWrite, likes, views, rno} = story;
+            const {title, dateWrite, likes, views, rno, fileName} = story;
+            let type = fileName ? 'essay' : 'route';
+            let link = type + '/view/' + rno;
             return `
                 <tr>
-                    <td data-rno="${rno}">${title}</td>
-                    <td>${dateWrite}</td>
+                    <td data-rno="${rno}" class="link"><a href="${link}">${title}</a></td>
+                    <td>${dateWrite.substr(0, 10)}</td>
                     <td>${likes}</td>
                     <td>${views}</td>
                 </tr>
@@ -1034,21 +1106,136 @@ let travelmaker = (function (window) {
                 <th class="title">게시물제목</th>
                 <th class="content">댓글내용</th>
                 <th class="date">작성일</th>
-            </tr>
+             </tr>
           `;
         };
 
         Template.prototype.commentTableBody = function (comment) {
             const {essayDTO, routeDTO, content, dateWrite} = comment;
             let story = essayDTO ? essayDTO : routeDTO;
+            let type = essayDTO ? 'essay' : 'route';
             let category = essayDTO ? '에세이' : '경로';
+            let link = type + '/view/' + story.rno;
             return `
               <tr>
                 <td data-rno="${story.rno}">[${category}]${story.title}</td>
-                <td>${content}</td>
+                <td class="link"><a href="${link}">${content}</a></td>
                 <td>${dateWrite}</td>
               </tr>
-            `
+            `;
+        };
+
+        Template.prototype.friendTableHead = function () {
+            return `
+             <tr>
+                <th class="title">게시물제목</th>
+                <th>떠나는 날</th>
+                <th>돌아오는 날</th>
+             </tr>
+            `;
+        };
+
+        Template.prototype.friendTableBody = function (friend) {
+            const {fno, title, dateStart, dateEnd} = friend;
+            const link = '/friend/view/' + fno;
+            return `
+              <tr>
+                <td class="link"><a href="${link}">${title}</a></td>
+                <td>${dateStart.substr(0, 10)}</td>
+                <td>${dateEnd.substr(0, 10)}</td>
+              </tr>
+            `;
+        };
+
+        Template.prototype.paymentWaitHead = function () {
+            return `
+                <tr>
+                    <th>타입</th>
+                    <th>거래자</th>
+                    <th>상품명</th>
+                    <th>수량</th>
+                    <th>가격</th>
+                    <th>결제금액</th>
+                    <th>결제일자</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            `;
+        };
+
+        Template.prototype.paymentWaitBody = function (seq, payment) {
+            const {cno, type, requestUser, requestUserSeq, seller, sellerSeq, requestUserCheck, sellerCheck, productName, quantity, price, cdate, applyNum, paidAt} = payment;
+            let total = price * quantity;
+            let status = '';
+
+            if (seq === sellerSeq) {
+                if (requestUserCheck === 0) {
+                    if (sellerCheck === 0) status = '결제대기';
+                } else if (requestUserCheck === 1) {
+                    if (sellerCheck === 0) status = '<button class="btn-check-pay">배송시작</button>';
+                    if (sellerCheck === 1) status = '<button class="btn-deliver">배송완료</button>';
+                } else if (requestUserCheck === 2) {
+                    if (sellerCheck === 1) status = '배송완료';
+                    if (sellerCheck === 2) status = '거래완료';
+                }
+            } else if (seq === requestUserSeq) {
+                if (requestUserCheck === 0) {
+                    if (sellerCheck === 0) status = '<button class="btn-pay">결제</button>';
+                } else if (requestUserCheck === 1) {
+                    if (sellerCheck === 0) status = '결제완료';
+                    if (sellerCheck === 1) status = '배송중';
+                } else if (requestUserCheck === 2) {
+                    if (sellerCheck === 1) status = '<button class="btn-check-deliver">상품수령확인</button>';
+                    if (sellerCheck === 2) status = '거래완료';
+                }
+            } else {
+                throw new Error('뭐야시발');
+            }
+
+            let partner = seq === requestUserSeq ? seller : requestUser;
+            let me = seq !== requestUserSeq ? seller : requestUser;
+            return `
+                <tr>
+                    <td>${type}</td>
+                    <td>${partner}</td>
+                    <td>${productName}</td>
+                    <td>${quantity}</td>
+                    <td>${price}</td>
+                    <td>${total}</td>
+                    <td>${cdate}</td>
+                    <td data-cno="${cno}" data-productName="${productName}" data-total="${total}" data-buyer_name="${me}">${status}</td>
+                    <td><button data-cno=${cno} class="btn-pur-cancel">거래취소</button></td>
+                </tr>
+            `;
+        };
+
+        Template.prototype.mypageAlarmviewTemplate = function (items) {
+
+            let type = '';
+            let url = '';
+            if (items.header === 'friend') {
+                type = '동행';
+                url = '/friend/view/' + items.dataSeq;
+            } else if (items.header === 'purA') {
+                type = '대리구매';
+                url = '/pur/view/1/' + items.dataSeq;
+            } else if (items.header === 'purB') {
+                type = '대리구매';
+                url = '/pur/view/2/' + items.dataSeq;
+            } else if (items.header === 'comment') {
+                type = '댓글';
+            } else {
+                console.log('error');
+            }
+
+            return `
+             <tr>
+                <td class="content"><a href="` + url + `" >${items.content}</a></th>
+                <td class="date">${items.alarmDate}</th>
+                <td class="type">` + type + `</th>
+                <td><button class="btn-alarm-delete" data-ano="${items.ano}">삭제</button></td>
+            </tr>
+          `;
         };
 
 
@@ -1128,9 +1315,89 @@ let travelmaker = (function (window) {
             this.updatePermitStatusOrder = updatePermitStatusOrder;
             this.updatePermitStatusReq = updatePermitStatusReq;
             this.getRequestView = getRequestView;
+            this.readFriendBySeq = readFriendBySeq;
+            this.createPayment = createPayment;
+            this.getListPaymentBySeq = getListPaymentBySeq;
+            this.updatePayment = updatePayment;
+            this.deletePayment = deletePayment;
+            this.getListPayment = getListPayment;
+            this.deleteAlarmByAno = deleteAlarmByAno;
+            this.getMainList = getMainList;
         };
 
         const {setRequestHeader} = new Utils();
+
+        function getMainList(keyword) {
+            return $.ajax({
+                type: "get",
+                url: `/api/story/home/${keyword}`,
+                dataType: "json"
+            });
+        }
+
+        function deletePayment(cno) {
+            return $.ajax({
+                type: 'DELETE',
+                url: '/api/cash/' + cno,
+                dataType: 'text',
+                // contentType: 'application/json',
+                beforeSend: setRequestHeader
+            });
+        }
+
+        function getListPaymentBySeq(seq) {
+            return $.ajax({
+                type: 'GET',
+                url: '/api/cash/' + seq,
+                dataType: 'json',
+                contentType: 'application/json',
+                beforeSend: setRequestHeader
+            })
+        }
+
+        function getListPayment(seq, requestUserCheck, sellerCheck) {
+            return $.ajax({
+                type: 'GET',
+                url: '/api/cash',
+                dataType: 'json',
+                data: {
+                    requestUserSeq: seq,
+                    requestUserCheck: requestUserCheck,
+                    sellerCheck: sellerCheck
+                },
+                beforeSend: setRequestHeader
+            })
+        }
+
+        function updatePayment(data) {
+            return $.ajax({
+                type: 'PUT',
+                url: '/api/cash',
+                dataType: 'text',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                beforeSend: setRequestHeader
+            })
+        }
+
+        function createPayment(data) {
+            return $.ajax({
+                type: 'POST',
+                url: '/api/cash',
+                dataType: 'text',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                beforeSend: setRequestHeader
+            })
+        }
+
+        function readFriendBySeq(seq) {
+            return $.ajax({
+                type: 'GET',
+                url: '/friend/readBySeq?seq=' + seq,
+                dataType: 'json'
+            });
+        }
 
         function deletePur0(bno) {
             return $.ajax({
@@ -1154,7 +1421,7 @@ let travelmaker = (function (window) {
                 url: '/pur/setRequestPermit',
                 contentType: 'application/json',
                 data: JSON.stringify(data),
-                dataType: 'json',
+                dataType: 'text',
                 beforeSend: setRequestHeader
             });
         }
@@ -1165,7 +1432,7 @@ let travelmaker = (function (window) {
                 url: '/pur/setOrderPermit',
                 contentType: 'application/json',
                 data: JSON.stringify(data),
-                dataType: 'json',
+                dataType: 'text',
                 beforeSend: setRequestHeader
             });
         }
@@ -1208,6 +1475,15 @@ let travelmaker = (function (window) {
             });
         }
 
+        function deleteAlarmByAno(ano) {
+            return $.ajax({
+                type: 'DELETE',
+                url: '/alarm/deleteAlarm/' + ano,
+                dataType: 'text',
+                beforeSend: setRequestHeader
+            });
+        }
+
         function getPurchaseList(pg) {
             return $.ajax({
                 type: 'get',
@@ -1226,15 +1502,15 @@ let travelmaker = (function (window) {
                 beforeSend: setRequestHeader
             });
         }
-        
+
         function updateDivision(data) {
-			return $.ajax({
-				type: 'post',
-				url: '/friend/updateDivision',
-				data: data,
-				beforeSend: setRequestHeader
-			});
-		}
+            return $.ajax({
+                type: 'post',
+                url: '/friend/updateDivision',
+                data: data,
+                beforeSend: setRequestHeader
+            });
+        }
 
         function deleteRouteWrite(fno) {
             return $.ajax({
@@ -2027,7 +2303,7 @@ let travelmaker = (function (window) {
             const btnConfirm = getEl('#btn-email-confirm'); // 버튼
             const timer = getEl('.timer');
             const close = getEl('.tmodal-mini .close');
-            const timerEnd = timerStart(180, timer, () => close.click());
+            const start = timerStart(180, timer, close);
 
             addEvent(emailConfirm, 'keyup', (e) => {
                 if (e.keyCode === 13) btnConfirm.click();
@@ -2043,33 +2319,36 @@ let travelmaker = (function (window) {
                     emailConfirm.focus();
                 } else {
                     close.click();
-                    timerEnd();
+                    timerEnd(start);
                     changedBtn.innerText = '완료';
                     changedBtn.classList.remove('ing');
-                    email1.disabled = true;
-                    email2.disabled = true;
+                    email1.readonly = true;
+                    email2.readonly = true;
                     v.changeValid(changedBtn);
                 }
             });
         }
 
-        function timerStart(sec, timer, callbackFunc) {
+        function timerStart(sec, timer, close) {
             let restTime = sec;
             const start = setInterval(function () {
                 restTime -= 1;
-                if (restTime < 0) return timerEnd();
+                if (restTime < 0) return clearStart();
                 let min = Math.floor(restTime / 60);
                 let sec = restTime % 60;
                 timer.innerText = `0${min}:${sec < 10 ? '0' + sec : sec}`;
             }, 1000);
 
-            function timerEnd() {
+            function clearStart() {
                 clearInterval(start);
                 alert('시간이 초과되었습니다. 다시 시도해주세요.');
-                if (callbackFunc) callbackFunc();
+                close.click();
             }
+            return start;
+        }
 
-            return timerEnd;
+        function timerEnd(timer) {
+            clearInterval(timer);
         }
 
 
@@ -2121,6 +2400,19 @@ let travelmaker = (function (window) {
         return Handler;
     })(_w);
 
+    const Alarm = (function (w) {
+        const Alarm = function (sock) {
+            this.sock = sock;
+        };
+
+        Alarm.prototype.send = function (header, data) {
+            let message = {header, data};
+            this.sock.send(JSON.stringify(message));
+        };
+
+        return Alarm;
+    })(_w);
+
     const Comment = (function () {
         const Comment = function () {
         };
@@ -2128,25 +2420,30 @@ let travelmaker = (function (window) {
         const {getEl, getEls, getElList, addAllSameEvent, addEvent, useState} = new Utils();
         const ajax = new Ajax();
         const t = new Template();
+        const alarm = new Alarm(new SockJS('/echo'));
 
         // let commentWrap;
-        let _bno, _seq;
+        let _bno, _seq, _rno, _category, _nickname;
         let _setCmt, _getCmt;
         let _commentGroup, _btnAddComment;
 
-        Comment.prototype.init = function (commentWrap, bno, seq) {
+        Comment.prototype.init = function (commentWrap, bno, seq, rno, category, nickname) {
             const [setCmt, getCmt] = useState({seq: 0, content: null});
             const [commentGroup, commentContent, btnAddComment]
                 = getEls(commentWrap, '.comment-group', '#comment-content', '#btn-add-comment');
-            console.log(commentWrap);
-            console.log('bno', bno);
-            console.log('seq', seq);
+            // console.log(commentWrap);
+            // console.log('bno', bno);
+            // console.log('seq', seq);
             _bno = bno;
             _seq = seq;
+            _rno = rno;
+            _category = category;
+            _nickname = nickname;
             _setCmt = setCmt;
             _getCmt = getCmt;
             _commentGroup = commentGroup;
             _btnAddComment = btnAddComment;
+            console.log(alarm);
 
             if (commentContent && btnAddComment) {
                 addEvent(commentContent, 'change', (e) => setCmt({content: e.target.value, seq: seq}));
@@ -2155,8 +2452,15 @@ let travelmaker = (function (window) {
                     if (!commentContent.value) return;
                     ajax.createComment(bno, getCmt())
                         .then((ret) => {
-                            commentContent.value = '';
+                            commentContent.value = ''; //todo 여기서 알람을 보내면 됨.
                             printCommentList();
+                            alarm.send('cmt', {
+                                category: "essay",
+                                action: "cmt",
+                                rno: _rno,
+                                username: _nickname,
+                                cno: 1
+                            });
                         })
                         .catch(console.error);
                 });
@@ -2221,7 +2525,16 @@ let travelmaker = (function (window) {
                 const commentContent = e.target.parentElement.previousElementSibling;
                 setCmtInner({...data, likes: data.likes + 1, content: commentContent.value});
                 ajax.updateComment(_bno, getCmtInner())
-                    .then((ret) => printCommentList())
+                    .then((ret) => {
+                        alarm.send('cmt', {
+                            category: "essay",
+                            action: "like",
+                            rno: _rno,
+                            cno: getCmtInner().cno,
+                            username: _nickname
+                        });
+                        printCommentList()
+                    })
                     .catch(console.error);
             });
 
@@ -2230,7 +2543,16 @@ let travelmaker = (function (window) {
                 const commentContent = e.target.parentElement.previousElementSibling;
                 setCmtInner({...data, unlikes: data.unlikes + 1, content: commentContent.value});
                 ajax.updateComment(_bno, getCmtInner())
-                    .then((ret) => printCommentList())
+                    .then((ret) => {
+                        alarm.send('cmt', {
+                            category: "essay",
+                            action: "unlike",
+                            rno: _rno,
+                            cno: getCmtInner().cno,
+                            username: _nickname
+                        });
+                        printCommentList()
+                    })
                     .catch(console.error);
             });
 
@@ -2252,6 +2574,13 @@ let travelmaker = (function (window) {
                     const cno = +e.target.dataset.cno;
                     ajax.createReComment(_bno, cno, getCmtInner())
                         .then(ret => {
+                            alarm.send('cmt', {
+                                category: "essay",
+                                action: "re",
+                                rno: _rno,
+                                cno: cno,
+                                username: _nickname
+                            });
                             printCommentList()
                         })
                         .catch(console.error);
@@ -2289,17 +2618,33 @@ let travelmaker = (function (window) {
         return Comment;
     })(_w);
 
-    const Alarm = (function (w) {
-        const Alarm = function (sock) {
-            this.sock = sock;
+    const Cash = (function () {
+        const Cash = function () {
+            this.IMP = window.IMP;
+            this.IMP.init('imp42270163');
         };
 
-        Alarm.prototype.send = function (header, data) {
-            let message = {header, data};
-            this.sock.send(JSON.stringify(message));
+        Cash.prototype.requestPay = function (pgtype, productname, total, buyer_name) {
+            let payInfo = {
+                pg: pgtype,
+                pay_method: 'card',
+                merchant_uid: productname + new Date().getTime(), // 상품명
+                name: productname, // 품목이름
+                amount: total, // 금액
+                buyer_name: buyer_name, // 주문자
+            };
+            return requestPay(this.IMP, payInfo);
         };
 
-        return Alarm;
+        function requestPay(IMP, payInfo) {
+            return new Promise((resolve, reject) => {
+                IMP.request_pay(payInfo, function (ret) {
+                    resolve(ret);
+                });
+            });
+        }
+
+        return Cash;
     })(_w);
 
     travelmaker.googleMap = GoogleMap;
@@ -2315,6 +2660,7 @@ let travelmaker = (function (window) {
     travelmaker.comment = Comment;
     travelmaker.handler = Handler;
     travelmaker.alarm = Alarm;
+    travelmaker.Cash = Cash;
 
     _w.travelmaker = travelmaker;
     return travelmaker;

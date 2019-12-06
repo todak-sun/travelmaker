@@ -17,7 +17,10 @@
     <input id="rno" type="hidden" value="${essayDTO.rno}">
     <input id="bno" type="hidden" value="${essayDTO.bno}"/>
     <input id="essay-seq" type="hidden" value="${essayDTO.seq}"/>
+    <input id="category" type="hidden" value="essay">
+    <input id="essay-background" type="hidden" value="${essayDTO.imageName}"/>
     <sec:authorize access="isAuthenticated()">
+        <input type="hidden" id="nickname" value="${userDetail.nickname}">
         <input type="hidden" id="my-seq" value="${userDetail.seq}">
     </sec:authorize>
 </div>
@@ -73,28 +76,3 @@
 <script src="${pageContext.request.contextPath}/resources/js/essay/view2.js"></script>
 </body>
 </html>
-
-<%--                <li>--%>
-<%--                    <div class="comment-item">--%>
-<%--                        <div class="comment-author">--%>
-<%--                            <div class="img-wrap">--%>
-<%--                                <img--%>
-<%--                                        src="https://source.unsplash.com/collection/190727/80x80"--%>
-<%--                                        alt=""--%>
-<%--                                />--%>
-<%--                            </div>--%>
-<%--                            <p class="author-nickname">밥만먹고여행</p>--%>
-<%--                        </div>--%>
-<%--                        <div class="content-area">--%>
-<%--                  <textarea class="comment-content" disabled>--%>
-<%--와 정말 좋은 곳에 다녀오셨네요!!</textarea--%>
-<%--                  >--%>
-<%--                            <div class="comment-operation">--%>
-<%--                                <button class="like likes">10</button>--%>
-<%--                                <button class="like unlikes">10</button>--%>
-<%--                                <button class="oper update">수정</button>--%>
-<%--                                <button class="oper delete">삭제</button>--%>
-<%--                            </div>--%>
-<%--                        </div>--%>
-<%--                    </div>--%>
-<%--                </li>--%>

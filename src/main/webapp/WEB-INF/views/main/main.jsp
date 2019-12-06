@@ -19,14 +19,25 @@
             <h2>여행을 더 즐겁게!</h2>
             <p>Travel Maker와 함께하세요</p>
         </div>
-    <sec:authorize access="!isAuthenticated()">
-        <button class="btn-login">시작하기</button>
-    </sec:authorize>
+        <sec:authorize access="!isAuthenticated()">
+            <button class="btn-login">시작하기</button>
+        </sec:authorize>
     </section>
-    <section class="sec-story"></section>
-    <section></section>
+
+    <article>
+        <section class="sec-story">
+            <ul class="story-group"></ul>
+        </section>
+        <section class="sec-friend">
+            <ul class="friend-group"></ul>
+        </section>
+        <section class="sec-purchase">
+            <ul class="purchase-group"></ul>
+        </section>
+    </article>
 </div>
-<%@include file="../common/footer.jsp"%>
+<%@include file="../common/footer.jsp" %>
 <%@include file="../common/foot-js.jsp" %>
+<script src="${pageContext.request.contextPath}/resources/js/main/main.js"></script>
 </body>
 </html>

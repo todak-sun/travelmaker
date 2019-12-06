@@ -1,8 +1,8 @@
 package com.travelmaker.alarm.dao;
 
-import java.util.List;
-
 import com.travelmaker.alarm.domain.AlarmDTO;
+
+import java.util.List;
 
 public interface AlarmDAO {
 
@@ -14,4 +14,9 @@ public interface AlarmDAO {
 
 	public void alarmDelete(String dataseq);
 
+	public List<AlarmDTO> getMyAlarmList(String userSeq,String con);
+
+	public void deleteNreadAlarm(String requestFid ,int con,int alarmType);
+
+    int delete(int ano);
 }

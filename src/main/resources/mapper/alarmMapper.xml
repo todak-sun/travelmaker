@@ -2,27 +2,185 @@
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="alarmSQL">
 
-	<insert id="addAlarm" parameterType="alarm">
-		insert into alarm(ano,header,dataSeq,is_read,alarmDate,sendUserId,sendUserFid,requestUserId,requestUserFid,content)
-		values(seq_ano.nextval,#{header},#{dataSeq},0,sysdate,#{sendUserId},#{sendUserFid},#{requestUserId},#{requestUserFid},#{content})
-	</insert>
-	
-	<select id="getAlarmList" parameterType="string" resultType="alarm" >
-		select * from alarm where requestUserFid = #{requestFid} and is_read = 0
-	</select>
-	
-	<update id="alarmIsReadChange" parameterType="int">
-		update alarm set is_read = 1 where ano = #{ano}
-	</update>
-	<select id="getAlarmDataSeq" parameterType="int" resultType="int">
-		select dataSeq from alarm where ano = #{ano}
-	</select>
-	
-	<delete id="delete" parameterType="java.util.Map">
-		DELETE FROM alarm WHERE header = #{header} AND dataseq = #{dataseq}
-	</delete>
+    <insert id="addAlarm" parameterType="alarm">
+        insert into alarm(ano, header, dataSeq, is_read, alarmDate, sendUserId, sendUserFid, requestUserId,
+                          requestUserFid, content)
+        values (seq_ano.nextval, #{header}, #{dataSeq}, 0, sysdate, #{sendUserId}, #{sendUserFid}, #{requestUserId},
+                #{requestUserFid}, #{content})
+    </insert>
 
-	<delete id="alarmDelete">
-		delete alarm where dataseq=#{dataseq}
-	</delete>
+    <select id="getAlarmList" parameterType="string"
+            resultType="alarm">
+        select *
+        from alarm
+        where requestUserFid =
+              #{requestFid}
+          and is_read = 0
+    </select>
+
+    <update id="alarmIsReadChange" parameterType="int">
+        update alarm
+        set is_read = 1
+        where ano = #{ano}
+    </update>
+    <select id="getAlarmDataSeq" parameterType="int"
+            resultType="int">
+        select dataSeq
+        from alarm
+        where ano = #{ano}
+    </select>
+
+    <delete id="delete" parameterType="java.util.Map">
+        DELETE
+        FROM alarm
+        WHERE header
+            = #{header}
+          AND dataseq = #{dataseq}
+    </delete>
+
+    <delete id="alarmDelete">
+        delete alarm
+        where dataseq = #{dataseq}
+    </delete>
+
+
+    <select id="getMyAlarmList" resultType="alarm">
+        select ano,
+               header,
+               dataseq,
+               is_read,
+               to_char(alarmdate, 'YYYY-MM-DD') AS
+                   alarmDate,
+               sendUserId,
+               sendUserFid,
+               requestUserId,
+               requestUserFid,
+               content
+        from alarm
+        where requestUserFid = #{userSeq}
+        order by is_read
+    </select>
+
+    <select id="getMyAlarmListFriend" resultType="alarm">
+        select ano,
+               header,
+               dataseq,
+               is_read,
+               to_char(alarmdate, 'YYYY-MM-DD') AS
+                   alarmDate,
+               sendUserId,
+               sendUserFid,
+               requestUserId,
+               requestUserFid,
+               content
+        from alarm
+        where requestUserFid = #{userSeq}
+          and header = 'friend'
+        order by is_read
+    </select>
+
+    <select id="getMyAlarmListPurchase" resultType="alarm">
+        select ano,
+               header,
+               dataseq,
+               is_read,
+               to_char(alarmdate, 'YYYY-MM-DD') AS
+                   alarmDate,
+               sendUserId,
+               sendUserFid,
+               requestUserId,
+               requestUserFid,
+               content
+        from alarm
+        where requestUserFid = #{userSeq}
+          and (header = 'purA' or
+               header = 'purB')
+        order by is_read
+    </select>
+
+    <select id="getMyAlarmListComment" resultType="alarm">
+        select ano,
+               header,
+               dataseq,
+               is_read,
+               to_char(alarmdate, 'YYYY-MM-DD') AS
+                   alarmDate,
+               sendUserId,
+               sendUserFid,
+               requestUserId,
+               requestUserFid,
+               content
+        from alarm
+        where requestUserFid = #{userSeq}
+          and header = 'cmt'
+        order by is_read
+    </select>
+
+
+    <!-- 알람삭제 관련 -->
+
+    <!-- 읽은알람 지우기 -->
+    <delete id="deleteNreadAlarm">
+        delete alarm
+        where is_read = '1'
+          and requestUserFid =
+              #{requestFid}
+    </delete>
+
+    <delete id="deleteNreadAlarmFriend">
+        delete alarm
+        where is_read = '1'
+          and requestUserFid =
+              #{requestFid}
+          and header = 'friend'
+    </delete>
+
+    <delete id="deleteNreadAlarmPurchase">
+        delete alarm
+        where is_read = '1'
+          and requestUserFid =
+              #{requestFid}
+          and (header = 'purA' or header = 'purB')
+    </delete>
+
+    <delete id="deleteNreadAlarmComment">
+        delete alarm
+        where is_read = '1'
+          and requestUserFid =
+              #{requestFid}
+          and header = 'cmt'
+    </delete>
+
+    <delete id="deleteByAno" parameterType="int">
+        delete ALARM
+        where ANO = #{ano}
+    </delete>
+
+
+    <!-- 전체 알람 지우기-->
+    <delete id="deleteAreadAlarm">
+        delete alarm
+        where requestUserFid = #{requestFid}
+    </delete>
+
+    <delete id="deleteAreadAlarmFriend">
+        delete alarm
+        where requestUserFid = #{requestFid}
+          and header = 'friend'
+    </delete>
+
+    <delete id="deleteAreadAlarmPurchase">
+        delete alarm
+        where requestUserFid = #{requestFid}
+          and (header = 'purA' or header = 'purB')
+    </delete>
+
+
+    <delete id="deleteAreadAlarmComment">
+        delete alarm
+        where requestUserFid = #{requestFid}
+          and header = 'cmt'
+    </delete>
+
+
 </mapper>

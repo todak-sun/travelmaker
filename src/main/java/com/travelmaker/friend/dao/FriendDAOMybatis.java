@@ -1,16 +1,15 @@
 package com.travelmaker.friend.dao;
 
-import java.util.List;
-import java.util.Map;
-
+import com.travelmaker.friend.domain.FriendDTO;
+import com.travelmaker.friend.domain.FriendRequestDTO;
+import com.travelmaker.friend.domain.FriendRouteDTO;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.travelmaker.friend.domain.FriendDTO;
-import com.travelmaker.friend.domain.FriendRequestDTO;
-import com.travelmaker.friend.domain.FriendRouteDTO;
+import java.util.List;
+import java.util.Map;
 
 @Repository("friendDAO")
 @Transactional
@@ -132,5 +131,10 @@ public class FriendDAOMybatis implements FriendDAO {
 	@Override
 	public void updateDivision(FriendRouteDTO friendRouteDTO) {
 		sqlSession.update("friendSQL.normalUpdate", friendRouteDTO.getFno());
+	}
+
+	@Override
+	public List<FriendDTO> readBySeq(int seq) {
+		return sqlSession.selectList("friendSQL.readBySeq", seq);
 	}
 }
