@@ -29,11 +29,11 @@ public class UploadService implements ServletContextAware {
 //    private Properties fileProperties;
 
     //    // 엑세스키
-    private String accessKey = "AKIAIUKFN2KASQJ5BG7Q";
+    private String accessKey = "";
     ////    // 보안 엑세스키
-    private String secretKey = "jk2EQppP+nFIKMz56RcTlq+h0A9nW+S6xezLeXWT";
+    private String secretKey = "";
     ////    // Amazon S3 버킷 이름
-    private String bucketName = "travelmaker-bucket";
+    private String bucketName = "";
 //    @Value("${amazonProperties.endpointUrl}")
 //    private String endpointUrl;
 //    @Value("${travelmaker.s3.bucket}")
