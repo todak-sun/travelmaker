@@ -65,6 +65,7 @@ $(function() {
         nickname,
         fileName,
         imageName,
+        imgProfile,
         likes,
         views,
         cmt,
@@ -76,7 +77,7 @@ $(function() {
       <article class="story">
         <div class="story-img-wrap">
           <img
-            src="/resources/storage/${storyType}/${imageName}"
+            src="${imageName}"
             alt=""
             class="story-img"
           />
@@ -93,7 +94,7 @@ $(function() {
         </div>
         <div class="story-user-wrap">
           <img
-            src="https://picsum.photos/300/200?random=2"
+            src="${imgProfile}"
             alt=""
             class="profile-img"
           />

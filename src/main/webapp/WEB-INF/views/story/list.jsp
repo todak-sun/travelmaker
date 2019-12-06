@@ -53,7 +53,7 @@
 	          </div>
 	          <div class="story-user-wrap">
 	            <img
-	              src="https://picsum.photos/300/200?random=2"
+	              src="${story.imgProfile}"
 	              alt=""
 	              class="profile-img"
 	            />
