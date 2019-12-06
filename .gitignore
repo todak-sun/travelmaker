@@ -42,3 +42,4 @@ package-lock.json
 package.json
 /src/main/webapp/storage/
 /src/main/resources/properties/
+/src/main/webapp/WEB-INF/config/
