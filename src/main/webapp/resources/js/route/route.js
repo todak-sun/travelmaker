@@ -333,14 +333,16 @@ $(function () {
 
             case 3:
                 // 코스가 1개 이상 저장되어있는지 확인 후
-                if ($savedCourses.length > 0)
+                if ($savedCourses[0].children.length == 0) {
+                    return alert('저장된 코스가 없습니다.');
+                }
                 // DB에 저장된 순서 반영 & 루트 인포 숨기기 & 에필로그 작성창 열기
-                    return saveOrderAjax(getOrder())
-                        .then(function () {
-                            showCommand(level);
-                            deactivateCourse();
-                        })
-                        .catch(console.error);
+                return saveOrderAjax(getOrder())
+                    .then(function () {
+                        showCommand(level);
+                        deactivateCourse();
+                    })
+                    .catch(console.error);
                 break;
 
             default:

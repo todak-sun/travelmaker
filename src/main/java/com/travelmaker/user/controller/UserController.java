@@ -196,27 +196,25 @@ public class UserController {
         int emailCode = r.nextInt(9000) + 1000; // 이메일로 받는 인증코드 부분 (난수)
 
         String setfrom = "qoatn94@gmail.com";
-        String title = "비트맨 회원가입 인증 이메일 입니다."; // 제목
+        String title = "Travel Maker 이메일 인증코드입니다."; // 제목
         String content =
                 System.getProperty("line.separator") + // 한줄씩 줄간격을 두기위해 작성
 
                         System.getProperty("line.separator") +
 
-                        "스페셜 게스트 디제이 오마이킹갓뱀수 ~ ~ "
-
-                        + "봄날에 찾아온 봄제이 ~ ~"
+                        "안녕하세요, 트래블메이커(Travel Maker) 이메일 인증코드입니다. "
 
                         + System.getProperty("line.separator") +
 
                         System.getProperty("line.separator") +
 
-                        " 인증번호는 " + emailCode + " 입니다. "
+                        " 인증번호 " + emailCode + "를 정확히 입력해주세요."
 
                         + System.getProperty("line.separator") +
 
                         System.getProperty("line.separator") +
 
-                        "오마에와 모 신데이루 !!! 나니니니이이이이!!! 감사합니다"; // 내용
+                        "감사합니다."; // 내용
 
         try {
             MimeMessage message = mailSender.createMimeMessage();

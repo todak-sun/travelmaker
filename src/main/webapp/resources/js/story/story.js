@@ -37,6 +37,10 @@ $(function () {
         getList(currListNum + 1, loadListNum, keyword)
             .then(function (result) {
                 addList(result);
+                let imgProfileList = Array.from(document.querySelectorAll('img.profile-img'));
+                imgProfileList.forEach(img => {
+                    if (img.src.length < 79) img.src = '/resources/img/default-profile-img.jpeg';
+                });
             })
             .catch(function (error) {
                 console.log(error);
@@ -59,54 +63,38 @@ $(function () {
 
         for (let i = 0; i < result.length; i++) {
             const {
-                bno,
-                rno,
-                title,
-                nickname,
-                fileName,
-                imageName,
-                imgProfile,
-                likes,
-                views,
-                cmt,
-                dateUpdate
+                bno, rno, title, nickname, fileName, imageName, imgProfile, likes, views, cmt, dateUpdate
             } = result[i];
             const storyType = fileName ? "essay" : "route";
-
             const $article = $(`
-      <article class="story">
-        <div class="story-img-wrap">
-        
-          <img
-            src="${imageName}"
-            alt=""
-            class="story-img"
-          />
-        </div>
-        <div class="story-content-wrap">
-          <h5 class="story-title">
-            <a href="/${storyType}/view/${rno}">${title}</a>
-          </h5>
-          <div class="story-info">
-            <span class="info-icon likes">${likes}</span>
-            <span class="info-icon views">${views}</span>
-            <span class="info-icon comments">${cmt}</span>
-          </div>
-        </div>
-        <div class="story-user-wrap">
-         <div class="image-wrap">
-              <img src="${imgProfile}" alt="" class="profile-img"/>
-          </div>
-          <div class="user-info">
-            <h6>${nickname}</h6>
-            <p>${dateUpdate}</p>
-          </div>
-        </div>
-      </article>
-      `);
+                  <article class="story">
+                    <div class="story-img-wrap">
+                      <img src="${imageName}" alt="" class="story-img"/>
+                    </div>
+                    <div class="story-content-wrap">
+                      <h5 class="story-title">
+                        <a href="/${storyType}/view/${rno}">${title}</a>
+                      </h5>
+                      <div class="story-info">
+                        <span class="info-icon views">${views}</span>
+                        <span class="info-icon comments">${cmt}</span>
+                      </div>
+                    </div>
+                    <div class="story-user-wrap">
+                     <div class="image-wrap">
+                          <img src="${imgProfile}" alt="" class="profile-img"/>
+                      </div>
+                      <div class="user-info">
+                        <h6>${nickname}</h6>
+                        <p>${dateUpdate}</p>
+                      </div>
+                    </div>
+                  </article>
+            `);
             $frag.append($article);
         }
         $list.append($frag);
+
 
         if (!currListNum) {
             // 현재 게시물이 0개(페이지가 처음 로딩)라면 스크롤 아래로 이동

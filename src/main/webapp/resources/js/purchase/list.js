@@ -12,6 +12,7 @@ $(function () {
     const pageGroup = getEl('.page-group');
 
     ajax.getPurchaseList(pg.value).then(({list, purchasePaging}) => {
+        console.log(list);
         const $frag = $(document.createDocumentFragment());
         list.forEach(pur => {
             $frag.append(t.purListItem(pur));
@@ -22,9 +23,10 @@ $(function () {
 
     }).catch(console.error);
 
-    addEvent(btnPurchaseWrite, 'click', () => {
-        modal.create('purchase', initPurchase);
-    });
+    if (btnPurchaseWrite)
+        addEvent(btnPurchaseWrite, 'click', () => {
+            modal.create('purchase', initPurchase);
+        });
 
     function initPurchase() {
         const btnList = getElList('.select-wrap button');

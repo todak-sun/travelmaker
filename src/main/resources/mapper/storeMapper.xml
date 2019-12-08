@@ -2,27 +2,46 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="storeSQL">
-	<!-- 호텔 리스트 -->
-	<select id="getHotelList" parameterType="java.util.Map"
-		resultType="hotel">
-		<![CDATA[SELECT * FROM (SELECT rownum rn, tt.* FROM (SELECT hnb, kor_name, eng_name, star, address, price, content, main_image_url from hotel_content order by hnb desc) tt) WHERE rn BETWEEN #{startNum} AND #{endNum}]]>
-	</select>
-	<select id="getTotalA" resultType="int">
-		SELECT count(rownum) FROM
-		friends
+    <!-- 호텔 리스트 -->
+    <select id="getHotelList" parameterType="java.util.Map" resultType="hotel">
+		<![CDATA[
+        SELECT *
+        FROM (SELECT rownum rn, tt.*
+              FROM (SELECT hnb,
+                           kor_name,
+                           eng_name,
+                           star,
+                           address,
+                           price,
+                           content,
+                           main_image_url
+                    from hotel_content
+                    order by hnb desc) tt)
+        WHERE rn BETWEEN #{startNum} AND #{endNum}
+        ]]>
 	</select>
 
-	<!-- 호텔 뷰 -->
-	<select id="getHotelView" parameterType="int" resultType="hotel">
-		SELECT
-		* FROM hotel_content WHERE hnb = #{hnb}
-	</select>
-	<select id="getHotelImageView" parameterType="int"
-		resultType="hotelImage">
-		SELECT * FROM hotel_images WHERE hnb = #{hnb}
-	</select>
-	<select id="getHotelRoomView" parameterType="int"
-		resultType="hotelRoom">
-		SELECT * FROM hotel_rooms WHERE hnb = #{hnb}
-	</select>
+    <select id="getTotalA" resultType="int">
+        SELECT count(rownum)
+        FROM hotel_content
+    </select>
+
+    <!-- 호텔 뷰 -->
+    <select id="getHotelView" parameterType="int" resultType="hotel">
+        SELECT *
+        FROM hotel_content
+        WHERE hnb = #{hnb}
+    </select>
+
+    <select id="getHotelImageView" parameterType="int" resultType="hotelImage">
+        SELECT *
+        FROM hotel_images
+        WHERE hnb = #{hnb}
+    </select>
+
+    <select id="getHotelRoomView" parameterType="int" resultType="hotelRoom">
+        SELECT *
+        FROM hotel_rooms
+        WHERE hnb = #{hnb}
+    </select>
 </mapper>

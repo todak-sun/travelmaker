@@ -6,7 +6,7 @@
 <head>
     <%@include file="../common/head-meta.jsp" %>
     <%@include file="../common/head-css.jsp" %>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/purchase/write.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/purchase/view2.css">
     <title>사다주세요</title>
 </head>
 <body>
@@ -86,50 +86,12 @@
                 </c:if>
             </sec:authorize>
         </div>
+    </div>
 
-        <div class="content-wrap">
-            <ul class="content-group"></ul>
-        </div>
+    <div class="content-wrap">
+        <ul class="content-group"></ul>
     </div>
 </div>
-
-<%--<sec:authorize access="hasRole('ROLE_USER') and isAuthenticated()">--%>
-<%--    <!-- 사다주세요 신청서 Modal -->--%>
-<%--    <div id="requestWriteModal" style="display: none;">--%>
-<%--        <div class="tmodal">--%>
-<%--            <div class="tmodal-bar">--%>
-<%--                <h4 class="modal-title">신청 글쓰기</h4>--%>
-<%--                <button type="button" class="close" data-dismiss="modal">&times;</button>--%>
-<%--            </div>--%>
-
-<%--            <div class="tmodal-body">--%>
-<%--<form id="requestForm" class="write-form">--%>
-<%--    <input type="hidden" name="bno" id="bno" value="">--%>
-<%--    <input type="hidden" name="nickname" id="nickname" value="">--%>
-<%--    <input type="hidden" name="requestUserSeq" id="requestUserSeq" value="">--%>
-<%--    &lt;%&ndash; <input type="hidden" name="id" id="id" value="${userDetail.id }"> &ndash;%&gt;--%>
-<%--    <table class="table">--%>
-<%--        <tr>--%>
-<%--            <td>신청 내용</td>--%>
-<%--            <td><textarea rows="10" cols="70" name="content" id="req-content"></textarea></td>--%>
-<%--        </tr>--%>
-<%--        <tr>--%>
-<%--            <td colspan="2" align="center">--%>
-<%--                <button type="button" class="btn btn-success" id="req-btn-try">신청하기</button>--%>
-<%--            </td>--%>
-<%--        </tr>--%>
-<%--    </table>--%>
-<%--</form>--%>
-<%--            </div>--%>
-
-<%--            <!-- <div class="modal-footer">--%>
-<%--                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>--%>
-<%--                </div> -->--%>
-<%--        </div>--%>
-<%--        <!-- </div> -->--%>
-
-<%--    </div>--%>
-<%--</sec:authorize>--%>
 
 <%@include file="../common/footer.jsp" %>
 <%@include file="../common/foot-js.jsp" %>

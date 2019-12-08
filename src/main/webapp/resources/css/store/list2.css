@@ -1,0 +1,192 @@
+.container-wrap {
+    /*margin-top: 80px;*/
+    margin-bottom: 1.5rem;
+}
+
+.container-wrap .hotel-wrap {
+    margin: 0 auto;
+    /*border: 2px solid blue;*/
+    width: 65%;
+    min-width: 680px;
+    max-width: 860px;
+    box-sizing: border-box;
+}
+
+.container-wrap .hotel-wrap .hotel-header {
+    position: relative;
+    box-sizing: border-box;
+    background-color: #868e96;
+}
+
+.container-wrap .hotel-wrap .hotel-header .title-kor {
+    text-align: center;
+    font-size: 1.75rem;
+    box-sizing: border-box;
+    padding: 1rem 1rem 0.25rem;
+    color: #e8e8e8;
+}
+
+.container-wrap .hotel-wrap .hotel-header .title-eng {
+    text-align: center;
+    font-size: 1.1rem;
+    box-sizing: border-box;
+    color: #ced4da;
+    padding-bottom: 1rem;
+}
+
+.container-wrap .hotel-wrap .hotel-header a {
+    position: absolute;
+    display: block;
+    text-decoration: none;
+    background-color: #ffffff;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 1rem;
+    border-radius: 0.5rem;
+    border: 2px solid #353535;
+    color: #353535;
+}
+
+.container-wrap .hotel-wrap .hotel-header a:hover {
+    background-color: #353535;
+    color: #ffffff;
+}
+
+.container-wrap .hotel-image-wrap {
+    box-sizing: border-box;
+}
+
+.container-wrap .hotel-image-wrap .main-image-wrap {
+    width: 100%;
+    height: auto;
+}
+
+.container-wrap .hotel-image-wrap .main-image-wrap img {
+    width: 100%;
+}
+
+.container-wrap .hotel-image-wrap .s-image-group {
+    display: flex;
+    box-sizing: border-box;
+    width: 100%;
+    overflow: auto;
+}
+
+.container-wrap .hotel-image-wrap .s-image-group li {
+    padding: 0.1rem;
+}
+
+.container-wrap .hotel-image-wrap .s-image-group img {
+    border: 1px solid gray;
+    opacity: 0.6;
+    transition: .5s;
+    cursor: pointer;
+}
+
+.container-wrap .hotel-image-wrap .s-image-group img.on {
+    opacity: 1;
+    border: 1px solid #00c1da;
+}
+
+.container-wrap .hotel-image-wrap .s-image-group img:hover {
+    opacity: 1;
+    border: 1px solid #00c1da;
+}
+
+.container-wrap .hotel-image-wrap .room-banner {
+    width: 100%;
+    background-color: #868e96;
+    padding: 1rem;
+    color: #ffffff;
+    margin: 0.5rem 0;
+    box-sizing: border-box;
+}
+
+.container-wrap .hotel-image-wrap .room-box {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.container-wrap .hotel-image-wrap .room-box .room-image-group {
+    box-sizing: border-box;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.container-wrap .hotel-image-wrap .room-box .room-image-group li {
+    box-sizing: border-box;
+    border: 1px solid gray;
+    margin-right: 0.25rem;
+    width: 100%;
+}
+
+.container-wrap .hotel-image-wrap .room-box .room-image-group .room-item {
+    width: 100%;
+}
+
+.container-wrap .hotel-image-wrap .room-box .room-image-group .room-item .image-wrap {
+    width: 100%;
+    height: 200px;
+    text-align: center;
+}
+
+.image-wrap img {
+    max-height: 100%;
+}
+
+.container-wrap .hotel-image-wrap .room-image-group .room-item p {
+    text-align: center;
+    padding: 0.5rem;
+}
+
+.container-wrap .info-banner {
+    width: 100%;
+    background-color: #868e96;
+    padding: 1rem;
+    color: #ffffff;
+    margin: 0.5rem 0;
+    box-sizing: border-box;
+}
+
+.container-wrap .hotel-info-wrap {
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.container-wrap .hotel-info-wrap .title-wrap {
+    display: flex;
+    align-items: center;
+}
+
+.container-wrap .hotel-info-wrap .title-wrap .title {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.container-wrap .hotel-info-wrap .title-wrap .grade {
+    font-size: 0.9rem;
+    color: #868e96;
+    margin-left: 1rem;
+}
+
+.container-wrap .hotel-info-wrap .address {
+    margin-top: 0.5rem;
+}
+
+.container-wrap .hotel-info-wrap .price {
+    margin-top: 0.5rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #e03131;
+}
+
+.container-wrap .hotel-info-wrap .hotel-detail {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    border: 2px solid gray;
+    line-height: 25px;
+}
+

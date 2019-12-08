@@ -55,10 +55,10 @@
         <beans:property name="order" value="0"/>
     </beans:bean>
 
-    <beans:bean id="fileProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
-        <beans:property name="location" value="/WEB-INF/config/file.properties"/>
-        <beans:property name="fileEncoding" value="UTF-8" />
-    </beans:bean>
+<!--    <beans:bean id="fileProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">-->
+<!--        <beans:property name="location" value="/WEB-INF/config/file.properties"/>-->
+<!--        <beans:property name="fileEncoding" value="UTF-8" />-->
+<!--    </beans:bean>-->
 
     <websocket:handlers>
         <websocket:mapping handler="websocketHandler" path="/echo"/>

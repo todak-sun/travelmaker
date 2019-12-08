@@ -38,8 +38,8 @@ public class PurchaseApiController {
         ModelAndView modelAndView = new ModelAndView();
         System.out.println("pg" + pg);
 
-        int endNum = Integer.parseInt(pg) * 5;
-        int startNum = endNum - 4;
+        int endNum = Integer.parseInt(pg) * 10;
+        int startNum = endNum - 9;
 
         Map<String, Integer> map = new HashMap<String, Integer>();
 

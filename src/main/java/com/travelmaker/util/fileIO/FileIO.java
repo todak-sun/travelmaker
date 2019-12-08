@@ -2,12 +2,13 @@ package com.travelmaker.util.fileIO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletContext;
-import java.io.*;
-import java.time.LocalDateTime;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 @Component
 public class FileIO {
@@ -17,7 +18,7 @@ public class FileIO {
     @Autowired
     UploadService uploadService;
     
-    private static final String amazonURLPath = "https://travelmaker-bucket.s3.ap-northeast-2.amazonaws.com/";
+    private static final String amazonURLPath = "https://travelmaker-buckets.s3.ap-northeast-2.amazonaws.com/";
 
     public String readFile(String fileName, String temp) {
     	return uploadService.downloadTxt(fileName, temp);

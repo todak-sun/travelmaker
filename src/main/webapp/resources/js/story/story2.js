@@ -1,7 +1,6 @@
 $(function () {
     let type, isDomestic;
     let seq = document.querySelector("#seq");
-
     //클래스
     const {getEl, addEvent} = new travelmaker.utils();
     const modal = new travelmaker.modal("#modal");

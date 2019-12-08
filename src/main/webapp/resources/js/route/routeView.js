@@ -170,7 +170,7 @@ function googleMap(flightPlanCoordinates) {
             lat: flightPlanCoordinates[0]["lat"],
             lng: flightPlanCoordinates[0]["lng"]
         },
-        mapTypeId: "satellite" // 'roadmap'
+        mapTypeId: 'roadmap'
     });
 
     // 장소 위치들 저장

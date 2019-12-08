@@ -6,7 +6,7 @@
     <%@include file="../common/head-meta.jsp" %>
     <%@include file="../common/head-css.jsp" %>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/purchase/view2.css">
-    <title>사다주세요</title>
+    <title>사주세요</title>
 </head>
 <body>
 <%@include file="../common/navbar2.jsp" %>

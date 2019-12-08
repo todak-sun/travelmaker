@@ -40,7 +40,7 @@
                         <a href="<c:out value="/${storyType}/view/${story.rno}"/>"><c:out value="${story.title}"/></a>
                     </h5>
                     <div class="story-info">
-                        <span class="info-icon likes"><c:out value="${story.likes}"/></span>
+<%--                        <span class="info-icon likes"><c:out value="${story.likes}"/></span>--%>
                         <span class="info-icon views"><c:out value="${story.views}"/></span>
                         <span class="info-icon comments"><c:out value="${story.cmt}"/></span>
                     </div>

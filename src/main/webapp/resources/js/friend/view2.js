@@ -22,22 +22,22 @@ $(function () {
     addAllSameEvent(btnTryList, 'click', btnTryListHandler);
     addAllSameEvent(btnApplyCheckList, 'click', btnApplyCheckListHandler);
 
-    if(btnModify)
-    addEvent(btnModify, 'click', () => {
-        if (confirm('수정하시겠습니까?')) return location.href = '/friend/modify/' + fno;
-    });
+    if (btnModify)
+        addEvent(btnModify, 'click', () => {
+            if (confirm('수정하시겠습니까?')) return location.href = '/friend/modify/' + fno;
+        });
 
-    if(btnDelete)
-    addEvent(btnDelete, 'click', () => {
-        if (confirm('정말로 삭제하시겠습니까?')) {
-            ajax.deleteFriendRequest(fno)
-                .then(() => {
-                    alert('삭제 완료!');
-                    location.href = '/friend/list/1';
-                })
-                .catch(console.error);
-        }
-    });
+    if (btnDelete)
+        addEvent(btnDelete, 'click', () => {
+            if (confirm('정말로 삭제하시겠습니까?')) {
+                ajax.deleteFriendRequest(fno)
+                    .then(() => {
+                        alert('삭제 완료!');
+                        location.href = '/friend/list/1';
+                    })
+                    .catch(console.error);
+            }
+        });
 
     function btnTryListHandler(e) {
         const dataMap = $(this).closest('li').find('.data-set').data();
@@ -51,8 +51,8 @@ $(function () {
             const dateEnd = getEl('#req-end-date');
             const content = getEl('#req-content');
             const btnTry = getEl('#req-btn-try');
-
-            $formRequest.prepend(`<input type="hidden" name="fcno" value="${dataMap.fcno}"`);
+            console.log(dataMap.fcno);
+            $formRequest.prepend(`<input type="hidden" name="fcno" value="${dataMap.fcno}">`);
 
             addEvent(dateStart, 'blur', (e) => {
                 const value = e.target.value;
@@ -122,6 +122,8 @@ $(function () {
         addEvent(this, 'click', btnListCloseHandler.bind(null, requestGroup));
 
         ajax.getFriendRequestView(dataMap.fcno).then(({list}) => {
+            console.log(dataMap.fcno);
+            console.log(list);
             const $frag = $(document.createDocumentFragment());
             list.forEach(request => $frag.append(t.friendRequest(request)));
             requestGroup.appendChild($frag[0]);

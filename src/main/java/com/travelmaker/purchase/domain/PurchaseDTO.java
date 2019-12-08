@@ -1,5 +1,6 @@
 package com.travelmaker.purchase.domain;
 
+import com.travelmaker.user.domain.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,5 +28,6 @@ public class PurchaseDTO {
     private String requestUsername;
     private int con;
 
+    private UserDTO user;
     private MultipartFile imageFile;
 }

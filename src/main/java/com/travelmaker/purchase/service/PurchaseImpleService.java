@@ -2,10 +2,12 @@ package com.travelmaker.purchase.service;
 
 import com.travelmaker.purchase.dao.PurchaseDAO;
 import com.travelmaker.purchase.domain.PurchaseDTO;
+import com.travelmaker.user.dao.UserDAO;
 import com.travelmaker.util.fileIO.FileIO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -19,13 +21,20 @@ public class PurchaseImpleService implements PurchaseService {
     @Autowired
     private FileIO fileIO;
 
+    @Autowired
+    private UserDAO userDAO;
+
     @Override
     public List<PurchaseDTO> getList(Map<String, Integer> map) {
 
-        System.out.println(map.get("startNum"));
-        System.out.println(map.get("endNum"));
-
-        return purchaseDAO.getList(map);
+//        System.out.println(map.get("startNum"));
+//        System.out.println(map.get("endNum"));
+        List<PurchaseDTO> purchaseDTOList = new ArrayList<>();
+        purchaseDAO.getList(map).forEach(purchaseDTO -> {
+            purchaseDTO.setUser(userDAO.getUserDTO(purchaseDTO.getWriteUserSeq()));
+            purchaseDTOList.add(purchaseDTO);
+        });
+        return purchaseDTOList;
     }
 
     @Override
@@ -35,10 +44,10 @@ public class PurchaseImpleService implements PurchaseService {
 
     @Override
     public int purchaseWrite(PurchaseDTO purchaseDTO) {
-    	String temp = "purchase";
+        String temp = "purchase";
         String img = Optional.ofNullable(purchaseDTO.getImageFile())
                 .map(imageFile -> fileIO.saveImage(imageFile, temp))
-				.orElse("tempImg");
+                .orElse("tempImg");
 
         purchaseDTO.setImg(img);
 
@@ -62,7 +71,7 @@ public class PurchaseImpleService implements PurchaseService {
         String imageName = purchaseDAO.puchaseDelete(bno);
         String[] imageUrl = imageName.split("/");
         String temp = "purchase";
-        
+
         fileIO.deleteImage(imageUrl[4], temp);
     }
 

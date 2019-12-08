@@ -11,6 +11,7 @@ $(function () {
     const rno = +getEl('#rno').value;
     const category = getEl('#category').value;
     const essaySeq = +getEl('#essay-seq').value;
+
     let nickname;
     if (getEl('#nickname')) {
         nickname = getEl('#nickname').value;

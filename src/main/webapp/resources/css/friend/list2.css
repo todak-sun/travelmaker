@@ -85,6 +85,7 @@
 }
 
 .content-item {
+    background-color: #ffffff;
     width: 60%;
     min-width: 480px;
     margin: 0 auto;
@@ -152,14 +153,15 @@
 
 .content-item .title-wrap .tbadge {
     position: absolute;
-    top: -0.5rem;
-    right: -0.5rem;
+    top: -1.5rem;
+    right: -2.5rem;
     font-size: 1.1rem;
     display: block;
     background-color: #c8c8c8;
     padding: 0.5rem 1rem;
     box-sizing: border-box;
     color: #ffffff;
+    transform: rotate(35deg);
 }
 
 .title-wrap .tbadge.tbadge-danger {

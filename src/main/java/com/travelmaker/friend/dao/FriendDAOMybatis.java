@@ -3,6 +3,7 @@ package com.travelmaker.friend.dao;
 import com.travelmaker.friend.domain.FriendDTO;
 import com.travelmaker.friend.domain.FriendRequestDTO;
 import com.travelmaker.friend.domain.FriendRouteDTO;
+import com.travelmaker.user.dao.UserDAO;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -16,17 +17,21 @@ import java.util.Map;
 public class FriendDAOMybatis implements FriendDAO {
 	@Autowired
 	private SqlSession sqlSession;
-	
+
+	@Autowired
+	private UserDAO userDAO;
+
 	@Override
 	public List<FriendDTO> getList(Map<String, Integer> map) {
 		sqlSession.delete("friendSQL.abnormalDelete");
 		List<FriendDTO> list = sqlSession.selectList("friendSQL.getList", map);
 		
 		for(FriendDTO friendDTO : list) {
-			friendDTO.setNickname(sqlSession.selectOne("friendSQL.getNickName", friendDTO.getSeq()));
 			friendDTO.setCitys(sqlSession.selectList("friendSQL.getCitys", friendDTO.getFno()));
+			friendDTO.setUser(userDAO.getUserDTO(friendDTO.getSeq()));
 			System.out.println("city = " + friendDTO.getCitys());
 		}
+
 		return list;
 	}
 

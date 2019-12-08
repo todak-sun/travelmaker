@@ -76,6 +76,7 @@ public class FriendApiController {
 	// 신청글 가져오기
 	@PostMapping(value = "/getRequestView")
 	public ModelAndView getRequestView(@RequestParam String fcno) {
+		System.out.println("fcno : " + fcno);
 		ModelAndView modelAndView = new ModelAndView();
 		List<FriendRequestDTO> list = friendService.getRequestView(fcno);
 		

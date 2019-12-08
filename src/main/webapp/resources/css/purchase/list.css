@@ -65,6 +65,7 @@
 }
 
 .pur-group .pur-item {
+    background-color: #ffffff;
     width: 80%;
     border: 3px solid gray;
     position: relative;
@@ -77,13 +78,13 @@
 }
 
 .pur-item.to-buy {
-    border: 3px solid #da4f4f;
-    box-shadow: 5px 5px 0px 1px rgba(218, 79, 79, 1);
+    border: 3px solid #f783ac;
+    box-shadow: 5px 5px 0px 1px rgba(247, 131, 172, 1);
 }
 
 .pur-item.to-request {
-    border: 3px solid #2626d4;
-    box-shadow: 5px 5px 0px 1px rgba(38, 38, 212, 1);
+    border: 3px solid #00c1da;
+    box-shadow: 5px 5px 0px 1px rgba(0, 193, 218, 1);
 }
 
 .pur-item .badge {
@@ -98,11 +99,11 @@
 }
 
 .pur-item.to-buy .badge {
-    background-color: #e53e3e;
+    background-color: #f783ac;
 }
 
 .pur-item.to-request .badge {
-    background-color: #2626d4;
+    background-color: #00c1da;
 }
 
 .pur-item .item-top {
@@ -125,8 +126,8 @@
 }
 
 .pur-item .item-top .user-wrap .image-wrap img {
-    max-height: 100%;
-    width: auto;
+    height: 100%;
+    width: 100%;
 }
 
 .pur-item .item-top .user-wrap .nickname {

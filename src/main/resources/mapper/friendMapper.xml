@@ -8,8 +8,7 @@
         WHERE is_normal = 1
     </delete>
 
-    <select id="getList" parameterType="java.util.Map"
-            resultType="friend">
+    <select id="getList" parameterType="java.util.Map" resultType="friend">
 		<![CDATA[
         SELECT *
         FROM (SELECT rownum rn, tt.*

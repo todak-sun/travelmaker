@@ -134,7 +134,7 @@
             <sec:authorize access="isAuthenticated()">
                 <sec:authentication property="principal" var="userDetail"/>
                 <c:if test="${userDetail.seq eq routeDTO.seq}">
-                    <div class="">
+                    <div class="button-wrap">
                         <button id="btn-route-modify">수정</button>
                         <button id="btn-route-delete">삭제</button>
                     </div>
