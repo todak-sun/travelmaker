@@ -480,7 +480,7 @@ $(function () {
     function courseAjaxSuccess(crno) {
         // < 3.웹페이지에 코스 임시저장
         // 수정된 임시저장코스 삭제(삭제할 게 있을 경우만)
-        let patchedCourse = +document.querySelector(
+        let patchedCourse = document.querySelector(
             `.route-info input[value='${crno}']`
         );
         if (patchedCourse)
