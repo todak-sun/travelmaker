@@ -9,9 +9,15 @@
 </head>
 <body>
 <%@include file="../common/navbar2.jsp" %>
-<input type="hidden" id="pg" value="${pg }">
-<div id="result"></div>
-<div id="paging" style="text-align: center;"></div>
+<div class="hidden">
+    <input type="hidden" id="pg" value="${pg}">
+</div>
+
+<div class="container-wrap">
+    <ul class="hotel-group"></ul>
+</div>
+
+<ul class="page-group"></ul>
 
 <%@include file="../common/footer.jsp" %>
 <%@include file="../common/foot-js.jsp" %>

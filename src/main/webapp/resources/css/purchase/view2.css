@@ -65,6 +65,11 @@
     background-position: center;
 }
 
+.write-form .input-wrap .image-area img {
+    max-height: 100%;
+    width: auto;
+}
+
 .write-form .input-wrap textarea {
     width: 100%;
     height: 180px;
@@ -75,6 +80,19 @@
     color: white;
     padding: 0.5rem;
     font-size: 1rem;
+}
+
+.write-form .input-wrap .date {
+    padding: 0.75rem;
+    color: #ffffff;
+}
+
+.write-form .input-wrap .date .from::after {
+    content: ' 부터';
+}
+
+.write-form .input-wrap .date .to::after {
+    content: ' 까지';
 }
 
 .write-form .button-wrap {
@@ -108,4 +126,60 @@
 .button-wrap .btn.btn-tdanger:hover {
     background-color: #ff5100;
     color: #ffffff;
+}
+
+.content-wrap {
+    width: 650px;
+    margin: 0 auto;
+}
+
+.content-group li {
+    width: 100%;
+    padding: 0.5rem;
+    box-sizing: border-box;
+}
+
+.content-group .request-item {
+    border: 2px solid gray;
+    border-radius: 1rem;
+    padding: 0.5rem;
+    box-sizing: border-box;
+}
+
+.request-item .button-wrap {
+    margin-top: 0.5rem;
+    text-align: right;
+}
+
+.request-item .button-wrap button {
+    outline: none;
+    padding: 0.3rem 0.5rem;
+    background-color: #ffffff;
+    border: 2px solid #353535;
+    color: #353535;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.request-item .button-wrap button:hover {
+    color: #ffffff;
+    background-color: #353535;
+}
+
+.request-item .button-wrap span {
+    /*display: block;*/
+    padding: 0.3rem 0.5rem;
+    color: #ffffff;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.request-item .button-wrap span.span-agree {
+    background-color: #00c1da;
+    border: 2px solid #00c1da;
+}
+
+.request-item .button-wrap span.span-disagree {
+    background-color: #fa5252;
+    border: 2px solid #fa5252;
 }

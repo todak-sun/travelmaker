@@ -1,10 +1,10 @@
 package com.travelmaker.friend.domain;
 
-import java.util.List;
-
+import com.travelmaker.user.domain.UserDTO;
+import lombok.Data;
 import org.springframework.stereotype.Component;
 
-import lombok.Data;
+import java.util.List;
 
 @Data
 @Component
@@ -19,7 +19,7 @@ public class FriendDTO {
 	private int is_finish;
 	private String kakao_chat;
 	private String date_of_issue;
-	private String nickname; // nickName 추가 (DB X)
+	private UserDTO user;
 	private List<FriendRouteDTO> friendRouteDTOs;
 	private List<String> citys;
 }

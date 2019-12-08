@@ -1,1 +1,139 @@
-@charset "UTF-8";
+.container-wrap {
+    margin: 120px auto 0;
+    width: 1200px;
+}
+
+.container-wrap .hotel-group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 0.5rem;
+}
+
+.container-wrap .hotel-group li {
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+.container-wrap .hotel-group .hotel-item {
+    position: relative;
+    border: 2px solid #353535;
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+.hotel-item .image-wrap {
+    position: relative;
+    width: 100%;
+    height: 270px;
+    background-color: #303133;
+    overflow: hidden;
+}
+
+.hotel-item .image-wrap img {
+    position: absolute;
+    top: 0;
+    left: -6rem;
+    /*display: block;*/
+    margin: 0 auto;
+    width: 100%;
+    /*width: 150%;*/
+}
+
+.hotel-item .hotel-detail {
+    position: absolute;
+    width: 190px;
+    height: 100%;
+    top: 0;
+    right: 0;
+    background-color: #ffffff;
+    padding: 0.2rem;
+}
+
+.hotel-item .hotel-detail .hotel-title-kor {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-top: 0.5rem;
+}
+
+.hotel-item .hotel-detail .hotel-title-eng {
+    color: #495057;
+    margin-top: 0.5rem;
+}
+
+.hotel-item .hotel-detail .hotel-address {
+    font-size: 0.9rem;
+    margin-top: 1rem;
+}
+
+.hotel-item .hotel-detail .hotel-address::before {
+    content: '주소: ';
+}
+
+.hotel-item .hotel-detail .hotel-info {
+    position: absolute;
+    right: 0.75rem;
+    bottom: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.hotel-item .hotel-detail .hotel-info .hotel-price::before {
+    content: '₩ ';
+}
+
+.hotel-item .hotel-detail .hotel-info .hotel-price::after {
+    content: ' ~';
+}
+
+.hotel-item .hotel-detail .hotel-info .btn-detail {
+    padding: 0.3rem 0.7rem;
+    font-size: 0.9rem;
+    background-color: #ffffff;
+    outline: none;
+    border: 2px solid #353535;
+    color: #353535;
+    border-radius: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.hotel-item .hotel-detail .hotel-info .btn-detail:hover {
+    background-color: #353535;
+    color: #ffffff;
+}
+
+.page-group {
+    /*width: 250px;*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 3rem auto;
+}
+
+.page-group li a {
+    padding: 0.5rem;
+    display: block;
+    color: #353535;
+    text-decoration: none;
+}
+
+.page-group li a:hover {
+    color: #00c1da;
+}
+
+.page-group li a.on {
+    color: #00c1da;
+}
+
+.page-group li a.direction {
+    color: #353535;
+}
+
+.page-group li a.direction:hover {
+    color: #00c1da;
+}
+
+
+/*.hotel-item .hotel-detail .hotel-info*/
+/*.hotel-item .hotel-detail .hotel-info*/

@@ -391,6 +391,7 @@ $(function () {
         showLoading();
         ajax.getUser(seq)
             .then(ret => {
+                let image = ret.imgProfile === null ? '/resources/img/default-profile-img.jpeg' : ret.imgProfile;
                 setUserData({...ret, dateRegist: '1991-11-01'});
                 console.log(ret.nickname);
                 console.log(nickname);
@@ -412,10 +413,10 @@ $(function () {
                 contentProfile.value = ret.contentProfile;
                 if (ret.gender) customRadios[1].click();
                 else customRadios[0].click();
-                if (ret.imgProfile) {
-                    imgArea.style.backgroundImage = `url(${ret.imgProfile})`;
-                    imgArea.classList.add('on');
-                }
+                // if (ret.imgProfile) {
+                imgArea.style.backgroundImage = `url(${image})`;
+                imgArea.classList.add('on');
+                // }
 
                 closeLoading();
             })

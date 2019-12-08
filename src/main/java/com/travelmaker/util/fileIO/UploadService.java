@@ -23,25 +23,12 @@ import java.util.UUID;
 @Component
 public class UploadService implements ServletContextAware {
 
-    //
-//    @Autowired
-//    @Resource(name = "fileProperties")
-//    private Properties fileProperties;
-
     //    // 엑세스키
     private String accessKey = "";
     ////    // 보안 엑세스키
     private String secretKey = "";
     ////    // Amazon S3 버킷 이름
     private String bucketName = "";
-//    @Value("${amazonProperties.endpointUrl}")
-//    private String endpointUrl;
-//    @Value("${travelmaker.s3.bucket}")
-//    private String bucketName;
-//    @Value("${travelmaker.aws.access_key_id}")
-//    private String accessKey;
-//    @Value("${travelmaker.aws.secret_access_key}")
-//    private String secretKey;
 
     // 엔드포인트 (AWS를 위한 진입점의 URL) - 아시아 태평양
     private Regions regions = Regions.AP_NORTHEAST_2;

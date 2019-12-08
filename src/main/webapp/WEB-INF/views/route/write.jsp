@@ -175,9 +175,12 @@
                             value="${fn:split(routeDTO.hashtag, ' ')}"
                     />
                     <div class="hash-view" id="hash-view">
-                        <c:forEach items="${hashes}" var="hash">
-                            <span class="hash">${hash}</span>
-                        </c:forEach>
+                        <c:if test="${routeDTO.hashtag ne null}">
+                            <c:set var="hashes" value="${fn:split(routeDTO.hashtag, ' ')}"/>
+                            <c:forEach items="${hashes}" var="hash">
+                                <span class="hash">${hash}</span>
+                            </c:forEach>
+                        </c:if>
                     </div>
                 </div>
             </div>

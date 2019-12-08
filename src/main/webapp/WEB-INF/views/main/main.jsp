@@ -24,15 +24,24 @@
         </sec:authorize>
     </section>
 
-    <article>
+    <article class="content-area">
+        <div class="banner-wrap">
+            <h2>멋진 이야기를 읽어보세요!</h2>
+        </div>
         <section class="sec-story">
             <ul class="story-group"></ul>
         </section>
+        <div class="banner-wrap">
+            <h2>여행, 함께가는 건 어떠세요?</h2>
+        </div>
         <section class="sec-friend">
             <ul class="friend-group"></ul>
         </section>
+        <div class="banner-wrap">
+            <h2>올 때 빈손으로 오시게? 뭐좀 들고와요~</h2>
+        </div>
         <section class="sec-purchase">
-            <ul class="purchase-group"></ul>
+            <ul class="pur-group"></ul>
         </section>
     </article>
 </div>

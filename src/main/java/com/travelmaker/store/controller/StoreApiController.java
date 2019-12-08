@@ -1,23 +1,17 @@
 package com.travelmaker.store.controller;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
-
 import com.travelmaker.store.domain.StoreHotelDTO;
 import com.travelmaker.store.domain.StoreHotelPaging;
 import com.travelmaker.store.service.StoreService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/store")
@@ -33,8 +27,8 @@ public class StoreApiController {
 	public ModelAndView getHotelList(@RequestParam(required = false, defaultValue = "1") String pg) {
 		ModelAndView modelAndView = new ModelAndView();
 		
-		int endNum = Integer.parseInt(pg) * 5;
-		int startNum = endNum - 4;
+		int endNum = Integer.parseInt(pg) * 10;
+		int startNum = endNum - 9;
 		
 		Map<String, Integer> map = new HashMap<String, Integer>();
 		
@@ -47,7 +41,7 @@ public class StoreApiController {
 		
 		storeHotelPaging.setCurrentPage(Integer.parseInt(pg));
 		storeHotelPaging.setPageBlock(3);
-		storeHotelPaging.setPageSize(5);
+		storeHotelPaging.setPageSize(9);
 		storeHotelPaging.setTotalA(totalA);
 		storeHotelPaging.makePagingHTML();
 		

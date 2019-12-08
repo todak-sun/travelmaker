@@ -30,7 +30,7 @@
         <div class="header-title">
             <div class="title-area">
                 <h2 class="title">${essayDTO.title}</h2>
-                <p class="author">[${essayDTO.userDTO.realname}] 님의 이야기.</p>
+                <p class="author">[${essayDTO.userDTO.nickname}] 님의 이야기.</p>
             </div>
             <div class="date-area">
                 <p>작성일: ${essayDTO.dateWrite}</p>

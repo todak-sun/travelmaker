@@ -215,7 +215,8 @@ $(function () {
         hiddenRno.value = data.rno;
         title.value = data.title;
         $editor.summernote('code', data.content);
-        editorTitle.style.backgroundImage = `url(/resources/storage/essay/${data.imageName})`;
-        data.hashtag.split(',').forEach(addHashSpan);
+        editorTitle.style.backgroundImage = `url(${data.imageName})`;
+        if (data.hashtag)
+            data.hashtag.split(',').forEach(addHashSpan);
     }
 });

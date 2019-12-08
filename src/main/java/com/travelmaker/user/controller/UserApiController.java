@@ -25,7 +25,6 @@ public class UserApiController {
 
     @PostMapping(path = "/{seq}/update")
     public String update(@PathVariable int seq, @ModelAttribute UserApiRequest request) {
-    	System.out.println("유저에이피아이컨트롤러 = " + request.getImageFile().getOriginalFilename());
     	return userApiService.update(request);
     }
 

@@ -140,7 +140,7 @@ let travelmaker = (function (window) {
             this.englishAndNumber = /^[a-zA-Z0-9]+$/;
             this.englishWithPoint = /[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
             this.number = /^[0-9]+$/;
-            this.nickname = /^[0-9a-zA-Z가-힣]{4,20}$/;
+            this.nickname = /^[0-9a-zA-Z가-힣]{2,20}$/;
         };
 
         return Regex;
@@ -233,7 +233,7 @@ let travelmaker = (function (window) {
                 <li>
                     <div class="request-item">
                         <div class="user-area">
-                            <p class="author">아이디 : ${nickname}</p>
+                            <p class="author">신청자 : ${nickname}</p>
                             ${productname ? '<p class="author">상품명 : ' + productname + '</p>' : ''}
                             ${price ? '<p class="author">가격 : ' + price + '</p>' : ''}
                             ${quantity ? '<p class="author">수량 : ' + quantity + '</p>' : ''}
@@ -290,7 +290,7 @@ let travelmaker = (function (window) {
         };
 
         Template.prototype.purListItem = function (pur) {
-            const {nickname, title, location, productname, con, bno} = pur;
+            const {title, location, productname, con, bno, user: {nickname, imgProfile}} = pur;
             return `
             <li>
               <div class="pur-item ${con === 1 ? 'to-request' : 'to-buy'}">
@@ -298,7 +298,7 @@ let travelmaker = (function (window) {
                 <div class="item-top">
                   <div class="user-wrap">
                     <div class="image-wrap">
-                      <img src="https://source.unsplash.com/collection/190727/200x150" alt=""/>
+                      <img src="${imgProfile ? imgProfile : '/resources/img/default-profile-img.jpeg'}" alt=""/>
                     </div>
                     <p class="nickname">${nickname}</p>
                   </div>
@@ -429,7 +429,7 @@ let travelmaker = (function (window) {
         Template.prototype.domestic = function () {
             return `
               <div class="location-wrap">
-                <h2>국내, 해외 중 어디에 다녀오셨나요?</h2>
+                <h2>국내, 해외 중 어디로 가실건가요?</h2>
                 <div class="btn-wrap">
                   <button id="btn-korea" data-domestic="1"></button>
                   <button id="btn-global" data-domestic="0"></button>
@@ -451,13 +451,14 @@ let travelmaker = (function (window) {
 
         Template.prototype.essayTemp = function (essay) {
             const {rno, title, imageName, isDomestic, dateWrite} = essay;
+            console.log(essay);
             return `
                <li>
                     <div data-rno="${rno}" class="temp-item">
                         <span class="delete">&times;</span>
                         <span class="get">불러오기</span>
                         <div class="image-wrap">
-                            <img src="/resources/storage/essay/${imageName}" alt="${imageName}"/>
+                            <img src="${imageName}" alt="${title}의 대표이미지"/>
                         </div>
                         <div class="temp-info">
                             <span class="mini-badge">${isDomestic ? '국내' : '해외'}</span>
@@ -470,13 +471,13 @@ let travelmaker = (function (window) {
         };
 
         Template.prototype.comment = function (mySeq, comment) {
-            const {cno, bno, content, likes, unlikes, seq, dateWrite, pcno, userDTO: {nickname}} = comment;
+            const {cno, bno, content, likes, unlikes, seq, dateWrite, pcno, userDTO: {nickname, imgProfile}} = comment;
             let commentItem = `
                 <li class="${cno === pcno ? '' : 're'}">
                     <div class="comment-item">
                         <div class="comment-author">
                             <div class="img-wrap">
-                                <img src="https://source.unsplash.com/collection/190727/80x80" alt="" />
+                                <img src="${imgProfile ? imgProfile : "/resources/img/default-profile-img.jpeg"}" alt="${nickname}의 프로필" />
                             </div>
                             <p class="author-nickname">${nickname}</p>
                         </div>
@@ -715,9 +716,10 @@ let travelmaker = (function (window) {
                     <li><a href="#" data-page="comment">댓글</a></li>
                 </ul>
             </nav>
-           
-           <input type="button" class="deleteAlarm" data-con="1" value="읽은 알람 지우기">
-           <input type="button" class="deleteAlarm" data-con="2" value="모든 알람 지우기">
+           <div class="button-wrap">
+               <input type="button" class="deleteAlarm" data-con="1" value="읽은 알람 지우기">
+               <input type="button" class="deleteAlarm" data-con="2" value="모든 알람 지우기">
+           </div>
            <table class="table">
                 <thead class="table-head"></thead>
                 <tbody class="table-content"></tbody>
@@ -826,7 +828,7 @@ let travelmaker = (function (window) {
               </div>
 
               <label for="addr2">상세주소</label>
-              <div class="input-wrap-4">
+              <div class="input-wrap-4 address">
                 <input type="text" id="addr2">
               </div>
               
@@ -1020,7 +1022,7 @@ let travelmaker = (function (window) {
                             <div class="image-wrap">
                                 <img src="https://source.unsplash.com/collection/190727/80x80" alt=""/>
                             </div>
-                            <p class="author">${request.nickname}</p>
+                            <p class="author">용주그냥회원가입</p>
                         </div>
                         <div class="content-area">
                             <p class="date">
@@ -1157,8 +1159,7 @@ let travelmaker = (function (window) {
                     <th>가격</th>
                     <th>결제금액</th>
                     <th>결제일자</th>
-                    <th></th>
-                    <th></th>
+                    <th colspan="2"></th>
                 </tr>
             `;
         };
@@ -2344,6 +2345,7 @@ let travelmaker = (function (window) {
                 alert('시간이 초과되었습니다. 다시 시도해주세요.');
                 close.click();
             }
+
             return start;
         }
 
